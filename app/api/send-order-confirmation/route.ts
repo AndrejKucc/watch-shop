@@ -3,9 +3,12 @@ import { createClient } from "@supabase/supabase-js";
 
 export async function POST(request: Request) {
   try {
-    const body = await request.json();
+    console.log("CONFIRMATION: ruta pokrenuta");
 
+    const body = await request.json();
     const orderId = body.orderId;
+
+    console.log("CONFIRMATION: orderId postoji:", Boolean(orderId));
 
     if (!orderId) {
       return NextResponse.json(
@@ -14,10 +17,16 @@ export async function POST(request: Request) {
       );
     }
 
+    console.log("CONFIRMATION: SUPABASE_URL postoji:", Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL));
+    console.log("CONFIRMATION: SUPABASE_SECRET_KEY postoji:", Boolean(process.env.SUPABASE_SECRET_KEY));
+    console.log("CONFIRMATION: RESEND_API_KEY postoji:", Boolean(process.env.RESEND_API_KEY));
+
     const supabase = createClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
       process.env.SUPABASE_SECRET_KEY!
     );
+
+    console.log("CONFIRMATION: čitam porudžbinu");
 
     const { data: order, error: orderError } = await supabase
       .from("orders")
@@ -41,7 +50,7 @@ export async function POST(request: Request) {
       .single();
 
     if (orderError || !order) {
-      console.error("Greška pri čitanju porudžbine:", orderError);
+      console.error("CONFIRMATION: greška pri čitanju porudžbine:", orderError);
 
       return NextResponse.json(
         { error: "Porudžbina nije pronađena." },
@@ -49,12 +58,17 @@ export async function POST(request: Request) {
       );
     }
 
+    console.log("CONFIRMATION: porudžbina pronađena");
+    console.log("CONFIRMATION: email postoji:", Boolean(order.email));
+
     if (!order.email) {
       return NextResponse.json(
         { error: "Porudžbina nema email adresu kupca." },
         { status: 400 }
       );
     }
+
+    console.log("CONFIRMATION: čitam stavke");
 
     const { data: items, error: itemsError } = await supabase
       .from("order_items")
@@ -72,13 +86,15 @@ export async function POST(request: Request) {
       .eq("order_id", orderId);
 
     if (itemsError) {
-      console.error("Greška pri čitanju stavki:", itemsError);
+      console.error("CONFIRMATION: greška pri čitanju stavki:", itemsError);
 
       return NextResponse.json(
         { error: "Stavke porudžbine nisu pronađene." },
         { status: 500 }
       );
     }
+
+    console.log("CONFIRMATION: stavke pronađene:", items?.length ?? 0);
 
     const itemsHtml = (items ?? [])
       .map((item) => {
@@ -210,6 +226,8 @@ export async function POST(request: Request) {
       </div>
     `;
 
+    console.log("CONFIRMATION: šaljem zahtev Resend-u");
+
     const resendResponse = await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: {
@@ -224,10 +242,14 @@ export async function POST(request: Request) {
       }),
     });
 
+    console.log("CONFIRMATION: Resend status:", resendResponse.status);
+
     const resendData = await resendResponse.json();
 
+    console.log("CONFIRMATION: Resend odgovor primljen");
+
     if (!resendResponse.ok) {
-      console.error("Resend greška:", resendData);
+      console.error("CONFIRMATION: Resend greška:", resendData);
 
       return NextResponse.json(
         { error: "Email nije uspešno poslat." },
@@ -235,12 +257,14 @@ export async function POST(request: Request) {
       );
     }
 
+    console.log("CONFIRMATION: email uspešno poslat");
+
     return NextResponse.json({
       success: true,
       emailId: resendData.id,
     });
   } catch (error) {
-    console.error("Greška pri slanju emaila:", error);
+    console.error("CONFIRMATION: CAUGHT ERROR:", error);
 
     return NextResponse.json(
       { error: "Došlo je do greške pri slanju emaila." },
