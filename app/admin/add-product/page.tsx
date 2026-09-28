@@ -410,30 +410,30 @@ export default function AddProductPage() {
             <div className="mt-6 grid gap-5 sm:grid-cols-3">
               <div>
                 <label className="text-sm text-neutral-400">
-                  Prodajna cena (€) *
+                  Prodajna cena (RSD) *
                 </label>
 
                 <input
                   type="number"
-                  step="0.01"
+                  step="1"
                   min="0"
                   value={price}
                   onChange={(event) =>
                     setPrice(event.target.value)
                   }
-                  placeholder="0.00"
+                  placeholder="0"
                   className="mt-2 w-full rounded-xl border border-white/10 bg-neutral-950 px-4 py-3 outline-none transition focus:border-white/30"
                 />
               </div>
 
               <div>
                 <label className="text-sm text-neutral-400">
-                  Nabavna cena (€)
+                  Nabavna cena (RSD)
                 </label>
 
                 <input
                   type="number"
-                  step="0.01"
+                  step="1"
                   min="0"
                   value={purchasePrice}
                   onChange={(event) =>
