@@ -28,6 +28,9 @@ export const metadata: Metadata = {
     "ženski satovi",
     "WATCH SHOP",
   ],
+  verification: {
+    google: "GoGcL66qUqShFA1qXMtp7AkJ0mGMu7f1MG5D06ZIpIU",
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
