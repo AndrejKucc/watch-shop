@@ -40,9 +40,14 @@ export default function CategoryFilter({
   const [search, setSearch] = useState("");
   const [onlyInStock, setOnlyInStock] = useState(false);
   const [sort, setSort] = useState("newest");
+  const [minPrice, setMinPrice] = useState("");
+  const [maxPrice, setMaxPrice] = useState("");
 
   const filteredProducts = useMemo(() => {
     const normalizedSearch = search.trim().toLowerCase();
+
+    const min = minPrice === "" ? null : Number(minPrice);
+    const max = maxPrice === "" ? null : Number(maxPrice);
 
     const result = products.filter((product) => {
       const matchesCategory =
@@ -64,7 +69,21 @@ export default function CategoryFilter({
 
       const matchesStock = !onlyInStock || product.stock > 0;
 
-      return matchesCategory && matchesSearch && matchesStock;
+      const productPrice = Number(product.price);
+
+      const matchesMinPrice =
+        min === null || productPrice >= min;
+
+      const matchesMaxPrice =
+        max === null || productPrice <= max;
+
+      return (
+        matchesCategory &&
+        matchesSearch &&
+        matchesStock &&
+        matchesMinPrice &&
+        matchesMaxPrice
+      );
     });
 
     return [...result].sort((a, b) => {
@@ -90,19 +109,31 @@ export default function CategoryFilter({
 
       return dateB - dateA;
     });
-  }, [products, category, search, onlyInStock, sort]);
+  }, [
+    products,
+    category,
+    search,
+    onlyInStock,
+    sort,
+    minPrice,
+    maxPrice,
+  ]);
 
   const hasActiveFilters =
     search !== "" ||
     category !== "sve" ||
     onlyInStock ||
-    sort !== "newest";
+    sort !== "newest" ||
+    minPrice !== "" ||
+    maxPrice !== "";
 
   const resetFilters = () => {
     setSearch("");
     setCategory("sve");
     setOnlyInStock(false);
     setSort("newest");
+    setMinPrice("");
+    setMaxPrice("");
   };
 
   return (
@@ -162,6 +193,64 @@ export default function CategoryFilter({
                 </button>
               );
             })}
+          </div>
+
+          <div className="grid gap-3 sm:grid-cols-2">
+            <div>
+              <label
+                htmlFor="min-price"
+                className="mb-2 block text-sm text-neutral-500"
+              >
+                Cena od
+              </label>
+
+              <div className="relative">
+                <input
+                  id="min-price"
+                  type="number"
+                  min="0"
+                  step="1"
+                  value={minPrice}
+                  onChange={(event) =>
+                    setMinPrice(event.target.value)
+                  }
+                  placeholder="0"
+                  className="h-12 w-full rounded-xl border border-white/10 bg-neutral-950 px-4 pr-16 text-base text-white outline-none transition placeholder:text-neutral-600 focus:border-white/30"
+                />
+
+                <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-sm text-neutral-600">
+                  RSD
+                </span>
+              </div>
+            </div>
+
+            <div>
+              <label
+                htmlFor="max-price"
+                className="mb-2 block text-sm text-neutral-500"
+              >
+                Cena do
+              </label>
+
+              <div className="relative">
+                <input
+                  id="max-price"
+                  type="number"
+                  min="0"
+                  step="1"
+                  value={maxPrice}
+                  onChange={(event) =>
+                    setMaxPrice(event.target.value)
+                  }
+                  placeholder="Bez limita"
+                  className="h-12 w-full rounded-xl border border-white/10 bg-neutral-950 px-4 pr-16 text-base text-white outline-none transition placeholder:text-neutral-600 focus:border-white/30"
+                />
+
+                <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-sm text-neutral-600">
+                  RSD
+                </span>
+              </div>
+            </div>
           </div>
 
           <div className="flex flex-col gap-3 border-t border-white/10 pt-4 sm:flex-row sm:items-center sm:justify-between">
@@ -360,8 +449,8 @@ export default function CategoryFilter({
             </h3>
 
             <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-neutral-500">
-              Nismo pronašli sat koji odgovara tvojoj pretrazi
-              ili izabranoj kategoriji.
+              Nismo pronašli sat koji odgovara tvojoj pretrazi,
+              kategoriji ili cenovnom opsegu.
             </p>
 
             <button
