@@ -55,11 +55,16 @@ export default function AdminOrdersPage() {
   const [message, setMessage] = useState("");
 
   const [expandedOrderId, setExpandedOrderId] = useState<string | null>(null);
+
   const [orderItemsByOrderId, setOrderItemsByOrderId] = useState<
     Record<string, OrderItemDetail[]>
   >({});
+
   const [detailsLoading, setDetailsLoading] = useState<string | null>(null);
-  const [detailsError, setDetailsError] = useState<Record<string, string>>({});
+
+  const [detailsError, setDetailsError] = useState<Record<string, string>>(
+    {}
+  );
 
   const [statusUpdatingId, setStatusUpdatingId] = useState<string | null>(
     null
@@ -68,7 +73,86 @@ export default function AdminOrdersPage() {
   const [deletingOrderId, setDeletingOrderId] = useState<string | null>(null);
 
   useEffect(() => {
+    const supabase = createClient();
+
     loadOrders();
+
+    const channel = supabase
+      .channel("admin-orders-realtime")
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "orders",
+        },
+        (payload) => {
+          if (payload.eventType === "INSERT") {
+            const newOrder = payload.new as Order;
+
+            setOrders((currentOrders) => {
+              const alreadyExists = currentOrders.some(
+                (order) => order.id === newOrder.id
+              );
+
+              if (alreadyExists) {
+                return currentOrders;
+              }
+
+              return [newOrder, ...currentOrders];
+            });
+
+            setMessage("Stigla je nova porudžbina.");
+          }
+
+          if (payload.eventType === "UPDATE") {
+            const updatedOrder = payload.new as Order;
+
+            setOrders((currentOrders) =>
+              currentOrders.map((order) =>
+                order.id === updatedOrder.id
+                  ? { ...order, ...updatedOrder }
+                  : order
+              )
+            );
+          }
+
+          if (payload.eventType === "DELETE") {
+            const deletedOrder = payload.old as { id: string };
+
+            setOrders((currentOrders) =>
+              currentOrders.filter(
+                (order) => order.id !== deletedOrder.id
+              )
+            );
+
+            setOrderItemsByOrderId((current) => {
+              const next = { ...current };
+              delete next[deletedOrder.id];
+              return next;
+            });
+
+            setDetailsError((current) => {
+              const next = { ...current };
+              delete next[deletedOrder.id];
+              return next;
+            });
+
+            setExpandedOrderId((current) =>
+              current === deletedOrder.id ? null : current
+            );
+          }
+        }
+      )
+      .subscribe((status) => {
+        if (status === "CHANNEL_ERROR") {
+          console.error("Realtime kanal za porudžbine nije povezan.");
+        }
+      });
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, []);
 
   async function loadOrders() {
