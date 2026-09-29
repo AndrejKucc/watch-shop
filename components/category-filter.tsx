@@ -14,6 +14,7 @@ type Product = {
   stock: number;
   category: string;
   images: string[] | null;
+  created_at?: string | null;
 };
 
 const categories = [
@@ -23,6 +24,13 @@ const categories = [
   { value: "unisex", label: "Unisex" },
 ];
 
+const sortOptions = [
+  { value: "newest", label: "Najnoviji" },
+  { value: "price_asc", label: "Cena: najniža" },
+  { value: "price_desc", label: "Cena: najviša" },
+  { value: "name_asc", label: "Naziv: A–Z" },
+];
+
 export default function CategoryFilter({
   products,
 }: {
@@ -30,11 +38,13 @@ export default function CategoryFilter({
 }) {
   const [category, setCategory] = useState("sve");
   const [search, setSearch] = useState("");
+  const [onlyInStock, setOnlyInStock] = useState(false);
+  const [sort, setSort] = useState("newest");
 
   const filteredProducts = useMemo(() => {
     const normalizedSearch = search.trim().toLowerCase();
 
-    return products.filter((product) => {
+    const result = products.filter((product) => {
       const matchesCategory =
         category === "sve" || product.category === category;
 
@@ -52,15 +62,54 @@ export default function CategoryFilter({
         normalizedSearch === "" ||
         searchableText.includes(normalizedSearch);
 
-      return matchesCategory && matchesSearch;
+      const matchesStock = !onlyInStock || product.stock > 0;
+
+      return matchesCategory && matchesSearch && matchesStock;
     });
-  }, [products, category, search]);
+
+    return [...result].sort((a, b) => {
+      if (sort === "price_asc") {
+        return Number(a.price) - Number(b.price);
+      }
+
+      if (sort === "price_desc") {
+        return Number(b.price) - Number(a.price);
+      }
+
+      if (sort === "name_asc") {
+        return a.name.localeCompare(b.name, "sr");
+      }
+
+      const dateA = a.created_at
+        ? new Date(a.created_at).getTime()
+        : 0;
+
+      const dateB = b.created_at
+        ? new Date(b.created_at).getTime()
+        : 0;
+
+      return dateB - dateA;
+    });
+  }, [products, category, search, onlyInStock, sort]);
+
+  const hasActiveFilters =
+    search !== "" ||
+    category !== "sve" ||
+    onlyInStock ||
+    sort !== "newest";
+
+  const resetFilters = () => {
+    setSearch("");
+    setCategory("sve");
+    setOnlyInStock(false);
+    setSort("newest");
+  };
 
   return (
     <>
       <div className="mt-12 rounded-3xl border border-white/10 bg-neutral-900/60 p-4 backdrop-blur sm:p-5">
-        <div className="flex flex-col gap-4 lg:flex-row lg:items-center">
-          <div className="relative flex-1">
+        <div className="flex flex-col gap-4">
+          <div className="relative">
             <svg
               aria-hidden="true"
               viewBox="0 0 24 24"
@@ -114,35 +163,69 @@ export default function CategoryFilter({
               );
             })}
           </div>
+
+          <div className="flex flex-col gap-3 border-t border-white/10 pt-4 sm:flex-row sm:items-center sm:justify-between">
+            <label className="flex min-h-11 cursor-pointer items-center gap-3 text-sm text-neutral-300">
+              <input
+                type="checkbox"
+                checked={onlyInStock}
+                onChange={(event) =>
+                  setOnlyInStock(event.target.checked)
+                }
+                className="h-4 w-4 rounded border-white/20 bg-neutral-950 accent-white"
+              />
+
+              <span>Samo na stanju</span>
+            </label>
+
+            <div className="flex items-center gap-3">
+              <label
+                htmlFor="sort-products"
+                className="text-sm text-neutral-500"
+              >
+                Sortiraj:
+              </label>
+
+              <select
+                id="sort-products"
+                value={sort}
+                onChange={(event) => setSort(event.target.value)}
+                className="min-h-11 rounded-xl border border-white/10 bg-neutral-950 px-4 text-sm text-white outline-none transition focus:border-white/30"
+              >
+                {sortOptions.map((option) => (
+                  <option
+                    key={option.value}
+                    value={option.value}
+                    className="bg-neutral-950"
+                  >
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
         </div>
       </div>
 
-      <div className="mt-8 flex items-center justify-between gap-4">
+      <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="text-sm text-neutral-500">
-            {search || category !== "sve"
-              ? "Rezultati pretrage"
-              : "Svi satovi"}
+            {hasActiveFilters ? "Rezultati pretrage" : "Svi satovi"}
           </p>
 
           <p className="mt-1 text-lg font-semibold">
             {filteredProducts.length}{" "}
             {filteredProducts.length === 1
               ? "proizvod"
-              : filteredProducts.length < 5
-                ? "proizvoda"
-                : "proizvoda"}
+              : "proizvoda"}
           </p>
         </div>
 
-        {(search || category !== "sve") && (
+        {hasActiveFilters && (
           <button
             type="button"
-            onClick={() => {
-              setSearch("");
-              setCategory("sve");
-            }}
-            className="rounded-xl border border-white/10 px-4 py-2 text-sm text-neutral-400 transition hover:border-white/20 hover:text-white"
+            onClick={resetFilters}
+            className="w-fit rounded-xl border border-white/10 px-4 py-2 text-sm text-neutral-400 transition hover:border-white/20 hover:text-white"
           >
             Resetuj filtere
           </button>
@@ -220,7 +303,10 @@ export default function CategoryFilter({
                   </p>
 
                   <p className="mt-1 text-2xl font-bold tracking-tight text-white">
-                    {Number(product.price).toFixed(2)} RSD
+                    {Number(product.price).toLocaleString(
+                      "sr-RS"
+                    )}{" "}
+                    RSD
                   </p>
                 </div>
 
@@ -233,7 +319,9 @@ export default function CategoryFilter({
                 >
                   {product.stock > 0
                     ? `${product.stock} ${
-                        product.stock === 1 ? "komad" : "komada"
+                        product.stock === 1
+                          ? "komad"
+                          : "komada"
                       }`
                     : "Nije na stanju"}
                 </span>
@@ -272,16 +360,13 @@ export default function CategoryFilter({
             </h3>
 
             <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-neutral-500">
-              Nismo pronašli sat koji odgovara tvojoj pretrazi ili izabranoj
-              kategoriji.
+              Nismo pronašli sat koji odgovara tvojoj pretrazi
+              ili izabranoj kategoriji.
             </p>
 
             <button
               type="button"
-              onClick={() => {
-                setSearch("");
-                setCategory("sve");
-              }}
+              onClick={resetFilters}
               className="mt-6 rounded-xl bg-white px-5 py-3 text-sm font-semibold text-black transition hover:bg-neutral-200 active:scale-95"
             >
               Prikaži sve satove
