@@ -1,14 +1,16 @@
 import type { MetadataRoute } from "next";
 import { getProducts } from "@/lib/products";
 
-const siteUrl = "https://watch-shop.rs";
+const siteUrl = "https://watchshop.blkn.workers.dev";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const products = await getProducts();
 
   const productUrls: MetadataRoute.Sitemap = products.map((product) => ({
     url: `${siteUrl}/product/${product.id}`,
-    lastModified: new Date(product.updated_at ?? product.created_at ?? Date.now()),
+    lastModified: new Date(
+      product.updated_at ?? product.created_at ?? Date.now()
+    ),
     changeFrequency: "weekly",
     priority: 0.8,
   }));
