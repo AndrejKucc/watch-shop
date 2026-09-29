@@ -1,8 +1,18 @@
 import type { MetadataRoute } from "next";
+import { getProducts } from "@/lib/products";
 
 const siteUrl = "https://watch-shop.rs";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const products = await getProducts();
+
+  const productUrls: MetadataRoute.Sitemap = products.map((product) => ({
+    url: `${siteUrl}/product/${product.id}`,
+    lastModified: new Date(product.updated_at ?? product.created_at ?? Date.now()),
+    changeFrequency: "weekly",
+    priority: 0.8,
+  }));
+
   return [
     {
       url: siteUrl,
@@ -40,5 +50,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "monthly",
       priority: 0.4,
     },
+    ...productUrls,
   ];
 }
