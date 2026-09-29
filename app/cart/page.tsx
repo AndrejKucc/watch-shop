@@ -90,7 +90,7 @@ export default function CartPage() {
                           </h2>
 
                           <p className="mt-1 text-sm text-neutral-500">
-                            {item.price.toFixed(2)} € po komadu
+                            {item.price.toFixed(2)} RSD po komadu
                           </p>
                         </div>
 
@@ -142,7 +142,7 @@ export default function CartPage() {
                           </p>
 
                           <p className="mt-1 text-xl font-bold tracking-tight sm:text-2xl">
-                            {(item.price * item.quantity).toFixed(2)} €
+                            {(item.price * item.quantity).toFixed(2)} RSD
                           </p>
                         </div>
                       </div>
@@ -189,7 +189,7 @@ export default function CartPage() {
                 </p>
 
                 <p className="mt-2 text-4xl font-bold tracking-tight">
-                  {totalPrice.toFixed(2)} €
+                  {totalPrice.toFixed(2)} RSD
                 </p>
               </div>
 

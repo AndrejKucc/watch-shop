@@ -190,7 +190,7 @@ export default async function Home() {
                 </h4>
 
                 <p className="mt-5 border-t border-white/10 pt-4 text-2xl font-bold tracking-tight">
-                  {Number(product.price).toFixed(2)} €
+                  {Number(product.price).toFixed(2)} RSD
                 </p>
               </div>
             </Link>

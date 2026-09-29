@@ -385,7 +385,7 @@ export default function AdminOrdersPage() {
 
                   <div className="text-right">
                     <p className="text-xl font-bold">
-                      {Number(order.total).toFixed(2)} €
+                      {Number(order.total).toFixed(2)} RSD
                     </p>
 
                     <p className="text-xs text-neutral-500">
@@ -586,7 +586,7 @@ export default function AdminOrdersPage() {
 
                             <div className="text-neutral-400">
                               {item.quantity} x{" "}
-                              {Number(item.price).toFixed(2)} €
+                              {Number(item.price).toFixed(2)} RSD
                             </div>
 
                             <div className="font-semibold">
@@ -594,7 +594,7 @@ export default function AdminOrdersPage() {
                                 item.quantity *
                                 Number(item.price)
                               ).toFixed(2)}{" "}
-                              €
+                              RSD
                             </div>
                           </div>
                         ))}
@@ -605,7 +605,7 @@ export default function AdminOrdersPage() {
                           </p>
 
                           <p className="text-lg font-bold">
-                            {Number(order.total).toFixed(2)} €
+                            {Number(order.total).toFixed(2)} RSD
                           </p>
                         </div>
                       </div>

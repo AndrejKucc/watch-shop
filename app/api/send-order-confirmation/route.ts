@@ -17,9 +17,18 @@ export async function POST(request: Request) {
       );
     }
 
-    console.log("CONFIRMATION: SUPABASE_URL postoji:", Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL));
-    console.log("CONFIRMATION: SUPABASE_SECRET_KEY postoji:", Boolean(process.env.SUPABASE_SECRET_KEY));
-    console.log("CONFIRMATION: RESEND_API_KEY postoji:", Boolean(process.env.RESEND_API_KEY));
+    console.log(
+      "CONFIRMATION: SUPABASE_URL postoji:",
+      Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL)
+    );
+    console.log(
+      "CONFIRMATION: SUPABASE_SECRET_KEY postoji:",
+      Boolean(process.env.SUPABASE_SECRET_KEY)
+    );
+    console.log(
+      "CONFIRMATION: RESEND_API_KEY postoji:",
+      Boolean(process.env.RESEND_API_KEY)
+    );
 
     const supabase = createClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -50,7 +59,10 @@ export async function POST(request: Request) {
       .single();
 
     if (orderError || !order) {
-      console.error("CONFIRMATION: greška pri čitanju porudžbine:", orderError);
+      console.error(
+        "CONFIRMATION: greška pri čitanju porudžbine:",
+        orderError
+      );
 
       return NextResponse.json(
         { error: "Porudžbina nije pronađena." },
@@ -86,7 +98,10 @@ export async function POST(request: Request) {
       .eq("order_id", orderId);
 
     if (itemsError) {
-      console.error("CONFIRMATION: greška pri čitanju stavki:", itemsError);
+      console.error(
+        "CONFIRMATION: greška pri čitanju stavki:",
+        itemsError
+      );
 
       return NextResponse.json(
         { error: "Stavke porudžbine nisu pronađene." },
@@ -94,7 +109,10 @@ export async function POST(request: Request) {
       );
     }
 
-    console.log("CONFIRMATION: stavke pronađene:", items?.length ?? 0);
+    console.log(
+      "CONFIRMATION: stavke pronađene:",
+      items?.length ?? 0
+    );
 
     const itemsHtml = (items ?? [])
       .map((item) => {
@@ -226,42 +244,183 @@ export async function POST(request: Request) {
       </div>
     `;
 
-    console.log("CONFIRMATION: šaljem zahtev Resend-u");
+    const sellerHtml = `
+      <div style="margin:0;padding:40px 20px;background:#f5f5f5;font-family:Arial,sans-serif;color:#111;">
+        <div style="max-width:650px;margin:0 auto;background:#ffffff;padding:40px;border-radius:20px;">
 
-    const resendResponse = await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        from: "onboarding@resend.dev",
-        to: [order.email],
-        subject: `WATCH SHOP — potvrda porudžbine ${order.id}`,
-        html,
-      }),
-    });
+          <div style="margin-bottom:30px;">
+            <div style="font-size:24px;font-weight:700;letter-spacing:3px;">
+              WATCH SHOP
+            </div>
+            <div style="margin-top:6px;color:#777;font-size:13px;">
+              Nova porudžbina
+            </div>
+          </div>
 
-    console.log("CONFIRMATION: Resend status:", resendResponse.status);
+          <h1 style="font-size:26px;margin:0 0 20px;">
+            Nova porudžbina
+          </h1>
 
-    const resendData = await resendResponse.json();
+          <div style="padding:20px;background:#f7f7f7;border-radius:14px;margin-bottom:25px;">
+            <div style="font-size:13px;color:#777;margin-bottom:6px;">
+              Broj porudžbine
+            </div>
+            <div style="font-size:16px;font-weight:700;">
+              ${order.id}
+            </div>
+          </div>
 
-    console.log("CONFIRMATION: Resend odgovor primljen");
+          <h2 style="font-size:18px;margin:25px 0 12px;">
+            Kupac
+          </h2>
 
-    if (!resendResponse.ok) {
-      console.error("CONFIRMATION: Resend greška:", resendData);
+          <p style="font-size:14px;line-height:1.8;color:#555;margin:0;">
+            <strong>Ime:</strong> ${order.customer_name}<br>
+            <strong>Telefon:</strong> ${order.phone}<br>
+            <strong>Email:</strong> ${order.email}
+          </p>
+
+          <h2 style="font-size:18px;margin:30px 0 12px;">
+            Dostava
+          </h2>
+
+          <p style="font-size:14px;line-height:1.8;color:#555;">
+            ${addressLine}
+          </p>
+
+          <h2 style="font-size:18px;margin:30px 0 12px;">
+            Proizvodi
+          </h2>
+
+          <table style="width:100%;border-collapse:collapse;font-size:14px;">
+            <thead>
+              <tr>
+                <th style="padding:10px 0;text-align:left;border-bottom:2px solid #111;">
+                  Proizvod
+                </th>
+                <th style="padding:10px 0;text-align:center;border-bottom:2px solid #111;">
+                  Količina
+                </th>
+                <th style="padding:10px 0;text-align:right;border-bottom:2px solid #111;">
+                  Iznos
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              ${itemsHtml}
+            </tbody>
+          </table>
+
+          <div style="margin-top:24px;padding-top:20px;border-top:2px solid #111;text-align:right;">
+            <div style="font-size:14px;color:#777;">
+              Ukupno
+            </div>
+            <div style="font-size:24px;font-weight:700;margin-top:4px;">
+              ${Number(order.total).toFixed(2)} RSD
+            </div>
+          </div>
+
+          <div style="margin-top:30px;padding:18px;background:#f7f7f7;border-radius:14px;">
+            <p style="font-size:14px;line-height:1.7;color:#555;margin:0;">
+              Način plaćanja: <strong>Plaćanje pouzećem</strong>
+            </p>
+          </div>
+
+        </div>
+      </div>
+    `;
+
+    console.log("CONFIRMATION: šaljem email kupcu");
+
+    const customerResponse = await fetch(
+      "https://api.resend.com/emails",
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          from: "onboarding@resend.dev",
+          to: [order.email],
+          subject: `WATCH SHOP — potvrda porudžbine ${order.id}`,
+          html: html,
+        }),
+      }
+    );
+
+    console.log(
+      "CONFIRMATION: Resend status kupac:",
+      customerResponse.status
+    );
+
+    const customerData = await customerResponse.json();
+
+    if (!customerResponse.ok) {
+      console.error(
+        "CONFIRMATION: Resend greška kupac:",
+        customerData
+      );
 
       return NextResponse.json(
-        { error: "Email nije uspešno poslat." },
+        { error: "Email kupcu nije uspešno poslat." },
         { status: 500 }
       );
     }
 
-    console.log("CONFIRMATION: email uspešno poslat");
+    console.log("CONFIRMATION: email kupcu uspešno poslat");
+
+    console.log("CONFIRMATION: šaljem email prodavcu");
+
+    const sellerResponse = await fetch(
+      "https://api.resend.com/emails",
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          from: "onboarding@resend.dev",
+          to: ["kucc.andrej@gmail.com"],
+          subject: `WATCH SHOP — NOVA PORUDŽBINA ${order.id}`,
+          html: sellerHtml,
+        }),
+      }
+    );
+
+    console.log(
+      "CONFIRMATION: Resend status prodavac:",
+      sellerResponse.status
+    );
+
+    const sellerData = await sellerResponse.json();
+
+    if (!sellerResponse.ok) {
+      console.error(
+        "CONFIRMATION: Resend greška prodavac:",
+        sellerData
+      );
+
+      return NextResponse.json(
+        {
+          success: true,
+          customerEmailSent: true,
+          sellerEmailSent: false,
+          warning: "Email kupcu je poslat, ali email prodavcu nije.",
+        },
+        { status: 200 }
+      );
+    }
+
+    console.log("CONFIRMATION: email prodavcu uspešno poslat");
 
     return NextResponse.json({
       success: true,
-      emailId: resendData.id,
+      customerEmailSent: true,
+      sellerEmailSent: true,
+      customerEmailId: customerData.id,
+      sellerEmailId: sellerData.id,
     });
   } catch (error) {
     console.error("CONFIRMATION: CAUGHT ERROR:", error);

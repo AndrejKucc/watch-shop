@@ -220,7 +220,7 @@ export default function CategoryFilter({
                   </p>
 
                   <p className="mt-1 text-2xl font-bold tracking-tight text-white">
-                    {Number(product.price).toFixed(2)} €
+                    {Number(product.price).toFixed(2)} RSD
                   </p>
                 </div>
 

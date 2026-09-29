@@ -183,7 +183,7 @@ export default function ProductsPage() {
                       </p>
 
                       <p className="mt-1 text-2xl font-bold">
-                        {Number(product.price).toFixed(2)} €
+                        {Number(product.price).toFixed(2)} RSD
                       </p>
                     </div>
 

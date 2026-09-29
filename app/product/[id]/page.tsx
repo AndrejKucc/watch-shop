@@ -301,7 +301,7 @@ export default async function ProductPage({
                   </p>
 
                   <p className="mt-2 text-4xl font-bold tracking-tight">
-                    {Number(product.price).toFixed(2)} €
+                    {Number(product.price).toFixed(2)} RSD
                   </p>
                 </div>
 

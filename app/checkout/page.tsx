@@ -249,7 +249,7 @@ export default function CheckoutPage() {
                 </span>
 
                 <span className="text-xl font-bold">
-                  {placedOrder.total.toFixed(2)} €
+                  {placedOrder.total.toFixed(2)} RSD
                 </span>
               </div>
 
@@ -600,12 +600,12 @@ export default function CheckoutPage() {
                     </p>
 
                     <p className="mt-1 text-xs text-neutral-500">
-                      {item.quantity} × {item.price.toFixed(2)} €
+                      {item.quantity} × {item.price.toFixed(2)} RSD
                     </p>
                   </div>
 
                   <p className="flex-shrink-0 text-sm font-semibold">
-                    {(item.price * item.quantity).toFixed(2)} €
+                    {(item.price * item.quantity).toFixed(2)} RSD
                   </p>
                 </div>
               ))}
@@ -634,7 +634,7 @@ export default function CheckoutPage() {
               </p>
 
               <p className="mt-2 text-4xl font-bold tracking-tight">
-                {totalPrice.toFixed(2)} €
+                {totalPrice.toFixed(2)} RSD
               </p>
             </div>
           </aside>
