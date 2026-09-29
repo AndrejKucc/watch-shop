@@ -226,63 +226,64 @@ export default async function ProductPage({
 
   return (
     <main className="min-h-screen bg-neutral-950 text-white">
-      <header className="sticky top-0 z-20 border-b border-white/10 bg-neutral-950/90 backdrop-blur-xl">
+      <header className="sticky top-0 z-30 border-b border-white/10 bg-neutral-950/90 backdrop-blur-xl">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 sm:px-6">
           <Link
             href="/"
-            className="text-xl font-bold tracking-[0.18em] transition-all duration-150 active:scale-95 sm:text-2xl"
+            className="text-xl font-bold tracking-[0.18em] transition-transform duration-150 active:scale-95 sm:text-2xl"
           >
             WATCH SHOP
           </Link>
 
           <Link
             href="/cart"
-            className="rounded-full border border-white/15 px-5 py-2.5 text-sm font-medium transition-all duration-150 hover:bg-white hover:text-black active:scale-95"
+            className="rounded-full border border-white/15 px-5 py-2.5 text-sm font-medium transition-all duration-200 hover:bg-white hover:text-black active:scale-95"
           >
             Korpa
           </Link>
         </div>
       </header>
 
-      <section className="mx-auto max-w-7xl px-5 py-8 sm:px-6 sm:py-12">
+      <section className="mx-auto max-w-7xl px-5 py-6 sm:px-6 sm:py-10">
         <Link
           href="/"
-          className="inline-flex items-center rounded-xl border border-white/10 px-4 py-2.5 text-sm text-neutral-400 transition-all duration-150 hover:bg-white hover:text-black active:scale-95"
+          className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.02] px-4 py-2.5 text-sm text-neutral-400 transition-all duration-200 hover:border-white/20 hover:bg-white hover:text-black active:scale-95"
         >
-          ← Nazad na proizvode
+          <span aria-hidden="true">←</span>
+          Nazad na proizvode
         </Link>
 
-        <div className="mt-8 grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:gap-14">
-          <div>
+        <div className="mt-8 grid gap-10 lg:grid-cols-[minmax(0,1.15fr)_minmax(380px,0.85fr)] lg:items-start lg:gap-16">
+          <div className="min-w-0">
             <ProductGallery
               images={imageList}
               productName={product.name}
             />
           </div>
 
-          <div className="lg:pt-4">
+          <div className="lg:sticky lg:top-28">
             <div className="flex flex-wrap gap-2">
-              <span className="rounded-full border border-white/10 bg-neutral-900 px-3 py-1.5 text-xs font-medium uppercase tracking-[0.18em] text-neutral-400">
+              <span className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 text-[11px] font-medium uppercase tracking-[0.2em] text-neutral-400">
                 {categoryLabel}
               </span>
 
               {product.condition && (
-                <span className="rounded-full border border-white/10 bg-neutral-900 px-3 py-1.5 text-xs font-medium uppercase tracking-[0.18em] text-neutral-400">
+                <span className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 text-[11px] font-medium uppercase tracking-[0.2em] text-neutral-400">
                   {product.condition}
                 </span>
               )}
             </div>
 
-            <p className="mt-7 text-sm font-medium uppercase tracking-[0.3em] text-neutral-500">
-              {product.brand || "Watch Shop"}
+            <p className="mt-7 text-xs font-medium uppercase tracking-[0.35em] text-neutral-500">
+              {product.brand || "WATCH SHOP"}
             </p>
 
-            <h1 className="mt-3 text-4xl font-semibold tracking-tight sm:text-5xl">
+            <h1 className="mt-4 text-4xl font-semibold leading-[1.05] tracking-tight sm:text-5xl xl:text-6xl">
               {product.name}
             </h1>
 
             {product.model && (
-              <p className="mt-3 text-lg text-neutral-500">
+              <p className="mt-4 text-lg text-neutral-400">
                 {product.model}
               </p>
             )}
@@ -293,19 +294,19 @@ export default async function ProductPage({
               </p>
             )}
 
-            <div className="mt-8 rounded-[2rem] border border-white/10 bg-neutral-900 p-6">
+            <div className="mt-9 border-y border-white/10 py-7">
               <div className="flex flex-wrap items-end justify-between gap-5">
                 <div>
-                  <p className="text-xs uppercase tracking-[0.18em] text-neutral-500">
+                  <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-neutral-500">
                     Prodajna cena
                   </p>
 
-                  <p className="mt-2 text-4xl font-bold tracking-tight">
-                    {Number(product.price).toFixed(2)} RSD
+                  <p className="mt-2 text-4xl font-semibold tracking-tight sm:text-5xl">
+                    {Number(product.price).toLocaleString("sr-RS")} RSD
                   </p>
                 </div>
 
-                <div className="text-right">
+                <div className="text-left sm:text-right">
                   <p
                     className={`text-sm font-semibold ${
                       product.stock > 0
@@ -327,7 +328,7 @@ export default async function ProductPage({
                 </div>
               </div>
 
-              <div className="mt-6">
+              <div className="mt-7">
                 <AddToCartButton
                   product={{
                     id: product.id,
@@ -341,26 +342,26 @@ export default async function ProductPage({
             </div>
 
             {(product.year || product.reference) && (
-              <div className="mt-5 grid gap-3 sm:grid-cols-2">
+              <div className="grid gap-px overflow-hidden rounded-2xl border border-white/10 bg-white/10 sm:grid-cols-2">
                 {product.year && (
-                  <div className="rounded-2xl border border-white/10 bg-neutral-900 p-5">
-                    <p className="text-xs uppercase tracking-[0.18em] text-neutral-500">
+                  <div className="bg-neutral-950 p-5">
+                    <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-neutral-500">
                       Godina
                     </p>
 
-                    <p className="mt-2 font-medium">
+                    <p className="mt-2 font-medium text-neutral-200">
                       {product.year}
                     </p>
                   </div>
                 )}
 
                 {product.reference && (
-                  <div className="rounded-2xl border border-white/10 bg-neutral-900 p-5">
-                    <p className="text-xs uppercase tracking-[0.18em] text-neutral-500">
+                  <div className="bg-neutral-950 p-5">
+                    <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-neutral-500">
                       Referenca
                     </p>
 
-                    <p className="mt-2 font-medium">
+                    <p className="mt-2 font-medium text-neutral-200">
                       {product.reference}
                     </p>
                   </div>
@@ -371,17 +372,19 @@ export default async function ProductPage({
         </div>
 
         {product.description && (
-          <section className="mt-16 border-t border-white/10 pt-12 sm:mt-20 sm:pt-16">
-            <div className="max-w-3xl">
-              <p className="text-xs font-medium uppercase tracking-[0.25em] text-neutral-500">
-                O satu
-              </p>
+          <section className="mt-16 border-t border-white/10 pt-12 sm:mt-24 sm:pt-16">
+            <div className="grid gap-8 lg:grid-cols-[0.35fr_0.65fr] lg:gap-16">
+              <div>
+                <p className="text-[11px] font-medium uppercase tracking-[0.25em] text-neutral-500">
+                  O satu
+                </p>
 
-              <h2 className="mt-3 text-3xl font-semibold tracking-tight">
-                Opis
-              </h2>
+                <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
+                  Opis
+                </h2>
+              </div>
 
-              <p className="mt-6 whitespace-pre-line text-base leading-8 text-neutral-400">
+              <p className="max-w-3xl whitespace-pre-line text-base leading-8 text-neutral-400">
                 {product.description}
               </p>
             </div>
@@ -389,63 +392,70 @@ export default async function ProductPage({
         )}
 
         {visibleGroups.length > 0 && (
-          <section className="mt-16 border-t border-white/10 pt-12 sm:mt-20 sm:pt-16">
-            <div>
-              <p className="text-xs font-medium uppercase tracking-[0.25em] text-neutral-500">
-                Detalji sata
-              </p>
+          <section className="mt-16 border-t border-white/10 pt-12 sm:mt-24 sm:pt-16">
+            <div className="grid gap-8 lg:grid-cols-[0.35fr_0.65fr] lg:gap-16">
+              <div>
+                <p className="text-[11px] font-medium uppercase tracking-[0.25em] text-neutral-500">
+                  Detalji sata
+                </p>
 
-              <h2 className="mt-3 text-3xl font-semibold tracking-tight">
-                Specifikacije
-              </h2>
-            </div>
+                <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
+                  Specifikacije
+                </h2>
 
-            <div className="mt-8 w-full max-w-2xl overflow-hidden rounded-[2rem] border border-white/10 bg-neutral-900">
-              {visibleGroups.map((group, groupIndex) => (
-                <div
-                  key={group.title}
-                  className={
-                    groupIndex > 0
-                      ? "border-t border-white/10"
-                      : ""
-                  }
-                >
-                  <div className="px-6 py-5 sm:px-8">
-                    <h3 className="text-lg font-semibold">
-                      {group.title}
-                    </h3>
+                <p className="mt-4 max-w-sm text-sm leading-7 text-neutral-500">
+                  Tehnički podaci prikazani su prema informacijama dostupnim za
+                  konkretan model.
+                </p>
+              </div>
 
-                    <div className="mt-4">
-                      {group.specifications.map(
-                        (specification, specificationIndex) => (
-                          <div
-                            key={specification.label}
-                            className={`flex items-start justify-between gap-6 py-4 ${
-                              specificationIndex > 0
-                                ? "border-t border-white/10"
-                                : ""
-                            }`}
-                          >
-                            <span className="text-sm text-neutral-500">
-                              {specification.label}
-                            </span>
+              <div className="overflow-hidden rounded-[2rem] border border-white/10 bg-neutral-900/60">
+                {visibleGroups.map((group, groupIndex) => (
+                  <div
+                    key={group.title}
+                    className={
+                      groupIndex > 0
+                        ? "border-t border-white/10"
+                        : ""
+                    }
+                  >
+                    <div className="px-6 py-6 sm:px-8">
+                      <h3 className="text-lg font-semibold text-white">
+                        {group.title}
+                      </h3>
 
-                            <span className="max-w-[60%] text-right text-sm font-medium text-neutral-200">
-                              {specification.value}
-                            </span>
-                          </div>
-                        )
-                      )}
+                      <div className="mt-4">
+                        {group.specifications.map(
+                          (specification, specificationIndex) => (
+                            <div
+                              key={specification.label}
+                              className={`grid grid-cols-[1fr_auto] items-start gap-6 py-4 ${
+                                specificationIndex > 0
+                                  ? "border-t border-white/10"
+                                  : ""
+                              }`}
+                            >
+                              <span className="text-sm text-neutral-500">
+                                {specification.label}
+                              </span>
+
+                              <span className="max-w-[55%] text-right text-sm font-medium text-neutral-200">
+                                {specification.value}
+                              </span>
+                            </div>
+                          )
+                        )}
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           </section>
         )}
       </section>
 
-      <footer className="mt-16 border-t border-white/10">
+      <footer className="mt-20 border-t border-white/10">
         <div className="mx-auto max-w-7xl px-5 py-10 text-center text-sm text-neutral-500 sm:px-6">
           WATCH SHOP — Premium satovi
         </div>
