@@ -22,6 +22,65 @@ type SpecificationField = {
   label: string;
 };
 
+type FeaturedBadge =
+  | ""
+  | "recommendation"
+  | "best_buy"
+  | "new_model"
+  | "great_price"
+  | "premium"
+  | "bestseller";
+
+const featuredBadgeOptions: {
+  value: FeaturedBadge;
+  label: string;
+  preview: string;
+  description: string;
+}[] = [
+  {
+    value: "",
+    label: "Bez trakice",
+    preview: "",
+    description: "Sat neće imati posebnu trakicu.",
+  },
+  {
+    value: "recommendation",
+    label: "Naša preporuka",
+    preview: "⭐ NAŠA PREPORUKA",
+    description: "Za sat koji posebno preporučuješ kupcima.",
+  },
+  {
+    value: "best_buy",
+    label: "Best Buy",
+    preview: "🔥 BEST BUY",
+    description: "Za odličan odnos cene i kvaliteta.",
+  },
+  {
+    value: "new_model",
+    label: "Novi model",
+    preview: "✨ NOVI MODEL",
+    description: "Za nov model u ponudi.",
+  },
+  {
+    value: "great_price",
+    label: "Odlična cena",
+    preview: "💰 ODLIČNA CENA",
+    description: "Za sat sa posebno privlačnom cenom.",
+  },
+  {
+    value: "premium",
+    label: "Premium izbor",
+    preview: "💎 PREMIUM IZBOR",
+    description: "Za sat koji želiš da izdvojiš kao premium izbor.",
+  },
+  {
+    value: "bestseller",
+    label: "Bestseller",
+    preview: "🏆 BESTSELLER",
+    description: "Za provereno najprodavaniji sat.",
+  },
+];
+
 const watchSpecificationGroups: {
   title: string;
   fields: SpecificationField[];
@@ -155,6 +214,7 @@ type Product = {
   category: string;
   images: string[] | null;
   is_featured: boolean;
+  featured_badge: FeaturedBadge | null;
   [key: string]: unknown;
 };
 
@@ -197,6 +257,8 @@ export default function EditProductPage() {
   const [stock, setStock] = useState("");
   const [description, setDescription] = useState("");
   const [isFeatured, setIsFeatured] = useState(false);
+  const [featuredBadge, setFeaturedBadge] =
+    useState<FeaturedBadge>("");
 
   const [specifications, setSpecifications] =
     useState<Record<string, string>>({});
@@ -242,6 +304,7 @@ export default function EditProductPage() {
           category,
           images,
           is_featured,
+          featured_badge,
           case_diameter,
           case_thickness,
           case_material,
@@ -298,6 +361,14 @@ export default function EditProductPage() {
       setStock(String(loadedProduct.stock ?? ""));
       setDescription(loadedProduct.description || "");
       setIsFeatured(loadedProduct.is_featured ?? false);
+
+      const savedBadge = featuredBadgeOptions.some(
+        (option) => option.value === loadedProduct.featured_badge
+      )
+        ? loadedProduct.featured_badge ?? ""
+        : "";
+
+      setFeaturedBadge(savedBadge);
 
       const loadedSpecifications: Record<string, string> = {};
       const loadedVisibility: Record<string, boolean> = {};
@@ -450,6 +521,10 @@ export default function EditProductPage() {
             : null;
       }
 
+      const finalIsFeatured = productType === "watch" && isFeatured;
+      const finalFeaturedBadge: FeaturedBadge =
+        finalIsFeatured ? featuredBadge : "";
+
       const { error: updateError } = await supabase
         .from("products")
         .update({
@@ -465,7 +540,8 @@ export default function EditProductPage() {
           purchase_price: parsedPurchasePrice,
           stock: parsedStock,
           images: finalImages,
-          is_featured: productType === "watch" && isFeatured,
+          is_featured: finalIsFeatured,
+          featured_badge: finalFeaturedBadge || null,
           ...specificationData,
         })
         .eq("id", product.id);
@@ -490,7 +566,8 @@ export default function EditProductPage() {
               purchase_price: parsedPurchasePrice,
               stock: parsedStock,
               images: finalImages,
-              is_featured: productType === "watch" && isFeatured,
+              is_featured: finalIsFeatured,
+              featured_badge: finalFeaturedBadge || null,
               ...specificationData,
             }
           : current
@@ -551,6 +628,10 @@ export default function EditProductPage() {
   }
 
   const currentSpecificationGroups = getSpecificationGroups(productType);
+
+  const selectedBadge = featuredBadgeOptions.find(
+    (option) => option.value === featuredBadge
+  );
 
   return (
     <main className="min-h-screen bg-neutral-950 px-6 py-10 text-white">
@@ -630,8 +711,57 @@ export default function EditProductPage() {
                     </span>
                   </label>
 
-                  <p className="mt-3 text-xs text-neutral-500">
-                    Izbor se primenjuje tek kada klikneš „Sačuvaj izmene“.
+                  <div className="mt-6">
+                    <label className="text-sm font-medium text-neutral-300">
+                      Trakica na slici sata
+                    </label>
+
+                    <p className="mt-2 text-sm leading-6 text-neutral-400">
+                      Izaberi oznaku koja objašnjava zašto si izdvojio ovaj sat.
+                      Ako izabereš „Bez trakice“, sat će biti istaknut bez oznake.
+                    </p>
+
+                    <select
+                      value={featuredBadge}
+                      onChange={(event) =>
+                        setFeaturedBadge(event.target.value as FeaturedBadge)
+                      }
+                      disabled={!isFeatured}
+                      className="mt-3 w-full rounded-xl border border-white/10 bg-neutral-950 px-4 py-3 outline-none transition focus:border-amber-400/50 disabled:cursor-not-allowed disabled:opacity-50"
+                    >
+                      {featuredBadgeOptions.map((option) => (
+                        <option key={option.value} value={option.value}>
+                          {option.label}
+                        </option>
+                      ))}
+                    </select>
+
+                    {selectedBadge && selectedBadge.preview && isFeatured && (
+                      <div className="mt-4">
+                        <p className="mb-2 text-xs uppercase tracking-wider text-neutral-500">
+                          Pregled trakice
+                        </p>
+
+                        <span className="inline-flex items-center rounded-md border border-amber-300/30 bg-amber-400 px-3 py-2 text-xs font-bold tracking-wide text-neutral-950">
+                          {selectedBadge.preview}
+                        </span>
+
+                        <p className="mt-2 text-xs text-neutral-400">
+                          {selectedBadge.description}
+                        </p>
+                      </div>
+                    )}
+
+                    {!isFeatured && (
+                      <p className="mt-3 text-xs text-neutral-500">
+                        Prvo uključi prikaz u istaknutim satovima da bi birao
+                        trakicu.
+                      </p>
+                    )}
+                  </div>
+
+                  <p className="mt-4 text-xs text-neutral-500">
+                    Izmene se primenjuju tek kada klikneš „Sačuvaj izmene“.
                   </p>
                 </div>
               </div>
