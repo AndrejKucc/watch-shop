@@ -18,6 +18,7 @@ type Product = {
   movement_type?: string | null;
   case_diameter?: string | number | null;
   case_material?: string | null;
+  bracelet_material?: string | null;
   water_resistance?: string | null;
   chronograph?: string | null;
   gmt?: string | null;
@@ -121,6 +122,7 @@ export default function CategoryFilter({
   const [movement, setMovement] = useState("");
   const [diameter, setDiameter] = useState("");
   const [caseMaterial, setCaseMaterial] = useState("");
+  const [braceletMaterial, setBraceletMaterial] = useState("");
   const [waterResistance, setWaterResistance] = useState("");
   const [chronograph, setChronograph] = useState("");
   const [gmt, setGmt] = useState("");
@@ -142,6 +144,11 @@ export default function CategoryFilter({
 
   const caseMaterials = useMemo(
     () => distinctValues(products, (product) => product.case_material),
+    [products],
+  );
+
+  const braceletMaterials = useMemo(
+    () => distinctValues(products, (product) => product.bracelet_material),
     [products],
   );
 
@@ -222,6 +229,11 @@ export default function CategoryFilter({
           !caseMaterial ||
           normalize(product.case_material) === normalize(caseMaterial);
 
+        const matchesBraceletMaterial =
+          !braceletMaterial ||
+          normalize(product.bracelet_material) ===
+            normalize(braceletMaterial);
+
         const matchesWaterResistance =
           !waterResistance ||
           normalize(product.water_resistance) ===
@@ -244,6 +256,7 @@ export default function CategoryFilter({
           matchesMovement &&
           matchesDiameter &&
           matchesCaseMaterial &&
+          matchesBraceletMaterial &&
           matchesWaterResistance &&
           matchesChronograph &&
           matchesGmt
@@ -284,6 +297,7 @@ export default function CategoryFilter({
     movement,
     diameter,
     caseMaterial,
+    braceletMaterial,
     waterResistance,
     chronograph,
     gmt,
@@ -301,6 +315,7 @@ export default function CategoryFilter({
     movement !== "" ||
     diameter !== "" ||
     caseMaterial !== "" ||
+    braceletMaterial !== "" ||
     waterResistance !== "" ||
     chronograph !== "" ||
     gmt !== "";
@@ -316,6 +331,7 @@ export default function CategoryFilter({
     setMovement("");
     setDiameter("");
     setCaseMaterial("");
+    setBraceletMaterial("");
     setWaterResistance("");
     setChronograph("");
     setGmt("");
@@ -423,6 +439,14 @@ export default function CategoryFilter({
                 value={caseMaterial}
                 onChange={setCaseMaterial}
                 options={caseMaterials}
+              />
+
+              <FilterSelect
+                id="filter-bracelet-material"
+                label="Materijal narukvice"
+                value={braceletMaterial}
+                onChange={setBraceletMaterial}
+                options={braceletMaterials}
               />
 
               <FilterSelect
