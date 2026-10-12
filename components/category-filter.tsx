@@ -12,9 +12,16 @@ type Product = {
   description: string | null;
   price: number;
   stock: number;
-  category: string;
+  category: string | null;
   images: string[] | null;
   created_at?: string | null;
+  movement_type?: string | null;
+  case_diameter?: string | number | null;
+  case_material?: string | null;
+  water_resistance?: string | null;
+  chronograph?: string | null;
+  gmt?: string | null;
+  reference?: string | null;
 };
 
 const categories = [
@@ -30,6 +37,67 @@ const sortOptions = [
   { value: "price_desc", label: "Cena: najviša" },
   { value: "name_asc", label: "Naziv: A–Z" },
 ];
+
+function normalize(value: unknown) {
+  return String(value ?? "").trim().toLocaleLowerCase("sr-RS");
+}
+
+function distinctValues(
+  products: Product[],
+  getValue: (product: Product) => unknown,
+) {
+  return Array.from(
+    new Set(
+      products
+        .map((product) => String(getValue(product) ?? "").trim())
+        .filter(Boolean),
+    ),
+  ).sort((a, b) => a.localeCompare(b, "sr"));
+}
+
+function FilterSelect({
+  id,
+  label,
+  value,
+  onChange,
+  options,
+}: {
+  id: string;
+  label: string;
+  value: string;
+  onChange: (value: string) => void;
+  options: string[];
+}) {
+  return (
+    <div className="min-w-0">
+      <label
+        htmlFor={id}
+        className="mb-2 block text-sm text-neutral-400"
+      >
+        {label}
+      </label>
+
+      <select
+        id={id}
+        value={value}
+        onChange={(event) => onChange(event.target.value)}
+        className="h-12 w-full rounded-xl border border-white/10 bg-neutral-950 px-3 text-sm text-white outline-none transition focus:border-white/30"
+      >
+        <option value="">Svi</option>
+
+        {options.map((option) => (
+          <option
+            key={option}
+            value={option}
+            className="bg-neutral-950"
+          >
+            {option}
+          </option>
+        ))}
+      </select>
+    </div>
+  );
+}
 
 export default function CategoryFilter({
   products,
@@ -49,74 +117,161 @@ export default function CategoryFilter({
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
 
+  const [brand, setBrand] = useState("");
+  const [movement, setMovement] = useState("");
+  const [diameter, setDiameter] = useState("");
+  const [caseMaterial, setCaseMaterial] = useState("");
+  const [waterResistance, setWaterResistance] = useState("");
+  const [chronograph, setChronograph] = useState("");
+  const [gmt, setGmt] = useState("");
+
+  const brands = useMemo(
+    () => distinctValues(products, (product) => product.brand),
+    [products],
+  );
+
+  const movements = useMemo(
+    () => distinctValues(products, (product) => product.movement_type),
+    [products],
+  );
+
+  const diameters = useMemo(
+    () => distinctValues(products, (product) => product.case_diameter),
+    [products],
+  );
+
+  const caseMaterials = useMemo(
+    () => distinctValues(products, (product) => product.case_material),
+    [products],
+  );
+
+  const waterResistances = useMemo(
+    () => distinctValues(products, (product) => product.water_resistance),
+    [products],
+  );
+
+  const chronographOptions = useMemo(
+    () => distinctValues(products, (product) => product.chronograph),
+    [products],
+  );
+
+  const gmtOptions = useMemo(
+    () => distinctValues(products, (product) => product.gmt),
+    [products],
+  );
+
+  const invalidPriceRange =
+    minPrice.trim() !== "" &&
+    maxPrice.trim() !== "" &&
+    Number.isFinite(Number(minPrice)) &&
+    Number.isFinite(Number(maxPrice)) &&
+    Number(minPrice) > Number(maxPrice);
+
   const filteredProducts = useMemo(() => {
-    const normalizedSearch = search.trim().toLowerCase();
+    const normalizedSearch = normalize(search);
+    const min = minPrice.trim() === "" ? null : Number(minPrice);
+    const max = maxPrice.trim() === "" ? null : Number(maxPrice);
 
-    const min = minPrice === "" ? null : Number(minPrice);
-    const max = maxPrice === "" ? null : Number(maxPrice);
+    return products
+      .filter((product) => {
+        const matchesCategory =
+          !showGenderFilter ||
+          category === "sve" ||
+          normalize(product.category) === normalize(category);
 
-    const result = products.filter((product) => {
-      const matchesCategory =
-        !showGenderFilter ||
-        category === "sve" ||
-        product.category === category;
+        const searchableText = [
+          product.name,
+          product.brand,
+          product.model,
+          product.description,
+          product.reference,
+        ]
+          .filter(Boolean)
+          .join(" ")
+          .toLocaleLowerCase("sr-RS");
 
-      const searchableText = [
-        product.name,
-        product.brand,
-        product.model,
-        product.description,
-      ]
-        .filter(Boolean)
-        .join(" ")
-        .toLowerCase();
+        const matchesSearch =
+          normalizedSearch === "" ||
+          searchableText.includes(normalizedSearch);
 
-      const matchesSearch =
-        normalizedSearch === "" ||
-        searchableText.includes(normalizedSearch);
+        const matchesStock = !onlyInStock || product.stock > 0;
+        const productPrice = Number(product.price);
 
-      const matchesStock = !onlyInStock || product.stock > 0;
+        const matchesMinPrice =
+          min === null ||
+          !Number.isFinite(min) ||
+          productPrice >= min;
 
-      const productPrice = Number(product.price);
+        const matchesMaxPrice =
+          max === null ||
+          !Number.isFinite(max) ||
+          productPrice <= max;
 
-      const matchesMinPrice =
-        min === null || productPrice >= min;
+        const matchesBrand =
+          !brand || normalize(product.brand) === normalize(brand);
 
-      const matchesMaxPrice =
-        max === null || productPrice <= max;
+        const matchesMovement =
+          !movement ||
+          normalize(product.movement_type) === normalize(movement);
 
-      return (
-        matchesCategory &&
-        matchesSearch &&
-        matchesStock &&
-        matchesMinPrice &&
-        matchesMaxPrice
-      );
-    });
+        const matchesDiameter =
+          !diameter ||
+          normalize(product.case_diameter) === normalize(diameter);
 
-    return [...result].sort((a, b) => {
-      if (sort === "price_asc") {
-        return Number(a.price) - Number(b.price);
-      }
+        const matchesCaseMaterial =
+          !caseMaterial ||
+          normalize(product.case_material) === normalize(caseMaterial);
 
-      if (sort === "price_desc") {
-        return Number(b.price) - Number(a.price);
-      }
+        const matchesWaterResistance =
+          !waterResistance ||
+          normalize(product.water_resistance) ===
+            normalize(waterResistance);
 
-      if (sort === "name_asc") {
-        return a.name.localeCompare(b.name, "sr");
-      }
+        const matchesChronograph =
+          !chronograph ||
+          normalize(product.chronograph) === normalize(chronograph);
 
-      const dateA = a.created_at
-        ? new Date(a.created_at).getTime()
-        : 0;
+        const matchesGmt =
+          !gmt || normalize(product.gmt) === normalize(gmt);
 
-      const dateB = b.created_at
-        ? new Date(b.created_at).getTime()
-        : 0;
+        return (
+          matchesCategory &&
+          matchesSearch &&
+          matchesStock &&
+          matchesMinPrice &&
+          matchesMaxPrice &&
+          matchesBrand &&
+          matchesMovement &&
+          matchesDiameter &&
+          matchesCaseMaterial &&
+          matchesWaterResistance &&
+          matchesChronograph &&
+          matchesGmt
+        );
+      })
+      .sort((a, b) => {
+        if (sort === "price_asc") {
+          return Number(a.price) - Number(b.price);
+        }
 
-      return dateB - dateA;
-    });
+        if (sort === "price_desc") {
+          return Number(b.price) - Number(a.price);
+        }
+
+        if (sort === "name_asc") {
+          return a.name.localeCompare(b.name, "sr");
+        }
+
+        const dateA = a.created_at
+          ? new Date(a.created_at).getTime()
+          : 0;
+
+        const dateB = b.created_at
+          ? new Date(b.created_at).getTime()
+          : 0;
+
+        return dateB - dateA;
+      });
   }, [
     products,
     category,
@@ -125,16 +280,30 @@ export default function CategoryFilter({
     sort,
     minPrice,
     maxPrice,
+    brand,
+    movement,
+    diameter,
+    caseMaterial,
+    waterResistance,
+    chronograph,
+    gmt,
     showGenderFilter,
   ]);
 
   const hasActiveFilters =
-    search !== "" ||
+    search.trim() !== "" ||
     category !== "sve" ||
     onlyInStock ||
     sort !== "newest" ||
     minPrice !== "" ||
-    maxPrice !== "";
+    maxPrice !== "" ||
+    brand !== "" ||
+    movement !== "" ||
+    diameter !== "" ||
+    caseMaterial !== "" ||
+    waterResistance !== "" ||
+    chronograph !== "" ||
+    gmt !== "";
 
   const resetFilters = () => {
     setSearch("");
@@ -143,12 +312,19 @@ export default function CategoryFilter({
     setSort("newest");
     setMinPrice("");
     setMaxPrice("");
+    setBrand("");
+    setMovement("");
+    setDiameter("");
+    setCaseMaterial("");
+    setWaterResistance("");
+    setChronograph("");
+    setGmt("");
   };
 
   return (
     <>
       <div className="mt-12 rounded-3xl border border-white/10 bg-neutral-900/60 p-4 backdrop-blur sm:p-5">
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-5">
           <div className="relative">
             <svg
               aria-hidden="true"
@@ -184,33 +360,102 @@ export default function CategoryFilter({
           </div>
 
           {showGenderFilter && (
-            <div className="flex flex-wrap gap-2">
-              {categories.map((item) => {
-                const active = category === item.value;
+            <div>
+              <p className="mb-2 text-sm text-neutral-400">Pol</p>
 
-                return (
-                  <button
-                    key={item.value}
-                    type="button"
-                    onClick={() => setCategory(item.value)}
-                    className={`rounded-2xl px-5 py-3 text-sm font-semibold transition-all duration-200 active:scale-95 ${
-                      active
-                        ? "bg-white text-black"
-                        : "border border-white/10 bg-neutral-950 text-neutral-300 hover:border-white/20 hover:bg-neutral-800 hover:text-white"
-                    }`}
-                  >
-                    {item.label}
-                  </button>
-                );
-              })}
+              <div className="flex flex-wrap gap-2">
+                {categories.map((item) => {
+                  const active = category === item.value;
+
+                  return (
+                    <button
+                      key={item.value}
+                      type="button"
+                      onClick={() => setCategory(item.value)}
+                      aria-pressed={active}
+                      className={`rounded-2xl px-5 py-3 text-sm font-semibold transition-all duration-200 active:scale-95 ${
+                        active
+                          ? "bg-white text-black"
+                          : "border border-white/10 bg-neutral-950 text-neutral-300 hover:border-white/20 hover:bg-neutral-800 hover:text-white"
+                      }`}
+                    >
+                      {item.label}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
           )}
+
+          <div>
+            <p className="mb-3 text-sm font-semibold text-white">
+              Filteri za satove
+            </p>
+
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              <FilterSelect
+                id="filter-brand"
+                label="Brend"
+                value={brand}
+                onChange={setBrand}
+                options={brands}
+              />
+
+              <FilterSelect
+                id="filter-movement"
+                label="Mehanizam"
+                value={movement}
+                onChange={setMovement}
+                options={movements}
+              />
+
+              <FilterSelect
+                id="filter-diameter"
+                label="Prečnik kućišta"
+                value={diameter}
+                onChange={setDiameter}
+                options={diameters}
+              />
+
+              <FilterSelect
+                id="filter-case-material"
+                label="Materijal kućišta"
+                value={caseMaterial}
+                onChange={setCaseMaterial}
+                options={caseMaterials}
+              />
+
+              <FilterSelect
+                id="filter-water-resistance"
+                label="Vodootpornost"
+                value={waterResistance}
+                onChange={setWaterResistance}
+                options={waterResistances}
+              />
+
+              <FilterSelect
+                id="filter-chronograph"
+                label="Hronograf"
+                value={chronograph}
+                onChange={setChronograph}
+                options={chronographOptions}
+              />
+
+              <FilterSelect
+                id="filter-gmt"
+                label="GMT"
+                value={gmt}
+                onChange={setGmt}
+                options={gmtOptions}
+              />
+            </div>
+          </div>
 
           <div className="grid gap-3 sm:grid-cols-2">
             <div>
               <label
                 htmlFor="min-price"
-                className="mb-2 block text-sm text-neutral-500"
+                className="mb-2 block text-sm text-neutral-400"
               >
                 Cena od
               </label>
@@ -222,9 +467,7 @@ export default function CategoryFilter({
                   min="0"
                   step="1"
                   value={minPrice}
-                  onChange={(event) =>
-                    setMinPrice(event.target.value)
-                  }
+                  onChange={(event) => setMinPrice(event.target.value)}
                   placeholder="0"
                   className="h-12 w-full rounded-xl border border-white/10 bg-neutral-950 px-4 pr-16 text-base text-white outline-none transition placeholder:text-neutral-600 focus:border-white/30"
                 />
@@ -238,7 +481,7 @@ export default function CategoryFilter({
             <div>
               <label
                 htmlFor="max-price"
-                className="mb-2 block text-sm text-neutral-500"
+                className="mb-2 block text-sm text-neutral-400"
               >
                 Cena do
               </label>
@@ -250,9 +493,7 @@ export default function CategoryFilter({
                   min="0"
                   step="1"
                   value={maxPrice}
-                  onChange={(event) =>
-                    setMaxPrice(event.target.value)
-                  }
+                  onChange={(event) => setMaxPrice(event.target.value)}
                   placeholder="Bez limita"
                   className="h-12 w-full rounded-xl border border-white/10 bg-neutral-950 px-4 pr-16 text-base text-white outline-none transition placeholder:text-neutral-600 focus:border-white/30"
                 />
@@ -264,14 +505,18 @@ export default function CategoryFilter({
             </div>
           </div>
 
+          {invalidPriceRange && (
+            <p role="alert" className="text-sm text-red-400">
+              Cena „od” ne može biti veća od cene „do”.
+            </p>
+          )}
+
           <div className="flex flex-col gap-3 border-t border-white/10 pt-4 sm:flex-row sm:items-center sm:justify-between">
             <label className="flex min-h-11 cursor-pointer items-center gap-3 text-sm text-neutral-300">
               <input
                 type="checkbox"
                 checked={onlyInStock}
-                onChange={(event) =>
-                  setOnlyInStock(event.target.checked)
-                }
+                onChange={(event) => setOnlyInStock(event.target.checked)}
                 className="h-4 w-4 rounded border-white/20 bg-neutral-950 accent-white"
               />
 
@@ -281,7 +526,7 @@ export default function CategoryFilter({
             <div className="flex items-center gap-3">
               <label
                 htmlFor="sort-products"
-                className="text-sm text-neutral-500"
+                className="text-sm text-neutral-400"
               >
                 Sortiraj:
               </label>
@@ -290,7 +535,7 @@ export default function CategoryFilter({
                 id="sort-products"
                 value={sort}
                 onChange={(event) => setSort(event.target.value)}
-                className="min-h-11 rounded-xl border border-white/10 bg-neutral-950 px-4 text-sm text-white outline-none transition focus:border-white/30"
+                className="min-h-11 min-w-0 rounded-xl border border-white/10 bg-neutral-950 px-3 text-sm text-white outline-none transition focus:border-white/30"
               >
                 {sortOptions.map((option) => (
                   <option
@@ -310,16 +555,12 @@ export default function CategoryFilter({
       <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="text-sm text-neutral-500">
-            {hasActiveFilters
-              ? "Rezultati pretrage"
-              : `Svi ${productLabel}`}
+            {hasActiveFilters ? "Rezultati pretrage" : `Svi ${productLabel}`}
           </p>
 
           <p className="mt-1 text-lg font-semibold">
-            {filteredProducts.length}{" "}
-            {filteredProducts.length === 1
-              ? "proizvod"
-              : "proizvoda"}
+            {invalidPriceRange ? 0 : filteredProducts.length}{" "}
+            {filteredProducts.length === 1 ? "proizvod" : "proizvoda"}
           </p>
         </div>
 
@@ -335,116 +576,110 @@ export default function CategoryFilter({
       </div>
 
       <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {filteredProducts.map((product) => (
-          <article
-            key={product.id}
-            className="group overflow-hidden rounded-[2rem] border border-white/10 bg-neutral-900 transition-all duration-300 hover:-translate-y-1 hover:border-white/20 hover:bg-neutral-800/80"
-          >
-            <Link
-              href={`/product/${product.id}`}
-              className="block"
+        {!invalidPriceRange &&
+          filteredProducts.map((product) => (
+            <article
+              key={product.id}
+              className="group overflow-hidden rounded-[2rem] border border-white/10 bg-neutral-900 transition-all duration-300 hover:-translate-y-1 hover:border-white/20 hover:bg-neutral-800/80"
             >
-              <div className="relative overflow-hidden bg-neutral-800">
-                <div className="aspect-[4/3]">
-                  {product.images && product.images[0] ? (
-                    <img
-                      src={product.images[0]}
-                      alt={product.name}
-                      className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-                    />
-                  ) : (
-                    <div className="flex h-full items-center justify-center">
-                      <span className="text-sm text-neutral-500">
-                        Slika proizvoda
+              <Link href={`/product/${product.id}`} className="block">
+                <div className="relative overflow-hidden bg-neutral-800">
+                  <div className="aspect-[4/3]">
+                    {product.images && product.images[0] ? (
+                      <img
+                        src={product.images[0]}
+                        alt={product.name}
+                        loading="lazy"
+                        className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                      />
+                    ) : (
+                      <div className="flex h-full items-center justify-center">
+                        <span className="text-sm text-neutral-500">
+                          Slika proizvoda
+                        </span>
+                      </div>
+                    )}
+                  </div>
+
+                  {showGenderFilter && (
+                    <div className="absolute left-4 top-4">
+                      <span className="rounded-full border border-white/10 bg-black/60 px-3 py-1.5 text-[11px] font-medium uppercase tracking-[0.18em] text-white backdrop-blur">
+                        {normalize(product.category) === "muski"
+                          ? "Muški"
+                          : normalize(product.category) === "zenski"
+                            ? "Ženski"
+                            : "Unisex"}
+                      </span>
+                    </div>
+                  )}
+
+                  {product.stock <= 0 && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-black/50 backdrop-blur-[2px]">
+                      <span className="rounded-full border border-white/10 bg-neutral-950/90 px-4 py-2 text-xs font-semibold uppercase tracking-[0.15em] text-neutral-300">
+                        Nije na stanju
                       </span>
                     </div>
                   )}
                 </div>
 
-                {showGenderFilter && (
-                  <div className="absolute left-4 top-4">
-                    <span className="rounded-full border border-white/10 bg-black/60 px-3 py-1.5 text-[11px] font-medium uppercase tracking-[0.18em] text-white backdrop-blur">
-                      {product.category === "muski"
-                        ? "Muški"
-                        : product.category === "zenski"
-                          ? "Ženski"
-                          : "Unisex"}
-                    </span>
+                <div className="p-6 pb-2">
+                  <p className="text-xs font-medium uppercase tracking-[0.22em] text-neutral-500">
+                    {product.brand || "Watch Shop"}
+                  </p>
+
+                  <h3 className="mt-3 text-2xl font-semibold tracking-tight text-white">
+                    {product.name}
+                  </h3>
+
+                  {product.model && (
+                    <p className="mt-1 text-sm text-neutral-500">
+                      {product.model}
+                    </p>
+                  )}
+                </div>
+              </Link>
+
+              <div className="p-6 pt-4">
+                <div className="flex items-end justify-between gap-4 border-t border-white/10 pt-5">
+                  <div>
+                    <p className="text-xs uppercase tracking-[0.16em] text-neutral-600">
+                      Cena
+                    </p>
+
+                    <p className="mt-1 text-2xl font-bold tracking-tight text-white">
+                      {Number(product.price).toLocaleString("sr-RS")} RSD
+                    </p>
                   </div>
-                )}
 
-                {product.stock <= 0 && (
-                  <div className="absolute inset-0 flex items-center justify-center bg-black/50 backdrop-blur-[2px]">
-                    <span className="rounded-full border border-white/10 bg-neutral-950/90 px-4 py-2 text-xs font-semibold uppercase tracking-[0.15em] text-neutral-300">
-                      Nije na stanju
-                    </span>
-                  </div>
-                )}
-              </div>
-
-              <div className="p-6 pb-2">
-                <p className="text-xs font-medium uppercase tracking-[0.22em] text-neutral-500">
-                  {product.brand || "Watch Shop"}
-                </p>
-
-                <h3 className="mt-3 text-2xl font-semibold tracking-tight text-white">
-                  {product.name}
-                </h3>
-
-                {product.model && (
-                  <p className="mt-1 text-sm text-neutral-500">
-                    {product.model}
-                  </p>
-                )}
-              </div>
-            </Link>
-
-            <div className="p-6 pt-4">
-              <div className="flex items-end justify-between gap-4 border-t border-white/10 pt-5">
-                <div>
-                  <p className="text-xs uppercase tracking-[0.16em] text-neutral-600">
-                    Cena
-                  </p>
-
-                  <p className="mt-1 text-2xl font-bold tracking-tight text-white">
-                    {Number(product.price).toLocaleString(
-                      "sr-RS"
-                    )}{" "}
-                    RSD
-                  </p>
+                  <span
+                    className={
+                      product.stock > 0
+                        ? "text-right text-xs text-neutral-500"
+                        : "text-right text-xs text-red-400"
+                    }
+                  >
+                    {product.stock > 0
+                      ? `${product.stock} ${
+                          product.stock === 1 ? "komad" : "komada"
+                        }`
+                      : "Nije na stanju"}
+                  </span>
                 </div>
 
-                <span
-                  className={
-                    product.stock > 0
-                      ? "text-right text-xs text-neutral-500"
-                      : "text-right text-xs text-red-400"
-                  }
-                >
-                  {product.stock > 0
-                    ? `${product.stock} ${
-                        product.stock === 1
-                          ? "komad"
-                          : "komada"
-                      }`
-                    : "Nije na stanju"}
-                </span>
+                <AddToCartButton
+                  product={{
+                    id: product.id,
+                    name: product.name,
+                    price: Number(product.price),
+                    image: product.images?.[0] ?? null,
+                    stock: product.stock,
+                  }}
+                />
               </div>
+            </article>
+          ))}
 
-              <AddToCartButton
-                product={{
-                  id: product.id,
-                  name: product.name,
-                  price: Number(product.price),
-                  image: product.images?.[0] ?? null,
-                  stock: product.stock,
-                }}
-              />
-            </div>
-          </article>
-        ))}
-
-        {filteredProducts.length === 0 && (
+        {(invalidPriceRange || filteredProducts.length === 0) && (
           <div className="col-span-full rounded-[2rem] border border-white/10 bg-neutral-900 p-12 text-center">
             <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-neutral-800">
               <svg
@@ -460,12 +695,13 @@ export default function CategoryFilter({
             </div>
 
             <h3 className="mt-5 text-xl font-semibold">
-              Nema rezultata
+              {invalidPriceRange ? "Proveri cene" : "Nema rezultata"}
             </h3>
 
             <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-neutral-500">
-              Nismo pronašli proizvod koji odgovara tvojoj
-              pretrazi, kategoriji ili cenovnom opsegu.
+              {invalidPriceRange
+                ? "Uneta početna cena je veća od maksimalne cene."
+                : "Nismo pronašli proizvod koji odgovara izabranim filterima. Promeni kriterijume ili resetuj filtere."}
             </p>
 
             <button
