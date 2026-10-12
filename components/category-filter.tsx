@@ -33,8 +33,14 @@ const sortOptions = [
 
 export default function CategoryFilter({
   products,
+  productLabel = "satovi",
+  searchPlaceholder = "Pretraži sat, brend ili model...",
+  showGenderFilter = true,
 }: {
   products: Product[];
+  productLabel?: string;
+  searchPlaceholder?: string;
+  showGenderFilter?: boolean;
 }) {
   const [category, setCategory] = useState("sve");
   const [search, setSearch] = useState("");
@@ -51,7 +57,9 @@ export default function CategoryFilter({
 
     const result = products.filter((product) => {
       const matchesCategory =
-        category === "sve" || product.category === category;
+        !showGenderFilter ||
+        category === "sve" ||
+        product.category === category;
 
       const searchableText = [
         product.name,
@@ -117,6 +125,7 @@ export default function CategoryFilter({
     sort,
     minPrice,
     maxPrice,
+    showGenderFilter,
   ]);
 
   const hasActiveFilters =
@@ -157,8 +166,8 @@ export default function CategoryFilter({
               type="search"
               value={search}
               onChange={(event) => setSearch(event.target.value)}
-              placeholder="Pretraži sat, brend ili model..."
-              aria-label="Pretraži satove"
+              placeholder={searchPlaceholder}
+              aria-label={`Pretraži ${productLabel}`}
               className="h-14 w-full rounded-2xl border border-white/10 bg-neutral-950 pl-12 pr-12 text-base text-white outline-none transition placeholder:text-neutral-600 focus:border-white/30"
             />
 
@@ -174,26 +183,28 @@ export default function CategoryFilter({
             )}
           </div>
 
-          <div className="flex flex-wrap gap-2">
-            {categories.map((item) => {
-              const active = category === item.value;
+          {showGenderFilter && (
+            <div className="flex flex-wrap gap-2">
+              {categories.map((item) => {
+                const active = category === item.value;
 
-              return (
-                <button
-                  key={item.value}
-                  type="button"
-                  onClick={() => setCategory(item.value)}
-                  className={`rounded-2xl px-5 py-3 text-sm font-semibold transition-all duration-200 active:scale-95 ${
-                    active
-                      ? "bg-white text-black"
-                      : "border border-white/10 bg-neutral-950 text-neutral-300 hover:border-white/20 hover:bg-neutral-800 hover:text-white"
-                  }`}
-                >
-                  {item.label}
-                </button>
-              );
-            })}
-          </div>
+                return (
+                  <button
+                    key={item.value}
+                    type="button"
+                    onClick={() => setCategory(item.value)}
+                    className={`rounded-2xl px-5 py-3 text-sm font-semibold transition-all duration-200 active:scale-95 ${
+                      active
+                        ? "bg-white text-black"
+                        : "border border-white/10 bg-neutral-950 text-neutral-300 hover:border-white/20 hover:bg-neutral-800 hover:text-white"
+                    }`}
+                  >
+                    {item.label}
+                  </button>
+                );
+              })}
+            </div>
+          )}
 
           <div className="grid gap-3 sm:grid-cols-2">
             <div>
@@ -299,7 +310,9 @@ export default function CategoryFilter({
       <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="text-sm text-neutral-500">
-            {hasActiveFilters ? "Rezultati pretrage" : "Svi satovi"}
+            {hasActiveFilters
+              ? "Rezultati pretrage"
+              : `Svi ${productLabel}`}
           </p>
 
           <p className="mt-1 text-lg font-semibold">
@@ -342,21 +355,23 @@ export default function CategoryFilter({
                   ) : (
                     <div className="flex h-full items-center justify-center">
                       <span className="text-sm text-neutral-500">
-                        Slika sata
+                        Slika proizvoda
                       </span>
                     </div>
                   )}
                 </div>
 
-                <div className="absolute left-4 top-4">
-                  <span className="rounded-full border border-white/10 bg-black/60 px-3 py-1.5 text-[11px] font-medium uppercase tracking-[0.18em] text-white backdrop-blur">
-                    {product.category === "muski"
-                      ? "Muški"
-                      : product.category === "zenski"
-                        ? "Ženski"
-                        : "Unisex"}
-                  </span>
-                </div>
+                {showGenderFilter && (
+                  <div className="absolute left-4 top-4">
+                    <span className="rounded-full border border-white/10 bg-black/60 px-3 py-1.5 text-[11px] font-medium uppercase tracking-[0.18em] text-white backdrop-blur">
+                      {product.category === "muski"
+                        ? "Muški"
+                        : product.category === "zenski"
+                          ? "Ženski"
+                          : "Unisex"}
+                    </span>
+                  </div>
+                )}
 
                 {product.stock <= 0 && (
                   <div className="absolute inset-0 flex items-center justify-center bg-black/50 backdrop-blur-[2px]">
@@ -449,8 +464,8 @@ export default function CategoryFilter({
             </h3>
 
             <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-neutral-500">
-              Nismo pronašli sat koji odgovara tvojoj pretrazi,
-              kategoriji ili cenovnom opsegu.
+              Nismo pronašli proizvod koji odgovara tvojoj
+              pretrazi, kategoriji ili cenovnom opsegu.
             </p>
 
             <button
@@ -458,7 +473,7 @@ export default function CategoryFilter({
               onClick={resetFilters}
               className="mt-6 rounded-xl bg-white px-5 py-3 text-sm font-semibold text-black transition hover:bg-neutral-200 active:scale-95"
             >
-              Prikaži sve satove
+              Prikaži sve {productLabel}
             </button>
           </div>
         )}

@@ -26,8 +26,28 @@ const leaves = [
   { left: "97%", delay: "8s", duration: "11s", size: "18px", rotate: "-30deg" },
 ];
 
+const mainNavigation = [
+  { href: "/satovi", label: "Satovi" },
+  { href: "/narukvice", label: "Narukvice" },
+  { href: "/ogrlice", label: "Ogrlice" },
+  { href: "/novcanici", label: "Novčanici" },
+  { href: "/pokloni", label: "Pokloni" },
+];
+
 export default async function Home() {
   const products = await getProducts();
+
+  const watches = products.filter(
+    (product) => product.product_type === "watch"
+  );
+
+  const featuredWatches = watches.filter(
+    (product) => product.is_featured === true
+  );
+
+  const displayedWatches = (
+    featuredWatches.length > 0 ? featuredWatches : watches
+  ).slice(0, 6);
 
   return (
     <main className="relative min-h-screen bg-neutral-950 text-white">
@@ -97,26 +117,43 @@ export default async function Home() {
       </div>
 
       <header className="sticky top-0 z-50 border-b border-white/10 bg-neutral-950/90 backdrop-blur-xl">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-5 sm:px-6">
-          <Link href="/" className="group">
-            <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full border border-white/15 bg-white/[0.03] transition group-hover:border-white/30">
-                <span className="text-sm">⌚</span>
+        <div className="mx-auto max-w-7xl px-5 sm:px-6">
+          <div className="flex items-center justify-between py-5">
+            <Link href="/" className="group">
+              <div className="flex items-center gap-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full border border-white/15 bg-white/[0.03] transition group-hover:border-white/30">
+                  <span className="text-sm">⌚</span>
+                </div>
+
+                <div>
+                  <h1 className="text-xl font-bold tracking-[0.18em] sm:text-2xl">
+                    WATCH SHOP
+                  </h1>
+
+                  <p className="mt-0.5 text-[10px] uppercase tracking-[0.3em] text-neutral-500 sm:text-xs">
+                    Premium satovi
+                  </p>
+                </div>
               </div>
+            </Link>
 
-              <div>
-                <h1 className="text-xl font-bold tracking-[0.18em] sm:text-2xl">
-                  WATCH SHOP
-                </h1>
+            <CartButton />
+          </div>
 
-                <p className="mt-0.5 text-[10px] uppercase tracking-[0.3em] text-neutral-500 sm:text-xs">
-                  Premium satovi
-                </p>
-              </div>
-            </div>
-          </Link>
-
-          <CartButton />
+          <nav
+            aria-label="Glavna navigacija"
+            className="flex gap-2 overflow-x-auto border-t border-white/10 py-3"
+          >
+            {mainNavigation.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="shrink-0 rounded-xl px-4 py-2.5 text-sm font-medium text-neutral-400 transition hover:bg-white/5 hover:text-white"
+              >
+                {item.label}
+              </Link>
+            ))}
+          </nav>
         </div>
       </header>
 
@@ -155,10 +192,14 @@ export default async function Home() {
           <h3 className="text-xl font-semibold">
             Izdvojeni satovi
           </h3>
+
+          <p className="mt-2 text-sm text-neutral-500">
+            Naš izbor satova koji privlače pažnju.
+          </p>
         </div>
 
         <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {products.slice(0, 3).map((product) => (
+          {displayedWatches.map((product) => (
             <Link
               key={product.id}
               href={`/product/${product.id}`}
@@ -195,10 +236,16 @@ export default async function Home() {
               </div>
             </Link>
           ))}
+
+          {displayedWatches.length === 0 && (
+            <p className="text-neutral-500">
+              Trenutno nema satova za prikaz.
+            </p>
+          )}
         </div>
 
         <div id="kolekcija" className="mt-16 scroll-mt-24">
-          <CategoryFilter products={products} />
+          <CategoryFilter products={watches} />
         </div>
       </section>
 
@@ -216,9 +263,19 @@ export default async function Home() {
             </div>
 
             <nav
-              aria-label="Dodatne informacije"
+              aria-label="Glavna navigacija"
               className="flex flex-wrap gap-x-6 gap-y-3 text-sm text-neutral-400"
             >
+              {mainNavigation.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className="transition hover:text-white"
+                >
+                  {item.label}
+                </Link>
+              ))}
+
               <Link
                 href="/about"
                 className="transition hover:text-white"

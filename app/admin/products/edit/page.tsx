@@ -1,15 +1,28 @@
 "use client";
 
 import Link from "next/link";
-import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import {
+  ChangeEvent,
+  FormEvent,
+  useEffect,
+  useState,
+} from "react";
 import { createClient } from "@/lib/supabase";
+
+type ProductType =
+  | "watch"
+  | "bracelet"
+  | "necklace"
+  | "wallet"
+  | "gift_box"
+  | "gift_set";
 
 type SpecificationField = {
   key: string;
   label: string;
 };
 
-const specificationGroups: {
+const watchSpecificationGroups: {
   title: string;
   fields: SpecificationField[];
 }[] = [
@@ -45,9 +58,7 @@ const specificationGroups: {
   },
   {
     title: "Staklo",
-    fields: [
-      { key: "crystal_material", label: "Materijal" },
-    ],
+    fields: [{ key: "crystal_material", label: "Materijal" }],
   },
   {
     title: "Narukvica / kaiš",
@@ -59,13 +70,80 @@ const specificationGroups: {
   },
 ];
 
-const allSpecificationFields = specificationGroups.flatMap(
-  (group) => group.fields
+const accessorySpecificationGroups: Record<
+  Exclude<ProductType, "watch">,
+  {
+    title: string;
+    fields: SpecificationField[];
+  }[]
+> = {
+  bracelet: [
+    {
+      title: "Detalji narukvice",
+      fields: [
+        { key: "bracelet_material", label: "Materijal" },
+        { key: "bracelet_color", label: "Boja" },
+        { key: "bracelet_width", label: "Širina" },
+      ],
+    },
+  ],
+  necklace: [
+    {
+      title: "Detalji ogrlice",
+      fields: [
+        { key: "bracelet_material", label: "Materijal" },
+        { key: "bracelet_color", label: "Boja" },
+        { key: "bracelet_width", label: "Širina / dužina" },
+      ],
+    },
+  ],
+  wallet: [
+    {
+      title: "Detalji novčanika",
+      fields: [
+        { key: "bracelet_material", label: "Materijal" },
+        { key: "bracelet_color", label: "Boja" },
+        { key: "bracelet_width", label: "Dimenzije" },
+      ],
+    },
+  ],
+  gift_box: [
+    {
+      title: "Detalji poklon kutije",
+      fields: [
+        { key: "bracelet_material", label: "Materijal" },
+        { key: "bracelet_color", label: "Boja" },
+        { key: "bracelet_width", label: "Dimenzije" },
+      ],
+    },
+  ],
+  gift_set: [
+    {
+      title: "Detalji poklon seta",
+      fields: [
+        { key: "bracelet_material", label: "Materijal / sadržaj" },
+        { key: "bracelet_color", label: "Boja" },
+        { key: "bracelet_width", label: "Dimenzije / veličina" },
+      ],
+    },
+  ],
+};
+
+const allSpecificationFields = Array.from(
+  new Map(
+    [
+      ...watchSpecificationGroups.flatMap((group) => group.fields),
+      ...Object.values(accessorySpecificationGroups).flatMap((groups) =>
+        groups.flatMap((group) => group.fields)
+      ),
+    ].map((field) => [field.key, field])
+  ).values()
 );
 
 type Product = {
   id: string;
   name: string;
+  product_type: ProductType;
   brand: string | null;
   model: string | null;
   reference: string | null;
@@ -76,11 +154,36 @@ type Product = {
   stock: number;
   category: string;
   images: string[] | null;
+  is_featured: boolean;
   [key: string]: unknown;
 };
 
+const productTypeLabels: Record<ProductType, string> = {
+  watch: "Sat",
+  bracelet: "Narukvica",
+  necklace: "Ogrlica",
+  wallet: "Novčanik",
+  gift_box: "Poklon kutija",
+  gift_set: "Poklon set",
+};
+
+function getProductTypeLabel(type: ProductType) {
+  return productTypeLabels[type] ?? "Proizvod";
+}
+
+function getSpecificationGroups(productType: ProductType) {
+  if (productType === "watch") {
+    return watchSpecificationGroups;
+  }
+
+  return accessorySpecificationGroups[productType];
+}
+
 export default function EditProductPage() {
   const [product, setProduct] = useState<Product | null>(null);
+
+  const [productType, setProductType] =
+    useState<ProductType>("watch");
 
   const [name, setName] = useState("");
   const [brand, setBrand] = useState("");
@@ -93,14 +196,13 @@ export default function EditProductPage() {
   const [purchasePrice, setPurchasePrice] = useState("");
   const [stock, setStock] = useState("");
   const [description, setDescription] = useState("");
+  const [isFeatured, setIsFeatured] = useState(false);
 
-  const [specifications, setSpecifications] = useState<
-    Record<string, string>
-  >({});
+  const [specifications, setSpecifications] =
+    useState<Record<string, string>>({});
 
-  const [visibleSpecifications, setVisibleSpecifications] = useState<
-    Record<string, boolean>
-  >({});
+  const [visibleSpecifications, setVisibleSpecifications] =
+    useState<Record<string, boolean>>({});
 
   const [existingImages, setExistingImages] = useState<string[]>([]);
   const [imageFiles, setImageFiles] = useState<File[]>([]);
@@ -125,41 +227,41 @@ export default function EditProductPage() {
 
       const { data, error } = await supabase
         .from("products")
-        .select(
-          `
-            id,
-            name,
-            brand,
-            model,
-            reference,
-            year,
-            description,
-            price,
-            purchase_price,
-            stock,
-            category,
-            images,
-            case_diameter,
-            case_thickness,
-            case_material,
-            case_shape,
-            case_color,
-            water_resistance,
-            movement_type,
-            movement_manufacturer,
-            movement_caliber,
-            dial_color,
-            dial_indices,
-            lume,
-            date_function,
-            chronograph,
-            gmt,
-            crystal_material,
-            bracelet_material,
-            bracelet_color,
-            bracelet_width
-          `
-        )
+        .select(`
+          id,
+          name,
+          product_type,
+          brand,
+          model,
+          reference,
+          year,
+          description,
+          price,
+          purchase_price,
+          stock,
+          category,
+          images,
+          is_featured,
+          case_diameter,
+          case_thickness,
+          case_material,
+          case_shape,
+          case_color,
+          water_resistance,
+          movement_type,
+          movement_manufacturer,
+          movement_caliber,
+          dial_color,
+          dial_indices,
+          lume,
+          date_function,
+          chronograph,
+          gmt,
+          crystal_material,
+          bracelet_material,
+          bracelet_color,
+          bracelet_width
+        `)
         .eq("id", id)
         .single();
 
@@ -170,48 +272,53 @@ export default function EditProductPage() {
         return;
       }
 
-      setProduct(data as Product);
+      const loadedProduct = data as Product;
 
-      setName(data.name || "");
-      setBrand(data.brand || "");
-      setModel(data.model || "");
-      setReference(data.reference || "");
-      setYear(data.year ? String(data.year) : "");
-      setCategory(data.category || "unisex");
+      setProduct(loadedProduct);
 
-      setPrice(String(data.price ?? ""));
+      const loadedProductType: ProductType =
+        loadedProduct.product_type ?? "watch";
+
+      setProductType(loadedProductType);
+      setName(loadedProduct.name || "");
+      setBrand(loadedProduct.brand || "");
+      setModel(loadedProduct.model || "");
+      setReference(loadedProduct.reference || "");
+      setYear(
+        loadedProduct.year ? String(loadedProduct.year) : ""
+      );
+      setCategory(loadedProduct.category || "unisex");
+      setPrice(String(loadedProduct.price ?? ""));
       setPurchasePrice(
-        data.purchase_price !== null && data.purchase_price !== undefined
-          ? String(data.purchase_price)
+        loadedProduct.purchase_price !== null &&
+          loadedProduct.purchase_price !== undefined
+          ? String(loadedProduct.purchase_price)
           : ""
       );
-      setStock(String(data.stock ?? ""));
-      setDescription(data.description || "");
+      setStock(String(loadedProduct.stock ?? ""));
+      setDescription(loadedProduct.description || "");
+      setIsFeatured(loadedProduct.is_featured ?? false);
 
       const loadedSpecifications: Record<string, string> = {};
       const loadedVisibility: Record<string, boolean> = {};
 
-    for (const field of allSpecificationFields) {
-  const value = (data as Record<string, unknown>)[field.key];
+      for (const field of allSpecificationFields) {
+        const value = (data as Record<string, unknown>)[field.key];
 
-  loadedSpecifications[field.key] =
-    value !== null && value !== undefined
-      ? String(value)
-      : "";
+        loadedSpecifications[field.key] =
+          value !== null && value !== undefined ? String(value) : "";
 
-  loadedVisibility[field.key] =
-    value !== null &&
-    value !== undefined &&
-    String(value).trim() !== "";
-}
+        loadedVisibility[field.key] =
+          value !== null &&
+          value !== undefined &&
+          String(value).trim() !== "";
+      }
 
       setSpecifications(loadedSpecifications);
       setVisibleSpecifications(loadedVisibility);
 
       setExistingImages(
-        Array.isArray(data.images)
-          ? data.images
-          : []
+        Array.isArray(loadedProduct.images) ? loadedProduct.images : []
       );
 
       setLoading(false);
@@ -236,7 +343,6 @@ export default function EditProductPage() {
 
   function handleImageChange(event: ChangeEvent<HTMLInputElement>) {
     const files = Array.from(event.target.files ?? []);
-
     setImageFiles(files);
   }
 
@@ -261,19 +367,17 @@ export default function EditProductPage() {
       const parsedPrice = Number(price);
 
       const parsedPurchasePrice =
-        purchasePrice.trim() === ""
-          ? null
-          : Number(purchasePrice);
+        purchasePrice.trim() === "" ? null : Number(purchasePrice);
 
       const parsedStock = Number(stock);
 
       const parsedYear =
-        year.trim() === ""
-          ? null
-          : Number(year);
+        year.trim() === "" ? null : Number(year);
 
       if (!name.trim()) {
-        throw new Error("Naziv sata je obavezan.");
+        throw new Error(
+          `Naziv ${getProductTypeLabel(productType).toLowerCase()} je obavezan.`
+        );
       }
 
       if (!Number.isFinite(parsedPrice) || parsedPrice <= 0) {
@@ -302,16 +406,13 @@ export default function EditProductPage() {
       }
 
       const supabase = createClient();
-
       const newImageUrls: string[] = [];
 
       for (const imageFile of imageFiles) {
         const fileExtension =
           imageFile.name.split(".").pop()?.toLowerCase() || "jpg";
 
-        const fileName =
-          `${crypto.randomUUID()}.${fileExtension}`;
-
+        const fileName = `${crypto.randomUUID()}.${fileExtension}`;
         const filePath = `products/${fileName}`;
 
         const { error: uploadError } = await supabase.storage
@@ -336,20 +437,15 @@ export default function EditProductPage() {
         newImageUrls.push(publicUrl);
       }
 
-      const finalImages = [
-        ...existingImages,
-        ...newImageUrls,
-      ];
+      const finalImages = [...existingImages, ...newImageUrls];
 
       const specificationData: Record<string, string | null> = {};
 
       for (const field of allSpecificationFields) {
-        const value =
-          specifications[field.key]?.trim() || "";
+        const value = specifications[field.key]?.trim() || "";
 
         specificationData[field.key] =
-          value !== "" &&
-          visibleSpecifications[field.key]
+          value !== "" && visibleSpecifications[field.key]
             ? value
             : null;
       }
@@ -357,6 +453,7 @@ export default function EditProductPage() {
       const { error: updateError } = await supabase
         .from("products")
         .update({
+          product_type: productType,
           name: name.trim(),
           brand: brand.trim() || null,
           model: model.trim() || null,
@@ -368,6 +465,7 @@ export default function EditProductPage() {
           purchase_price: parsedPurchasePrice,
           stock: parsedStock,
           images: finalImages,
+          is_featured: productType === "watch" && isFeatured,
           ...specificationData,
         })
         .eq("id", product.id);
@@ -380,6 +478,7 @@ export default function EditProductPage() {
         current
           ? {
               ...current,
+              product_type: productType,
               name: name.trim(),
               brand: brand.trim() || null,
               model: model.trim() || null,
@@ -391,6 +490,7 @@ export default function EditProductPage() {
               purchase_price: parsedPurchasePrice,
               stock: parsedStock,
               images: finalImages,
+              is_featured: productType === "watch" && isFeatured,
               ...specificationData,
             }
           : current
@@ -425,9 +525,7 @@ export default function EditProductPage() {
     return (
       <main className="min-h-screen bg-neutral-950 px-6 py-12 text-white">
         <div className="mx-auto max-w-5xl">
-          <p className="text-neutral-400">
-            Učitavanje proizvoda...
-          </p>
+          <p className="text-neutral-400">Učitavanje proizvoda...</p>
         </div>
       </main>
     );
@@ -452,22 +550,17 @@ export default function EditProductPage() {
     );
   }
 
+  const currentSpecificationGroups = getSpecificationGroups(productType);
+
   return (
     <main className="min-h-screen bg-neutral-950 px-6 py-10 text-white">
       <div className="mx-auto max-w-5xl">
-
         <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
           <div>
-            <p className="text-sm text-neutral-500">
-              Admin panel
-            </p>
-
-            <h1 className="mt-1 text-3xl font-bold">
-              Izmeni proizvod
-            </h1>
-
+            <p className="text-sm text-neutral-500">Admin panel</p>
+            <h1 className="mt-1 text-3xl font-bold">Izmeni proizvod</h1>
             <p className="mt-2 text-neutral-400">
-              Promeni podatke o satu.
+              {getProductTypeLabel(productType)}
             </p>
           </div>
 
@@ -479,57 +572,102 @@ export default function EditProductPage() {
           </Link>
         </div>
 
-        <form
-          onSubmit={handleSave}
-          className="space-y-8"
-        >
+        <form onSubmit={handleSave} className="space-y-8">
+          <section className="rounded-3xl border border-white/10 bg-neutral-900 p-6 sm:p-8">
+            <h2 className="text-xl font-semibold">Vrsta proizvoda</h2>
+
+            <div className="mt-6">
+              <label className="text-sm text-neutral-400">
+                Tip proizvoda
+              </label>
+
+              <select
+                value={productType}
+                onChange={(event) =>
+                  setProductType(event.target.value as ProductType)
+                }
+                className="mt-2 w-full rounded-xl border border-white/10 bg-neutral-950 px-4 py-3 outline-none transition focus:border-white/30"
+              >
+                <option value="watch">Sat</option>
+                <option value="bracelet">Narukvica</option>
+                <option value="necklace">Ogrlica</option>
+                <option value="wallet">Novčanik</option>
+                <option value="gift_box">Poklon kutija</option>
+                <option value="gift_set">Poklon set</option>
+              </select>
+            </div>
+          </section>
+
+          {productType === "watch" && (
+            <section className="rounded-3xl border border-amber-400/30 bg-amber-400/5 p-6 sm:p-8">
+              <div className="flex items-start gap-4">
+                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-amber-400/10 text-xl">
+                  ⭐
+                </div>
+
+                <div className="flex-1">
+                  <h2 className="text-xl font-semibold">
+                    Istaknuti satovi
+                  </h2>
+
+                  <p className="mt-2 text-sm leading-6 text-neutral-400">
+                    Uključi ovu opciju da se sat prikaže u sekciji
+                    „Izdvojeni satovi“ na početnoj strani.
+                  </p>
+
+                  <label className="mt-5 flex cursor-pointer items-center gap-3 rounded-2xl border border-white/10 bg-neutral-950 p-4 transition hover:border-amber-400/40">
+                    <input
+                      type="checkbox"
+                      checked={isFeatured}
+                      onChange={(event) =>
+                        setIsFeatured(event.target.checked)
+                      }
+                      className="h-5 w-5 accent-amber-400"
+                    />
+
+                    <span className="font-medium">
+                      Prikaži u istaknutim satovima na početnoj strani
+                    </span>
+                  </label>
+
+                  <p className="mt-3 text-xs text-neutral-500">
+                    Izbor se primenjuje tek kada klikneš „Sačuvaj izmene“.
+                  </p>
+                </div>
+              </div>
+            </section>
+          )}
 
           <section className="rounded-3xl border border-white/10 bg-neutral-900 p-6 sm:p-8">
-            <h2 className="text-xl font-semibold">
-              Osnovno
-            </h2>
+            <h2 className="text-xl font-semibold">Osnovno</h2>
 
             <div className="mt-6 grid gap-5 sm:grid-cols-2">
-
               <div className="sm:col-span-2">
                 <label className="text-sm text-neutral-400">
-                  Naziv sata *
+                  Naziv proizvoda *
                 </label>
-
                 <input
                   value={name}
-                  onChange={(event) =>
-                    setName(event.target.value)
-                  }
+                  onChange={(event) => setName(event.target.value)}
                   required
                   className="mt-2 w-full rounded-xl border border-white/10 bg-neutral-950 px-4 py-3 outline-none transition focus:border-white/30"
                 />
               </div>
 
               <div>
-                <label className="text-sm text-neutral-400">
-                  Brend
-                </label>
-
+                <label className="text-sm text-neutral-400">Brend</label>
                 <input
                   value={brand}
-                  onChange={(event) =>
-                    setBrand(event.target.value)
-                  }
+                  onChange={(event) => setBrand(event.target.value)}
                   className="mt-2 w-full rounded-xl border border-white/10 bg-neutral-950 px-4 py-3 outline-none transition focus:border-white/30"
                 />
               </div>
 
               <div>
-                <label className="text-sm text-neutral-400">
-                  Model
-                </label>
-
+                <label className="text-sm text-neutral-400">Model</label>
                 <input
                   value={model}
-                  onChange={(event) =>
-                    setModel(event.target.value)
-                  }
+                  onChange={(event) => setModel(event.target.value)}
                   className="mt-2 w-full rounded-xl border border-white/10 bg-neutral-950 px-4 py-3 outline-none transition focus:border-white/30"
                 />
               </div>
@@ -538,27 +676,19 @@ export default function EditProductPage() {
                 <label className="text-sm text-neutral-400">
                   Referenca
                 </label>
-
                 <input
                   value={reference}
-                  onChange={(event) =>
-                    setReference(event.target.value)
-                  }
+                  onChange={(event) => setReference(event.target.value)}
                   className="mt-2 w-full rounded-xl border border-white/10 bg-neutral-950 px-4 py-3 outline-none transition focus:border-white/30"
                 />
               </div>
 
               <div>
-                <label className="text-sm text-neutral-400">
-                  Godina
-                </label>
-
+                <label className="text-sm text-neutral-400">Godina</label>
                 <input
                   type="number"
                   value={year}
-                  onChange={(event) =>
-                    setYear(event.target.value)
-                  }
+                  onChange={(event) => setYear(event.target.value)}
                   placeholder="npr. 2024"
                   className="mt-2 w-full rounded-xl border border-white/10 bg-neutral-950 px-4 py-3 outline-none transition focus:border-white/30"
                 />
@@ -568,51 +698,33 @@ export default function EditProductPage() {
                 <label className="text-sm text-neutral-400">
                   Kategorija
                 </label>
-
                 <select
                   value={category}
-                  onChange={(event) =>
-                    setCategory(event.target.value)
-                  }
+                  onChange={(event) => setCategory(event.target.value)}
                   className="mt-2 w-full rounded-xl border border-white/10 bg-neutral-950 px-4 py-3 outline-none transition focus:border-white/30"
                 >
-                  <option value="muski">
-                    Muški
-                  </option>
-
-                  <option value="zenski">
-                    Ženski
-                  </option>
-
-                  <option value="unisex">
-                    Unisex
-                  </option>
+                  <option value="muski">Muški</option>
+                  <option value="zenski">Ženski</option>
+                  <option value="unisex">Unisex</option>
                 </select>
               </div>
-
             </div>
           </section>
 
           <section className="rounded-3xl border border-white/10 bg-neutral-900 p-6 sm:p-8">
-            <h2 className="text-xl font-semibold">
-              Prodaja
-            </h2>
+            <h2 className="text-xl font-semibold">Prodaja</h2>
 
             <div className="mt-6 grid gap-5 sm:grid-cols-3">
-
               <div>
                 <label className="text-sm text-neutral-400">
                   Prodajna cena (RSD) *
                 </label>
-
                 <input
                   type="number"
                   step="1"
                   min="0"
                   value={price}
-                  onChange={(event) =>
-                    setPrice(event.target.value)
-                  }
+                  onChange={(event) => setPrice(event.target.value)}
                   required
                   className="mt-2 w-full rounded-xl border border-white/10 bg-neutral-950 px-4 py-3 outline-none transition focus:border-white/30"
                 />
@@ -622,15 +734,12 @@ export default function EditProductPage() {
                 <label className="text-sm text-neutral-400">
                   Nabavna cena (RSD)
                 </label>
-
                 <input
                   type="number"
                   step="1"
                   min="0"
                   value={purchasePrice}
-                  onChange={(event) =>
-                    setPurchasePrice(event.target.value)
-                  }
+                  onChange={(event) => setPurchasePrice(event.target.value)}
                   placeholder="Samo za admin"
                   className="mt-2 w-full rounded-xl border border-white/10 bg-neutral-950 px-4 py-3 outline-none transition focus:border-white/30"
                 />
@@ -638,54 +747,41 @@ export default function EditProductPage() {
 
               <div>
                 <label className="text-sm text-neutral-400">
-                  Stanje na lageru *
+                  Količina na stanju *
                 </label>
-
                 <input
                   type="number"
                   min="0"
                   step="1"
                   value={stock}
-                  onChange={(event) =>
-                    setStock(event.target.value)
-                  }
+                  onChange={(event) => setStock(event.target.value)}
                   required
                   className="mt-2 w-full rounded-xl border border-white/10 bg-neutral-950 px-4 py-3 outline-none transition focus:border-white/30"
                 />
               </div>
-
             </div>
 
             <div className="mt-5">
-              <label className="text-sm text-neutral-400">
-                Opis
-              </label>
-
+              <label className="text-sm text-neutral-400">Opis</label>
               <textarea
                 value={description}
-                onChange={(event) =>
-                  setDescription(event.target.value)
-                }
+                onChange={(event) => setDescription(event.target.value)}
                 rows={5}
                 className="mt-2 w-full resize-y rounded-xl border border-white/10 bg-neutral-950 px-4 py-3 outline-none transition focus:border-white/30"
               />
             </div>
           </section>
 
-          {specificationGroups.map((group) => (
+          {currentSpecificationGroups.map((group) => (
             <section
               key={group.title}
               className="rounded-3xl border border-white/10 bg-neutral-900 p-6 sm:p-8"
             >
-              <h2 className="text-xl font-semibold">
-                {group.title}
-              </h2>
+              <h2 className="text-xl font-semibold">{group.title}</h2>
 
               <div className="mt-6 space-y-4">
                 {group.fields.map((field) => {
-                  const value =
-                    specifications[field.key] ?? "";
-
+                  const value = specifications[field.key] ?? "";
                   const visible =
                     visibleSpecifications[field.key] ?? false;
 
@@ -695,12 +791,10 @@ export default function EditProductPage() {
                       className="rounded-2xl border border-white/10 bg-neutral-950 p-4"
                     >
                       <div className="grid gap-4 md:grid-cols-[1fr_auto] md:items-end">
-
                         <div>
                           <label className="text-sm text-neutral-400">
                             {field.label}
                           </label>
-
                           <input
                             value={value}
                             onChange={(event) =>
@@ -719,18 +813,12 @@ export default function EditProductPage() {
                             type="checkbox"
                             checked={visible}
                             onChange={() =>
-                              toggleSpecificationVisibility(
-                                field.key
-                              )
+                              toggleSpecificationVisibility(field.key)
                             }
                             className="h-4 w-4 accent-white"
                           />
-
-                          <span className="text-sm">
-                            Prikaži kupcu
-                          </span>
+                          <span className="text-sm">Prikaži kupcu</span>
                         </label>
-
                       </div>
                     </div>
                   );
@@ -740,13 +828,10 @@ export default function EditProductPage() {
           ))}
 
           <section className="rounded-3xl border border-white/10 bg-neutral-900 p-6 sm:p-8">
-            <h2 className="text-xl font-semibold">
-              Slike sata
-            </h2>
+            <h2 className="text-xl font-semibold">Slike proizvoda</h2>
 
             <p className="mt-2 text-sm text-neutral-500">
-              Postojeće slike možeš ukloniti, a nove dodati
-              ispod.
+              Postojeće slike možeš ukloniti, a nove dodati ispod.
             </p>
 
             {existingImages.length > 0 && (
@@ -771,9 +856,7 @@ export default function EditProductPage() {
 
                       <button
                         type="button"
-                        onClick={() =>
-                          removeExistingImage(index)
-                        }
+                        onClick={() => removeExistingImage(index)}
                         className="w-full border-t border-white/10 px-3 py-2 text-xs font-semibold text-red-400 transition hover:bg-red-500/10"
                       >
                         Ukloni sliku
@@ -788,7 +871,6 @@ export default function EditProductPage() {
               <label className="text-sm text-neutral-400">
                 Dodaj nove slike
               </label>
-
               <input
                 id="product-images"
                 type="file"
@@ -846,11 +928,8 @@ export default function EditProductPage() {
             disabled={saving}
             className="w-full rounded-2xl bg-white px-6 py-4 font-semibold text-black transition-all duration-150 hover:bg-neutral-200 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-50"
           >
-            {saving
-              ? "Čuvanje izmena..."
-              : "Sačuvaj izmene"}
+            {saving ? "Čuvanje izmena..." : "Sačuvaj izmene"}
           </button>
-
         </form>
       </div>
     </main>

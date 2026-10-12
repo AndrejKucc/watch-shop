@@ -13,7 +13,7 @@ type Product = {
   price: number;
   stock: number;
   category: string;
-  condition: string | null;
+  product_type: string;
   year: number | null;
   reference: string | null;
   images: string[] | null;
@@ -41,6 +41,13 @@ type Product = {
   bracelet_material: string | null;
   bracelet_color: string | null;
   bracelet_width: string | null;
+
+  accessory_material: string | null;
+  accessory_color: string | null;
+  accessory_size: string | null;
+  accessory_dimensions: string | null;
+  gift_for: string | null;
+  gift_contents: string | null;
 };
 
 type Specification = {
@@ -60,6 +67,15 @@ function getVisibleSpecifications(specifications: Specification[]) {
       specification.value.trim() !== ""
   );
 }
+
+const productTypeLabels: Record<string, string> = {
+  watch: "Sat",
+  bracelet: "Narukvica",
+  necklace: "Ogrlica",
+  wallet: "Novčanik",
+  gift_box: "Poklon kutija",
+  gift_set: "Poklon set",
+};
 
 export async function generateMetadata({
   params,
@@ -91,7 +107,7 @@ export async function generateMetadata({
 
   const description =
     product.description ||
-    `${titleParts.join(" ")} — premium sat dostupan u WATCH SHOP-u.`;
+    `${titleParts.join(" ")} — dostupan u WATCH SHOP-u.`;
 
   return {
     title,
@@ -124,7 +140,7 @@ export default async function ProductPage({
         price,
         stock,
         category,
-        condition,
+        product_type,
         year,
         reference,
         images,
@@ -151,7 +167,14 @@ export default async function ProductPage({
 
         bracelet_material,
         bracelet_color,
-        bracelet_width
+        bracelet_width,
+
+        accessory_material,
+        accessory_color,
+        accessory_size,
+        accessory_dimensions,
+        gift_for,
+        gift_contents
       `
     )
     .eq("id", id)
@@ -162,6 +185,7 @@ export default async function ProductPage({
   }
 
   const product = data as Product;
+  const isWatch = product.product_type === "watch";
 
   const categoryLabel =
     product.category === "muski"
@@ -170,7 +194,10 @@ export default async function ProductPage({
         ? "Ženski"
         : "Unisex";
 
-  const specificationGroups: SpecificationGroup[] = [
+  const productTypeLabel =
+    productTypeLabels[product.product_type] || "Proizvod";
+
+  const watchSpecificationGroups: SpecificationGroup[] = [
     {
       title: "Kućište",
       specifications: getVisibleSpecifications([
@@ -217,6 +244,53 @@ export default async function ProductPage({
     },
   ];
 
+  const accessorySpecificationGroups: SpecificationGroup[] = [];
+
+  if (
+    ["bracelet", "necklace", "wallet"].includes(product.product_type)
+  ) {
+    accessorySpecificationGroups.push({
+      title: "Detalji proizvoda",
+      specifications: getVisibleSpecifications([
+        { label: "Materijal", value: product.accessory_material },
+        { label: "Boja", value: product.accessory_color },
+        {
+          label: product.product_type === "necklace" ? "Dužina" : "Veličina",
+          value: product.accessory_size,
+        },
+        {
+          label: "Dimenzije",
+          value: product.accessory_dimensions,
+        },
+      ]),
+    });
+  }
+
+  if (product.product_type === "gift_box") {
+    accessorySpecificationGroups.push({
+      title: "Detalji poklon kutije",
+      specifications: getVisibleSpecifications([
+        { label: "Za koga", value: product.gift_for },
+        { label: "Veličina", value: product.accessory_size },
+        { label: "Boja", value: product.accessory_color },
+      ]),
+    });
+  }
+
+  if (product.product_type === "gift_set") {
+    accessorySpecificationGroups.push({
+      title: "Detalji poklon seta",
+      specifications: getVisibleSpecifications([
+        { label: "Za koga", value: product.gift_for },
+        { label: "Sadržaj seta", value: product.gift_contents },
+      ]),
+    });
+  }
+
+  const specificationGroups = isWatch
+    ? watchSpecificationGroups
+    : accessorySpecificationGroups;
+
   const visibleGroups = specificationGroups.filter(
     (group) => group.specifications.length > 0
   );
@@ -246,7 +320,7 @@ export default async function ProductPage({
 
       <section className="mx-auto max-w-7xl px-5 py-6 sm:px-6 sm:py-10">
         <Link
-          href="/"
+          href={isWatch ? "/satovi" : "/"}
           className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.02] px-4 py-2.5 text-sm text-neutral-400 transition-all duration-200 hover:border-white/20 hover:bg-white hover:text-black active:scale-95"
         >
           <span aria-hidden="true">←</span>
@@ -264,12 +338,12 @@ export default async function ProductPage({
           <div className="lg:sticky lg:top-28">
             <div className="flex flex-wrap gap-2">
               <span className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 text-[11px] font-medium uppercase tracking-[0.2em] text-neutral-400">
-                {categoryLabel}
+                {productTypeLabel}
               </span>
 
-              {product.condition && (
+              {isWatch && (
                 <span className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 text-[11px] font-medium uppercase tracking-[0.2em] text-neutral-400">
-                  {product.condition}
+                  {categoryLabel}
                 </span>
               )}
             </div>
@@ -288,7 +362,7 @@ export default async function ProductPage({
               </p>
             )}
 
-            {product.reference && (
+            {isWatch && product.reference && (
               <p className="mt-2 text-sm text-neutral-600">
                 Ref. {product.reference}
               </p>
@@ -341,8 +415,8 @@ export default async function ProductPage({
               </div>
             </div>
 
-            {(product.year || product.reference) && (
-              <div className="grid gap-px overflow-hidden rounded-2xl border border-white/10 bg-white/10 sm:grid-cols-2">
+            {isWatch && (product.year || product.reference) && (
+              <div className="mt-6 grid gap-px overflow-hidden rounded-2xl border border-white/10 bg-white/10 sm:grid-cols-2">
                 {product.year && (
                   <div className="bg-neutral-950 p-5">
                     <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-neutral-500">
@@ -376,7 +450,7 @@ export default async function ProductPage({
             <div className="grid gap-8 lg:grid-cols-[0.35fr_0.65fr] lg:gap-16">
               <div>
                 <p className="text-[11px] font-medium uppercase tracking-[0.25em] text-neutral-500">
-                  O satu
+                  {isWatch ? "O satu" : "O proizvodu"}
                 </p>
 
                 <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
@@ -396,7 +470,7 @@ export default async function ProductPage({
             <div className="grid gap-8 lg:grid-cols-[0.35fr_0.65fr] lg:gap-16">
               <div>
                 <p className="text-[11px] font-medium uppercase tracking-[0.25em] text-neutral-500">
-                  Detalji sata
+                  {isWatch ? "Detalji sata" : "Detalji proizvoda"}
                 </p>
 
                 <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
@@ -404,8 +478,9 @@ export default async function ProductPage({
                 </h2>
 
                 <p className="mt-4 max-w-sm text-sm leading-7 text-neutral-500">
-                  Tehnički podaci prikazani su prema informacijama dostupnim za
-                  konkretan model.
+                  {isWatch
+                    ? "Tehnički podaci prikazani su prema informacijama dostupnim za konkretan model."
+                    : "Prikazane su dostupne informacije o materijalu, dimenzijama i sadržaju proizvoda."}
                 </p>
               </div>
 
@@ -414,9 +489,7 @@ export default async function ProductPage({
                   <div
                     key={group.title}
                     className={
-                      groupIndex > 0
-                        ? "border-t border-white/10"
-                        : ""
+                      groupIndex > 0 ? "border-t border-white/10" : ""
                     }
                   >
                     <div className="px-6 py-6 sm:px-8">
@@ -457,7 +530,7 @@ export default async function ProductPage({
 
       <footer className="mt-20 border-t border-white/10">
         <div className="mx-auto max-w-7xl px-5 py-10 text-center text-sm text-neutral-500 sm:px-6">
-          WATCH SHOP — Premium satovi
+          WATCH SHOP — Premium satovi i modni dodaci
         </div>
       </footer>
     </main>

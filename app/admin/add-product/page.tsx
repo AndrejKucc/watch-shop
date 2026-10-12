@@ -4,12 +4,20 @@ import Link from "next/link";
 import { ChangeEvent, FormEvent, useState } from "react";
 import { createClient } from "@/lib/supabase";
 
+type ProductType =
+  | "watch"
+  | "bracelet"
+  | "necklace"
+  | "wallet"
+  | "gift_box"
+  | "gift_set";
+
 type SpecificationField = {
   key: string;
   label: string;
 };
 
-const specificationGroups: {
+const watchSpecificationGroups: {
   title: string;
   fields: SpecificationField[];
 }[] = [
@@ -59,12 +67,144 @@ const specificationGroups: {
   },
 ];
 
-const allSpecificationFields = specificationGroups.flatMap(
-  (group) => group.fields
-);
+const accessorySpecificationGroups: Record<
+  Exclude<ProductType, "watch">,
+  {
+    title: string;
+    fields: SpecificationField[];
+  }[]
+> = {
+  bracelet: [
+    {
+      title: "Detalji narukvice",
+      fields: [
+        { key: "accessory_material", label: "Materijal" },
+        { key: "accessory_color", label: "Boja" },
+        { key: "accessory_size", label: "Veličina / dužina" },
+      ],
+    },
+  ],
+
+  necklace: [
+    {
+      title: "Detalji ogrlice",
+      fields: [
+        { key: "accessory_material", label: "Materijal" },
+        { key: "accessory_color", label: "Boja" },
+        { key: "accessory_size", label: "Dužina" },
+      ],
+    },
+  ],
+
+  wallet: [
+    {
+      title: "Detalji novčanika",
+      fields: [
+        { key: "accessory_material", label: "Materijal" },
+        { key: "accessory_color", label: "Boja" },
+        { key: "accessory_dimensions", label: "Dimenzije" },
+      ],
+    },
+  ],
+
+  gift_box: [
+    {
+      title: "Detalji poklon kutije",
+      fields: [
+        { key: "gift_for", label: "Za koga" },
+        { key: "accessory_size", label: "Veličina" },
+        { key: "accessory_color", label: "Boja" },
+      ],
+    },
+  ],
+
+  gift_set: [
+    {
+      title: "Detalji poklon seta",
+      fields: [
+        { key: "gift_for", label: "Za koga" },
+        { key: "gift_contents", label: "Sadržaj seta" },
+      ],
+    },
+  ],
+};
+
+const allWatchSpecificationFields =
+  watchSpecificationGroups.flatMap((group) => group.fields);
+
+const allAccessorySpecificationFields = Object.values(
+  accessorySpecificationGroups
+)
+  .flat()
+  .flatMap((group) => group.fields);
+
+const allSpecificationFields = [
+  ...allWatchSpecificationFields,
+  ...allAccessorySpecificationFields,
+];
+
+const productTypeLabels: Record<ProductType, string> = {
+  watch: "Sat",
+  bracelet: "Narukvica",
+  necklace: "Ogrlica",
+  wallet: "Novčanik",
+  gift_box: "Poklon kutija",
+  gift_set: "Poklon set",
+};
+
+function getNameLabel(productType: ProductType) {
+  if (productType === "watch") {
+    return "Naziv sata";
+  }
+
+  if (productType === "bracelet") {
+    return "Naziv narukvice";
+  }
+
+  if (productType === "necklace") {
+    return "Naziv ogrlice";
+  }
+
+  if (productType === "wallet") {
+    return "Naziv novčanika";
+  }
+
+  if (productType === "gift_box") {
+    return "Naziv poklon kutije";
+  }
+
+  return "Naziv poklon seta";
+}
+
+function getNamePlaceholder(productType: ProductType) {
+  if (productType === "watch") {
+    return "npr. Submariner Date";
+  }
+
+  if (productType === "bracelet") {
+    return "npr. Kožna narukvica";
+  }
+
+  if (productType === "necklace") {
+    return "npr. Srebrna ogrlica";
+  }
+
+  if (productType === "wallet") {
+    return "npr. Kožni novčanik";
+  }
+
+  if (productType === "gift_box") {
+    return "npr. Premium poklon kutija";
+  }
+
+  return "npr. Premium poklon set";
+}
 
 export default function AddProductPage() {
   const supabase = createClient();
+
+  const [productType, setProductType] =
+    useState<ProductType>("watch");
 
   const [name, setName] = useState("");
   const [brand, setBrand] = useState("");
@@ -82,15 +222,19 @@ export default function AddProductPage() {
     Record<string, string>
   >({});
 
-  const [visibleSpecifications, setVisibleSpecifications] = useState<
-    Record<string, boolean>
-  >({});
+  const [visibleSpecifications, setVisibleSpecifications] =
+    useState<Record<string, boolean>>({});
 
   const [imageFiles, setImageFiles] = useState<File[]>([]);
 
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+
+  const activeSpecificationGroups =
+    productType === "watch"
+      ? watchSpecificationGroups
+      : accessorySpecificationGroups[productType];
 
   function updateSpecification(key: string, value: string) {
     setSpecifications((current) => ({
@@ -106,13 +250,39 @@ export default function AddProductPage() {
     }));
   }
 
-  function handleImageChange(event: ChangeEvent<HTMLInputElement>) {
+  function handleProductTypeChange(
+    nextProductType: ProductType
+  ) {
+    setProductType(nextProductType);
+
+    setSpecifications({});
+    setVisibleSpecifications({});
+
+    if (nextProductType === "watch") {
+      setBrand("");
+      setModel("");
+      setReference("");
+      setYear("");
+    } else {
+      setReference("");
+      setYear("");
+    }
+
+    setMessage("");
+    setErrorMessage("");
+  }
+
+  function handleImageChange(
+    event: ChangeEvent<HTMLInputElement>
+  ) {
     const files = Array.from(event.target.files ?? []);
 
     setImageFiles(files);
   }
 
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(
+    event: FormEvent<HTMLFormElement>
+  ) {
     event.preventDefault();
 
     setLoading(true);
@@ -121,13 +291,19 @@ export default function AddProductPage() {
 
     try {
       if (imageFiles.length === 0) {
-        throw new Error("Izaberi bar jednu sliku sata.");
+        throw new Error(
+          `Izaberi bar jednu sliku ${productTypeLabels[
+            productType
+          ].toLowerCase()}.`
+        );
       }
 
       const parsedPrice = Number(price);
 
       const parsedPurchasePrice =
-        purchasePrice.trim() === "" ? null : Number(purchasePrice);
+        purchasePrice.trim() === ""
+          ? null
+          : Number(purchasePrice);
 
       const parsedStock = Number(stock);
 
@@ -135,10 +311,15 @@ export default function AddProductPage() {
         year.trim() === "" ? null : Number(year);
 
       if (!name.trim()) {
-        throw new Error("Naziv sata je obavezan.");
+        throw new Error(
+          `${getNameLabel(productType)} je obavezan.`
+        );
       }
 
-      if (!Number.isFinite(parsedPrice) || parsedPrice <= 0) {
+      if (
+        !Number.isFinite(parsedPrice) ||
+        parsedPrice <= 0
+      ) {
         throw new Error("Cena mora biti veća od 0.");
       }
 
@@ -150,8 +331,13 @@ export default function AddProductPage() {
         throw new Error("Nabavna cena nije ispravna.");
       }
 
-      if (!Number.isInteger(parsedStock) || parsedStock < 0) {
-        throw new Error("Količina na stanju nije ispravna.");
+      if (
+        !Number.isInteger(parsedStock) ||
+        parsedStock < 0
+      ) {
+        throw new Error(
+          "Količina na lageru nije ispravna."
+        );
       }
 
       if (
@@ -167,19 +353,21 @@ export default function AddProductPage() {
 
       for (const imageFile of imageFiles) {
         const fileExtension =
-          imageFile.name.split(".").pop()?.toLowerCase() || "jpg";
+          imageFile.name.split(".").pop()?.toLowerCase() ||
+          "jpg";
 
         const fileName =
           `${crypto.randomUUID()}.${fileExtension}`;
 
         const filePath = `products/${fileName}`;
 
-        const { error: uploadError } = await supabase.storage
-          .from("product-images")
-          .upload(filePath, imageFile, {
-            cacheControl: "3600",
-            upsert: false,
-          });
+        const { error: uploadError } =
+          await supabase.storage
+            .from("product-images")
+            .upload(filePath, imageFile, {
+              cacheControl: "3600",
+              upsert: false,
+            });
 
         if (uploadError) {
           throw new Error(
@@ -196,7 +384,10 @@ export default function AddProductPage() {
         imageUrls.push(publicUrl);
       }
 
-      const specificationData: Record<string, string | null> = {};
+      const specificationData: Record<
+        string,
+        string | null
+      > = {};
 
       for (const field of allSpecificationFields) {
         const value =
@@ -209,27 +400,38 @@ export default function AddProductPage() {
             : null;
       }
 
-      const { error: insertError } =
-        await supabase.from("products").insert({
-          name: name.trim(),
-          brand: brand.trim() || null,
-          model: model.trim() || null,
-          reference: reference.trim() || null,
-          year: parsedYear,
-          category,
-          description: description.trim() || null,
-          price: parsedPrice,
-          purchase_price: parsedPurchasePrice,
-          stock: parsedStock,
-          images: imageUrls,
+      const productData = {
+        product_type: productType,
+        name: name.trim(),
+        brand: brand.trim() || null,
+        model: model.trim() || null,
+        reference:
+          productType === "watch"
+            ? reference.trim() || null
+            : null,
+        year:
+          productType === "watch"
+            ? parsedYear
+            : null,
+        category,
+        description: description.trim() || null,
+        price: parsedPrice,
+        purchase_price: parsedPurchasePrice,
+        stock: parsedStock,
+        images: imageUrls,
+        ...specificationData,
+      };
 
-          ...specificationData,
-        });
+      const { error: insertError } =
+        await supabase
+          .from("products")
+          .insert(productData);
 
       if (insertError) {
         throw new Error(insertError.message);
       }
 
+      setProductType("watch");
       setName("");
       setBrand("");
       setModel("");
@@ -253,7 +455,13 @@ export default function AddProductPage() {
       }
 
       setMessage(
-        `Proizvod je uspešno dodat sa ${imageUrls.length} ${imageUrls.length === 1 ? "slikom" : "slike"}.`
+        `${productTypeLabels[productType]} je uspešno dodat sa ${
+          imageUrls.length
+        } ${
+          imageUrls.length === 1
+            ? "slikom"
+            : "slike"
+        }.`
       );
     } catch (error) {
       setErrorMessage(
@@ -276,7 +484,7 @@ export default function AddProductPage() {
             </p>
 
             <h1 className="mt-1 text-3xl font-bold">
-              Dodaj novi sat
+              Dodaj novi proizvod
             </h1>
           </div>
 
@@ -294,13 +502,47 @@ export default function AddProductPage() {
         >
           <section className="rounded-3xl border border-white/10 bg-neutral-900 p-6 sm:p-8">
             <h2 className="text-xl font-semibold">
+              Tip proizvoda
+            </h2>
+
+            <p className="mt-2 text-sm text-neutral-500">
+              Izaberi šta dodaješ u prodavnicu.
+            </p>
+
+            <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              {(
+                Object.entries(productTypeLabels) as [
+                  ProductType,
+                  string
+                ][]
+              ).map(([value, label]) => (
+                <button
+                  key={value}
+                  type="button"
+                  onClick={() =>
+                    handleProductTypeChange(value)
+                  }
+                  className={`rounded-2xl border px-5 py-4 text-left font-semibold transition ${
+                    productType === value
+                      ? "border-white bg-white text-black"
+                      : "border-white/10 bg-neutral-950 text-white hover:bg-white/5"
+                  }`}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+          </section>
+
+          <section className="rounded-3xl border border-white/10 bg-neutral-900 p-6 sm:p-8">
+            <h2 className="text-xl font-semibold">
               Osnovno
             </h2>
 
             <div className="mt-6 grid gap-5 sm:grid-cols-2">
               <div className="sm:col-span-2">
                 <label className="text-sm text-neutral-400">
-                  Naziv sata *
+                  {getNameLabel(productType)} *
                 </label>
 
                 <input
@@ -308,7 +550,7 @@ export default function AddProductPage() {
                   onChange={(event) =>
                     setName(event.target.value)
                   }
-                  placeholder="npr. Submariner Date"
+                  placeholder={getNamePlaceholder(productType)}
                   className="mt-2 w-full rounded-xl border border-white/10 bg-neutral-950 px-4 py-3 outline-none transition focus:border-white/30"
                 />
               </div>
@@ -343,36 +585,40 @@ export default function AddProductPage() {
                 />
               </div>
 
-              <div>
-                <label className="text-sm text-neutral-400">
-                  Referenca
-                </label>
+              {productType === "watch" && (
+                <>
+                  <div>
+                    <label className="text-sm text-neutral-400">
+                      Referenca
+                    </label>
 
-                <input
-                  value={reference}
-                  onChange={(event) =>
-                    setReference(event.target.value)
-                  }
-                  placeholder="npr. 126610LN"
-                  className="mt-2 w-full rounded-xl border border-white/10 bg-neutral-950 px-4 py-3 outline-none transition focus:border-white/30"
-                />
-              </div>
+                    <input
+                      value={reference}
+                      onChange={(event) =>
+                        setReference(event.target.value)
+                      }
+                      placeholder="npr. 126610LN"
+                      className="mt-2 w-full rounded-xl border border-white/10 bg-neutral-950 px-4 py-3 outline-none transition focus:border-white/30"
+                    />
+                  </div>
 
-              <div>
-                <label className="text-sm text-neutral-400">
-                  Godina
-                </label>
+                  <div>
+                    <label className="text-sm text-neutral-400">
+                      Godina
+                    </label>
 
-                <input
-                  type="number"
-                  value={year}
-                  onChange={(event) =>
-                    setYear(event.target.value)
-                  }
-                  placeholder="npr. 2024"
-                  className="mt-2 w-full rounded-xl border border-white/10 bg-neutral-950 px-4 py-3 outline-none transition focus:border-white/30"
-                />
-              </div>
+                    <input
+                      type="number"
+                      value={year}
+                      onChange={(event) =>
+                        setYear(event.target.value)
+                      }
+                      placeholder="npr. 2024"
+                      className="mt-2 w-full rounded-xl border border-white/10 bg-neutral-950 px-4 py-3 outline-none transition focus:border-white/30"
+                    />
+                  </div>
+                </>
+              )}
 
               <div>
                 <label className="text-sm text-neutral-400">
@@ -446,7 +692,7 @@ export default function AddProductPage() {
 
               <div>
                 <label className="text-sm text-neutral-400">
-                  Stanje na lageru *
+                  Količina na lageru *
                 </label>
 
                 <input
@@ -473,13 +719,17 @@ export default function AddProductPage() {
                   setDescription(event.target.value)
                 }
                 rows={5}
-                placeholder="Napiši opis sata..."
+                placeholder={`Napiši opis ${
+                  productTypeLabels[
+                    productType
+                  ].toLowerCase()
+                }...`}
                 className="mt-2 w-full resize-y rounded-xl border border-white/10 bg-neutral-950 px-4 py-3 outline-none transition focus:border-white/30"
               />
             </div>
           </section>
 
-          {specificationGroups.map((group) => (
+          {activeSpecificationGroups.map((group) => (
             <section
               key={group.title}
               className="rounded-3xl border border-white/10 bg-neutral-900 p-6 sm:p-8"
@@ -494,8 +744,12 @@ export default function AddProductPage() {
                     specifications[field.key] ?? "";
 
                   const visible =
-                    visibleSpecifications[field.key] ??
-                    false;
+                    visibleSpecifications[
+                      field.key
+                    ] ?? false;
+
+                  const isGiftFor =
+                    field.key === "gift_for";
 
                   return (
                     <div
@@ -508,17 +762,46 @@ export default function AddProductPage() {
                             {field.label}
                           </label>
 
-                          <input
-                            value={value}
-                            onChange={(event) =>
-                              updateSpecification(
-                                field.key,
-                                event.target.value
-                              )
-                            }
-                            placeholder={`Unesi ${field.label.toLowerCase()}...`}
-                            className="mt-2 w-full rounded-xl border border-white/10 bg-neutral-900 px-4 py-3 outline-none transition focus:border-white/30"
-                          />
+                          {isGiftFor ? (
+                            <select
+                              value={value}
+                              onChange={(event) =>
+                                updateSpecification(
+                                  field.key,
+                                  event.target.value
+                                )
+                              }
+                              className="mt-2 w-full rounded-xl border border-white/10 bg-neutral-900 px-4 py-3 outline-none transition focus:border-white/30"
+                            >
+                              <option value="">
+                                Izaberi
+                              </option>
+
+                              <option value="muski">
+                                Muški
+                              </option>
+
+                              <option value="zenski">
+                                Ženski
+                              </option>
+
+                              <option value="unisex">
+                                Unisex
+                              </option>
+                            </select>
+                          ) : (
+                            <input
+                              value={value}
+                              onChange={(event) =>
+                                updateSpecification(
+                                  field.key,
+                                  event.target.value
+                                )
+                              }
+                              placeholder={`Unesi ${field.label.toLowerCase()}...`}
+                              className="mt-2 w-full rounded-xl border border-white/10 bg-neutral-900 px-4 py-3 outline-none transition focus:border-white/30"
+                            />
+                          )}
                         </div>
 
                         <label className="flex min-h-11 cursor-pointer items-center gap-3 rounded-xl border border-white/10 px-4 py-3 transition hover:bg-white/5">
@@ -547,12 +830,15 @@ export default function AddProductPage() {
 
           <section className="rounded-3xl border border-white/10 bg-neutral-900 p-6 sm:p-8">
             <h2 className="text-xl font-semibold">
-              Slike sata
+              Slike{" "}
+              {productTypeLabels[
+                productType
+              ].toLowerCase()}
             </h2>
 
             <p className="mt-2 text-sm text-neutral-500">
-              Izaberi više slika odjednom. Sve slike će biti
-              sačuvane u galeriji proizvoda.
+              Izaberi više slika odjednom. Sve slike će
+              biti sačuvane u galeriji proizvoda.
             </p>
 
             <input
