@@ -34,6 +34,42 @@ const mainNavigation = [
   { href: "/pokloni", label: "Pokloni" },
 ];
 
+const featuredBadges: Record<
+  string,
+  { text: string; className: string }
+> = {
+  recommendation: {
+    text: "⭐ NAŠA PREPORUKA",
+    className:
+      "border-amber-300/40 bg-amber-400 text-neutral-950",
+  },
+  best_buy: {
+    text: "🔥 BEST BUY",
+    className:
+      "border-orange-300/40 bg-orange-500 text-white",
+  },
+  new_model: {
+    text: "✨ NOVI MODEL",
+    className:
+      "border-sky-300/40 bg-sky-500 text-white",
+  },
+  great_price: {
+    text: "💰 ODLIČNA CENA",
+    className:
+      "border-emerald-300/40 bg-emerald-500 text-neutral-950",
+  },
+  premium: {
+    text: "💎 PREMIUM IZBOR",
+    className:
+      "border-violet-300/40 bg-violet-500 text-white",
+  },
+  bestseller: {
+    text: "🏆 BESTSELLER",
+    className:
+      "border-rose-300/40 bg-rose-500 text-white",
+  },
+};
+
 export default async function Home() {
   const products = await getProducts();
 
@@ -199,43 +235,60 @@ export default async function Home() {
         </div>
 
         <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {displayedWatches.map((product) => (
-            <Link
-              key={product.id}
-              href={`/product/${product.id}`}
-              className="group overflow-hidden rounded-[2rem] border border-white/10 bg-neutral-900 transition-all duration-300 hover:-translate-y-1 hover:border-white/20 hover:bg-neutral-800/80"
-            >
-              <div className="aspect-[4/3] overflow-hidden bg-neutral-800">
-                {product.images && product.images[0] ? (
-                  <img
-                    src={product.images[0]}
-                    alt={product.name}
-                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-                  />
-                ) : (
-                  <div className="flex h-full items-center justify-center">
-                    <span className="text-sm text-neutral-500">
-                      Slika sata
+          {displayedWatches.map((product) => {
+            const badgeKey =
+              typeof product.featured_badge === "string"
+                ? product.featured_badge
+                : "";
+
+            const badge = featuredBadges[badgeKey];
+
+            return (
+              <Link
+                key={product.id}
+                href={`/product/${product.id}`}
+                className="group overflow-hidden rounded-[2rem] border border-white/10 bg-neutral-900 transition-all duration-300 hover:-translate-y-1 hover:border-white/20 hover:bg-neutral-800/80"
+              >
+                <div className="relative aspect-[4/3] overflow-hidden bg-neutral-800">
+                  {product.images && product.images[0] ? (
+                    <img
+                      src={product.images[0]}
+                      alt={product.name}
+                      className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    />
+                  ) : (
+                    <div className="flex h-full items-center justify-center">
+                      <span className="text-sm text-neutral-500">
+                        Slika sata
+                      </span>
+                    </div>
+                  )}
+
+                  {badge && (
+                    <span
+                      className={`absolute left-4 top-4 z-10 inline-flex max-w-[calc(100%-2rem)] items-center rounded-md border px-3 py-2 text-[10px] font-extrabold tracking-[0.08em] shadow-lg sm:text-xs ${badge.className}`}
+                    >
+                      {badge.text}
                     </span>
-                  </div>
-                )}
-              </div>
+                  )}
+                </div>
 
-              <div className="p-6">
-                <p className="text-xs font-medium uppercase tracking-[0.22em] text-neutral-500">
-                  {product.brand || "Watch Shop"}
-                </p>
+                <div className="p-6">
+                  <p className="text-xs font-medium uppercase tracking-[0.22em] text-neutral-500">
+                    {product.brand || "Watch Shop"}
+                  </p>
 
-                <h4 className="mt-3 text-2xl font-semibold tracking-tight text-white">
-                  {product.name}
-                </h4>
+                  <h4 className="mt-3 text-2xl font-semibold tracking-tight text-white">
+                    {product.name}
+                  </h4>
 
-                <p className="mt-5 border-t border-white/10 pt-4 text-2xl font-bold tracking-tight">
-                  {Number(product.price).toFixed(2)} RSD
-                </p>
-              </div>
-            </Link>
-          ))}
+                  <p className="mt-5 border-t border-white/10 pt-4 text-2xl font-bold tracking-tight">
+                    {Number(product.price).toFixed(2)} RSD
+                  </p>
+                </div>
+              </Link>
+            );
+          })}
 
           {displayedWatches.length === 0 && (
             <p className="text-neutral-500">
