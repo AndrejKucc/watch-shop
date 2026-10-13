@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase-server";
 import { AddToCartButton } from "@/components/cart";
+import ProductReviews from "@/components/product-reviews";
 import ProductGallery from "@/components/product-gallery";
 
 type Product = {
@@ -17,31 +18,25 @@ type Product = {
   year: number | null;
   reference: string | null;
   images: string[] | null;
-
   case_diameter: string | null;
   case_thickness: string | null;
   case_material: string | null;
   case_shape: string | null;
   case_color: string | null;
   water_resistance: string | null;
-
   movement_type: string | null;
   movement_manufacturer: string | null;
   movement_caliber: string | null;
-
   dial_color: string | null;
   dial_indices: string | null;
   lume: string | null;
   date_function: string | null;
   chronograph: string | null;
   gmt: string | null;
-
   crystal_material: string | null;
-
   bracelet_material: string | null;
   bracelet_color: string | null;
   bracelet_width: string | null;
-
   accessory_material: string | null;
   accessory_color: string | null;
   accessory_size: string | null;
@@ -144,31 +139,25 @@ export default async function ProductPage({
         year,
         reference,
         images,
-
         case_diameter,
         case_thickness,
         case_material,
         case_shape,
         case_color,
         water_resistance,
-
         movement_type,
         movement_manufacturer,
         movement_caliber,
-
         dial_color,
         dial_indices,
         lume,
         date_function,
         chronograph,
         gmt,
-
         crystal_material,
-
         bracelet_material,
         bracelet_color,
         bracelet_width,
-
         accessory_material,
         accessory_color,
         accessory_size,
@@ -526,6 +515,8 @@ export default async function ProductPage({
             </div>
           </section>
         )}
+
+        <ProductReviews productId={product.id} />
       </section>
 
       <footer className="mt-20 border-t border-white/10">
