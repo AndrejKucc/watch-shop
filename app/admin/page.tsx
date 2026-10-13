@@ -19,12 +19,12 @@ export default function AdminPage() {
     const supabase = createClient();
 
     const result = await supabase.auth.signInWithPassword({
-      email: email,
-      password: password,
+      email,
+      password,
     });
 
     if (result.error) {
-      setMessage("Pogresan email ili lozinka.");
+      setMessage("Pogrešan email ili lozinka.");
       setLoading(false);
       return;
     }
@@ -39,15 +39,15 @@ export default function AdminPage() {
     await supabase.auth.signOut();
 
     setLoggedIn(false);
+    setEmail("");
+    setPassword("");
   }
 
   if (loggedIn) {
     return (
       <main className="min-h-screen bg-neutral-950 px-6 py-12 text-white">
         <div className="mx-auto max-w-6xl">
-
-          <div className="flex items-center justify-between">
-
+          <div className="flex items-center justify-between gap-4">
             <div>
               <p className="text-sm uppercase tracking-[0.3em] text-neutral-500">
                 WATCH SHOP
@@ -60,24 +60,20 @@ export default function AdminPage() {
 
             <button
               onClick={handleLogout}
-              className="rounded-xl border border-white/10 px-5 py-3 text-sm hover:bg-white hover:text-black"
+              className="rounded-xl border border-white/10 px-5 py-3 text-sm transition hover:bg-white hover:text-black"
             >
               Odjavi se
             </button>
-
           </div>
 
           <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-
             <button
-            onClick={() => {
-    window.location.href = "/admin/products";
-  }}
-              className="rounded-3xl border border-white/10 bg-neutral-900 p-8 text-left hover:border-white/30"
+              onClick={() => {
+                window.location.href = "/admin/products";
+              }}
+              className="rounded-3xl border border-white/10 bg-neutral-900 p-8 text-left transition hover:border-white/30"
             >
-              <div className="text-3xl">
-                Satovi
-              </div>
+              <div className="text-3xl">⌚</div>
 
               <h2 className="mt-5 text-xl font-semibold">
                 Proizvodi
@@ -90,11 +86,9 @@ export default function AdminPage() {
 
             <Link
               href="/admin/orders"
-              className="rounded-3xl border border-white/10 bg-neutral-900 p-8 text-left hover:border-white/30"
+              className="rounded-3xl border border-white/10 bg-neutral-900 p-8 text-left transition hover:border-white/30"
             >
-              <div className="text-3xl">
-                Porudzbine
-              </div>
+              <div className="text-3xl">📦</div>
 
               <h2 className="mt-5 text-xl font-semibold">
                 Porudžbine
@@ -105,15 +99,13 @@ export default function AdminPage() {
               </p>
             </Link>
 
-           <button
-  onClick={() => {
-    window.location.href = "/admin/add-product";
-  }}
-  className="rounded-3xl border border-white/10 bg-neutral-900 p-8 text-left hover:border-white/30"
->
-              <div className="text-3xl">
-                Dodaj
-              </div>
+            <button
+              onClick={() => {
+                window.location.href = "/admin/add-product";
+              }}
+              className="rounded-3xl border border-white/10 bg-neutral-900 p-8 text-left transition hover:border-white/30"
+            >
+              <div className="text-3xl">➕</div>
 
               <h2 className="mt-5 text-xl font-semibold">
                 Dodaj proizvod
@@ -124,8 +116,21 @@ export default function AdminPage() {
               </p>
             </button>
 
-          </div>
+            <Link
+              href="/admin/reviews"
+              className="rounded-3xl border border-white/10 bg-neutral-900 p-8 text-left transition hover:border-white/30"
+            >
+              <div className="text-3xl">⭐</div>
 
+              <h2 className="mt-5 text-xl font-semibold">
+                Recenzije
+              </h2>
+
+              <p className="mt-2 text-sm text-neutral-500">
+                Pregledaj ocene i briši neželjene recenzije.
+              </p>
+            </Link>
+          </div>
         </div>
       </main>
     );
@@ -133,9 +138,7 @@ export default function AdminPage() {
 
   return (
     <main className="flex min-h-screen items-center justify-center bg-neutral-950 px-6 text-white">
-
       <div className="w-full max-w-md rounded-3xl border border-white/10 bg-neutral-900 p-8">
-
         <h1 className="text-3xl font-bold">
           Admin
         </h1>
@@ -147,42 +150,47 @@ export default function AdminPage() {
         <form
           onSubmit={(event) => {
             event.preventDefault();
-            handleLogin();
+            void handleLogin();
           }}
           className="mt-8 space-y-5"
         >
-
           <div>
-
-            <label className="mb-2 block text-sm text-neutral-400">
+            <label
+              htmlFor="admin-email"
+              className="mb-2 block text-sm text-neutral-400"
+            >
               Email
             </label>
 
             <input
+              id="admin-email"
               type="email"
+              autoComplete="username"
               value={email}
               onChange={(event) => setEmail(event.target.value)}
               required
-              className="w-full rounded-xl border border-white/10 bg-neutral-800 px-4 py-3 outline-none"
+              className="w-full rounded-xl border border-white/10 bg-neutral-800 px-4 py-3 outline-none focus:border-white/30"
               placeholder="admin@email.com"
             />
-
           </div>
 
           <div>
-
-            <label className="mb-2 block text-sm text-neutral-400">
+            <label
+              htmlFor="admin-password"
+              className="mb-2 block text-sm text-neutral-400"
+            >
               Lozinka
             </label>
 
             <div className="relative">
-
               <input
+                id="admin-password"
                 type={showPassword ? "text" : "password"}
+                autoComplete="current-password"
                 value={password}
                 onChange={(event) => setPassword(event.target.value)}
                 required
-                className="w-full rounded-xl border border-white/10 bg-neutral-800 px-4 py-3 pr-24 outline-none"
+                className="w-full rounded-xl border border-white/10 bg-neutral-800 px-4 py-3 pr-24 outline-none focus:border-white/30"
                 placeholder="********"
               />
 
@@ -193,29 +201,24 @@ export default function AdminPage() {
               >
                 {showPassword ? "Sakrij" : "Prikaži"}
               </button>
-
             </div>
-
           </div>
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full rounded-xl bg-white px-4 py-3 font-semibold text-black hover:bg-neutral-200 disabled:opacity-50"
+            className="w-full rounded-xl bg-white px-4 py-3 font-semibold text-black transition hover:bg-neutral-200 disabled:opacity-50"
           >
             {loading ? "Prijavljivanje..." : "Prijavi se"}
           </button>
 
           {message && (
-            <p className="text-sm text-red-400">
+            <p role="alert" className="text-sm text-red-400">
               {message}
             </p>
           )}
-
         </form>
-
       </div>
-
     </main>
   );
 }
