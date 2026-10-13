@@ -46,6 +46,12 @@ export async function middleware(request: NextRequest) {
     error: authError,
   } = await supabase.auth.getUser();
 
+  console.log("[ADMIN DEBUG]", {
+  pathname,
+  userId: user?.id ?? null,
+  authError: authError?.message ?? null,
+});
+
   if (authError || !user) {
     const loginUrl = new URL("/admin", request.url);
     return NextResponse.redirect(loginUrl);
