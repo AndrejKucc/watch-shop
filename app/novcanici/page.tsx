@@ -43,6 +43,7 @@ export default async function NovcaniciPage() {
 
         <CategoryFilter
           products={wallets}
+          filterMode="wallets"
           productLabel="novčanici"
           searchPlaceholder="Pretraži novčanik, brend ili model..."
           showGenderFilter={false}
@@ -54,31 +55,19 @@ export default async function NovcaniciPage() {
           <p>© {new Date().getFullYear()} WATCH SHOP</p>
 
           <div className="flex flex-wrap gap-6">
-            <Link
-              href="/"
-              className="transition hover:text-white"
-            >
+            <Link href="/" className="transition hover:text-white">
               Početna
             </Link>
 
-            <Link
-              href="/satovi"
-              className="transition hover:text-white"
-            >
+            <Link href="/satovi" className="transition hover:text-white">
               Satovi
             </Link>
 
-            <Link
-              href="/narukvice"
-              className="transition hover:text-white"
-            >
+            <Link href="/narukvice" className="transition hover:text-white">
               Narukvice
             </Link>
 
-            <Link
-              href="/ogrlice"
-              className="transition hover:text-white"
-            >
+            <Link href="/ogrlice" className="transition hover:text-white">
               Ogrlice
             </Link>
           </div>

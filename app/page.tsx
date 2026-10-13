@@ -66,11 +66,11 @@ export default async function Home() {
   const products = await getProducts();
 
   const watches = products.filter(
-    (product) => product.product_type === "watch"
+    (product) => product.product_type === "watch",
   );
 
   const featuredWatches = watches.filter(
-    (product) => product.is_featured === true
+    (product) => product.is_featured === true,
   );
 
   const displayedWatches = (
@@ -159,7 +159,7 @@ export default async function Home() {
                   </h1>
 
                   <p className="mt-0.5 text-[10px] uppercase tracking-[0.3em] text-neutral-500 sm:text-xs">
-                    Premium satovi
+                    Premium satovi i aksesoari
                   </p>
                 </div>
               </div>
@@ -191,7 +191,7 @@ export default async function Home() {
       <section className="relative z-10 mx-auto max-w-7xl px-6 py-20 sm:py-28">
         <div className="max-w-4xl">
           <p className="text-sm font-medium uppercase tracking-[0.35em] text-neutral-500">
-            Kolekcija satova
+            Kolekcija za svaki stil
           </p>
 
           <h2 className="mt-5 text-5xl font-semibold leading-[1.05] tracking-tight sm:text-7xl lg:text-8xl">
@@ -200,8 +200,8 @@ export default async function Home() {
           </h2>
 
           <p className="mt-8 max-w-2xl text-base leading-7 text-neutral-400 sm:text-lg sm:leading-8">
-            Pažljivo odabrani satovi za one koji cene kvalitet, stil i
-            karakter.
+            Otkrij satove, narukvice, ogrlice, novčanike i poklone pažljivo
+            odabrane za svaki stil i priliku.
           </p>
 
           <div className="mt-10 flex flex-wrap items-center gap-3">
@@ -242,6 +242,7 @@ export default async function Home() {
                     <img
                       src={product.images[0]}
                       alt={product.name}
+                      loading="lazy"
                       className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                     />
                   ) : (
@@ -271,7 +272,11 @@ export default async function Home() {
                   </h4>
 
                   <p className="mt-5 border-t border-white/10 pt-4 text-2xl font-bold tracking-tight">
-                    {Number(product.price).toFixed(2)} RSD
+                    {Number(product.price).toLocaleString("sr-RS", {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })}{" "}
+                    RSD
                   </p>
                 </div>
               </Link>
@@ -285,8 +290,22 @@ export default async function Home() {
           )}
         </div>
 
-        <div id="kolekcija" className="mt-16 scroll-mt-24">
-          <CategoryFilter products={watches} />
+        <div id="kolekcija" className="mt-20 scroll-mt-24">
+          <div className="mb-8 border-b border-white/10 pb-5">
+            <h3 className="text-2xl font-semibold">Svi proizvodi</h3>
+
+            <p className="mt-2 text-sm text-neutral-500">
+              Pronađi pravi proizvod i prilagodi prikaz svojim željama.
+            </p>
+          </div>
+
+          <CategoryFilter
+  products={products}
+  filterMode="basic"
+  productLabel="proizvodi"
+  searchPlaceholder="Pretraži sat, narukvicu, ogrlicu, novčanik ili poklon..."
+  showGenderFilter={false}
+/>
         </div>
       </section>
 
@@ -299,7 +318,7 @@ export default async function Home() {
               </p>
 
               <p className="mt-2 text-sm text-neutral-500">
-                Premium satovi
+                Premium satovi i aksesoari
               </p>
             </div>
 
@@ -307,31 +326,19 @@ export default async function Home() {
               aria-label="Navigacija u podnožju"
               className="flex flex-wrap gap-x-6 gap-y-3 text-sm text-neutral-400"
             >
-              <Link
-                href="/about"
-                className="transition hover:text-white"
-              >
+              <Link href="/about" className="transition hover:text-white">
                 O nama
               </Link>
 
-              <Link
-                href="/contact"
-                className="transition hover:text-white"
-              >
+              <Link href="/contact" className="transition hover:text-white">
                 Kontakt
               </Link>
 
-              <Link
-                href="/terms"
-                className="transition hover:text-white"
-              >
+              <Link href="/terms" className="transition hover:text-white">
                 Uslovi kupovine
               </Link>
 
-              <Link
-                href="/privacy"
-                className="transition hover:text-white"
-              >
+              <Link href="/privacy" className="transition hover:text-white">
                 Privatnost
               </Link>
             </nav>

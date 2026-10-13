@@ -1,4 +1,5 @@
 "use client";
+
 import { CompareButton } from "@/components/compare-button";
 import ComparePanel from "@/components/compare-panel";
 import Link from "next/link";
@@ -14,18 +15,37 @@ type Product = {
   price: number;
   stock: number;
   category: string | null;
+  product_type?: string | null;
   images: string[] | null;
   created_at?: string | null;
+
   movement_type?: string | null;
   case_diameter?: string | number | null;
   case_material?: string | null;
+  case_color?: string | null;
+  case_shape?: string | null;
+  case_thickness?: string | null;
+
   bracelet_material?: string | null;
+  bracelet_color?: string | null;
+  bracelet_width?: string | null;
+
+  accessory_material?: string | null;
+  accessory_color?: string | null;
+  accessory_size?: string | null;
+  accessory_dimensions?: string | null;
+
+  gift_for?: string | null;
+  gift_contents?: string | null;
+
   water_resistance?: string | null;
   chronograph?: string | null;
   gmt?: string | null;
   reference?: string | null;
   crystal_material?: string | null;
 };
+
+type FilterMode = "basic" | "watches" | "accessories" | "wallets" | "gifts";
 
 const categories = [
   { value: "sve", label: "Svi" },
@@ -73,10 +93,7 @@ function FilterSelect({
 }) {
   return (
     <div className="min-w-0">
-      <label
-        htmlFor={id}
-        className="mb-2 block text-sm text-neutral-400"
-      >
+      <label htmlFor={id} className="mb-2 block text-sm text-neutral-400">
         {label}
       </label>
 
@@ -86,14 +103,10 @@ function FilterSelect({
         onChange={(event) => onChange(event.target.value)}
         className="h-12 w-full rounded-xl border border-white/10 bg-neutral-950 px-3 text-sm text-white outline-none transition focus:border-white/30"
       >
-        <option value="">Svi</option>
+        <option value="">Sve vrednosti</option>
 
         {options.map((option) => (
-          <option
-            key={option}
-            value={option}
-            className="bg-neutral-950"
-          >
+          <option key={option} value={option} className="bg-neutral-950">
             {option}
           </option>
         ))}
@@ -104,15 +117,25 @@ function FilterSelect({
 
 export default function CategoryFilter({
   products,
-  productLabel = "satovi",
-  searchPlaceholder = "Pretraži sat, brend ili model...",
+  productLabel = "proizvodi",
+  searchPlaceholder = "Pretraži proizvode...",
   showGenderFilter = true,
+  filterMode = "watches",
 }: {
   products: Product[];
   productLabel?: string;
   searchPlaceholder?: string;
   showGenderFilter?: boolean;
+  filterMode?: FilterMode;
 }) {
+  const isWatchMode = filterMode === "watches";
+  const isAccessoryMode = filterMode === "accessories";
+  const isWalletMode = filterMode === "wallets";
+  const isGiftMode = filterMode === "gifts";
+
+  const showAccessoryFilters =
+    isAccessoryMode || isWalletMode;
+
   const [category, setCategory] = useState("sve");
   const [search, setSearch] = useState("");
   const [onlyInStock, setOnlyInStock] = useState(false);
@@ -128,6 +151,11 @@ export default function CategoryFilter({
   const [waterResistance, setWaterResistance] = useState("");
   const [chronograph, setChronograph] = useState("");
   const [gmt, setGmt] = useState("");
+
+  const [accessoryMaterial, setAccessoryMaterial] = useState("");
+  const [accessoryColor, setAccessoryColor] = useState("");
+  const [accessorySize, setAccessorySize] = useState("");
+  const [giftFor, setGiftFor] = useState("");
 
   const brands = useMemo(
     () => distinctValues(products, (product) => product.brand),
@@ -169,21 +197,61 @@ export default function CategoryFilter({
     [products],
   );
 
+  const accessoryMaterials = useMemo(
+    () =>
+      distinctValues(products, (product) => {
+        if (product.accessory_material) {
+          return product.accessory_material;
+        }
+
+        return product.bracelet_material;
+      }),
+    [products],
+  );
+
+  const accessoryColors = useMemo(
+    () =>
+      distinctValues(products, (product) => {
+        if (product.accessory_color) {
+          return product.accessory_color;
+        }
+
+        return product.bracelet_color;
+      }),
+    [products],
+  );
+
+  const accessorySizes = useMemo(
+    () => distinctValues(products, (product) => product.accessory_size),
+    [products],
+  );
+
+  const giftForOptions = useMemo(
+    () => distinctValues(products, (product) => product.gift_for),
+    [products],
+  );
+
+  const min = minPrice.trim() === "" ? null : Number(minPrice);
+  const max = maxPrice.trim() === "" ? null : Number(maxPrice);
+
+  const invalidMinPrice =
+    min !== null && (!Number.isFinite(min) || min < 0);
+
+  const invalidMaxPrice =
+    max !== null && (!Number.isFinite(max) || max < 0);
+
   const invalidPriceRange =
-    minPrice.trim() !== "" &&
-    maxPrice.trim() !== "" &&
-    Number.isFinite(Number(minPrice)) &&
-    Number.isFinite(Number(maxPrice)) &&
-    Number(minPrice) > Number(maxPrice);
+    invalidMinPrice ||
+    invalidMaxPrice ||
+    (min !== null && max !== null && min > max);
 
   const filteredProducts = useMemo(() => {
     const normalizedSearch = normalize(search);
-    const min = minPrice.trim() === "" ? null : Number(minPrice);
-    const max = maxPrice.trim() === "" ? null : Number(maxPrice);
 
     return products
       .filter((product) => {
         const matchesCategory =
+          !isWatchMode ||
           !showGenderFilter ||
           category === "sve" ||
           normalize(product.category) === normalize(category);
@@ -194,14 +262,23 @@ export default function CategoryFilter({
           product.model,
           product.description,
           product.reference,
+          product.accessory_material,
+          product.accessory_color,
+          product.accessory_size,
+          product.accessory_dimensions,
+          product.gift_for,
+          product.gift_contents,
+          product.case_material,
+          product.case_color,
+          product.bracelet_material,
+          product.bracelet_color,
         ]
           .filter(Boolean)
-          .join(" ")
-          .toLocaleLowerCase("sr-RS");
+          .join(" ");
 
         const matchesSearch =
           normalizedSearch === "" ||
-          searchableText.includes(normalizedSearch);
+          normalize(searchableText).includes(normalizedSearch);
 
         const matchesStock = !onlyInStock || product.stock > 0;
         const productPrice = Number(product.price);
@@ -217,36 +294,72 @@ export default function CategoryFilter({
           productPrice <= max;
 
         const matchesBrand =
-          !brand || normalize(product.brand) === normalize(brand);
+          !isWatchMode ||
+          !brand ||
+          normalize(product.brand) === normalize(brand);
 
         const matchesMovement =
+          !isWatchMode ||
           !movement ||
           normalize(product.movement_type) === normalize(movement);
 
         const matchesDiameter =
+          !isWatchMode ||
           !diameter ||
           normalize(product.case_diameter) === normalize(diameter);
 
         const matchesCaseMaterial =
+          !isWatchMode ||
           !caseMaterial ||
           normalize(product.case_material) === normalize(caseMaterial);
 
         const matchesBraceletMaterial =
+          !isWatchMode ||
           !braceletMaterial ||
           normalize(product.bracelet_material) ===
             normalize(braceletMaterial);
 
         const matchesWaterResistance =
+          !isWatchMode ||
           !waterResistance ||
           normalize(product.water_resistance) ===
             normalize(waterResistance);
 
         const matchesChronograph =
+          !isWatchMode ||
           !chronograph ||
           normalize(product.chronograph) === normalize(chronograph);
 
         const matchesGmt =
-          !gmt || normalize(product.gmt) === normalize(gmt);
+          !isWatchMode ||
+          !gmt ||
+          normalize(product.gmt) === normalize(gmt);
+
+        const productMaterial =
+          product.accessory_material || product.bracelet_material;
+
+        const productColor =
+          product.accessory_color || product.bracelet_color;
+
+        const matchesAccessoryMaterial =
+          !showAccessoryFilters ||
+          !accessoryMaterial ||
+          normalize(productMaterial) === normalize(accessoryMaterial);
+
+        const matchesAccessoryColor =
+          !showAccessoryFilters ||
+          !accessoryColor ||
+          normalize(productColor) === normalize(accessoryColor);
+
+        const matchesAccessorySize =
+          !isWalletMode ||
+          !accessorySize ||
+          normalize(product.accessory_size) === normalize(accessorySize);
+
+        const matchesGiftFor =
+          !isGiftMode ||
+          !giftFor ||
+          normalize(product.gift_for) === normalize(giftFor);
 
         return (
           matchesCategory &&
@@ -261,7 +374,11 @@ export default function CategoryFilter({
           matchesBraceletMaterial &&
           matchesWaterResistance &&
           matchesChronograph &&
-          matchesGmt
+          matchesGmt &&
+          matchesAccessoryMaterial &&
+          matchesAccessoryColor &&
+          matchesAccessorySize &&
+          matchesGiftFor
         );
       })
       .sort((a, b) => {
@@ -293,8 +410,8 @@ export default function CategoryFilter({
     search,
     onlyInStock,
     sort,
-    minPrice,
-    maxPrice,
+    min,
+    max,
     brand,
     movement,
     diameter,
@@ -303,24 +420,36 @@ export default function CategoryFilter({
     waterResistance,
     chronograph,
     gmt,
+    accessoryMaterial,
+    accessoryColor,
+    accessorySize,
+    giftFor,
     showGenderFilter,
+    isWatchMode,
+    showAccessoryFilters,
+    isWalletMode,
+    isGiftMode,
   ]);
 
   const hasActiveFilters =
     search.trim() !== "" ||
-    category !== "sve" ||
+    (isWatchMode && category !== "sve") ||
     onlyInStock ||
     sort !== "newest" ||
     minPrice !== "" ||
     maxPrice !== "" ||
-    brand !== "" ||
-    movement !== "" ||
-    diameter !== "" ||
-    caseMaterial !== "" ||
-    braceletMaterial !== "" ||
-    waterResistance !== "" ||
-    chronograph !== "" ||
-    gmt !== "";
+    (isWatchMode && brand !== "") ||
+    (isWatchMode && movement !== "") ||
+    (isWatchMode && diameter !== "") ||
+    (isWatchMode && caseMaterial !== "") ||
+    (isWatchMode && braceletMaterial !== "") ||
+    (isWatchMode && waterResistance !== "") ||
+    (isWatchMode && chronograph !== "") ||
+    (isWatchMode && gmt !== "") ||
+    (showAccessoryFilters && accessoryMaterial !== "") ||
+    (showAccessoryFilters && accessoryColor !== "") ||
+    (isWalletMode && accessorySize !== "") ||
+    (isGiftMode && giftFor !== "");
 
   const resetFilters = () => {
     setSearch("");
@@ -337,6 +466,10 @@ export default function CategoryFilter({
     setWaterResistance("");
     setChronograph("");
     setGmt("");
+    setAccessoryMaterial("");
+    setAccessoryColor("");
+    setAccessorySize("");
+    setGiftFor("");
   };
 
   return (
@@ -377,7 +510,7 @@ export default function CategoryFilter({
             )}
           </div>
 
-          {showGenderFilter && (
+          {isWatchMode && showGenderFilter && (
             <div>
               <p className="mb-2 text-sm text-neutral-400">Pol</p>
 
@@ -405,77 +538,133 @@ export default function CategoryFilter({
             </div>
           )}
 
-          <div>
-            <p className="mb-3 text-sm font-semibold text-white">
-              Filteri za satove
-            </p>
+          {isWatchMode && (
+            <div>
+              <p className="mb-3 text-sm font-semibold text-white">
+                Filteri za satove
+              </p>
 
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              <FilterSelect
-                id="filter-brand"
-                label="Brend"
-                value={brand}
-                onChange={setBrand}
-                options={brands}
-              />
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                <FilterSelect
+                  id="filter-brand"
+                  label="Brend"
+                  value={brand}
+                  onChange={setBrand}
+                  options={brands}
+                />
 
-              <FilterSelect
-                id="filter-movement"
-                label="Mehanizam"
-                value={movement}
-                onChange={setMovement}
-                options={movements}
-              />
+                <FilterSelect
+                  id="filter-movement"
+                  label="Mehanizam"
+                  value={movement}
+                  onChange={setMovement}
+                  options={movements}
+                />
 
-              <FilterSelect
-                id="filter-diameter"
-                label="Prečnik kućišta"
-                value={diameter}
-                onChange={setDiameter}
-                options={diameters}
-              />
+                <FilterSelect
+                  id="filter-diameter"
+                  label="Prečnik kućišta"
+                  value={diameter}
+                  onChange={setDiameter}
+                  options={diameters}
+                />
 
-              <FilterSelect
-                id="filter-case-material"
-                label="Materijal kućišta"
-                value={caseMaterial}
-                onChange={setCaseMaterial}
-                options={caseMaterials}
-              />
+                <FilterSelect
+                  id="filter-case-material"
+                  label="Materijal kućišta"
+                  value={caseMaterial}
+                  onChange={setCaseMaterial}
+                  options={caseMaterials}
+                />
 
-              <FilterSelect
-                id="filter-bracelet-material"
-                label="Materijal narukvice"
-                value={braceletMaterial}
-                onChange={setBraceletMaterial}
-                options={braceletMaterials}
-              />
+                <FilterSelect
+                  id="filter-bracelet-material"
+                  label="Materijal narukvice"
+                  value={braceletMaterial}
+                  onChange={setBraceletMaterial}
+                  options={braceletMaterials}
+                />
 
-              <FilterSelect
-                id="filter-water-resistance"
-                label="Vodootpornost"
-                value={waterResistance}
-                onChange={setWaterResistance}
-                options={waterResistances}
-              />
+                <FilterSelect
+                  id="filter-water-resistance"
+                  label="Vodootpornost"
+                  value={waterResistance}
+                  onChange={setWaterResistance}
+                  options={waterResistances}
+                />
 
-              <FilterSelect
-                id="filter-chronograph"
-                label="Hronograf"
-                value={chronograph}
-                onChange={setChronograph}
-                options={chronographOptions}
-              />
+                <FilterSelect
+                  id="filter-chronograph"
+                  label="Hronograf"
+                  value={chronograph}
+                  onChange={setChronograph}
+                  options={chronographOptions}
+                />
 
-              <FilterSelect
-                id="filter-gmt"
-                label="GMT"
-                value={gmt}
-                onChange={setGmt}
-                options={gmtOptions}
-              />
+                <FilterSelect
+                  id="filter-gmt"
+                  label="GMT"
+                  value={gmt}
+                  onChange={setGmt}
+                  options={gmtOptions}
+                />
+              </div>
             </div>
-          </div>
+          )}
+
+          {showAccessoryFilters && (
+            <div>
+              <p className="mb-3 text-sm font-semibold text-white">
+                Filteri za dodatke
+              </p>
+
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                <FilterSelect
+                  id="filter-accessory-material"
+                  label="Materijal"
+                  value={accessoryMaterial}
+                  onChange={setAccessoryMaterial}
+                  options={accessoryMaterials}
+                />
+
+                <FilterSelect
+                  id="filter-accessory-color"
+                  label="Boja"
+                  value={accessoryColor}
+                  onChange={setAccessoryColor}
+                  options={accessoryColors}
+                />
+
+                {isWalletMode && (
+                  <FilterSelect
+                    id="filter-accessory-size"
+                    label="Veličina"
+                    value={accessorySize}
+                    onChange={setAccessorySize}
+                    options={accessorySizes}
+                  />
+                )}
+              </div>
+            </div>
+          )}
+
+          {isGiftMode && (
+            <div>
+              <p className="mb-3 text-sm font-semibold text-white">
+                Filteri za poklone
+              </p>
+
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                <FilterSelect
+                  id="filter-gift-for"
+                  label="Za koga"
+                  value={giftFor}
+                  onChange={setGiftFor}
+                  options={giftForOptions}
+                />
+              </div>
+            </div>
+          )}
 
           <div className="grid gap-3 sm:grid-cols-2">
             <div>
@@ -533,7 +722,8 @@ export default function CategoryFilter({
 
           {invalidPriceRange && (
             <p role="alert" className="text-sm text-red-400">
-              Cena „od” ne može biti veća od cene „do”.
+              Proveri cene: obe moraju biti nenegativne, a cena „od” ne
+              može biti veća od cene „do”.
             </p>
           )}
 
@@ -581,7 +771,7 @@ export default function CategoryFilter({
       <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="text-sm text-neutral-500">
-            {hasActiveFilters ? "Rezultati pretrage" : `Svi ${productLabel}`}
+            {hasActiveFilters ? "Filtrirani rezultati" : `Svi ${productLabel}`}
           </p>
 
           <p className="mt-1 text-lg font-semibold">
@@ -601,7 +791,7 @@ export default function CategoryFilter({
         )}
       </div>
 
-            <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {!invalidPriceRange &&
           filteredProducts.map((product) => (
             <article
@@ -627,7 +817,7 @@ export default function CategoryFilter({
                     )}
                   </div>
 
-                  {showGenderFilter && (
+                  {isWatchMode && showGenderFilter && (
                     <div className="absolute left-4 top-4">
                       <span className="rounded-full border border-white/10 bg-black/60 px-3 py-1.5 text-[11px] font-medium uppercase tracking-[0.18em] text-white backdrop-blur">
                         {normalize(product.category) === "muski"
@@ -728,7 +918,7 @@ export default function CategoryFilter({
 
             <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-neutral-500">
               {invalidPriceRange
-                ? "Uneta početna cena je veća od maksimalne cene."
+                ? "Unete cene nisu ispravne. Proveri početnu i maksimalnu cenu."
                 : "Nismo pronašli proizvod koji odgovara izabranim filterima. Promeni kriterijume ili resetuj filtere."}
             </p>
 

@@ -7,7 +7,7 @@ export default async function WatchesPage() {
   const allProducts = await getProducts();
 
   const watches = allProducts.filter(
-    (product) => product.product_type === "watch"
+    (product) => product.product_type === "watch",
   );
 
   return (
@@ -53,18 +53,23 @@ export default async function WatchesPage() {
 
         <div className="mt-16 border-b border-white/10 pb-5">
           <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
-            <h3 className="text-xl font-semibold">
-              Kolekcija satova
-            </h3>
+            <h3 className="text-xl font-semibold">Kolekcija satova</h3>
 
             <p className="text-sm text-neutral-500">
-              {watches.length} {watches.length === 1 ? "proizvod" : "proizvoda"}
+              {watches.length}{" "}
+              {watches.length === 1 ? "proizvod" : "proizvoda"}
             </p>
           </div>
         </div>
 
         <div className="mt-8">
-          <CategoryFilter products={watches} />
+          <CategoryFilter
+            products={watches}
+            filterMode="watches"
+            productLabel="satovi"
+            searchPlaceholder="Pretraži sat, brend ili model..."
+            showGenderFilter={true}
+          />
         </div>
       </section>
 
@@ -85,38 +90,23 @@ export default async function WatchesPage() {
               aria-label="Dodatne informacije"
               className="flex flex-wrap gap-x-6 gap-y-3 text-sm text-neutral-400"
             >
-              <Link
-                href="/"
-                className="transition hover:text-white"
-              >
+              <Link href="/" className="transition hover:text-white">
                 Početna
               </Link>
 
-              <Link
-                href="/about"
-                className="transition hover:text-white"
-              >
+              <Link href="/about" className="transition hover:text-white">
                 O nama
               </Link>
 
-              <Link
-                href="/contact"
-                className="transition hover:text-white"
-              >
+              <Link href="/contact" className="transition hover:text-white">
                 Kontakt
               </Link>
 
-              <Link
-                href="/terms"
-                className="transition hover:text-white"
-              >
+              <Link href="/terms" className="transition hover:text-white">
                 Uslovi kupovine
               </Link>
 
-              <Link
-                href="/privacy"
-                className="transition hover:text-white"
-              >
+              <Link href="/privacy" className="transition hover:text-white">
                 Privatnost
               </Link>
             </nav>

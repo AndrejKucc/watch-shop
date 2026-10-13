@@ -43,6 +43,7 @@ export default async function OgrlicePage() {
 
         <CategoryFilter
           products={necklaces}
+          filterMode="accessories"
           productLabel="ogrlice"
           searchPlaceholder="Pretraži ogrlicu, brend ili model..."
           showGenderFilter={false}
@@ -54,24 +55,15 @@ export default async function OgrlicePage() {
           <p>© {new Date().getFullYear()} WATCH SHOP</p>
 
           <div className="flex gap-6">
-            <Link
-              href="/"
-              className="transition hover:text-white"
-            >
+            <Link href="/" className="transition hover:text-white">
               Početna
             </Link>
 
-            <Link
-              href="/satovi"
-              className="transition hover:text-white"
-            >
+            <Link href="/satovi" className="transition hover:text-white">
               Satovi
             </Link>
 
-            <Link
-              href="/narukvice"
-              className="transition hover:text-white"
-            >
+            <Link href="/narukvice" className="transition hover:text-white">
               Narukvice
             </Link>
           </div>

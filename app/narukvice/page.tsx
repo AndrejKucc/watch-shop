@@ -41,12 +41,15 @@ export default async function NarukvicePage() {
           </p>
         </div>
 
-        <CategoryFilter
-          products={bracelets}
-          productLabel="narukvice"
-          searchPlaceholder="Pretraži narukvicu, brend ili model..."
-          showGenderFilter={false}
-        />
+        
+<CategoryFilter
+  products={bracelets}
+  filterMode="accessories"
+  productLabel="narukvice"
+  searchPlaceholder="Pretraži narukvicu, brend ili model..."
+  showGenderFilter={false}
+/>
+
       </section>
 
       <footer className="border-t border-white/10">
