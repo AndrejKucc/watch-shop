@@ -43,9 +43,10 @@ export async function middleware(request: NextRequest) {
 
   const {
     data: { user },
+    error: authError,
   } = await supabase.auth.getUser();
 
-  if (!user) {
+  if (authError || !user) {
     const loginUrl = new URL("/admin", request.url);
     return NextResponse.redirect(loginUrl);
   }
@@ -57,7 +58,16 @@ export async function middleware(request: NextRequest) {
     .maybeSingle();
 
   if (error || !adminUser) {
-    return NextResponse.redirect(new URL("/", request.url));
+    const debugUrl = new URL("/", request.url);
+
+    debugUrl.searchParams.set(
+      "admin_debug",
+      error
+        ? `db-error-${error.code || "unknown"}`
+        : "admin-not-found"
+    );
+
+    return NextResponse.redirect(debugUrl);
   }
 
   return response;
