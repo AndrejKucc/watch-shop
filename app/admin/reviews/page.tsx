@@ -11,6 +11,7 @@ type Review = {
   rating: number;
   comment: string;
   created_at: string;
+  is_featured: boolean;
 };
 
 type ReviewWithProduct = Review & {
@@ -20,7 +21,7 @@ type ReviewWithProduct = Review & {
 export default function AdminReviewsPage() {
   const [reviews, setReviews] = useState<ReviewWithProduct[]>([]);
   const [loading, setLoading] = useState(true);
-  const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [busyId, setBusyId] = useState<string | null>(null);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const [authorized, setAuthorized] = useState(false);
@@ -41,7 +42,6 @@ export default function AdminReviewsPage() {
       return;
     }
 
-    // Provera administratorskih prava preko Supabase funkcije.
     const { data: isAdmin, error: adminError } = await supabase.rpc(
       "is_shop_admin"
     );
@@ -58,20 +58,18 @@ export default function AdminReviewsPage() {
     const { data, error: reviewsError } = await supabase
       .from("product_reviews")
       .select(
-        "id, product_id, reviewer_name, rating, comment, created_at"
+        "id, product_id, reviewer_name, rating, comment, created_at, is_featured"
       )
+      .order("is_featured", { ascending: false })
       .order("created_at", { ascending: false });
 
     if (reviewsError) {
-      setError(
-        "Greška pri učitavanju recenzija: " + reviewsError.message
-      );
+      setError("Greška pri učitavanju recenzija: " + reviewsError.message);
       setLoading(false);
       return;
     }
 
     const reviewsData = data || [];
-
     const productIds = [
       ...new Set(reviewsData.map((review) => review.product_id)),
     ];
@@ -88,10 +86,7 @@ export default function AdminReviewsPage() {
         console.error("Greška pri učitavanju proizvoda:", productsError);
       } else {
         productNames = Object.fromEntries(
-          (products || []).map((product) => [
-            product.id,
-            product.name,
-          ])
+          (products || []).map((product) => [product.id, product.name])
         );
       }
     }
@@ -99,8 +94,8 @@ export default function AdminReviewsPage() {
     setReviews(
       reviewsData.map((review) => ({
         ...review,
-        product_name:
-          productNames[review.product_id] || "Nepoznat proizvod",
+        is_featured: review.is_featured ?? false,
+        product_name: productNames[review.product_id] || "Nepoznat proizvod",
       }))
     );
 
@@ -111,16 +106,8 @@ export default function AdminReviewsPage() {
     void loadReviews();
   }, [loadReviews]);
 
-  async function deleteReview(review: ReviewWithProduct) {
-    const confirmed = window.confirm(
-      `Da li sigurno želiš da obrišeš recenziju korisnika ${review.reviewer_name}?\n\nOva radnja se ne može poništiti.`
-    );
-
-    if (!confirmed) {
-      return;
-    }
-
-    setDeletingId(review.id);
+  async function toggleFeatured(review: ReviewWithProduct) {
+    setBusyId(review.id);
     setMessage("");
     setError("");
 
@@ -133,47 +120,113 @@ export default function AdminReviewsPage() {
 
     if (authError || !user) {
       setError("Sesija je istekla. Prijavi se ponovo.");
-      setDeletingId(null);
+      setBusyId(null);
       return;
     }
 
-    // Ponovna provera administratorskih prava pre brisanja.
+    const { data: isAdmin, error: adminError } = await supabase.rpc(
+      "is_shop_admin"
+    );
+
+    if (adminError || !isAdmin) {
+      setError("Nemaš administratorsku dozvolu za ovu radnju.");
+      setBusyId(null);
+      return;
+    }
+
+    const newValue = !review.is_featured;
+
+    const { data, error: updateError } = await supabase
+      .from("product_reviews")
+      .update({ is_featured: newValue })
+      .eq("id", review.id)
+      .select("id, is_featured");
+
+    if (updateError || !data?.length) {
+      setError(
+        "Izmena nije uspela. Proveri administratorska RLS pravila u Supabase-u."
+      );
+      setBusyId(null);
+      return;
+    }
+
+    setReviews((current) =>
+      current
+        .map((item) =>
+          item.id === review.id
+            ? { ...item, is_featured: newValue }
+            : item
+        )
+        .sort(
+          (a, b) =>
+            Number(b.is_featured) - Number(a.is_featured) ||
+            new Date(b.created_at).getTime() -
+              new Date(a.created_at).getTime()
+        )
+    );
+
+    setMessage(
+      newValue
+        ? "Recenzija je istaknuta i prikazivaće se prva."
+        : "Isticanje recenzije je uklonjeno."
+    );
+
+    setBusyId(null);
+  }
+
+  async function deleteReview(review: ReviewWithProduct) {
+    const confirmed = window.confirm(
+      `Da li sigurno želiš da obrišeš recenziju korisnika ${review.reviewer_name}?\n\nOva radnja se ne može poništiti.`
+    );
+
+    if (!confirmed) return;
+
+    setBusyId(review.id);
+    setMessage("");
+    setError("");
+
+    const supabase = createClient();
+
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser();
+
+    if (authError || !user) {
+      setError("Sesija je istekla. Prijavi se ponovo.");
+      setBusyId(null);
+      return;
+    }
+
     const { data: isAdmin, error: adminError } = await supabase.rpc(
       "is_shop_admin"
     );
 
     if (adminError || !isAdmin) {
       setError("Nemaš administratorsku dozvolu za brisanje.");
-      setDeletingId(null);
+      setBusyId(null);
       return;
     }
 
-    const { data: deletedReviews, error: deleteError } = await supabase
+    const { data, error: deleteError } = await supabase
       .from("product_reviews")
       .delete()
       .eq("id", review.id)
       .select("id");
 
-    if (deleteError) {
-      setError("Brisanje nije uspelo: " + deleteError.message);
-      setDeletingId(null);
-      return;
-    }
-
-    if (!deletedReviews || deletedReviews.length === 0) {
+    if (deleteError || !data?.length) {
       setError(
-        "Recenzija nije obrisana. Proveri administratorska prava i RLS pravila u Supabase-u."
+        "Brisanje nije uspelo. Proveri administratorska prava i RLS pravila."
       );
-      setDeletingId(null);
+      setBusyId(null);
       return;
     }
 
     setReviews((current) =>
       current.filter((item) => item.id !== review.id)
     );
-
     setMessage("Recenzija je uspešno obrisana.");
-    setDeletingId(null);
+    setBusyId(null);
   }
 
   return (
@@ -191,12 +244,10 @@ export default function AdminReviewsPage() {
             Administracija
           </p>
 
-          <h1 className="mt-3 text-4xl font-bold">
-            Recenzije
-          </h1>
+          <h1 className="mt-3 text-4xl font-bold">Recenzije</h1>
 
           <p className="mt-3 text-neutral-400">
-            Pregledaj ocene i komentare kupaca i ukloni neželjene recenzije.
+            Pregledaj recenzije, istakni najbolje i ukloni neželjene komentare.
           </p>
         </div>
 
@@ -224,12 +275,9 @@ export default function AdminReviewsPage() {
           </div>
         )}
 
-        {!loading && authorized && !error && reviews.length === 0 && (
+        {!loading && authorized && reviews.length === 0 && (
           <div className="mt-8 rounded-2xl border border-white/10 bg-neutral-900 p-10 text-center">
-            <p className="text-xl font-semibold">
-              Nema recenzija
-            </p>
-
+            <p className="text-xl font-semibold">Nema recenzija</p>
             <p className="mt-2 text-neutral-400">
               Kada kupci ostave recenzije, pojaviće se ovde.
             </p>
@@ -239,19 +287,21 @@ export default function AdminReviewsPage() {
         {!loading && authorized && reviews.length > 0 && (
           <div className="mt-8 space-y-5">
             <div className="rounded-2xl border border-white/10 bg-gradient-to-r from-indigo-950 to-neutral-900 p-5">
-              <p className="text-sm text-neutral-400">
-                Ukupno recenzija
-              </p>
-
-              <p className="mt-1 text-3xl font-bold">
-                {reviews.length}
+              <p className="text-sm text-neutral-400">Ukupno recenzija</p>
+              <p className="mt-1 text-3xl font-bold">{reviews.length}</p>
+              <p className="mt-2 text-sm text-amber-300">
+                Istaknuto: {reviews.filter((review) => review.is_featured).length}
               </p>
             </div>
 
             {reviews.map((review) => (
               <article
                 key={review.id}
-                className="rounded-3xl border border-white/10 bg-neutral-900 p-6 transition hover:border-indigo-400/30 sm:p-8"
+                className={`rounded-3xl border bg-neutral-900 p-6 transition sm:p-8 ${
+                  review.is_featured
+                    ? "border-amber-400/40"
+                    : "border-white/10 hover:border-indigo-400/30"
+                }`}
               >
                 <div className="flex flex-col justify-between gap-5 sm:flex-row">
                   <div className="min-w-0">
@@ -259,9 +309,17 @@ export default function AdminReviewsPage() {
                       {review.product_name}
                     </p>
 
-                    <h2 className="mt-3 text-xl font-semibold">
-                      {review.reviewer_name}
-                    </h2>
+                    <div className="mt-3 flex flex-wrap items-center gap-3">
+                      <h2 className="text-xl font-semibold">
+                        {review.reviewer_name}
+                      </h2>
+
+                      {review.is_featured && (
+                        <span className="rounded-full border border-amber-400/30 bg-amber-400/10 px-3 py-1 text-xs font-bold text-amber-300">
+                          ⭐ ISTAKNUTA
+                        </span>
+                      )}
+                    </div>
 
                     <p
                       aria-label={`Ocena: ${review.rating} od 5`}
@@ -282,15 +340,32 @@ export default function AdminReviewsPage() {
                     </p>
                   </div>
 
-                  <div className="shrink-0">
+                  <div className="flex shrink-0 flex-col gap-3 sm:min-w-48">
                     <button
                       type="button"
-                      disabled={deletingId === review.id}
-                      onClick={() => void deleteReview(review)}
-                      className="w-full rounded-xl border border-red-500/30 px-5 py-3 text-sm font-semibold text-red-300 transition hover:border-red-400 hover:bg-red-500/10 disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto"
+                      disabled={busyId === review.id}
+                      onClick={() => void toggleFeatured(review)}
+                      className={`rounded-xl border px-5 py-3 text-sm font-semibold transition disabled:cursor-not-allowed disabled:opacity-50 ${
+                        review.is_featured
+                          ? "border-amber-400/30 text-amber-300 hover:bg-amber-400/10"
+                          : "border-amber-400/30 text-amber-200 hover:bg-amber-400/10"
+                      }`}
                     >
-                      {deletingId === review.id
-                        ? "Brisanje..."
+                      {busyId === review.id
+                        ? "Obrada..."
+                        : review.is_featured
+                          ? "☆ Ukloni isticanje"
+                          : "⭐ Istakni recenziju"}
+                    </button>
+
+                    <button
+                      type="button"
+                      disabled={busyId === review.id}
+                      onClick={() => void deleteReview(review)}
+                      className="rounded-xl border border-red-500/30 px-5 py-3 text-sm font-semibold text-red-300 transition hover:border-red-400 hover:bg-red-500/10 disabled:cursor-not-allowed disabled:opacity-50"
+                    >
+                      {busyId === review.id
+                        ? "Obrada..."
                         : "Obriši recenziju"}
                     </button>
                   </div>
