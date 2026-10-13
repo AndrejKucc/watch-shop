@@ -1,5 +1,6 @@
 "use client";
-
+import { CompareButton } from "@/components/compare-button";
+import ComparePanel from "@/components/compare-panel";
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { AddToCartButton } from "@/components/cart";
@@ -23,6 +24,7 @@ type Product = {
   chronograph?: string | null;
   gmt?: string | null;
   reference?: string | null;
+  crystal_material?: string | null;
 };
 
 const categories = [
@@ -599,7 +601,7 @@ export default function CategoryFilter({
         )}
       </div>
 
-      <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {!invalidPriceRange &&
           filteredProducts.map((product) => (
             <article
@@ -699,6 +701,8 @@ export default function CategoryFilter({
                     stock: product.stock,
                   }}
                 />
+
+                <CompareButton productId={product.id} />
               </div>
             </article>
           ))}
@@ -738,6 +742,8 @@ export default function CategoryFilter({
           </div>
         )}
       </div>
+
+      <ComparePanel products={products} />
     </>
   );
 }
