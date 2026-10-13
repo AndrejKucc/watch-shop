@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { getProducts } from "@/lib/products";
 import { CartButton } from "@/components/cart";
+import { AccountButton } from "@/components/account-button";
 import CategoryFilter from "@/components/category-filter";
 
 const leaves = [
@@ -173,7 +174,10 @@ export default async function Home() {
               </div>
             </Link>
 
-            <CartButton />
+            <div className="flex items-center gap-3">
+  <AccountButton />
+  <CartButton />
+</div>
           </div>
 
           <nav
