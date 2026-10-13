@@ -35,39 +35,30 @@ const mainNavigation = [
   { href: "/pokloni", label: "Pokloni" },
 ];
 
-const featuredBadges: Record<
-  string,
-  { text: string; className: string }
-> = {
+const featuredBadges: Record<string, { text: string; className: string }> = {
   recommendation: {
     text: "⭐ NAŠA PREPORUKA",
-    className:
-      "border-amber-300/40 bg-amber-400 text-neutral-950",
+    className: "border-amber-300/40 bg-amber-400 text-neutral-950",
   },
   best_buy: {
     text: "🔥 BEST BUY",
-    className:
-      "border-orange-300/40 bg-orange-500 text-white",
+    className: "border-orange-300/40 bg-orange-500 text-white",
   },
   new_model: {
     text: "✨ NOVI MODEL",
-    className:
-      "border-sky-300/40 bg-sky-500 text-white",
+    className: "border-sky-300/40 bg-sky-500 text-white",
   },
   great_price: {
     text: "💰 ODLIČNA CENA",
-    className:
-      "border-emerald-300/40 bg-emerald-500 text-neutral-950",
+    className: "border-emerald-300/40 bg-emerald-500 text-neutral-950",
   },
   premium: {
     text: "💎 PREMIUM IZBOR",
-    className:
-      "border-violet-300/40 bg-violet-500 text-white",
+    className: "border-violet-300/40 bg-violet-500 text-white",
   },
   bestseller: {
     text: "🏆 BESTSELLER",
-    className:
-      "border-rose-300/40 bg-rose-500 text-white",
+    className: "border-rose-300/40 bg-rose-500 text-white",
   },
 };
 
@@ -175,9 +166,9 @@ export default async function Home() {
             </Link>
 
             <div className="flex items-center gap-3">
-  <AccountButton />
-  <CartButton />
-</div>
+              <AccountButton />
+              <CartButton />
+            </div>
           </div>
 
           <nav
@@ -205,9 +196,7 @@ export default async function Home() {
 
           <h2 className="mt-5 text-5xl font-semibold leading-[1.05] tracking-tight sm:text-7xl lg:text-8xl">
             Vreme je za
-            <span className="block text-neutral-400">
-              pravi izbor.
-            </span>
+            <span className="block text-neutral-400">pravi izbor.</span>
           </h2>
 
           <p className="mt-8 max-w-2xl text-base leading-7 text-neutral-400 sm:text-lg sm:leading-8">
@@ -225,13 +214,8 @@ export default async function Home() {
           </div>
         </div>
 
-        <div
-          id="satovi"
-          className="mt-20 border-b border-white/10 pb-5"
-        >
-          <h3 className="text-xl font-semibold">
-            Izdvojeni satovi
-          </h3>
+        <div id="satovi" className="mt-20 border-b border-white/10 pb-5">
+          <h3 className="text-xl font-semibold">Izdvojeni satovi</h3>
 
           <p className="mt-2 text-sm text-neutral-500">
             Naš izbor satova koji privlače pažnju.
@@ -320,19 +304,9 @@ export default async function Home() {
             </div>
 
             <nav
-              aria-label="Glavna navigacija"
+              aria-label="Navigacija u podnožju"
               className="flex flex-wrap gap-x-6 gap-y-3 text-sm text-neutral-400"
             >
-              {mainNavigation.map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className="transition hover:text-white"
-                >
-                  {item.label}
-                </Link>
-              ))}
-
               <Link
                 href="/about"
                 className="transition hover:text-white"
