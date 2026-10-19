@@ -93,7 +93,10 @@ function FilterSelect({
 }) {
   return (
     <div className="min-w-0">
-      <label htmlFor={id} className="mb-2 block text-sm text-neutral-400">
+      <label
+        htmlFor={id}
+        className="mb-2 block text-sm text-[#C4CCDA]"
+      >
         {label}
       </label>
 
@@ -101,12 +104,12 @@ function FilterSelect({
         id={id}
         value={value}
         onChange={(event) => onChange(event.target.value)}
-        className="h-12 w-full rounded-xl border border-white/10 bg-neutral-950 px-3 text-sm text-white outline-none transition focus:border-white/30"
+        className="h-12 w-full rounded-xl border border-[#D6B56D]/25 bg-[#111C2D] px-3 text-sm text-[#F5F2EA] outline-none transition focus:border-[#D6B56D]/80 focus:ring-2 focus:ring-[#D6B56D]/10"
       >
         <option value="">Sve vrednosti</option>
 
         {options.map((option) => (
-          <option key={option} value={option} className="bg-neutral-950">
+          <option key={option} value={option} className="bg-[#111C2D]">
             {option}
           </option>
         ))}
@@ -133,8 +136,7 @@ export default function CategoryFilter({
   const isWalletMode = filterMode === "wallets";
   const isGiftMode = filterMode === "gifts";
 
-  const showAccessoryFilters =
-    isAccessoryMode || isWalletMode;
+  const showAccessoryFilters = isAccessoryMode || isWalletMode;
 
   const [category, setCategory] = useState("sve");
   const [search, setSearch] = useState("");
@@ -199,25 +201,17 @@ export default function CategoryFilter({
 
   const accessoryMaterials = useMemo(
     () =>
-      distinctValues(products, (product) => {
-        if (product.accessory_material) {
-          return product.accessory_material;
-        }
-
-        return product.bracelet_material;
-      }),
+      distinctValues(products, (product) =>
+        product.accessory_material || product.bracelet_material,
+      ),
     [products],
   );
 
   const accessoryColors = useMemo(
     () =>
-      distinctValues(products, (product) => {
-        if (product.accessory_color) {
-          return product.accessory_color;
-        }
-
-        return product.bracelet_color;
-      }),
+      distinctValues(products, (product) =>
+        product.accessory_color || product.bracelet_color,
+      ),
     [products],
   );
 
@@ -234,11 +228,8 @@ export default function CategoryFilter({
   const min = minPrice.trim() === "" ? null : Number(minPrice);
   const max = maxPrice.trim() === "" ? null : Number(maxPrice);
 
-  const invalidMinPrice =
-    min !== null && (!Number.isFinite(min) || min < 0);
-
-  const invalidMaxPrice =
-    max !== null && (!Number.isFinite(max) || max < 0);
+  const invalidMinPrice = min !== null && (!Number.isFinite(min) || min < 0);
+  const invalidMaxPrice = max !== null && (!Number.isFinite(max) || max < 0);
 
   const invalidPriceRange =
     invalidMinPrice ||
@@ -284,14 +275,10 @@ export default function CategoryFilter({
         const productPrice = Number(product.price);
 
         const matchesMinPrice =
-          min === null ||
-          !Number.isFinite(min) ||
-          productPrice >= min;
+          min === null || !Number.isFinite(min) || productPrice >= min;
 
         const matchesMaxPrice =
-          max === null ||
-          !Number.isFinite(max) ||
-          productPrice <= max;
+          max === null || !Number.isFinite(max) || productPrice <= max;
 
         const matchesBrand =
           !isWatchMode ||
@@ -316,14 +303,12 @@ export default function CategoryFilter({
         const matchesBraceletMaterial =
           !isWatchMode ||
           !braceletMaterial ||
-          normalize(product.bracelet_material) ===
-            normalize(braceletMaterial);
+          normalize(product.bracelet_material) === normalize(braceletMaterial);
 
         const matchesWaterResistance =
           !isWatchMode ||
           !waterResistance ||
-          normalize(product.water_resistance) ===
-            normalize(waterResistance);
+          normalize(product.water_resistance) === normalize(waterResistance);
 
         const matchesChronograph =
           !isWatchMode ||
@@ -394,13 +379,8 @@ export default function CategoryFilter({
           return a.name.localeCompare(b.name, "sr");
         }
 
-        const dateA = a.created_at
-          ? new Date(a.created_at).getTime()
-          : 0;
-
-        const dateB = b.created_at
-          ? new Date(b.created_at).getTime()
-          : 0;
+        const dateA = a.created_at ? new Date(a.created_at).getTime() : 0;
+        const dateB = b.created_at ? new Date(b.created_at).getTime() : 0;
 
         return dateB - dateA;
       });
@@ -472,15 +452,19 @@ export default function CategoryFilter({
     setGiftFor("");
   };
 
+  const labelClass = "mb-2 block text-sm text-[#C4CCDA]";
+  const inputClass =
+    "h-12 w-full rounded-xl border border-[#D6B56D]/20 bg-[#111C2D] px-4 text-base text-[#F5F2EA] outline-none transition placeholder:text-[#8996AA] focus:border-[#D6B56D]/70 focus:ring-2 focus:ring-[#D6B56D]/10";
+
   return (
     <>
-      <div className="mt-12 rounded-3xl border border-white/10 bg-neutral-900/60 p-4 backdrop-blur sm:p-5">
+      <div className="mt-12 rounded-3xl border border-[#D6B56D]/20 bg-gradient-to-br from-[#243449]/95 via-[#1B2638]/95 to-[#172235]/95 p-4 backdrop-blur-xl sm:p-5">
         <div className="flex flex-col gap-5">
           <div className="relative">
             <svg
               aria-hidden="true"
               viewBox="0 0 24 24"
-              className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-neutral-500"
+              className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-[#C4AD7B]"
               fill="none"
               stroke="currentColor"
               strokeWidth="1.8"
@@ -495,7 +479,7 @@ export default function CategoryFilter({
               onChange={(event) => setSearch(event.target.value)}
               placeholder={searchPlaceholder}
               aria-label={`Pretraži ${productLabel}`}
-              className="h-14 w-full rounded-2xl border border-white/10 bg-neutral-950 pl-12 pr-12 text-base text-white outline-none transition placeholder:text-neutral-600 focus:border-white/30"
+              className={`${inputClass} h-14 rounded-2xl pl-12 pr-12`}
             />
 
             {search && (
@@ -503,7 +487,7 @@ export default function CategoryFilter({
                 type="button"
                 onClick={() => setSearch("")}
                 aria-label="Obriši pretragu"
-                className="absolute right-3 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-xl text-neutral-500 transition hover:bg-white/10 hover:text-white"
+                className="absolute right-3 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-xl text-[#AEBACC] transition hover:bg-[#D6B56D]/10 hover:text-[#E7CA8B]"
               >
                 ×
               </button>
@@ -512,7 +496,7 @@ export default function CategoryFilter({
 
           {isWatchMode && showGenderFilter && (
             <div>
-              <p className="mb-2 text-sm text-neutral-400">Pol</p>
+              <p className={labelClass}>Pol</p>
 
               <div className="flex flex-wrap gap-2">
                 {categories.map((item) => {
@@ -526,8 +510,8 @@ export default function CategoryFilter({
                       aria-pressed={active}
                       className={`rounded-2xl px-5 py-3 text-sm font-semibold transition-all duration-200 active:scale-95 ${
                         active
-                          ? "bg-white text-black"
-                          : "border border-white/10 bg-neutral-950 text-neutral-300 hover:border-white/20 hover:bg-neutral-800 hover:text-white"
+                          ? "border border-[#E7CA8B]/70 bg-gradient-to-r from-[#E7CA8B] to-[#C4A45E] text-[#172033] shadow-lg shadow-amber-950/20"
+                          : "border border-[#D6B56D]/20 bg-[#111C2D] text-[#C4CCDA] hover:border-[#D6B56D]/60 hover:bg-[#30435B] hover:text-[#F5F2EA]"
                       }`}
                     >
                       {item.label}
@@ -540,7 +524,7 @@ export default function CategoryFilter({
 
           {isWatchMode && (
             <div>
-              <p className="mb-3 text-sm font-semibold text-white">
+              <p className="mb-3 text-sm font-semibold text-[#F5F2EA]">
                 Filteri za satove
               </p>
 
@@ -614,7 +598,7 @@ export default function CategoryFilter({
 
           {showAccessoryFilters && (
             <div>
-              <p className="mb-3 text-sm font-semibold text-white">
+              <p className="mb-3 text-sm font-semibold text-[#F5F2EA]">
                 Filteri za dodatke
               </p>
 
@@ -650,7 +634,7 @@ export default function CategoryFilter({
 
           {isGiftMode && (
             <div>
-              <p className="mb-3 text-sm font-semibold text-white">
+              <p className="mb-3 text-sm font-semibold text-[#F5F2EA]">
                 Filteri za poklone
               </p>
 
@@ -668,10 +652,7 @@ export default function CategoryFilter({
 
           <div className="grid gap-3 sm:grid-cols-2">
             <div>
-              <label
-                htmlFor="min-price"
-                className="mb-2 block text-sm text-neutral-400"
-              >
+              <label htmlFor="min-price" className={labelClass}>
                 Cena od
               </label>
 
@@ -684,20 +665,17 @@ export default function CategoryFilter({
                   value={minPrice}
                   onChange={(event) => setMinPrice(event.target.value)}
                   placeholder="0"
-                  className="h-12 w-full rounded-xl border border-white/10 bg-neutral-950 px-4 pr-16 text-base text-white outline-none transition placeholder:text-neutral-600 focus:border-white/30"
+                  className={`${inputClass} pr-16`}
                 />
 
-                <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-sm text-neutral-600">
+                <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-sm text-[#8996AA]">
                   RSD
                 </span>
               </div>
             </div>
 
             <div>
-              <label
-                htmlFor="max-price"
-                className="mb-2 block text-sm text-neutral-400"
-              >
+              <label htmlFor="max-price" className={labelClass}>
                 Cena do
               </label>
 
@@ -710,10 +688,10 @@ export default function CategoryFilter({
                   value={maxPrice}
                   onChange={(event) => setMaxPrice(event.target.value)}
                   placeholder="Bez limita"
-                  className="h-12 w-full rounded-xl border border-white/10 bg-neutral-950 px-4 pr-16 text-base text-white outline-none transition placeholder:text-neutral-600 focus:border-white/30"
+                  className={`${inputClass} pr-16`}
                 />
 
-                <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-sm text-neutral-600">
+                <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-sm text-[#8996AA]">
                   RSD
                 </span>
               </div>
@@ -721,29 +699,26 @@ export default function CategoryFilter({
           </div>
 
           {invalidPriceRange && (
-            <p role="alert" className="text-sm text-red-400">
-              Proveri cene: obe moraju biti nenegativne, a cena „od” ne
-              može biti veća od cene „do”.
+            <p role="alert" className="text-sm text-red-300">
+              Proveri cene: obe moraju biti nenegativne, a cena „od” ne može
+              biti veća od cene „do”.
             </p>
           )}
 
-          <div className="flex flex-col gap-3 border-t border-white/10 pt-4 sm:flex-row sm:items-center sm:justify-between">
-            <label className="flex min-h-11 cursor-pointer items-center gap-3 text-sm text-neutral-300">
+          <div className="flex flex-col gap-3 border-t border-[#D6B56D]/20 pt-4 sm:flex-row sm:items-center sm:justify-between">
+            <label className="flex min-h-11 cursor-pointer items-center gap-3 text-sm text-[#C4CCDA]">
               <input
                 type="checkbox"
                 checked={onlyInStock}
                 onChange={(event) => setOnlyInStock(event.target.checked)}
-                className="h-4 w-4 rounded border-white/20 bg-neutral-950 accent-white"
+                className="h-4 w-4 rounded border-[#D6B56D]/30 bg-[#111C2D] accent-[#D6B56D]"
               />
 
               <span>Samo na stanju</span>
             </label>
 
             <div className="flex items-center gap-3">
-              <label
-                htmlFor="sort-products"
-                className="text-sm text-neutral-400"
-              >
+              <label htmlFor="sort-products" className="text-sm text-[#C4CCDA]">
                 Sortiraj:
               </label>
 
@@ -751,13 +726,13 @@ export default function CategoryFilter({
                 id="sort-products"
                 value={sort}
                 onChange={(event) => setSort(event.target.value)}
-                className="min-h-11 min-w-0 rounded-xl border border-white/10 bg-neutral-950 px-3 text-sm text-white outline-none transition focus:border-white/30"
+                className="min-h-11 min-w-0 rounded-xl border border-[#D6B56D]/25 bg-[#111C2D] px-3 text-sm text-[#F5F2EA] outline-none transition focus:border-[#D6B56D]/70"
               >
                 {sortOptions.map((option) => (
                   <option
                     key={option.value}
                     value={option.value}
-                    className="bg-neutral-950"
+                    className="bg-[#111C2D]"
                   >
                     {option.label}
                   </option>
@@ -770,11 +745,11 @@ export default function CategoryFilter({
 
       <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="text-sm text-neutral-500">
+          <p className="text-sm text-[#AEBACC]">
             {hasActiveFilters ? "Filtrirani rezultati" : `Svi ${productLabel}`}
           </p>
 
-          <p className="mt-1 text-lg font-semibold">
+          <p className="mt-1 text-lg font-semibold text-[#F5F2EA]">
             {invalidPriceRange ? 0 : filteredProducts.length}{" "}
             {filteredProducts.length === 1 ? "proizvod" : "proizvoda"}
           </p>
@@ -784,7 +759,7 @@ export default function CategoryFilter({
           <button
             type="button"
             onClick={resetFilters}
-            className="w-fit rounded-xl border border-white/10 px-4 py-2 text-sm text-neutral-400 transition hover:border-white/20 hover:text-white"
+            className="w-fit rounded-xl border border-[#D6B56D]/30 px-4 py-2 text-sm text-[#C4CCDA] transition hover:border-[#D6B56D]/70 hover:bg-[#D6B56D]/10 hover:text-[#E7CA8B]"
           >
             Resetuj filtere
           </button>
@@ -796,10 +771,10 @@ export default function CategoryFilter({
           filteredProducts.map((product) => (
             <article
               key={product.id}
-              className="group overflow-hidden rounded-[2rem] border border-white/10 bg-neutral-900 transition-all duration-300 hover:-translate-y-1 hover:border-white/20 hover:bg-neutral-800/80"
+              className="group overflow-hidden rounded-[2rem] border border-[#D6B56D]/20 bg-gradient-to-br from-[#243449] via-[#1B2638] to-[#172235] transition-all duration-300 hover:-translate-y-1 hover:border-[#D6B56D]/60 hover:shadow-xl hover:shadow-black/20"
             >
               <Link href={`/product/${product.id}`} className="block">
-                <div className="relative overflow-hidden bg-neutral-800">
+                <div className="relative overflow-hidden bg-[#26374C]">
                   <div className="aspect-[4/3]">
                     {product.images && product.images[0] ? (
                       <img
@@ -810,7 +785,7 @@ export default function CategoryFilter({
                       />
                     ) : (
                       <div className="flex h-full items-center justify-center">
-                        <span className="text-sm text-neutral-500">
+                        <span className="text-sm text-[#AEBACC]">
                           Slika proizvoda
                         </span>
                       </div>
@@ -819,7 +794,7 @@ export default function CategoryFilter({
 
                   {isWatchMode && showGenderFilter && (
                     <div className="absolute left-4 top-4">
-                      <span className="rounded-full border border-white/10 bg-black/60 px-3 py-1.5 text-[11px] font-medium uppercase tracking-[0.18em] text-white backdrop-blur">
+                      <span className="rounded-full border border-[#D6B56D]/30 bg-[#111C2D]/85 px-3 py-1.5 text-[11px] font-medium uppercase tracking-[0.18em] text-[#F5F2EA] backdrop-blur">
                         {normalize(product.category) === "muski"
                           ? "Muški"
                           : normalize(product.category) === "zenski"
@@ -830,8 +805,8 @@ export default function CategoryFilter({
                   )}
 
                   {product.stock <= 0 && (
-                    <div className="absolute inset-0 flex items-center justify-center bg-black/50 backdrop-blur-[2px]">
-                      <span className="rounded-full border border-white/10 bg-neutral-950/90 px-4 py-2 text-xs font-semibold uppercase tracking-[0.15em] text-neutral-300">
+                    <div className="absolute inset-0 flex items-center justify-center bg-[#0B1220]/65 backdrop-blur-[2px]">
+                      <span className="rounded-full border border-[#D6B56D]/20 bg-[#111C2D]/95 px-4 py-2 text-xs font-semibold uppercase tracking-[0.15em] text-[#C4CCDA]">
                         Nije na stanju
                       </span>
                     </div>
@@ -839,16 +814,16 @@ export default function CategoryFilter({
                 </div>
 
                 <div className="p-6 pb-2">
-                  <p className="text-xs font-medium uppercase tracking-[0.22em] text-neutral-500">
+                  <p className="text-xs font-medium uppercase tracking-[0.22em] text-[#C4AD7B]">
                     {product.brand || "Watch Shop"}
                   </p>
 
-                  <h3 className="mt-3 text-2xl font-semibold tracking-tight text-white">
+                  <h3 className="mt-3 text-2xl font-semibold tracking-tight text-[#F5F2EA]">
                     {product.name}
                   </h3>
 
                   {product.model && (
-                    <p className="mt-1 text-sm text-neutral-500">
+                    <p className="mt-1 text-sm text-[#AEBACC]">
                       {product.model}
                     </p>
                   )}
@@ -856,13 +831,13 @@ export default function CategoryFilter({
               </Link>
 
               <div className="p-6 pt-4">
-                <div className="flex items-end justify-between gap-4 border-t border-white/10 pt-5">
+                <div className="flex items-end justify-between gap-4 border-t border-[#D6B56D]/20 pt-5">
                   <div>
-                    <p className="text-xs uppercase tracking-[0.16em] text-neutral-600">
+                    <p className="text-xs uppercase tracking-[0.16em] text-[#8996AA]">
                       Cena
                     </p>
 
-                    <p className="mt-1 text-2xl font-bold tracking-tight text-white">
+                    <p className="mt-1 text-2xl font-bold tracking-tight text-[#E7CA8B]">
                       {Number(product.price).toLocaleString("sr-RS")} RSD
                     </p>
                   </div>
@@ -870,8 +845,8 @@ export default function CategoryFilter({
                   <span
                     className={
                       product.stock > 0
-                        ? "text-right text-xs text-neutral-500"
-                        : "text-right text-xs text-red-400"
+                        ? "text-right text-xs text-[#AEBACC]"
+                        : "text-right text-xs text-red-300"
                     }
                   >
                     {product.stock > 0
@@ -898,11 +873,11 @@ export default function CategoryFilter({
           ))}
 
         {(invalidPriceRange || filteredProducts.length === 0) && (
-          <div className="col-span-full rounded-[2rem] border border-white/10 bg-neutral-900 p-12 text-center">
-            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-neutral-800">
+          <div className="col-span-full rounded-[2rem] border border-[#D6B56D]/20 bg-gradient-to-br from-[#243449] to-[#172235] p-12 text-center">
+            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl border border-[#D6B56D]/20 bg-[#111C2D]">
               <svg
                 viewBox="0 0 24 24"
-                className="h-6 w-6 text-neutral-500"
+                className="h-6 w-6 text-[#C4AD7B]"
                 fill="none"
                 stroke="currentColor"
                 strokeWidth="1.5"
@@ -912,11 +887,11 @@ export default function CategoryFilter({
               </svg>
             </div>
 
-            <h3 className="mt-5 text-xl font-semibold">
+            <h3 className="mt-5 text-xl font-semibold text-[#F5F2EA]">
               {invalidPriceRange ? "Proveri cene" : "Nema rezultata"}
             </h3>
 
-            <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-neutral-500">
+            <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-[#AEBACC]">
               {invalidPriceRange
                 ? "Unete cene nisu ispravne. Proveri početnu i maksimalnu cenu."
                 : "Nismo pronašli proizvod koji odgovara izabranim filterima. Promeni kriterijume ili resetuj filtere."}
@@ -925,7 +900,7 @@ export default function CategoryFilter({
             <button
               type="button"
               onClick={resetFilters}
-              className="mt-6 rounded-xl bg-white px-5 py-3 text-sm font-semibold text-black transition hover:bg-neutral-200 active:scale-95"
+              className="mt-6 rounded-xl border border-[#E7CA8B]/70 bg-gradient-to-r from-[#E7CA8B] to-[#C4A45E] px-5 py-3 text-sm font-semibold text-[#172033] transition hover:from-[#F5DDA3] hover:to-[#D6B56D] active:scale-95"
             >
               Prikaži sve {productLabel}
             </button>
