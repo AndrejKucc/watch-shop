@@ -38,27 +38,27 @@ const mainNavigation = [
 const featuredBadges: Record<string, { text: string; className: string }> = {
   recommendation: {
     text: "⭐ NAŠA PREPORUKA",
-    className: "border-amber-300/40 bg-amber-400 text-neutral-950",
+    className: "border-amber-300/50 bg-amber-300 text-slate-950",
   },
   best_buy: {
     text: "🔥 BEST BUY",
-    className: "border-orange-300/40 bg-orange-500 text-white",
+    className: "border-orange-300/50 bg-orange-400 text-slate-950",
   },
   new_model: {
     text: "✨ NOVI MODEL",
-    className: "border-sky-300/40 bg-sky-500 text-white",
+    className: "border-sky-300/50 bg-sky-300 text-slate-950",
   },
   great_price: {
     text: "💰 ODLIČNA CENA",
-    className: "border-emerald-300/40 bg-emerald-500 text-neutral-950",
+    className: "border-emerald-300/50 bg-emerald-300 text-slate-950",
   },
   premium: {
     text: "💎 PREMIUM IZBOR",
-    className: "border-violet-300/40 bg-violet-500 text-white",
+    className: "border-violet-300/50 bg-violet-300 text-slate-950",
   },
   bestseller: {
     text: "🏆 BESTSELLER",
-    className: "border-rose-300/40 bg-rose-500 text-white",
+    className: "border-rose-300/50 bg-rose-300 text-slate-950",
   },
 };
 
@@ -78,7 +78,7 @@ export default async function Home() {
   ).slice(0, 6);
 
   return (
-    <main className="relative min-h-screen bg-neutral-950 text-white">
+    <main className="relative min-h-screen overflow-x-clip bg-[#101827] text-[#F5F2EA]">
       <style>{`
         @keyframes autumnFall {
           0% {
@@ -144,21 +144,21 @@ export default async function Home() {
         ))}
       </div>
 
-      <header className="sticky top-0 z-50 border-b border-white/10 bg-neutral-950/90 backdrop-blur-xl">
+      <header className="sticky top-0 z-50 border-b border-amber-200/15 bg-[#152238]/95 backdrop-blur-xl">
         <div className="mx-auto max-w-7xl px-5 sm:px-6">
           <div className="flex items-center justify-between py-5">
             <Link href="/" className="group">
               <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-full border border-white/15 bg-white/[0.03] transition group-hover:border-white/30">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full border border-amber-200/30 bg-[#243449] transition group-hover:border-amber-200/70 group-hover:bg-[#30435b]">
                   <span className="text-sm">⌚</span>
                 </div>
 
                 <div>
-                  <h1 className="text-xl font-bold tracking-[0.18em] sm:text-2xl">
+                  <h1 className="text-xl font-bold tracking-[0.18em] text-[#F5F2EA] sm:text-2xl">
                     WATCH SHOP
                   </h1>
 
-                  <p className="mt-0.5 text-[10px] uppercase tracking-[0.3em] text-neutral-500 sm:text-xs">
+                  <p className="mt-0.5 text-[10px] uppercase tracking-[0.3em] text-[#C4AD7B] sm:text-xs">
                     Premium satovi i aksesoari
                   </p>
                 </div>
@@ -179,7 +179,7 @@ export default async function Home() {
               <Link
                 key={item.href}
                 href={item.href}
-                className="shrink-0 rounded-xl px-4 py-2.5 text-sm font-medium text-neutral-400 transition hover:bg-white/5 hover:text-white"
+                className="shrink-0 rounded-xl px-4 py-2.5 text-sm font-medium text-[#C4CCDA] transition hover:bg-[#D6B56D]/10 hover:text-[#E7CA8B]"
               >
                 {item.label}
               </Link>
@@ -189,17 +189,22 @@ export default async function Home() {
       </header>
 
       <section className="relative z-10 mx-auto max-w-7xl px-6 py-20 sm:py-28">
+        <div className="pointer-events-none absolute -left-24 top-12 -z-10 h-80 w-80 rounded-full bg-[#D6B56D]/[0.07] blur-3xl" />
+        <div className="pointer-events-none absolute right-0 top-48 -z-10 h-96 w-96 rounded-full bg-sky-400/[0.06] blur-3xl" />
+
         <div className="max-w-4xl">
-          <p className="text-sm font-medium uppercase tracking-[0.35em] text-neutral-500">
+          <p className="text-sm font-medium uppercase tracking-[0.35em] text-[#C4AD7B]">
             Kolekcija za svaki stil
           </p>
 
           <h2 className="mt-5 text-5xl font-semibold leading-[1.05] tracking-tight sm:text-7xl lg:text-8xl">
             Vreme je za
-            <span className="block text-neutral-400">pravi izbor.</span>
+            <span className="block bg-gradient-to-r from-[#F5F2EA] via-[#E7CA8B] to-[#B9CDE8] bg-clip-text text-transparent">
+              pravi izbor.
+            </span>
           </h2>
 
-          <p className="mt-8 max-w-2xl text-base leading-7 text-neutral-400 sm:text-lg sm:leading-8">
+          <p className="mt-8 max-w-2xl text-base leading-7 text-[#C4CCDA] sm:text-lg sm:leading-8">
             Otkrij satove, narukvice, ogrlice, novčanike i poklone pažljivo
             odabrane za svaki stil i priliku.
           </p>
@@ -207,17 +212,19 @@ export default async function Home() {
           <div className="mt-10 flex flex-wrap items-center gap-3">
             <a
               href="#kolekcija"
-              className="rounded-2xl bg-white px-6 py-3.5 text-sm font-semibold text-black transition-all duration-200 hover:bg-neutral-200 active:scale-95"
+              className="rounded-2xl border border-[#E7CA8B]/70 bg-gradient-to-r from-[#E7CA8B] to-[#C4A45E] px-6 py-3.5 text-sm font-semibold text-[#172033] shadow-lg shadow-amber-950/20 transition-all duration-200 hover:from-[#F5DDA3] hover:to-[#D6B56D] active:scale-95"
             >
               Pogledaj kolekciju
             </a>
           </div>
         </div>
 
-        <div id="satovi" className="mt-20 border-b border-white/10 pb-5">
-          <h3 className="text-xl font-semibold">Izdvojeni satovi</h3>
+        <div id="satovi" className="mt-20 border-b border-amber-100/20 pb-5">
+          <h3 className="text-xl font-semibold text-[#F5F2EA]">
+            Izdvojeni satovi
+          </h3>
 
-          <p className="mt-2 text-sm text-neutral-500">
+          <p className="mt-2 text-sm text-[#AEBACC]">
             Naš izbor satova koji privlače pažnju.
           </p>
         </div>
@@ -235,9 +242,9 @@ export default async function Home() {
               <Link
                 key={product.id}
                 href={`/product/${product.id}`}
-                className="group overflow-hidden rounded-[2rem] border border-white/10 bg-neutral-900 transition-all duration-300 hover:-translate-y-1 hover:border-white/20 hover:bg-neutral-800/80"
+                className="group overflow-hidden rounded-[2rem] border border-[#D6B56D]/20 bg-gradient-to-br from-[#243449] via-[#1B2638] to-[#172235] transition-all duration-300 hover:-translate-y-1 hover:border-[#D6B56D]/60 hover:shadow-xl hover:shadow-black/20"
               >
-                <div className="relative aspect-[4/3] overflow-hidden bg-neutral-800">
+                <div className="relative aspect-[4/3] overflow-hidden bg-[#26374C]">
                   {product.images && product.images[0] ? (
                     <img
                       src={product.images[0]}
@@ -247,7 +254,7 @@ export default async function Home() {
                     />
                   ) : (
                     <div className="flex h-full items-center justify-center">
-                      <span className="text-sm text-neutral-500">
+                      <span className="text-sm text-[#B8C5D8]">
                         Slika sata
                       </span>
                     </div>
@@ -263,15 +270,15 @@ export default async function Home() {
                 </div>
 
                 <div className="p-6">
-                  <p className="text-xs font-medium uppercase tracking-[0.22em] text-neutral-500">
+                  <p className="text-xs font-medium uppercase tracking-[0.22em] text-[#C4AD7B]">
                     {product.brand || "Watch Shop"}
                   </p>
 
-                  <h4 className="mt-3 text-2xl font-semibold tracking-tight text-white">
+                  <h4 className="mt-3 text-2xl font-semibold tracking-tight text-[#F5F2EA]">
                     {product.name}
                   </h4>
 
-                  <p className="mt-5 border-t border-white/10 pt-4 text-2xl font-bold tracking-tight">
+                  <p className="mt-5 border-t border-white/10 pt-4 text-2xl font-bold tracking-tight text-[#E7CA8B]">
                     {Number(product.price).toLocaleString("sr-RS", {
                       minimumFractionDigits: 2,
                       maximumFractionDigits: 2,
@@ -284,67 +291,81 @@ export default async function Home() {
           })}
 
           {displayedWatches.length === 0 && (
-            <p className="text-neutral-500">
+            <p className="text-[#B8C5D8]">
               Trenutno nema satova za prikaz.
             </p>
           )}
         </div>
 
         <div id="kolekcija" className="mt-20 scroll-mt-24">
-          <div className="mb-8 border-b border-white/10 pb-5">
-            <h3 className="text-2xl font-semibold">Svi proizvodi</h3>
+          <div className="mb-8 border-b border-amber-100/20 pb-5">
+            <h3 className="text-2xl font-semibold text-[#F5F2EA]">
+              Svi proizvodi
+            </h3>
 
-            <p className="mt-2 text-sm text-neutral-500">
+            <p className="mt-2 text-sm text-[#B8C5D8]">
               Pronađi pravi proizvod i prilagodi prikaz svojim željama.
             </p>
           </div>
 
           <CategoryFilter
-  products={products}
-  filterMode="basic"
-  productLabel="proizvodi"
-  searchPlaceholder="Pretraži sat, narukvicu, ogrlicu, novčanik ili poklon..."
-  showGenderFilter={false}
-/>
+            products={products}
+            filterMode="basic"
+            productLabel="proizvodi"
+            searchPlaceholder="Pretraži sat, narukvicu, ogrlicu, novčanik ili poklon..."
+            showGenderFilter={false}
+          />
         </div>
       </section>
 
-      <footer className="relative z-10 border-t border-white/10 bg-neutral-950/90">
+      <footer className="relative z-10 border-t border-amber-100/15 bg-[#111C2D]">
         <div className="mx-auto max-w-7xl px-6 py-10">
           <div className="flex flex-col gap-8 md:flex-row md:items-center md:justify-between">
             <div>
-              <p className="text-sm font-semibold tracking-[0.2em]">
+              <p className="text-sm font-semibold tracking-[0.2em] text-[#F5F2EA]">
                 WATCH SHOP
               </p>
 
-              <p className="mt-2 text-sm text-neutral-500">
+              <p className="mt-2 text-sm text-[#AEBACC]">
                 Premium satovi i aksesoari
               </p>
             </div>
 
             <nav
               aria-label="Navigacija u podnožju"
-              className="flex flex-wrap gap-x-6 gap-y-3 text-sm text-neutral-400"
+              className="flex flex-wrap gap-x-6 gap-y-3 text-sm text-[#C4CCDA]"
             >
-              <Link href="/about" className="transition hover:text-white">
+              <Link
+                href="/about"
+                className="transition hover:text-[#E7CA8B]"
+              >
                 O nama
               </Link>
 
-              <Link href="/contact" className="transition hover:text-white">
+              <Link
+                href="/contact"
+                className="transition hover:text-[#E7CA8B]"
+              >
                 Kontakt
               </Link>
 
-              <Link href="/terms" className="transition hover:text-white">
+              <Link
+                href="/terms"
+                className="transition hover:text-[#E7CA8B]"
+              >
                 Uslovi kupovine
               </Link>
 
-              <Link href="/privacy" className="transition hover:text-white">
+              <Link
+                href="/privacy"
+                className="transition hover:text-[#E7CA8B]"
+              >
                 Privatnost
               </Link>
             </nav>
           </div>
 
-          <div className="mt-8 border-t border-white/10 pt-6 text-xs text-neutral-600">
+          <div className="mt-8 border-t border-white/10 pt-6 text-xs text-[#8996AA]">
             © {new Date().getFullYear()} WATCH SHOP. Sva prava zadržana.
           </div>
         </div>
