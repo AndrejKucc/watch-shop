@@ -47,6 +47,15 @@ type Product = {
 
 type FilterMode = "basic" | "watches" | "accessories" | "wallets" | "gifts";
 
+const COLORS = {
+  black: "#191C1B",
+  green: "#163D30",
+  red: "#8F2638",
+  white: "#F4F3EF",
+  muted: "#A5ADA7",
+  border: "rgba(255,255,255,0.10)",
+};
+
 const categories = [
   { value: "sve", label: "Svi" },
   { value: "muski", label: "Muški" },
@@ -95,7 +104,7 @@ function FilterSelect({
     <div className="min-w-0">
       <label
         htmlFor={id}
-        className="mb-2 block text-sm text-[#C4CCDA]"
+        className="mb-2 block text-xs font-medium uppercase tracking-[0.13em] text-[#A5ADA7]"
       >
         {label}
       </label>
@@ -104,12 +113,14 @@ function FilterSelect({
         id={id}
         value={value}
         onChange={(event) => onChange(event.target.value)}
-        className="h-12 w-full rounded-xl border border-[#D6B56D]/25 bg-[#111C2D] px-3 text-sm text-[#F5F2EA] outline-none transition focus:border-[#D6B56D]/80 focus:ring-2 focus:ring-[#D6B56D]/10"
+        className="h-12 w-full rounded-xl border border-white/[0.10] bg-[#191C1B]/80 px-3 text-sm text-[#F4F3EF] outline-none backdrop-blur-xl transition duration-200 hover:border-white/[0.20] focus:border-[#163D30] focus:ring-2 focus:ring-[#163D30]/50"
       >
-        <option value="">Sve vrednosti</option>
+        <option value="" className="bg-[#191C1B]">
+          Sve vrednosti
+        </option>
 
         {options.map((option) => (
-          <option key={option} value={option} className="bg-[#111C2D]">
+          <option key={option} value={option} className="bg-[#191C1B]">
             {option}
           </option>
         ))}
@@ -201,16 +212,19 @@ export default function CategoryFilter({
 
   const accessoryMaterials = useMemo(
     () =>
-      distinctValues(products, (product) =>
-        product.accessory_material || product.bracelet_material,
+      distinctValues(
+        products,
+        (product) =>
+          product.accessory_material || product.bracelet_material,
       ),
     [products],
   );
 
   const accessoryColors = useMemo(
     () =>
-      distinctValues(products, (product) =>
-        product.accessory_color || product.bracelet_color,
+      distinctValues(
+        products,
+        (product) => product.accessory_color || product.bracelet_color,
       ),
     [products],
   );
@@ -303,7 +317,8 @@ export default function CategoryFilter({
         const matchesBraceletMaterial =
           !isWatchMode ||
           !braceletMaterial ||
-          normalize(product.bracelet_material) === normalize(braceletMaterial);
+          normalize(product.bracelet_material) ===
+            normalize(braceletMaterial);
 
         const matchesWaterResistance =
           !isWatchMode ||
@@ -452,25 +467,213 @@ export default function CategoryFilter({
     setGiftFor("");
   };
 
-  const labelClass = "mb-2 block text-sm text-[#C4CCDA]";
+  const labelClass =
+    "mb-2 block text-xs font-medium uppercase tracking-[0.13em] text-[#A5ADA7]";
+
   const inputClass =
-    "h-12 w-full rounded-xl border border-[#D6B56D]/20 bg-[#111C2D] px-4 text-base text-[#F5F2EA] outline-none transition placeholder:text-[#8996AA] focus:border-[#D6B56D]/70 focus:ring-2 focus:ring-[#D6B56D]/10";
+    "h-12 w-full rounded-xl border border-white/[0.10] bg-[#191C1B]/80 px-4 text-base text-[#F4F3EF] outline-none backdrop-blur-xl transition duration-200 placeholder:text-[#737C76] hover:border-white/[0.20] focus:border-[#163D30] focus:ring-2 focus:ring-[#163D30]/50";
 
   return (
     <>
-      <div className="mt-12 rounded-3xl border border-[#D6B56D]/20 bg-gradient-to-br from-[#243449]/95 via-[#1B2638]/95 to-[#172235]/95 p-4 backdrop-blur-xl sm:p-5">
-        <div className="flex flex-col gap-5">
+      <style jsx>{`
+        .ws-glass-panel {
+          background: rgba(25, 28, 27, 0.78);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          box-shadow:
+            0 24px 70px rgba(0, 0, 0, 0.18),
+            inset 0 1px 0 rgba(255, 255, 255, 0.045);
+          backdrop-filter: blur(24px) saturate(145%);
+          -webkit-backdrop-filter: blur(24px) saturate(145%);
+        }
+
+        .ws-glass-control {
+          background: rgba(255, 255, 255, 0.035);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          backdrop-filter: blur(18px);
+          -webkit-backdrop-filter: blur(18px);
+          transition:
+            background 180ms ease,
+            border-color 180ms ease,
+            transform 180ms ease;
+        }
+
+        .ws-glass-control:hover {
+          background: rgba(255, 255, 255, 0.065);
+          border-color: rgba(255, 255, 255, 0.22);
+        }
+
+        .ws-category-active {
+          background: linear-gradient(135deg, #163d30, #20533f);
+          border: 1px solid rgba(125, 180, 145, 0.42);
+          color: #f4f3ef;
+          box-shadow:
+            0 8px 24px rgba(22, 61, 48, 0.24),
+            inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        .ws-filter-button {
+          min-height: 44px;
+          border-radius: 14px;
+          padding: 11px 18px;
+          font-size: 13px;
+          font-weight: 600;
+          letter-spacing: 0.01em;
+        }
+
+        .ws-product-card {
+          background: linear-gradient(
+            145deg,
+            rgba(37, 42, 39, 0.96),
+            rgba(25, 28, 27, 0.98) 65%
+          );
+          border: 1px solid rgba(255, 255, 255, 0.085);
+          box-shadow: 0 12px 35px rgba(0, 0, 0, 0.12);
+          transition:
+            transform 260ms ease,
+            border-color 260ms ease,
+            box-shadow 260ms ease;
+        }
+
+        .ws-product-card:hover {
+          transform: translateY(-5px);
+          border-color: rgba(90, 133, 108, 0.58);
+          box-shadow: 0 24px 55px rgba(0, 0, 0, 0.26);
+        }
+
+        .ws-product-image {
+          transition: transform 650ms cubic-bezier(0.2, 0.7, 0.2, 1);
+        }
+
+        .ws-product-card:hover .ws-product-image {
+          transform: scale(1.045);
+        }
+
+        .ws-accent-line {
+          background: linear-gradient(
+            90deg,
+            #163d30,
+            rgba(22, 61, 48, 0.12)
+          );
+        }
+
+        .ws-price {
+          color: #f4f3ef;
+          font-variant-numeric: tabular-nums;
+        }
+
+        .ws-stock-dot {
+          background: #5d9d76;
+          box-shadow: 0 0 0 4px rgba(93, 157, 118, 0.1);
+        }
+
+        .ws-out-of-stock {
+          background: rgba(143, 38, 56, 0.2);
+          border: 1px solid rgba(200, 85, 104, 0.35);
+        }
+
+        .ws-search-clear:hover {
+          background: rgba(143, 38, 56, 0.2);
+          color: #f4b6c0;
+        }
+
+        .ws-reset-button {
+          border: 1px solid rgba(143, 38, 56, 0.38);
+          color: #e3a5af;
+          transition:
+            background 180ms ease,
+            border-color 180ms ease,
+            color 180ms ease;
+        }
+
+        .ws-reset-button:hover {
+          background: rgba(143, 38, 56, 0.14);
+          border-color: rgba(200, 85, 104, 0.65);
+          color: #f4c5cc;
+        }
+
+        .ws-primary-button {
+          background: linear-gradient(135deg, #163d30, #20533f);
+          border: 1px solid rgba(125, 180, 145, 0.38);
+          color: #f4f3ef;
+          transition:
+            transform 180ms ease,
+            background 180ms ease,
+            box-shadow 180ms ease;
+        }
+
+        .ws-primary-button:hover {
+          background: linear-gradient(135deg, #1b4939, #286348);
+          box-shadow: 0 10px 26px rgba(22, 61, 48, 0.24);
+        }
+
+        .ws-primary-button:active {
+          transform: scale(0.98);
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .ws-glass-control,
+          .ws-product-card,
+          .ws-product-image,
+          .ws-reset-button,
+          .ws-primary-button {
+            transition: none;
+          }
+
+          .ws-product-card:hover,
+          .ws-product-card:hover .ws-product-image {
+            transform: none;
+          }
+        }
+      `}</style>
+
+      <section
+        aria-label="Pretraga i filteri proizvoda"
+        className="ws-glass-panel mt-10 overflow-hidden rounded-[28px] p-4 sm:mt-12 sm:rounded-[32px] sm:p-6 lg:p-7"
+      >
+        <div className="mb-6 flex items-center gap-3">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl border border-white/[0.09] bg-white/[0.035]">
+            <svg
+              aria-hidden="true"
+              viewBox="0 0 24 24"
+              className="h-5 w-5 text-[#91B49D]"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.6"
+            >
+              <path
+                d="M4 7h9M17 7h3M4 17h3m4 0h9"
+                strokeLinecap="round"
+              />
+              <circle cx="15" cy="7" r="2" />
+              <circle cx="9" cy="17" r="2" />
+            </svg>
+          </div>
+
+          <div>
+            <h2 className="text-base font-semibold tracking-tight text-[#F4F3EF] sm:text-lg">
+              Pronađi svoj stil
+            </h2>
+            <p className="mt-0.5 text-xs text-[#A5ADA7] sm:text-sm">
+              Izdvoj detalje i pronađi pravi komad.
+            </p>
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-7">
           <div className="relative">
             <svg
               aria-hidden="true"
               viewBox="0 0 24 24"
-              className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-[#C4AD7B]"
+              className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-[#91B49D]"
               fill="none"
               stroke="currentColor"
-              strokeWidth="1.8"
+              strokeWidth="1.7"
             >
               <circle cx="11" cy="11" r="7" />
-              <path d="m20 20-4-4" />
+              <path
+                d="m20 20-4-4"
+                strokeLinecap="round"
+              />
             </svg>
 
             <input
@@ -487,16 +690,16 @@ export default function CategoryFilter({
                 type="button"
                 onClick={() => setSearch("")}
                 aria-label="Obriši pretragu"
-                className="absolute right-3 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-xl text-[#AEBACC] transition hover:bg-[#D6B56D]/10 hover:text-[#E7CA8B]"
+                className="ws-search-clear absolute right-2 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-xl text-[#A5ADA7] transition"
               >
-                ×
+                <span className="text-2xl leading-none">×</span>
               </button>
             )}
           </div>
 
           {isWatchMode && showGenderFilter && (
             <div>
-              <p className={labelClass}>Pol</p>
+              <p className={labelClass}>Kategorija</p>
 
               <div className="flex flex-wrap gap-2">
                 {categories.map((item) => {
@@ -508,10 +711,10 @@ export default function CategoryFilter({
                       type="button"
                       onClick={() => setCategory(item.value)}
                       aria-pressed={active}
-                      className={`rounded-2xl px-5 py-3 text-sm font-semibold transition-all duration-200 active:scale-95 ${
+                      className={`ws-filter-button ${
                         active
-                          ? "border border-[#E7CA8B]/70 bg-gradient-to-r from-[#E7CA8B] to-[#C4A45E] text-[#172033] shadow-lg shadow-amber-950/20"
-                          : "border border-[#D6B56D]/20 bg-[#111C2D] text-[#C4CCDA] hover:border-[#D6B56D]/60 hover:bg-[#30435B] hover:text-[#F5F2EA]"
+                          ? "ws-category-active"
+                          : "ws-glass-control text-[#C4CCC6]"
                       }`}
                     >
                       {item.label}
@@ -524,9 +727,12 @@ export default function CategoryFilter({
 
           {isWatchMode && (
             <div>
-              <p className="mb-3 text-sm font-semibold text-[#F5F2EA]">
-                Filteri za satove
-              </p>
+              <div className="mb-4 flex items-center gap-3">
+                <span className="h-5 w-1 rounded-full bg-[#163D30]" />
+                <h3 className="text-sm font-semibold tracking-wide text-[#F4F3EF]">
+                  Detalji satova
+                </h3>
+              </div>
 
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 <FilterSelect
@@ -598,9 +804,12 @@ export default function CategoryFilter({
 
           {showAccessoryFilters && (
             <div>
-              <p className="mb-3 text-sm font-semibold text-[#F5F2EA]">
-                Filteri za dodatke
-              </p>
+              <div className="mb-4 flex items-center gap-3">
+                <span className="h-5 w-1 rounded-full bg-[#163D30]" />
+                <h3 className="text-sm font-semibold tracking-wide text-[#F4F3EF]">
+                  Detalji dodataka
+                </h3>
+              </div>
 
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 <FilterSelect
@@ -634,9 +843,12 @@ export default function CategoryFilter({
 
           {isGiftMode && (
             <div>
-              <p className="mb-3 text-sm font-semibold text-[#F5F2EA]">
-                Filteri za poklone
-              </p>
+              <div className="mb-4 flex items-center gap-3">
+                <span className="h-5 w-1 rounded-full bg-[#8F2638]" />
+                <h3 className="text-sm font-semibold tracking-wide text-[#F4F3EF]">
+                  Detalji poklona
+                </h3>
+              </div>
 
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 <FilterSelect
@@ -650,89 +862,104 @@ export default function CategoryFilter({
             </div>
           )}
 
-          <div className="grid gap-3 sm:grid-cols-2">
-            <div>
-              <label htmlFor="min-price" className={labelClass}>
-                Cena od
-              </label>
-
-              <div className="relative">
-                <input
-                  id="min-price"
-                  type="number"
-                  min="0"
-                  step="1"
-                  value={minPrice}
-                  onChange={(event) => setMinPrice(event.target.value)}
-                  placeholder="0"
-                  className={`${inputClass} pr-16`}
-                />
-
-                <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-sm text-[#8996AA]">
-                  RSD
-                </span>
-              </div>
+          <div>
+            <div className="mb-4 flex items-center gap-3">
+              <span className="h-5 w-1 rounded-full bg-[#8F2638]" />
+              <h3 className="text-sm font-semibold tracking-wide text-[#F4F3EF]">
+                Cena i dostupnost
+              </h3>
             </div>
 
-            <div>
-              <label htmlFor="max-price" className={labelClass}>
-                Cena do
-              </label>
+            <div className="grid gap-4 sm:grid-cols-2">
+              <div>
+                <label htmlFor="min-price" className={labelClass}>
+                  Cena od
+                </label>
 
-              <div className="relative">
-                <input
-                  id="max-price"
-                  type="number"
-                  min="0"
-                  step="1"
-                  value={maxPrice}
-                  onChange={(event) => setMaxPrice(event.target.value)}
-                  placeholder="Bez limita"
-                  className={`${inputClass} pr-16`}
-                />
+                <div className="relative">
+                  <input
+                    id="min-price"
+                    type="number"
+                    min="0"
+                    step="1"
+                    value={minPrice}
+                    onChange={(event) => setMinPrice(event.target.value)}
+                    placeholder="0"
+                    className={`${inputClass} pr-16`}
+                  />
 
-                <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-sm text-[#8996AA]">
-                  RSD
-                </span>
+                  <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-xs font-medium text-[#737C76]">
+                    RSD
+                  </span>
+                </div>
+              </div>
+
+              <div>
+                <label htmlFor="max-price" className={labelClass}>
+                  Cena do
+                </label>
+
+                <div className="relative">
+                  <input
+                    id="max-price"
+                    type="number"
+                    min="0"
+                    step="1"
+                    value={maxPrice}
+                    onChange={(event) => setMaxPrice(event.target.value)}
+                    placeholder="Bez limita"
+                    className={`${inputClass} pr-16`}
+                  />
+
+                  <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-xs font-medium text-[#737C76]">
+                    RSD
+                  </span>
+                </div>
               </div>
             </div>
           </div>
 
           {invalidPriceRange && (
-            <p role="alert" className="text-sm text-red-300">
+            <p
+              role="alert"
+              className="rounded-xl border border-[#8F2638]/40 bg-[#8F2638]/10 px-4 py-3 text-sm leading-6 text-[#F0B7C0]"
+            >
               Proveri cene: obe moraju biti nenegativne, a cena „od” ne može
               biti veća od cene „do”.
             </p>
           )}
 
-          <div className="flex flex-col gap-3 border-t border-[#D6B56D]/20 pt-4 sm:flex-row sm:items-center sm:justify-between">
-            <label className="flex min-h-11 cursor-pointer items-center gap-3 text-sm text-[#C4CCDA]">
+          <div className="flex flex-col gap-4 border-t border-white/[0.09] pt-5 sm:flex-row sm:items-center sm:justify-between">
+            <label className="flex min-h-11 cursor-pointer items-center gap-3 text-sm text-[#C4CCC6]">
               <input
                 type="checkbox"
                 checked={onlyInStock}
                 onChange={(event) => setOnlyInStock(event.target.checked)}
-                className="h-4 w-4 rounded border-[#D6B56D]/30 bg-[#111C2D] accent-[#D6B56D]"
+                className="h-4 w-4 rounded border-white/20 bg-[#191C1B] accent-[#163D30]"
               />
 
-              <span>Samo na stanju</span>
+              <span>Samo proizvodi na stanju</span>
             </label>
 
-            <div className="flex items-center gap-3">
-              <label htmlFor="sort-products" className="text-sm text-[#C4CCDA]">
-                Sortiraj:
+            <div className="flex min-w-0 items-center gap-3">
+              <label
+                htmlFor="sort-products"
+                className="shrink-0 text-xs font-medium uppercase tracking-[0.1em] text-[#A5ADA7]"
+              >
+                Sortiraj
               </label>
 
               <select
                 id="sort-products"
                 value={sort}
                 onChange={(event) => setSort(event.target.value)}
-                className="min-h-11 min-w-0 rounded-xl border border-[#D6B56D]/25 bg-[#111C2D] px-3 text-sm text-[#F5F2EA] outline-none transition focus:border-[#D6B56D]/70"
+                className="ws-glass-control min-h-11 min-w-0 flex-1 rounded-xl bg-[#191C1B]/80 px-3 text-sm text-[#F4F3EF] outline-none focus:border-[#163D30] sm:flex-none"
               >
                 {sortOptions.map((option) => (
                   <option
                     key={option.value}
                     value={option.value}
-                    className="bg-[#111C2D]"
+                    className="bg-[#191C1B]"
                   >
                     {option.label}
                   </option>
@@ -741,60 +968,86 @@ export default function CategoryFilter({
             </div>
           </div>
         </div>
-      </div>
+      </section>
 
-      <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+      <div className="mt-8 flex flex-col gap-4 sm:mt-10 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="text-sm text-[#AEBACC]">
-            {hasActiveFilters ? "Filtrirani rezultati" : `Svi ${productLabel}`}
+          <p className="text-xs font-medium uppercase tracking-[0.16em] text-[#A5ADA7]">
+            {hasActiveFilters ? "Rezultati pretrage" : `Kolekcija · ${productLabel}`}
           </p>
 
-          <p className="mt-1 text-lg font-semibold text-[#F5F2EA]">
-            {invalidPriceRange ? 0 : filteredProducts.length}{" "}
-            {filteredProducts.length === 1 ? "proizvod" : "proizvoda"}
-          </p>
+          <div className="mt-2 flex items-baseline gap-2">
+            <p className="text-3xl font-semibold tracking-tight text-[#F4F3EF]">
+              {invalidPriceRange ? 0 : filteredProducts.length}
+            </p>
+
+            <span className="text-sm text-[#A5ADA7]">
+              {filteredProducts.length === 1 ? "proizvod" : "proizvoda"}
+            </span>
+          </div>
+
+          <div className="ws-accent-line mt-3 h-px w-24" />
         </div>
 
         {hasActiveFilters && (
           <button
             type="button"
             onClick={resetFilters}
-            className="w-fit rounded-xl border border-[#D6B56D]/30 px-4 py-2 text-sm text-[#C4CCDA] transition hover:border-[#D6B56D]/70 hover:bg-[#D6B56D]/10 hover:text-[#E7CA8B]"
+            className="ws-reset-button w-fit rounded-xl px-4 py-3 text-sm font-medium"
           >
+            <span className="mr-2" aria-hidden="true">
+              ↺
+            </span>
             Resetuj filtere
           </button>
         )}
       </div>
 
-      <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
         {!invalidPriceRange &&
           filteredProducts.map((product) => (
             <article
               key={product.id}
-              className="group overflow-hidden rounded-[2rem] border border-[#D6B56D]/20 bg-gradient-to-br from-[#243449] via-[#1B2638] to-[#172235] transition-all duration-300 hover:-translate-y-1 hover:border-[#D6B56D]/60 hover:shadow-xl hover:shadow-black/20"
+              className="ws-product-card group overflow-hidden rounded-[26px]"
             >
               <Link href={`/product/${product.id}`} className="block">
-                <div className="relative overflow-hidden bg-[#26374C]">
+                <div className="relative overflow-hidden bg-[#222724]">
                   <div className="aspect-[4/3]">
                     {product.images && product.images[0] ? (
                       <img
                         src={product.images[0]}
                         alt={product.name}
                         loading="lazy"
-                        className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                        className="ws-product-image h-full w-full object-cover"
                       />
                     ) : (
-                      <div className="flex h-full items-center justify-center">
-                        <span className="text-sm text-[#AEBACC]">
-                          Slika proizvoda
+                      <div className="flex h-full flex-col items-center justify-center gap-3 text-[#737C76]">
+                        <svg
+                          aria-hidden="true"
+                          viewBox="0 0 24 24"
+                          className="h-10 w-10 opacity-70"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="1.2"
+                        >
+                          <circle cx="12" cy="12" r="8" />
+                          <path
+                            d="M12 7v5l3 2"
+                            strokeLinecap="round"
+                          />
+                        </svg>
+                        <span className="text-xs uppercase tracking-[0.16em]">
+                          Watch Shop
                         </span>
                       </div>
                     )}
                   </div>
 
+                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#191C1B]/50 via-transparent to-transparent" />
+
                   {isWatchMode && showGenderFilter && (
                     <div className="absolute left-4 top-4">
-                      <span className="rounded-full border border-[#D6B56D]/30 bg-[#111C2D]/85 px-3 py-1.5 text-[11px] font-medium uppercase tracking-[0.18em] text-[#F5F2EA] backdrop-blur">
+                      <span className="rounded-full border border-white/[0.14] bg-[#191C1B]/75 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-[#F4F3EF] backdrop-blur-xl">
                         {normalize(product.category) === "muski"
                           ? "Muški"
                           : normalize(product.category) === "zenski"
@@ -805,48 +1058,60 @@ export default function CategoryFilter({
                   )}
 
                   {product.stock <= 0 && (
-                    <div className="absolute inset-0 flex items-center justify-center bg-[#0B1220]/65 backdrop-blur-[2px]">
-                      <span className="rounded-full border border-[#D6B56D]/20 bg-[#111C2D]/95 px-4 py-2 text-xs font-semibold uppercase tracking-[0.15em] text-[#C4CCDA]">
+                    <div className="absolute inset-0 flex items-center justify-center bg-[#191C1B]/70 backdrop-blur-[3px]">
+                      <span className="ws-out-of-stock rounded-full px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.16em] text-[#F0B7C0]">
                         Nije na stanju
+                      </span>
+                    </div>
+                  )}
+
+                  {product.stock > 0 && (
+                    <div className="absolute bottom-4 left-4 flex items-center gap-2 rounded-full border border-white/[0.12] bg-[#191C1B]/75 px-3 py-2 backdrop-blur-xl">
+                      <span className="ws-stock-dot h-1.5 w-1.5 rounded-full" />
+                      <span className="text-[10px] font-medium uppercase tracking-[0.12em] text-[#E0E6E1]">
+                        Dostupno
                       </span>
                     </div>
                   )}
                 </div>
 
-                <div className="p-6 pb-2">
-                  <p className="text-xs font-medium uppercase tracking-[0.22em] text-[#C4AD7B]">
+                <div className="p-5 pb-3 sm:p-6 sm:pb-3">
+                  <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#91B49D]">
                     {product.brand || "Watch Shop"}
                   </p>
 
-                  <h3 className="mt-3 text-2xl font-semibold tracking-tight text-[#F5F2EA]">
+                  <h3 className="mt-3 text-xl font-semibold leading-snug tracking-tight text-[#F4F3EF] transition-colors duration-200 group-hover:text-white sm:text-2xl">
                     {product.name}
                   </h3>
 
                   {product.model && (
-                    <p className="mt-1 text-sm text-[#AEBACC]">
+                    <p className="mt-1.5 text-sm text-[#A5ADA7]">
                       {product.model}
                     </p>
                   )}
                 </div>
               </Link>
 
-              <div className="p-6 pt-4">
-                <div className="flex items-end justify-between gap-4 border-t border-[#D6B56D]/20 pt-5">
-                  <div>
-                    <p className="text-xs uppercase tracking-[0.16em] text-[#8996AA]">
+              <div className="p-5 pt-3 sm:p-6 sm:pt-3">
+                <div className="mb-5 flex items-end justify-between gap-3 border-t border-white/[0.09] pt-4">
+                  <div className="min-w-0">
+                    <p className="text-[10px] font-medium uppercase tracking-[0.16em] text-[#737C76]">
                       Cena
                     </p>
 
-                    <p className="mt-1 text-2xl font-bold tracking-tight text-[#E7CA8B]">
-                      {Number(product.price).toLocaleString("sr-RS")} RSD
+                    <p className="ws-price mt-1.5 text-xl font-semibold tracking-tight sm:text-2xl">
+                      {Number(product.price).toLocaleString("sr-RS")}{" "}
+                      <span className="text-xs font-medium text-[#A5ADA7]">
+                        RSD
+                      </span>
                     </p>
                   </div>
 
                   <span
                     className={
                       product.stock > 0
-                        ? "text-right text-xs text-[#AEBACC]"
-                        : "text-right text-xs text-red-300"
+                        ? "shrink-0 text-right text-xs text-[#A5ADA7]"
+                        : "shrink-0 text-right text-xs text-[#E3A5AF]"
                     }
                   >
                     {product.stock > 0
@@ -867,40 +1132,46 @@ export default function CategoryFilter({
                   }}
                 />
 
-                <CompareButton productId={product.id} />
+                <div className="mt-3">
+                  <CompareButton productId={product.id} />
+                </div>
               </div>
             </article>
           ))}
 
         {(invalidPriceRange || filteredProducts.length === 0) && (
-          <div className="col-span-full rounded-[2rem] border border-[#D6B56D]/20 bg-gradient-to-br from-[#243449] to-[#172235] p-12 text-center">
-            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl border border-[#D6B56D]/20 bg-[#111C2D]">
+          <div className="ws-glass-panel col-span-full rounded-[28px] p-8 text-center sm:p-12">
+            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl border border-white/[0.09] bg-white/[0.035]">
               <svg
+                aria-hidden="true"
                 viewBox="0 0 24 24"
-                className="h-6 w-6 text-[#C4AD7B]"
+                className="h-7 w-7 text-[#91B49D]"
                 fill="none"
                 stroke="currentColor"
-                strokeWidth="1.5"
+                strokeWidth="1.4"
               >
                 <circle cx="11" cy="11" r="7" />
-                <path d="m20 20-4-4" />
+                <path
+                  d="m20 20-4-4"
+                  strokeLinecap="round"
+                />
               </svg>
             </div>
 
-            <h3 className="mt-5 text-xl font-semibold text-[#F5F2EA]">
-              {invalidPriceRange ? "Proveri cene" : "Nema rezultata"}
+            <h3 className="mt-6 text-xl font-semibold tracking-tight text-[#F4F3EF] sm:text-2xl">
+              {invalidPriceRange ? "Proveri unete cene" : "Nema rezultata"}
             </h3>
 
-            <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-[#AEBACC]">
+            <p className="mx-auto mt-3 max-w-md text-sm leading-6 text-[#A5ADA7]">
               {invalidPriceRange
                 ? "Unete cene nisu ispravne. Proveri početnu i maksimalnu cenu."
-                : "Nismo pronašli proizvod koji odgovara izabranim filterima. Promeni kriterijume ili resetuj filtere."}
+                : "Nismo pronašli proizvod koji odgovara izabranim filterima. Promeni kriterijume ili prikaži celu kolekciju."}
             </p>
 
             <button
               type="button"
               onClick={resetFilters}
-              className="mt-6 rounded-xl border border-[#E7CA8B]/70 bg-gradient-to-r from-[#E7CA8B] to-[#C4A45E] px-5 py-3 text-sm font-semibold text-[#172033] transition hover:from-[#F5DDA3] hover:to-[#D6B56D] active:scale-95"
+              className="ws-primary-button mt-7 rounded-xl px-6 py-3 text-sm font-semibold"
             >
               Prikaži sve {productLabel}
             </button>
