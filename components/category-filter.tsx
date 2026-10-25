@@ -47,15 +47,6 @@ type Product = {
 
 type FilterMode = "basic" | "watches" | "accessories" | "wallets" | "gifts";
 
-const COLORS = {
-  black: "#191C1B",
-  green: "#163D30",
-  red: "#8F2638",
-  white: "#F4F3EF",
-  muted: "#A5ADA7",
-  border: "rgba(255,255,255,0.10)",
-};
-
 const categories = [
   { value: "sve", label: "Svi" },
   { value: "muski", label: "Muški" },
@@ -104,7 +95,7 @@ function FilterSelect({
     <div className="min-w-0">
       <label
         htmlFor={id}
-        className="mb-2 block text-xs font-medium uppercase tracking-[0.13em] text-[#A5ADA7]"
+        className="mb-2 block text-xs font-medium uppercase tracking-[0.13em] text-[#B9A58C]"
       >
         {label}
       </label>
@@ -113,14 +104,14 @@ function FilterSelect({
         id={id}
         value={value}
         onChange={(event) => onChange(event.target.value)}
-        className="h-12 w-full rounded-xl border border-white/[0.10] bg-[#191C1B]/80 px-3 text-sm text-[#F4F3EF] outline-none backdrop-blur-xl transition duration-200 hover:border-white/[0.20] focus:border-[#163D30] focus:ring-2 focus:ring-[#163D30]/50"
+        className="h-12 w-full rounded-xl border border-[#D4AF7A]/15 bg-[#241A13]/80 px-3 text-sm text-[#F5EEE3] outline-none backdrop-blur-xl transition duration-200 hover:border-[#D4AF7A]/30 focus:border-[#D4AF7A] focus:ring-2 focus:ring-[#D4AF7A]/30"
       >
-        <option value="" className="bg-[#191C1B]">
+        <option value="" className="bg-[#241A13]">
           Sve vrednosti
         </option>
 
         {options.map((option) => (
-          <option key={option} value={option} className="bg-[#191C1B]">
+          <option key={option} value={option} className="bg-[#241A13]">
             {option}
           </option>
         ))}
@@ -468,17 +459,17 @@ export default function CategoryFilter({
   };
 
   const labelClass =
-    "mb-2 block text-xs font-medium uppercase tracking-[0.13em] text-[#A5ADA7]";
+    "mb-2 block text-xs font-medium uppercase tracking-[0.13em] text-[#B9A58C]";
 
   const inputClass =
-    "h-12 w-full rounded-xl border border-white/[0.10] bg-[#191C1B]/80 px-4 text-base text-[#F4F3EF] outline-none backdrop-blur-xl transition duration-200 placeholder:text-[#737C76] hover:border-white/[0.20] focus:border-[#163D30] focus:ring-2 focus:ring-[#163D30]/50";
+    "h-12 w-full rounded-xl border border-[#D4AF7A]/15 bg-[#241A13]/80 px-4 text-base text-[#F5EEE3] outline-none backdrop-blur-xl transition duration-200 placeholder:text-[#A18B72] hover:border-[#D4AF7A]/30 focus:border-[#D4AF7A] focus:ring-2 focus:ring-[#D4AF7A]/30";
 
   return (
     <>
       <style jsx>{`
         .ws-glass-panel {
-          background: rgba(25, 28, 27, 0.78);
-          border: 1px solid rgba(255, 255, 255, 0.1);
+          background: rgba(36, 26, 19, 0.78);
+          border: 1px solid rgba(212, 175, 122, 0.15);
           box-shadow:
             0 24px 70px rgba(0, 0, 0, 0.18),
             inset 0 1px 0 rgba(255, 255, 255, 0.045);
@@ -487,8 +478,8 @@ export default function CategoryFilter({
         }
 
         .ws-glass-control {
-          background: rgba(255, 255, 255, 0.035);
-          border: 1px solid rgba(255, 255, 255, 0.1);
+          background: rgba(212, 175, 122, 0.045);
+          border: 1px solid rgba(212, 175, 122, 0.15);
           backdrop-filter: blur(18px);
           -webkit-backdrop-filter: blur(18px);
           transition:
@@ -498,17 +489,17 @@ export default function CategoryFilter({
         }
 
         .ws-glass-control:hover {
-          background: rgba(255, 255, 255, 0.065);
-          border-color: rgba(255, 255, 255, 0.22);
+          background: rgba(212, 175, 122, 0.09);
+          border-color: rgba(212, 175, 122, 0.28);
         }
 
         .ws-category-active {
-          background: linear-gradient(135deg, #163d30, #20533f);
-          border: 1px solid rgba(125, 180, 145, 0.42);
-          color: #f4f3ef;
+          background: linear-gradient(135deg, #D4AF7A, #B99155);
+          border: 1px solid rgba(241, 221, 186, 0.48);
+          color: #241A13;
           box-shadow:
-            0 8px 24px rgba(22, 61, 48, 0.24),
-            inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            0 8px 24px rgba(75, 54, 33, 0.24),
+            inset 0 1px 0 rgba(255, 255, 255, 0.18);
         }
 
         .ws-filter-button {
@@ -523,10 +514,10 @@ export default function CategoryFilter({
         .ws-product-card {
           background: linear-gradient(
             145deg,
-            rgba(37, 42, 39, 0.96),
-            rgba(25, 28, 27, 0.98) 65%
+            rgba(65, 46, 31, 0.96),
+            rgba(36, 26, 19, 0.98) 65%
           );
-          border: 1px solid rgba(255, 255, 255, 0.085);
+          border: 1px solid rgba(212, 175, 122, 0.14);
           box-shadow: 0 12px 35px rgba(0, 0, 0, 0.12);
           transition:
             transform 260ms ease,
@@ -536,7 +527,7 @@ export default function CategoryFilter({
 
         .ws-product-card:hover {
           transform: translateY(-5px);
-          border-color: rgba(90, 133, 108, 0.58);
+          border-color: rgba(212, 175, 122, 0.48);
           box-shadow: 0 24px 55px rgba(0, 0, 0, 0.26);
         }
 
@@ -551,34 +542,34 @@ export default function CategoryFilter({
         .ws-accent-line {
           background: linear-gradient(
             90deg,
-            #163d30,
-            rgba(22, 61, 48, 0.12)
+            #D4AF7A,
+            rgba(212, 175, 122, 0.12)
           );
         }
 
         .ws-price {
-          color: #f4f3ef;
+          color: #F5EEE3;
           font-variant-numeric: tabular-nums;
         }
 
         .ws-stock-dot {
-          background: #5d9d76;
-          box-shadow: 0 0 0 4px rgba(93, 157, 118, 0.1);
+          background: #D4AF7A;
+          box-shadow: 0 0 0 4px rgba(212, 175, 122, 0.12);
         }
 
         .ws-out-of-stock {
-          background: rgba(143, 38, 56, 0.2);
-          border: 1px solid rgba(200, 85, 104, 0.35);
+          background: rgba(204, 85, 0, 0.18);
+          border: 1px solid rgba(204, 85, 0, 0.4);
         }
 
         .ws-search-clear:hover {
-          background: rgba(143, 38, 56, 0.2);
-          color: #f4b6c0;
+          background: rgba(204, 85, 0, 0.18);
+          color: #F0B27A;
         }
 
         .ws-reset-button {
-          border: 1px solid rgba(143, 38, 56, 0.38);
-          color: #e3a5af;
+          border: 1px solid rgba(204, 85, 0, 0.42);
+          color: #F0B27A;
           transition:
             background 180ms ease,
             border-color 180ms ease,
@@ -586,15 +577,15 @@ export default function CategoryFilter({
         }
 
         .ws-reset-button:hover {
-          background: rgba(143, 38, 56, 0.14);
-          border-color: rgba(200, 85, 104, 0.65);
-          color: #f4c5cc;
+          background: rgba(204, 85, 0, 0.14);
+          border-color: rgba(230, 126, 49, 0.65);
+          color: #FFD0A3;
         }
 
         .ws-primary-button {
-          background: linear-gradient(135deg, #163d30, #20533f);
-          border: 1px solid rgba(125, 180, 145, 0.38);
-          color: #f4f3ef;
+          background: linear-gradient(135deg, #D4AF7A, #B99155);
+          border: 1px solid rgba(241, 221, 186, 0.42);
+          color: #241A13;
           transition:
             transform 180ms ease,
             background 180ms ease,
@@ -602,8 +593,8 @@ export default function CategoryFilter({
         }
 
         .ws-primary-button:hover {
-          background: linear-gradient(135deg, #1b4939, #286348);
-          box-shadow: 0 10px 26px rgba(22, 61, 48, 0.24);
+          background: linear-gradient(135deg, #E2C18B, #C49B60);
+          box-shadow: 0 10px 26px rgba(75, 54, 33, 0.24);
         }
 
         .ws-primary-button:active {
@@ -631,11 +622,11 @@ export default function CategoryFilter({
         className="ws-glass-panel mt-10 overflow-hidden rounded-[28px] p-4 sm:mt-12 sm:rounded-[32px] sm:p-6 lg:p-7"
       >
         <div className="mb-6 flex items-center gap-3">
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl border border-white/[0.09] bg-white/[0.035]">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl border border-[#D4AF7A]/15 bg-[#D4AF7A]/[0.045]">
             <svg
               aria-hidden="true"
               viewBox="0 0 24 24"
-              className="h-5 w-5 text-[#91B49D]"
+              className="h-5 w-5 text-[#D4AF7A]"
               fill="none"
               stroke="currentColor"
               strokeWidth="1.6"
@@ -650,10 +641,10 @@ export default function CategoryFilter({
           </div>
 
           <div>
-            <h2 className="text-base font-semibold tracking-tight text-[#F4F3EF] sm:text-lg">
+            <h2 className="text-base font-semibold tracking-tight text-[#F5EEE3] sm:text-lg">
               Pronađi svoj stil
             </h2>
-            <p className="mt-0.5 text-xs text-[#A5ADA7] sm:text-sm">
+            <p className="mt-0.5 text-xs text-[#B9A58C] sm:text-sm">
               Izdvoj detalje i pronađi pravi komad.
             </p>
           </div>
@@ -664,7 +655,7 @@ export default function CategoryFilter({
             <svg
               aria-hidden="true"
               viewBox="0 0 24 24"
-              className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-[#91B49D]"
+              className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-[#D4AF7A]"
               fill="none"
               stroke="currentColor"
               strokeWidth="1.7"
@@ -690,7 +681,7 @@ export default function CategoryFilter({
                 type="button"
                 onClick={() => setSearch("")}
                 aria-label="Obriši pretragu"
-                className="ws-search-clear absolute right-2 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-xl text-[#A5ADA7] transition"
+                className="ws-search-clear absolute right-2 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-xl text-[#B9A58C] transition"
               >
                 <span className="text-2xl leading-none">×</span>
               </button>
@@ -714,7 +705,7 @@ export default function CategoryFilter({
                       className={`ws-filter-button ${
                         active
                           ? "ws-category-active"
-                          : "ws-glass-control text-[#C4CCC6]"
+                          : "ws-glass-control text-[#E2D4C1]"
                       }`}
                     >
                       {item.label}
@@ -728,8 +719,8 @@ export default function CategoryFilter({
           {isWatchMode && (
             <div>
               <div className="mb-4 flex items-center gap-3">
-                <span className="h-5 w-1 rounded-full bg-[#163D30]" />
-                <h3 className="text-sm font-semibold tracking-wide text-[#F4F3EF]">
+                <span className="h-5 w-1 rounded-full bg-[#D4AF7A]" />
+                <h3 className="text-sm font-semibold tracking-wide text-[#F5EEE3]">
                   Detalji satova
                 </h3>
               </div>
@@ -805,8 +796,8 @@ export default function CategoryFilter({
           {showAccessoryFilters && (
             <div>
               <div className="mb-4 flex items-center gap-3">
-                <span className="h-5 w-1 rounded-full bg-[#163D30]" />
-                <h3 className="text-sm font-semibold tracking-wide text-[#F4F3EF]">
+                <span className="h-5 w-1 rounded-full bg-[#D4AF7A]" />
+                <h3 className="text-sm font-semibold tracking-wide text-[#F5EEE3]">
                   Detalji dodataka
                 </h3>
               </div>
@@ -844,8 +835,8 @@ export default function CategoryFilter({
           {isGiftMode && (
             <div>
               <div className="mb-4 flex items-center gap-3">
-                <span className="h-5 w-1 rounded-full bg-[#8F2638]" />
-                <h3 className="text-sm font-semibold tracking-wide text-[#F4F3EF]">
+                <span className="h-5 w-1 rounded-full bg-[#CC5500]" />
+                <h3 className="text-sm font-semibold tracking-wide text-[#F5EEE3]">
                   Detalji poklona
                 </h3>
               </div>
@@ -864,8 +855,8 @@ export default function CategoryFilter({
 
           <div>
             <div className="mb-4 flex items-center gap-3">
-              <span className="h-5 w-1 rounded-full bg-[#8F2638]" />
-              <h3 className="text-sm font-semibold tracking-wide text-[#F4F3EF]">
+              <span className="h-5 w-1 rounded-full bg-[#CC5500]" />
+              <h3 className="text-sm font-semibold tracking-wide text-[#F5EEE3]">
                 Cena i dostupnost
               </h3>
             </div>
@@ -888,7 +879,7 @@ export default function CategoryFilter({
                     className={`${inputClass} pr-16`}
                   />
 
-                  <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-xs font-medium text-[#737C76]">
+                  <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-xs font-medium text-[#A18B72]">
                     RSD
                   </span>
                 </div>
@@ -911,7 +902,7 @@ export default function CategoryFilter({
                     className={`${inputClass} pr-16`}
                   />
 
-                  <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-xs font-medium text-[#737C76]">
+                  <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-xs font-medium text-[#A18B72]">
                     RSD
                   </span>
                 </div>
@@ -922,20 +913,20 @@ export default function CategoryFilter({
           {invalidPriceRange && (
             <p
               role="alert"
-              className="rounded-xl border border-[#8F2638]/40 bg-[#8F2638]/10 px-4 py-3 text-sm leading-6 text-[#F0B7C0]"
+              className="rounded-xl border border-[#CC5500]/40 bg-[#CC5500]/10 px-4 py-3 text-sm leading-6 text-[#FFD0A3]"
             >
               Proveri cene: obe moraju biti nenegativne, a cena „od” ne može
               biti veća od cene „do”.
             </p>
           )}
 
-          <div className="flex flex-col gap-4 border-t border-white/[0.09] pt-5 sm:flex-row sm:items-center sm:justify-between">
-            <label className="flex min-h-11 cursor-pointer items-center gap-3 text-sm text-[#C4CCC6]">
+          <div className="flex flex-col gap-4 border-t border-[#D4AF7A]/15 pt-5 sm:flex-row sm:items-center sm:justify-between">
+            <label className="flex min-h-11 cursor-pointer items-center gap-3 text-sm text-[#E2D4C1]">
               <input
                 type="checkbox"
                 checked={onlyInStock}
                 onChange={(event) => setOnlyInStock(event.target.checked)}
-                className="h-4 w-4 rounded border-white/20 bg-[#191C1B] accent-[#163D30]"
+                className="h-4 w-4 rounded border-[#D4AF7A]/30 bg-[#241A13] accent-[#D4AF7A]"
               />
 
               <span>Samo proizvodi na stanju</span>
@@ -944,7 +935,7 @@ export default function CategoryFilter({
             <div className="flex min-w-0 items-center gap-3">
               <label
                 htmlFor="sort-products"
-                className="shrink-0 text-xs font-medium uppercase tracking-[0.1em] text-[#A5ADA7]"
+                className="shrink-0 text-xs font-medium uppercase tracking-[0.1em] text-[#B9A58C]"
               >
                 Sortiraj
               </label>
@@ -953,13 +944,13 @@ export default function CategoryFilter({
                 id="sort-products"
                 value={sort}
                 onChange={(event) => setSort(event.target.value)}
-                className="ws-glass-control min-h-11 min-w-0 flex-1 rounded-xl bg-[#191C1B]/80 px-3 text-sm text-[#F4F3EF] outline-none focus:border-[#163D30] sm:flex-none"
+                className="ws-glass-control min-h-11 min-w-0 flex-1 rounded-xl bg-[#241A13]/80 px-3 text-sm text-[#F5EEE3] outline-none focus:border-[#D4AF7A] sm:flex-none"
               >
                 {sortOptions.map((option) => (
                   <option
                     key={option.value}
                     value={option.value}
-                    className="bg-[#191C1B]"
+                    className="bg-[#241A13]"
                   >
                     {option.label}
                   </option>
@@ -972,16 +963,16 @@ export default function CategoryFilter({
 
       <div className="mt-8 flex flex-col gap-4 sm:mt-10 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="text-xs font-medium uppercase tracking-[0.16em] text-[#A5ADA7]">
+          <p className="text-xs font-medium uppercase tracking-[0.16em] text-[#B9A58C]">
             {hasActiveFilters ? "Rezultati pretrage" : `Kolekcija · ${productLabel}`}
           </p>
 
           <div className="mt-2 flex items-baseline gap-2">
-            <p className="text-3xl font-semibold tracking-tight text-[#F4F3EF]">
+            <p className="text-3xl font-semibold tracking-tight text-[#F5EEE3]">
               {invalidPriceRange ? 0 : filteredProducts.length}
             </p>
 
-            <span className="text-sm text-[#A5ADA7]">
+            <span className="text-sm text-[#B9A58C]">
               {filteredProducts.length === 1 ? "proizvod" : "proizvoda"}
             </span>
           </div>
@@ -1011,7 +1002,7 @@ export default function CategoryFilter({
               className="ws-product-card group overflow-hidden rounded-[26px]"
             >
               <Link href={`/product/${product.id}`} className="block">
-                <div className="relative overflow-hidden bg-[#222724]">
+                <div className="relative overflow-hidden bg-[#302116]">
                   <div className="aspect-[4/3]">
                     {product.images && product.images[0] ? (
                       <img
@@ -1021,7 +1012,7 @@ export default function CategoryFilter({
                         className="ws-product-image h-full w-full object-cover"
                       />
                     ) : (
-                      <div className="flex h-full flex-col items-center justify-center gap-3 text-[#737C76]">
+                      <div className="flex h-full flex-col items-center justify-center gap-3 text-[#A18B72]">
                         <svg
                           aria-hidden="true"
                           viewBox="0 0 24 24"
@@ -1043,11 +1034,11 @@ export default function CategoryFilter({
                     )}
                   </div>
 
-                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#191C1B]/50 via-transparent to-transparent" />
+                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#241A13]/60 via-transparent to-transparent" />
 
                   {isWatchMode && showGenderFilter && (
                     <div className="absolute left-4 top-4">
-                      <span className="rounded-full border border-white/[0.14] bg-[#191C1B]/75 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-[#F4F3EF] backdrop-blur-xl">
+                      <span className="rounded-full border border-[#D4AF7A]/20 bg-[#241A13]/80 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-[#F5EEE3] backdrop-blur-xl">
                         {normalize(product.category) === "muski"
                           ? "Muški"
                           : normalize(product.category) === "zenski"
@@ -1058,17 +1049,17 @@ export default function CategoryFilter({
                   )}
 
                   {product.stock <= 0 && (
-                    <div className="absolute inset-0 flex items-center justify-center bg-[#191C1B]/70 backdrop-blur-[3px]">
-                      <span className="ws-out-of-stock rounded-full px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.16em] text-[#F0B7C0]">
+                    <div className="absolute inset-0 flex items-center justify-center bg-[#241A13]/75 backdrop-blur-[3px]">
+                      <span className="ws-out-of-stock rounded-full px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.16em] text-[#FFD0A3]">
                         Nije na stanju
                       </span>
                     </div>
                   )}
 
                   {product.stock > 0 && (
-                    <div className="absolute bottom-4 left-4 flex items-center gap-2 rounded-full border border-white/[0.12] bg-[#191C1B]/75 px-3 py-2 backdrop-blur-xl">
+                    <div className="absolute bottom-4 left-4 flex items-center gap-2 rounded-full border border-[#D4AF7A]/20 bg-[#241A13]/80 px-3 py-2 backdrop-blur-xl">
                       <span className="ws-stock-dot h-1.5 w-1.5 rounded-full" />
-                      <span className="text-[10px] font-medium uppercase tracking-[0.12em] text-[#E0E6E1]">
+                      <span className="text-[10px] font-medium uppercase tracking-[0.12em] text-[#F1DDBA]">
                         Dostupno
                       </span>
                     </div>
@@ -1076,16 +1067,16 @@ export default function CategoryFilter({
                 </div>
 
                 <div className="p-5 pb-3 sm:p-6 sm:pb-3">
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#91B49D]">
+                  <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#D4AF7A]">
                     {product.brand || "Watch Shop"}
                   </p>
 
-                  <h3 className="mt-3 text-xl font-semibold leading-snug tracking-tight text-[#F4F3EF] transition-colors duration-200 group-hover:text-white sm:text-2xl">
+                  <h3 className="mt-3 text-xl font-semibold leading-snug tracking-tight text-[#F5EEE3] transition-colors duration-200 group-hover:text-white sm:text-2xl">
                     {product.name}
                   </h3>
 
                   {product.model && (
-                    <p className="mt-1.5 text-sm text-[#A5ADA7]">
+                    <p className="mt-1.5 text-sm text-[#B9A58C]">
                       {product.model}
                     </p>
                   )}
@@ -1093,15 +1084,15 @@ export default function CategoryFilter({
               </Link>
 
               <div className="p-5 pt-3 sm:p-6 sm:pt-3">
-                <div className="mb-5 flex items-end justify-between gap-3 border-t border-white/[0.09] pt-4">
+                <div className="mb-5 flex items-end justify-between gap-3 border-t border-[#D4AF7A]/15 pt-4">
                   <div className="min-w-0">
-                    <p className="text-[10px] font-medium uppercase tracking-[0.16em] text-[#737C76]">
+                    <p className="text-[10px] font-medium uppercase tracking-[0.16em] text-[#A18B72]">
                       Cena
                     </p>
 
                     <p className="ws-price mt-1.5 text-xl font-semibold tracking-tight sm:text-2xl">
                       {Number(product.price).toLocaleString("sr-RS")}{" "}
-                      <span className="text-xs font-medium text-[#A5ADA7]">
+                      <span className="text-xs font-medium text-[#B9A58C]">
                         RSD
                       </span>
                     </p>
@@ -1110,8 +1101,8 @@ export default function CategoryFilter({
                   <span
                     className={
                       product.stock > 0
-                        ? "shrink-0 text-right text-xs text-[#A5ADA7]"
-                        : "shrink-0 text-right text-xs text-[#E3A5AF]"
+                        ? "shrink-0 text-right text-xs text-[#B9A58C]"
+                        : "shrink-0 text-right text-xs text-[#F0B27A]"
                     }
                   >
                     {product.stock > 0
@@ -1141,11 +1132,11 @@ export default function CategoryFilter({
 
         {(invalidPriceRange || filteredProducts.length === 0) && (
           <div className="ws-glass-panel col-span-full rounded-[28px] p-8 text-center sm:p-12">
-            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl border border-white/[0.09] bg-white/[0.035]">
+            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl border border-[#D4AF7A]/15 bg-[#D4AF7A]/[0.045]">
               <svg
                 aria-hidden="true"
                 viewBox="0 0 24 24"
-                className="h-7 w-7 text-[#91B49D]"
+                className="h-7 w-7 text-[#D4AF7A]"
                 fill="none"
                 stroke="currentColor"
                 strokeWidth="1.4"
@@ -1158,11 +1149,11 @@ export default function CategoryFilter({
               </svg>
             </div>
 
-            <h3 className="mt-6 text-xl font-semibold tracking-tight text-[#F4F3EF] sm:text-2xl">
+            <h3 className="mt-6 text-xl font-semibold tracking-tight text-[#F5EEE3] sm:text-2xl">
               {invalidPriceRange ? "Proveri unete cene" : "Nema rezultata"}
             </h3>
 
-            <p className="mx-auto mt-3 max-w-md text-sm leading-6 text-[#A5ADA7]">
+            <p className="mx-auto mt-3 max-w-md text-sm leading-6 text-[#B9A58C]">
               {invalidPriceRange
                 ? "Unete cene nisu ispravne. Proveri početnu i maksimalnu cenu."
                 : "Nismo pronašli proizvod koji odgovara izabranim filterima. Promeni kriterijume ili prikaži celu kolekciju."}
