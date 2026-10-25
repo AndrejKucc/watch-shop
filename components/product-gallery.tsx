@@ -85,8 +85,8 @@ export default function ProductGallery({
 
   if (images.length === 0) {
     return (
-      <div className="overflow-hidden rounded-[2rem] border border-white/10 bg-neutral-900">
-        <div className="flex min-h-[420px] items-center justify-center bg-neutral-800 text-neutral-500 sm:min-h-[620px]">
+      <div className="overflow-hidden rounded-[2rem] border border-[#d6b878]/20 bg-[#30231b] shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]">
+        <div className="flex min-h-[420px] items-center justify-center bg-gradient-to-br from-[#4b3621]/50 to-[#211812] text-[#b8a99a] sm:min-h-[620px]">
           Slika sata
         </div>
       </div>
@@ -96,14 +96,14 @@ export default function ProductGallery({
   return (
     <>
       <div>
-        <div className="group relative overflow-hidden rounded-[2rem] border border-white/10 bg-neutral-900">
+        <div className="group relative overflow-hidden rounded-[2rem] border border-[#d6b878]/25 bg-[#30231b] shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]">
           <button
             type="button"
             onClick={() => setIsFullscreen(true)}
             className="block w-full cursor-zoom-in"
             aria-label="Otvori sliku preko celog ekrana"
           >
-            <div className="flex min-h-[420px] items-center justify-center overflow-hidden bg-neutral-800 sm:min-h-[620px]">
+            <div className="flex min-h-[420px] items-center justify-center overflow-hidden bg-gradient-to-br from-[#4b3621]/40 via-[#30231b] to-[#211812] sm:min-h-[620px]">
               <img
                 src={images[selectedImage]}
                 alt={`${productName} - slika ${selectedImage + 1}`}
@@ -118,7 +118,7 @@ export default function ProductGallery({
                 type="button"
                 onClick={goToPrevious}
                 aria-label="Prethodna slika"
-                className="absolute left-3 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-white/10 bg-black/35 text-lg text-white/80 backdrop-blur-sm transition hover:bg-black/55 hover:text-white active:scale-95"
+                className="absolute left-3 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-[#d6b878]/30 bg-gradient-to-b from-[#d6b878]/25 to-[#211812]/75 text-lg text-[#f4ebdd]/90 shadow-[inset_0_1px_0_rgba(255,255,255,0.2)] backdrop-blur-sm transition hover:border-[#ead4a0]/70 hover:from-[#d6b878]/40 hover:text-white active:scale-95"
               >
                 ←
               </button>
@@ -127,12 +127,12 @@ export default function ProductGallery({
                 type="button"
                 onClick={goToNext}
                 aria-label="Sledeća slika"
-                className="absolute right-3 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-white/10 bg-black/35 text-lg text-white/80 backdrop-blur-sm transition hover:bg-black/55 hover:text-white active:scale-95"
+                className="absolute right-3 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-[#d6b878]/30 bg-gradient-to-b from-[#d6b878]/25 to-[#211812]/75 text-lg text-[#f4ebdd]/90 shadow-[inset_0_1px_0_rgba(255,255,255,0.2)] backdrop-blur-sm transition hover:border-[#ead4a0]/70 hover:from-[#d6b878]/40 hover:text-white active:scale-95"
               >
                 →
               </button>
 
-              <div className="pointer-events-none absolute bottom-4 left-1/2 -translate-x-1/2 rounded-full border border-white/10 bg-black/50 px-3 py-1.5 text-xs text-white/90 backdrop-blur">
+              <div className="pointer-events-none absolute bottom-4 left-1/2 -translate-x-1/2 rounded-full border border-[#d6b878]/30 bg-[#211812]/75 px-3 py-1.5 text-xs text-[#f4ebdd]/90 shadow-[inset_0_1px_0_rgba(255,255,255,0.12)] backdrop-blur">
                 {selectedImage + 1} / {imageCount}
               </div>
             </>
@@ -151,13 +151,13 @@ export default function ProductGallery({
                   onClick={() => setSelectedImage(index)}
                   aria-label={`Prikaži sliku ${index + 1}`}
                   aria-pressed={isSelected}
-                  className={`group overflow-hidden rounded-2xl border bg-neutral-900 transition-all duration-200 active:scale-95 ${
+                  className={`group overflow-hidden rounded-2xl border bg-[#30231b] shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] transition-all duration-200 active:scale-95 ${
                     isSelected
-                      ? "border-white"
-                      : "border-white/10 hover:border-white/40"
+                      ? "border-[#d6b878] shadow-[0_0_0_1px_rgba(214,184,120,0.15)]"
+                      : "border-[#d6b878]/15 hover:border-[#d6b878]/50"
                   }`}
                 >
-                  <div className="aspect-square overflow-hidden bg-neutral-800">
+                  <div className="aspect-square overflow-hidden bg-gradient-to-br from-[#4b3621]/35 to-[#211812]">
                     <img
                       src={image}
                       alt={`${productName} ${index + 1}`}
@@ -171,7 +171,7 @@ export default function ProductGallery({
         )}
 
         {imageCount > 1 && (
-          <p className="mt-3 text-center text-xs text-neutral-600">
+          <p className="mt-3 text-center text-xs text-[#8f8071]">
             Izaberi sliku ili koristi strelice
           </p>
         )}
@@ -179,7 +179,7 @@ export default function ProductGallery({
 
       {isFullscreen && (
         <div
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 p-4 backdrop-blur-sm"
+          className="fixed inset-0 z-[100] flex items-center justify-center border border-[#d6b878]/10 bg-[#17110d]/95 p-4 shadow-[inset_0_0_120px_rgba(75,54,33,0.15)] backdrop-blur-sm"
           role="dialog"
           aria-modal="true"
           aria-label={`${productName} - uvećana slika`}
@@ -189,7 +189,7 @@ export default function ProductGallery({
             type="button"
             onClick={closeFullscreen}
             aria-label="Zatvori uvećanu sliku"
-            className="absolute right-4 top-4 z-20 flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-black/45 text-xl text-white/80 backdrop-blur transition hover:bg-white/10 hover:text-white active:scale-95"
+            className="absolute right-4 top-4 z-20 flex h-10 w-10 items-center justify-center rounded-full border border-[#d6b878]/30 bg-gradient-to-b from-[#d6b878]/20 to-[#211812]/80 text-xl text-[#f4ebdd]/90 shadow-[inset_0_1px_0_rgba(255,255,255,0.18)] backdrop-blur transition hover:border-[#ead4a0]/70 hover:from-[#d6b878]/35 hover:text-white active:scale-95"
           >
             ×
           </button>
@@ -202,7 +202,7 @@ export default function ProductGallery({
                 goToPrevious();
               }}
               aria-label="Prethodna slika"
-              className="absolute left-3 top-1/2 z-20 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-white/10 bg-black/35 text-lg text-white/75 backdrop-blur-sm transition hover:bg-black/55 hover:text-white active:scale-95 sm:left-6"
+              className="absolute left-3 top-1/2 z-20 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-[#d6b878]/30 bg-gradient-to-b from-[#d6b878]/20 to-[#211812]/80 text-lg text-[#f4ebdd]/85 shadow-[inset_0_1px_0_rgba(255,255,255,0.16)] backdrop-blur-sm transition hover:border-[#ead4a0]/70 hover:from-[#d6b878]/35 hover:text-white active:scale-95 sm:left-6"
             >
               ←
             </button>
@@ -233,14 +233,14 @@ export default function ProductGallery({
                 goToNext();
               }}
               aria-label="Sledeća slika"
-              className="absolute right-3 top-1/2 z-20 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-white/10 bg-black/35 text-lg text-white/75 backdrop-blur-sm transition hover:bg-black/55 hover:text-white active:scale-95 sm:right-6"
+              className="absolute right-3 top-1/2 z-20 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-[#d6b878]/30 bg-gradient-to-b from-[#d6b878]/20 to-[#211812]/80 text-lg text-[#f4ebdd]/85 shadow-[inset_0_1px_0_rgba(255,255,255,0.16)] backdrop-blur-sm transition hover:border-[#ead4a0]/70 hover:from-[#d6b878]/35 hover:text-white active:scale-95 sm:right-6"
             >
               →
             </button>
           )}
 
           {imageCount > 1 && (
-            <div className="pointer-events-none absolute bottom-5 left-1/2 -translate-x-1/2 rounded-full border border-white/10 bg-black/50 px-4 py-2 text-sm text-white/90 backdrop-blur">
+            <div className="pointer-events-none absolute bottom-5 left-1/2 -translate-x-1/2 rounded-full border border-[#d6b878]/30 bg-[#211812]/80 px-4 py-2 text-sm text-[#f4ebdd]/90 shadow-[inset_0_1px_0_rgba(255,255,255,0.12)] backdrop-blur">
               {selectedImage + 1} / {imageCount}
             </div>
           )}
