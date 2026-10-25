@@ -70,25 +70,25 @@ export default function RegisterPage() {
   }
 
   return (
-    <main className="min-h-screen bg-neutral-950 px-5 py-16 text-white">
+    <main className="min-h-screen bg-gradient-to-br from-[#211812] via-[#2b2018] to-[#17110d] px-5 py-16 text-[#f4ebdd]">
       <div className="mx-auto max-w-md">
         <Link
           href="/"
-          className="text-sm text-neutral-400 transition hover:text-white"
+          className="text-sm text-[#b8a99a] transition hover:text-[#ead4a0]"
         >
           ← Nazad u prodavnicu
         </Link>
 
-        <div className="mt-10 rounded-3xl border border-white/10 bg-neutral-900/60 p-6 sm:p-8">
-          <p className="text-xs uppercase tracking-[0.25em] text-neutral-500">
+        <div className="mt-10 rounded-3xl border border-[#d6b878]/25 bg-gradient-to-br from-[#30231b]/95 via-[#2b2018]/95 to-[#211812]/95 p-6 shadow-[inset_0_1px_0_rgba(234,212,160,0.08),0_12px_40px_rgba(0,0,0,0.2)] sm:p-8">
+          <p className="text-xs uppercase tracking-[0.25em] text-[#d6b878]">
             Korisnički nalog
           </p>
 
-          <h1 className="mt-3 text-3xl font-semibold">
+          <h1 className="mt-3 text-3xl font-semibold text-[#f4ebdd]">
             Napravi nalog
           </h1>
 
-          <p className="mt-3 text-sm leading-6 text-neutral-400">
+          <p className="mt-3 text-sm leading-6 text-[#c2b5a8]">
             Registruj se da bi mogao da objavljuješ i upravljaš
             svojim recenzijama.
           </p>
@@ -97,7 +97,7 @@ export default function RegisterPage() {
             <div>
               <label
                 htmlFor="register-name"
-                className="block text-sm text-neutral-300"
+                className="block text-sm text-[#ead4a0]"
               >
                 Ime i prezime
               </label>
@@ -111,7 +111,7 @@ export default function RegisterPage() {
                 required
                 value={name}
                 onChange={(event) => setName(event.target.value)}
-                className="mt-2 min-h-12 w-full rounded-xl border border-white/10 bg-neutral-950 px-4 py-3 outline-none focus:border-white/40"
+                className="mt-2 min-h-12 w-full rounded-xl border border-[#d6b878]/25 bg-[#211812]/80 px-4 py-3 text-[#f4ebdd] outline-none placeholder:text-[#8f8071] focus:border-[#d6b878]/70 focus:ring-1 focus:ring-[#d6b878]/30"
                 placeholder="Unesi svoje ime"
               />
             </div>
@@ -119,7 +119,7 @@ export default function RegisterPage() {
             <div>
               <label
                 htmlFor="register-email"
-                className="block text-sm text-neutral-300"
+                className="block text-sm text-[#ead4a0]"
               >
                 Email adresa
               </label>
@@ -131,7 +131,7 @@ export default function RegisterPage() {
                 required
                 value={email}
                 onChange={(event) => setEmail(event.target.value)}
-                className="mt-2 min-h-12 w-full rounded-xl border border-white/10 bg-neutral-950 px-4 py-3 outline-none focus:border-white/40"
+                className="mt-2 min-h-12 w-full rounded-xl border border-[#d6b878]/25 bg-[#211812]/80 px-4 py-3 text-[#f4ebdd] outline-none placeholder:text-[#8f8071] focus:border-[#d6b878]/70 focus:ring-1 focus:ring-[#d6b878]/30"
                 placeholder="ime@email.com"
               />
             </div>
@@ -139,7 +139,7 @@ export default function RegisterPage() {
             <div>
               <label
                 htmlFor="register-password"
-                className="block text-sm text-neutral-300"
+                className="block text-sm text-[#ead4a0]"
               >
                 Lozinka
               </label>
@@ -152,19 +152,25 @@ export default function RegisterPage() {
                 required
                 value={password}
                 onChange={(event) => setPassword(event.target.value)}
-                className="mt-2 min-h-12 w-full rounded-xl border border-white/10 bg-neutral-950 px-4 py-3 outline-none focus:border-white/40"
+                className="mt-2 min-h-12 w-full rounded-xl border border-[#d6b878]/25 bg-[#211812]/80 px-4 py-3 text-[#f4ebdd] outline-none placeholder:text-[#8f8071] focus:border-[#d6b878]/70 focus:ring-1 focus:ring-[#d6b878]/30"
                 placeholder="Najmanje 8 karaktera"
               />
             </div>
 
             {error && (
-              <p role="alert" className="text-sm text-red-400">
+              <p
+                role="alert"
+                className="rounded-xl border border-[#c46a2d]/40 bg-[#c46a2d]/10 px-4 py-3 text-sm text-[#f0a477]"
+              >
                 {error}
               </p>
             )}
 
             {message && (
-              <p role="status" className="text-sm leading-6 text-emerald-400">
+              <p
+                role="status"
+                className="rounded-xl border border-[#d6b878]/25 bg-[#d6b878]/10 px-4 py-3 text-sm leading-6 text-[#ead4a0]"
+              >
                 {message}
               </p>
             )}
@@ -172,17 +178,17 @@ export default function RegisterPage() {
             <button
               type="submit"
               disabled={loading}
-              className="min-h-12 w-full rounded-xl bg-white px-5 py-3 font-semibold text-black transition hover:bg-neutral-200 disabled:opacity-50"
+              className="min-h-12 w-full rounded-xl border border-[#ead4a0]/50 bg-gradient-to-b from-[#ead4a0] via-[#d6b878] to-[#bd9650] px-5 py-3 font-semibold text-[#211812] shadow-[inset_0_1px_0_rgba(255,255,255,0.45),0_4px_14px_rgba(0,0,0,0.2)] transition hover:brightness-110 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
             >
               {loading ? "Kreiranje naloga..." : "Registruj se"}
             </button>
           </form>
 
-          <p className="mt-6 text-center text-sm text-neutral-400">
+          <p className="mt-6 text-center text-sm text-[#b8a99a]">
             Već imaš nalog?{" "}
             <Link
               href="/nalog/prijava"
-              className="text-white underline underline-offset-4"
+              className="font-medium text-[#ead4a0] underline decoration-[#d6b878]/50 underline-offset-4 transition hover:text-white"
             >
               Prijavi se
             </Link>

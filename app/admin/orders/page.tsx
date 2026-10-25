@@ -365,38 +365,40 @@ export default function AdminOrdersPage() {
   }
 
   return (
-    <main className="min-h-screen bg-neutral-950 px-6 py-12 text-white">
+    <main className="min-h-screen bg-[#211812] px-6 py-12 text-[#f4ebdd]">
       <div className="mx-auto max-w-6xl">
         <button
           type="button"
           onClick={() => {
             window.location.href = "/admin";
           }}
-          className="mb-8 rounded-xl border border-white/10 px-5 py-3 text-sm transition hover:bg-white hover:text-black"
+          className="mb-8 rounded-xl border border-[#d6b878]/25 bg-[#30231b] px-5 py-3 text-sm font-semibold text-[#ead4a0] transition-all duration-200 hover:border-[#d6b878]/50 hover:bg-[#4b3621] active:scale-95"
         >
           Nazad na admin
         </button>
 
-        <h1 className="text-4xl font-bold">Porudžbine</h1>
+        <h1 className="text-4xl font-bold tracking-tight text-[#ead4a0]">
+          Porudžbine
+        </h1>
 
-        <p className="mt-2 text-neutral-400">
+        <p className="mt-2 text-[#b8a99a]">
           Pregled i upravljanje porudžbinama kupaca.
         </p>
 
         {loading && (
-          <p className="mt-10 text-neutral-400">
+          <p className="mt-10 text-[#b8a99a]">
             Učitavanje porudžbina...
           </p>
         )}
 
         {message && (
-          <p className="mt-10 text-sm text-neutral-300">
+          <p className="mt-10 rounded-xl border border-[#d6b878]/20 bg-[#30231b] px-4 py-3 text-sm text-[#ead4a0]">
             {message}
           </p>
         )}
 
         {!loading && orders.length === 0 && !message && (
-          <p className="mt-10 text-neutral-400">
+          <p className="mt-10 rounded-2xl border border-[#d6b878]/15 bg-[#30231b] p-6 text-[#b8a99a]">
             Trenutno nema porudžbina.
           </p>
         )}
@@ -416,79 +418,79 @@ export default function AdminOrdersPage() {
             return (
               <div
                 key={order.id}
-                className="rounded-3xl border border-white/10 bg-neutral-900"
+                className="overflow-hidden rounded-3xl border border-[#d6b878]/20 bg-gradient-to-br from-[#30231b] to-[#211812] shadow-[inset_0_1px_0_rgba(234,212,160,0.04)] transition-colors duration-200 hover:border-[#d6b878]/35"
               >
                 <button
                   type="button"
                   onClick={() => toggleOrder(order.id)}
-                  className="flex w-full flex-col gap-2 p-6 text-left sm:flex-row sm:items-center sm:justify-between"
+                  className="flex w-full flex-col gap-4 p-6 text-left transition-colors hover:bg-[#4b3621]/20 sm:flex-row sm:items-center sm:justify-between"
                 >
-                  <div>
-                    <p className="text-xs uppercase tracking-wider text-neutral-500">
+                  <div className="min-w-0">
+                    <p className="text-xs uppercase tracking-wider text-[#b8a99a]">
                       Porudžbina
                     </p>
 
-                    <p className="mt-1 break-all font-mono text-sm text-neutral-300">
+                    <p className="mt-1 break-all font-mono text-sm text-[#d6b878]">
                       {order.id}
                     </p>
                   </div>
 
-                  <div>
-                    <p className="font-semibold">
+                  <div className="min-w-0">
+                    <p className="font-semibold text-[#f4ebdd]">
                       {order.customer_name}
                     </p>
 
-                    <p className="text-sm text-neutral-500">
+                    <p className="text-sm text-[#b8a99a]">
                       {order.phone}
                       {order.email ? ` · ${order.email}` : ""}
                     </p>
                   </div>
 
-                  <div>
-                    <p className="text-sm text-neutral-400">
+                  <div className="min-w-0">
+                    <p className="text-sm text-[#c2b5a8]">
                       {order.address}
                     </p>
 
-                    <p className="mt-1 text-sm text-neutral-500">
+                    <p className="mt-1 text-sm text-[#8f8071]">
                       {order.settlement ? `${order.settlement}, ` : ""}
                       {order.city} {order.postal_code}
                     </p>
                   </div>
 
-                  <div className="text-sm text-neutral-400">
+                  <div className="text-sm text-[#c2b5a8]">
                     {order.payment_method === "cash_on_delivery"
                       ? "Pouzećem"
                       : order.payment_method}
                   </div>
 
                   <div>
-                    <span className="rounded-full border border-white/10 px-3 py-1 text-xs">
+                    <span className="inline-flex rounded-full border border-[#d6b878]/35 bg-[#d6b878]/10 px-3 py-1 text-xs font-medium text-[#ead4a0]">
                       {statusLabel(order.status)}
                     </span>
                   </div>
 
-                  <div className="text-right">
-                    <p className="text-xl font-bold">
+                  <div className="text-left sm:text-right">
+                    <p className="text-xl font-bold text-[#ead4a0]">
                       {Number(order.total).toFixed(2)} RSD
                     </p>
 
-                    <p className="text-xs text-neutral-500">
+                    <p className="text-xs text-[#8f8071]">
                       {formatDate(order.created_at)}
                     </p>
                   </div>
                 </button>
 
                 {isExpanded && (
-                  <div className="border-t border-white/10 p-6">
+                  <div className="border-t border-[#d6b878]/20 bg-[#17110d]/40 p-6">
                     <div className="grid gap-6 sm:grid-cols-2">
-                      <div>
-                        <h3 className="text-sm font-semibold text-neutral-300">
+                      <div className="rounded-2xl border border-[#d6b878]/15 bg-[#30231b]/60 p-5">
+                        <h3 className="text-sm font-semibold text-[#ead4a0]">
                           Podaci kupca
                         </h3>
 
-                        <dl className="mt-3 space-y-1 text-sm text-neutral-400">
+                        <dl className="mt-3 space-y-2 text-sm text-[#c2b5a8]">
                           <div>
-                            <dt className="inline text-neutral-500">
+                            <dt className="inline text-[#8f8071]">
                               Ime i prezime:{" "}
                             </dt>
                             <dd className="inline">
@@ -497,7 +499,7 @@ export default function AdminOrdersPage() {
                           </div>
 
                           <div>
-                            <dt className="inline text-neutral-500">
+                            <dt className="inline text-[#8f8071]">
                               Telefon:{" "}
                             </dt>
                             <dd className="inline">{order.phone}</dd>
@@ -505,7 +507,7 @@ export default function AdminOrdersPage() {
 
                           {order.email && (
                             <div>
-                              <dt className="inline text-neutral-500">
+                              <dt className="inline text-[#8f8071]">
                                 Email:{" "}
                               </dt>
                               <dd className="inline">{order.email}</dd>
@@ -513,7 +515,7 @@ export default function AdminOrdersPage() {
                           )}
 
                           <div>
-                            <dt className="inline text-neutral-500">
+                            <dt className="inline text-[#8f8071]">
                               Adresa:{" "}
                             </dt>
                             <dd className="inline">{order.address}</dd>
@@ -521,7 +523,7 @@ export default function AdminOrdersPage() {
 
                           {order.settlement && (
                             <div>
-                              <dt className="inline text-neutral-500">
+                              <dt className="inline text-[#8f8071]">
                                 Mesto / naselje:{" "}
                               </dt>
                               <dd className="inline">
@@ -531,14 +533,14 @@ export default function AdminOrdersPage() {
                           )}
 
                           <div>
-                            <dt className="inline text-neutral-500">
+                            <dt className="inline text-[#8f8071]">
                               Grad:{" "}
                             </dt>
                             <dd className="inline">{order.city}</dd>
                           </div>
 
                           <div>
-                            <dt className="inline text-neutral-500">
+                            <dt className="inline text-[#8f8071]">
                               Poštanski broj:{" "}
                             </dt>
                             <dd className="inline">
@@ -547,7 +549,7 @@ export default function AdminOrdersPage() {
                           </div>
 
                           <div>
-                            <dt className="inline text-neutral-500">
+                            <dt className="inline text-[#8f8071]">
                               Način plaćanja:{" "}
                             </dt>
                             <dd className="inline">
@@ -560,8 +562,8 @@ export default function AdminOrdersPage() {
                         </dl>
                       </div>
 
-                      <div>
-                        <h3 className="text-sm font-semibold text-neutral-300">
+                      <div className="rounded-2xl border border-[#d6b878]/15 bg-[#30231b]/60 p-5">
+                        <h3 className="text-sm font-semibold text-[#ead4a0]">
                           Status porudžbine
                         </h3>
 
@@ -574,12 +576,13 @@ export default function AdminOrdersPage() {
                             )
                           }
                           disabled={statusUpdatingId === order.id}
-                          className="mt-3 w-full rounded-xl border border-white/10 bg-neutral-800 px-4 py-3 outline-none disabled:opacity-50"
+                          className="mt-3 w-full rounded-xl border border-[#d6b878]/25 bg-[#17110d] px-4 py-3 text-[#f4ebdd] outline-none transition focus:border-[#d6b878]/70 focus:ring-2 focus:ring-[#d6b878]/10 disabled:opacity-50"
                         >
                           {STATUS_OPTIONS.map((option) => (
                             <option
                               key={option.value}
                               value={option.value}
+                              className="bg-[#211812] text-[#f4ebdd]"
                             >
                               {option.label}
                             </option>
@@ -587,7 +590,7 @@ export default function AdminOrdersPage() {
                         </select>
 
                         {statusUpdatingId === order.id && (
-                          <p className="mt-2 text-xs text-neutral-500">
+                          <p className="mt-2 text-xs text-[#b8a99a]">
                             Čuvanje statusa...
                           </p>
                         )}
@@ -597,7 +600,7 @@ export default function AdminOrdersPage() {
                             type="button"
                             onClick={() => handleDeleteOrder(order)}
                             disabled={!canDelete || isDeleting}
-                            className="w-full rounded-xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm font-semibold text-red-300 transition hover:bg-red-500/20 disabled:cursor-not-allowed disabled:opacity-30"
+                            className="w-full rounded-xl border border-[#c46a2d]/40 bg-[#c46a2d]/10 px-4 py-3 text-sm font-semibold text-[#e8a078] transition hover:border-[#c46a2d]/70 hover:bg-[#c46a2d]/20 disabled:cursor-not-allowed disabled:opacity-30"
                           >
                             {isDeleting
                               ? "Brisanje..."
@@ -605,14 +608,14 @@ export default function AdminOrdersPage() {
                           </button>
 
                           {!canDelete && (
-                            <p className="mt-2 text-xs leading-5 text-neutral-600">
+                            <p className="mt-2 text-xs leading-5 text-[#8f8071]">
                               Brisanje je dostupno kada je porudžbina
                               otkazana, poslata ili završena.
                             </p>
                           )}
 
                           {order.status === "cancelled" && (
-                            <p className="mt-2 text-xs leading-5 text-neutral-500">
+                            <p className="mt-2 text-xs leading-5 text-[#b8a99a]">
                               Kod otkazane porudžbine zaliha će biti
                               automatski vraćena.
                             </p>
@@ -620,7 +623,7 @@ export default function AdminOrdersPage() {
 
                           {(order.status === "shipped" ||
                             order.status === "completed") && (
-                            <p className="mt-2 text-xs leading-5 text-neutral-500">
+                            <p className="mt-2 text-xs leading-5 text-[#b8a99a]">
                               Kod poslate ili završene porudžbine zaliha
                               se ne vraća.
                             </p>
@@ -629,18 +632,18 @@ export default function AdminOrdersPage() {
                       </div>
                     </div>
 
-                    <h3 className="mt-8 text-sm font-semibold text-neutral-300">
+                    <h3 className="mt-8 text-sm font-semibold text-[#ead4a0]">
                       Stavke porudžbine
                     </h3>
 
                     {detailsLoading === order.id && (
-                      <p className="mt-3 text-sm text-neutral-500">
+                      <p className="mt-3 text-sm text-[#b8a99a]">
                         Učitavanje stavki...
                       </p>
                     )}
 
                     {detailsError[order.id] && (
-                      <p className="mt-3 text-sm text-red-400">
+                      <p className="mt-3 rounded-xl border border-[#c46a2d]/30 bg-[#c46a2d]/10 p-3 text-sm text-[#e8a078]">
                         {detailsError[order.id]}
                       </p>
                     )}
@@ -650,16 +653,16 @@ export default function AdminOrdersPage() {
                         {items.map((item) => (
                           <div
                             key={item.id}
-                            className="flex items-center justify-between rounded-xl border border-white/10 bg-neutral-800 px-4 py-3 text-sm"
+                            className="flex flex-col gap-3 rounded-xl border border-[#d6b878]/15 bg-[#30231b]/70 px-4 py-3 text-sm sm:flex-row sm:items-center sm:justify-between"
                           >
-                            <div>
-                              <p className="text-neutral-200">
+                            <div className="min-w-0">
+                              <p className="font-medium text-[#f4ebdd]">
                                 {item.products?.name ??
                                   "Proizvod je obrisan"}
                               </p>
 
                               {item.products?.brand && (
-                                <p className="text-neutral-500">
+                                <p className="text-[#b8a99a]">
                                   {item.products.brand}
                                   {item.products.model
                                     ? ` · ${item.products.model}`
@@ -668,12 +671,12 @@ export default function AdminOrdersPage() {
                               )}
                             </div>
 
-                            <div className="text-neutral-400">
+                            <div className="text-[#b8a99a]">
                               {item.quantity} x{" "}
                               {Number(item.price).toFixed(2)} RSD
                             </div>
 
-                            <div className="font-semibold">
+                            <div className="font-semibold text-[#ead4a0]">
                               {(
                                 item.quantity *
                                 Number(item.price)
@@ -683,12 +686,12 @@ export default function AdminOrdersPage() {
                           </div>
                         ))}
 
-                        <div className="flex items-center justify-between border-t border-white/10 pt-3">
-                          <p className="text-neutral-400">
+                        <div className="flex items-center justify-between border-t border-[#d6b878]/20 pt-4">
+                          <p className="text-[#b8a99a]">
                             Ukupno porudžbine
                           </p>
 
-                          <p className="text-lg font-bold">
+                          <p className="text-lg font-bold text-[#ead4a0]">
                             {Number(order.total).toFixed(2)} RSD
                           </p>
                         </div>
@@ -696,7 +699,7 @@ export default function AdminOrdersPage() {
                     )}
 
                     {items && items.length === 0 && (
-                      <p className="mt-3 text-sm text-neutral-500">
+                      <p className="mt-3 text-sm text-[#8f8071]">
                         Ova porudžbina nema stavki.
                       </p>
                     )}

@@ -600,9 +600,9 @@ export default function EditProductPage() {
 
   if (loading) {
     return (
-      <main className="min-h-screen bg-neutral-950 px-6 py-12 text-white">
+      <main className="min-h-screen bg-[#211812] px-6 py-12 text-[#f4ebdd]">
         <div className="mx-auto max-w-5xl">
-          <p className="text-neutral-400">Učitavanje proizvoda...</p>
+          <p className="text-[#b8a99a]">Učitavanje proizvoda...</p>
         </div>
       </main>
     );
@@ -610,15 +610,15 @@ export default function EditProductPage() {
 
   if (!product) {
     return (
-      <main className="min-h-screen bg-neutral-950 px-6 py-12 text-white">
+      <main className="min-h-screen bg-[#211812] px-6 py-12 text-[#f4ebdd]">
         <div className="mx-auto max-w-5xl">
-          <p className="text-red-400">
+          <p className="text-red-300">
             {message || "Proizvod nije pronađen."}
           </p>
 
           <Link
             href="/admin/products"
-            className="mt-6 inline-block rounded-xl border border-white/10 px-5 py-3 text-sm transition hover:bg-white hover:text-black"
+            className="mt-6 inline-block rounded-xl border border-[#d6b878]/25 bg-[#30231b] px-5 py-3 text-sm text-[#ead4a0] transition hover:border-[#d6b878]/60 hover:bg-[#4b3621]"
           >
             Nazad na proizvode
           </Link>
@@ -634,31 +634,35 @@ export default function EditProductPage() {
   );
 
   return (
-    <main className="min-h-screen bg-neutral-950 px-6 py-10 text-white">
+    <main className="min-h-screen bg-[#211812] px-6 py-10 text-[#f4ebdd]">
       <div className="mx-auto max-w-5xl">
         <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
           <div>
-            <p className="text-sm text-neutral-500">Admin panel</p>
-            <h1 className="mt-1 text-3xl font-bold">Izmeni proizvod</h1>
-            <p className="mt-2 text-neutral-400">
+            <p className="text-sm text-[#b8a99a]">Admin panel</p>
+            <h1 className="mt-1 text-3xl font-bold text-[#f4ebdd]">
+              Izmeni proizvod
+            </h1>
+            <p className="mt-2 text-[#c2b5a8]">
               {getProductTypeLabel(productType)}
             </p>
           </div>
 
           <Link
             href="/admin/products"
-            className="rounded-xl border border-white/10 px-5 py-3 text-sm font-semibold transition-all duration-150 hover:bg-white hover:text-black active:scale-95"
+            className="rounded-xl border border-[#d6b878]/30 bg-[#30231b] px-5 py-3 text-sm font-semibold text-[#ead4a0] transition-all duration-150 hover:border-[#d6b878]/60 hover:bg-[#4b3621] active:scale-95"
           >
             Nazad na proizvode
           </Link>
         </div>
 
         <form onSubmit={handleSave} className="space-y-8">
-          <section className="rounded-3xl border border-white/10 bg-neutral-900 p-6 sm:p-8">
-            <h2 className="text-xl font-semibold">Vrsta proizvoda</h2>
+          <section className="rounded-3xl border border-[#d6b878]/20 bg-[#30231b] p-6 shadow-[0_18px_50px_rgba(0,0,0,0.12)] sm:p-8">
+            <h2 className="text-xl font-semibold text-[#ead4a0]">
+              Vrsta proizvoda
+            </h2>
 
             <div className="mt-6">
-              <label className="text-sm text-neutral-400">
+              <label className="text-sm text-[#c2b5a8]">
                 Tip proizvoda
               </label>
 
@@ -667,7 +671,7 @@ export default function EditProductPage() {
                 onChange={(event) =>
                   setProductType(event.target.value as ProductType)
                 }
-                className="mt-2 w-full rounded-xl border border-white/10 bg-neutral-950 px-4 py-3 outline-none transition focus:border-white/30"
+                className="mt-2 w-full rounded-xl border border-[#d6b878]/20 bg-[#211812] px-4 py-3 text-[#f4ebdd] outline-none transition focus:border-[#d6b878]/70 focus:ring-2 focus:ring-[#d6b878]/10"
               >
                 <option value="watch">Sat</option>
                 <option value="bracelet">Narukvica</option>
@@ -680,43 +684,43 @@ export default function EditProductPage() {
           </section>
 
           {productType === "watch" && (
-            <section className="rounded-3xl border border-amber-400/30 bg-amber-400/5 p-6 sm:p-8">
+            <section className="rounded-3xl border border-[#d6b878]/35 bg-gradient-to-br from-[#4b3621]/60 via-[#30231b] to-[#211812] p-6 sm:p-8">
               <div className="flex items-start gap-4">
-                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-amber-400/10 text-xl">
+                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-[#d6b878]/30 bg-[#d6b878]/10 text-xl">
                   ⭐
                 </div>
 
                 <div className="flex-1">
-                  <h2 className="text-xl font-semibold">
+                  <h2 className="text-xl font-semibold text-[#ead4a0]">
                     Istaknuti satovi
                   </h2>
 
-                  <p className="mt-2 text-sm leading-6 text-neutral-400">
+                  <p className="mt-2 text-sm leading-6 text-[#c2b5a8]">
                     Uključi ovu opciju da se sat prikaže u sekciji
                     „Izdvojeni satovi“ na početnoj strani.
                   </p>
 
-                  <label className="mt-5 flex cursor-pointer items-center gap-3 rounded-2xl border border-white/10 bg-neutral-950 p-4 transition hover:border-amber-400/40">
+                  <label className="mt-5 flex cursor-pointer items-center gap-3 rounded-2xl border border-[#d6b878]/20 bg-[#211812] p-4 transition hover:border-[#d6b878]/50 hover:bg-[#30231b]">
                     <input
                       type="checkbox"
                       checked={isFeatured}
                       onChange={(event) =>
                         setIsFeatured(event.target.checked)
                       }
-                      className="h-5 w-5 accent-amber-400"
+                      className="h-5 w-5 accent-[#d6b878]"
                     />
 
-                    <span className="font-medium">
+                    <span className="font-medium text-[#f4ebdd]">
                       Prikaži u istaknutim satovima na početnoj strani
                     </span>
                   </label>
 
                   <div className="mt-6">
-                    <label className="text-sm font-medium text-neutral-300">
+                    <label className="text-sm font-medium text-[#ead4a0]">
                       Trakica na slici sata
                     </label>
 
-                    <p className="mt-2 text-sm leading-6 text-neutral-400">
+                    <p className="mt-2 text-sm leading-6 text-[#c2b5a8]">
                       Izaberi oznaku koja objašnjava zašto si izdvojio ovaj sat.
                       Ako izabereš „Bez trakice“, sat će biti istaknut bez oznake.
                     </p>
@@ -727,7 +731,7 @@ export default function EditProductPage() {
                         setFeaturedBadge(event.target.value as FeaturedBadge)
                       }
                       disabled={!isFeatured}
-                      className="mt-3 w-full rounded-xl border border-white/10 bg-neutral-950 px-4 py-3 outline-none transition focus:border-amber-400/50 disabled:cursor-not-allowed disabled:opacity-50"
+                      className="mt-3 w-full rounded-xl border border-[#d6b878]/20 bg-[#211812] px-4 py-3 text-[#f4ebdd] outline-none transition focus:border-[#d6b878]/70 focus:ring-2 focus:ring-[#d6b878]/10 disabled:cursor-not-allowed disabled:opacity-50"
                     >
                       {featuredBadgeOptions.map((option) => (
                         <option key={option.value} value={option.value}>
@@ -738,29 +742,29 @@ export default function EditProductPage() {
 
                     {selectedBadge && selectedBadge.preview && isFeatured && (
                       <div className="mt-4">
-                        <p className="mb-2 text-xs uppercase tracking-wider text-neutral-500">
+                        <p className="mb-2 text-xs uppercase tracking-wider text-[#b8a99a]">
                           Pregled trakice
                         </p>
 
-                        <span className="inline-flex items-center rounded-md border border-amber-300/30 bg-amber-400 px-3 py-2 text-xs font-bold tracking-wide text-neutral-950">
+                        <span className="inline-flex items-center rounded-md border border-[#ead4a0]/50 bg-gradient-to-b from-[#ead4a0] via-[#d6b878] to-[#bd9650] px-3 py-2 text-xs font-bold tracking-wide text-[#211812] shadow-[inset_0_1px_0_rgba(255,255,255,0.4)]">
                           {selectedBadge.preview}
                         </span>
 
-                        <p className="mt-2 text-xs text-neutral-400">
+                        <p className="mt-2 text-xs text-[#c2b5a8]">
                           {selectedBadge.description}
                         </p>
                       </div>
                     )}
 
                     {!isFeatured && (
-                      <p className="mt-3 text-xs text-neutral-500">
+                      <p className="mt-3 text-xs text-[#8f8071]">
                         Prvo uključi prikaz u istaknutim satovima da bi birao
                         trakicu.
                       </p>
                     )}
                   </div>
 
-                  <p className="mt-4 text-xs text-neutral-500">
+                  <p className="mt-4 text-xs text-[#8f8071]">
                     Izmene se primenjuju tek kada klikneš „Sačuvaj izmene“.
                   </p>
                 </div>
@@ -768,70 +772,72 @@ export default function EditProductPage() {
             </section>
           )}
 
-          <section className="rounded-3xl border border-white/10 bg-neutral-900 p-6 sm:p-8">
-            <h2 className="text-xl font-semibold">Osnovno</h2>
+          <section className="rounded-3xl border border-[#d6b878]/20 bg-[#30231b] p-6 shadow-[0_18px_50px_rgba(0,0,0,0.12)] sm:p-8">
+            <h2 className="text-xl font-semibold text-[#ead4a0]">
+              Osnovno
+            </h2>
 
             <div className="mt-6 grid gap-5 sm:grid-cols-2">
               <div className="sm:col-span-2">
-                <label className="text-sm text-neutral-400">
+                <label className="text-sm text-[#c2b5a8]">
                   Naziv proizvoda *
                 </label>
                 <input
                   value={name}
                   onChange={(event) => setName(event.target.value)}
                   required
-                  className="mt-2 w-full rounded-xl border border-white/10 bg-neutral-950 px-4 py-3 outline-none transition focus:border-white/30"
+                  className="mt-2 w-full rounded-xl border border-[#d6b878]/20 bg-[#211812] px-4 py-3 text-[#f4ebdd] outline-none transition placeholder:text-[#8f8071] focus:border-[#d6b878]/70 focus:ring-2 focus:ring-[#d6b878]/10"
                 />
               </div>
 
               <div>
-                <label className="text-sm text-neutral-400">Brend</label>
+                <label className="text-sm text-[#c2b5a8]">Brend</label>
                 <input
                   value={brand}
                   onChange={(event) => setBrand(event.target.value)}
-                  className="mt-2 w-full rounded-xl border border-white/10 bg-neutral-950 px-4 py-3 outline-none transition focus:border-white/30"
+                  className="mt-2 w-full rounded-xl border border-[#d6b878]/20 bg-[#211812] px-4 py-3 text-[#f4ebdd] outline-none transition placeholder:text-[#8f8071] focus:border-[#d6b878]/70 focus:ring-2 focus:ring-[#d6b878]/10"
                 />
               </div>
 
               <div>
-                <label className="text-sm text-neutral-400">Model</label>
+                <label className="text-sm text-[#c2b5a8]">Model</label>
                 <input
                   value={model}
                   onChange={(event) => setModel(event.target.value)}
-                  className="mt-2 w-full rounded-xl border border-white/10 bg-neutral-950 px-4 py-3 outline-none transition focus:border-white/30"
+                  className="mt-2 w-full rounded-xl border border-[#d6b878]/20 bg-[#211812] px-4 py-3 text-[#f4ebdd] outline-none transition placeholder:text-[#8f8071] focus:border-[#d6b878]/70 focus:ring-2 focus:ring-[#d6b878]/10"
                 />
               </div>
 
               <div>
-                <label className="text-sm text-neutral-400">
+                <label className="text-sm text-[#c2b5a8]">
                   Referenca
                 </label>
                 <input
                   value={reference}
                   onChange={(event) => setReference(event.target.value)}
-                  className="mt-2 w-full rounded-xl border border-white/10 bg-neutral-950 px-4 py-3 outline-none transition focus:border-white/30"
+                  className="mt-2 w-full rounded-xl border border-[#d6b878]/20 bg-[#211812] px-4 py-3 text-[#f4ebdd] outline-none transition placeholder:text-[#8f8071] focus:border-[#d6b878]/70 focus:ring-2 focus:ring-[#d6b878]/10"
                 />
               </div>
 
               <div>
-                <label className="text-sm text-neutral-400">Godina</label>
+                <label className="text-sm text-[#c2b5a8]">Godina</label>
                 <input
                   type="number"
                   value={year}
                   onChange={(event) => setYear(event.target.value)}
                   placeholder="npr. 2024"
-                  className="mt-2 w-full rounded-xl border border-white/10 bg-neutral-950 px-4 py-3 outline-none transition focus:border-white/30"
+                  className="mt-2 w-full rounded-xl border border-[#d6b878]/20 bg-[#211812] px-4 py-3 text-[#f4ebdd] outline-none transition placeholder:text-[#8f8071] focus:border-[#d6b878]/70 focus:ring-2 focus:ring-[#d6b878]/10"
                 />
               </div>
 
               <div>
-                <label className="text-sm text-neutral-400">
+                <label className="text-sm text-[#c2b5a8]">
                   Kategorija
                 </label>
                 <select
                   value={category}
                   onChange={(event) => setCategory(event.target.value)}
-                  className="mt-2 w-full rounded-xl border border-white/10 bg-neutral-950 px-4 py-3 outline-none transition focus:border-white/30"
+                  className="mt-2 w-full rounded-xl border border-[#d6b878]/20 bg-[#211812] px-4 py-3 text-[#f4ebdd] outline-none transition focus:border-[#d6b878]/70 focus:ring-2 focus:ring-[#d6b878]/10"
                 >
                   <option value="muski">Muški</option>
                   <option value="zenski">Ženski</option>
@@ -841,12 +847,14 @@ export default function EditProductPage() {
             </div>
           </section>
 
-          <section className="rounded-3xl border border-white/10 bg-neutral-900 p-6 sm:p-8">
-            <h2 className="text-xl font-semibold">Prodaja</h2>
+          <section className="rounded-3xl border border-[#d6b878]/20 bg-[#30231b] p-6 shadow-[0_18px_50px_rgba(0,0,0,0.12)] sm:p-8">
+            <h2 className="text-xl font-semibold text-[#ead4a0]">
+              Prodaja
+            </h2>
 
             <div className="mt-6 grid gap-5 sm:grid-cols-3">
               <div>
-                <label className="text-sm text-neutral-400">
+                <label className="text-sm text-[#c2b5a8]">
                   Prodajna cena (RSD) *
                 </label>
                 <input
@@ -856,12 +864,12 @@ export default function EditProductPage() {
                   value={price}
                   onChange={(event) => setPrice(event.target.value)}
                   required
-                  className="mt-2 w-full rounded-xl border border-white/10 bg-neutral-950 px-4 py-3 outline-none transition focus:border-white/30"
+                  className="mt-2 w-full rounded-xl border border-[#d6b878]/20 bg-[#211812] px-4 py-3 text-[#f4ebdd] outline-none transition focus:border-[#d6b878]/70 focus:ring-2 focus:ring-[#d6b878]/10"
                 />
               </div>
 
               <div>
-                <label className="text-sm text-neutral-400">
+                <label className="text-sm text-[#c2b5a8]">
                   Nabavna cena (RSD)
                 </label>
                 <input
@@ -871,12 +879,12 @@ export default function EditProductPage() {
                   value={purchasePrice}
                   onChange={(event) => setPurchasePrice(event.target.value)}
                   placeholder="Samo za admin"
-                  className="mt-2 w-full rounded-xl border border-white/10 bg-neutral-950 px-4 py-3 outline-none transition focus:border-white/30"
+                  className="mt-2 w-full rounded-xl border border-[#d6b878]/20 bg-[#211812] px-4 py-3 text-[#f4ebdd] outline-none transition placeholder:text-[#8f8071] focus:border-[#d6b878]/70 focus:ring-2 focus:ring-[#d6b878]/10"
                 />
               </div>
 
               <div>
-                <label className="text-sm text-neutral-400">
+                <label className="text-sm text-[#c2b5a8]">
                   Količina na stanju *
                 </label>
                 <input
@@ -886,18 +894,18 @@ export default function EditProductPage() {
                   value={stock}
                   onChange={(event) => setStock(event.target.value)}
                   required
-                  className="mt-2 w-full rounded-xl border border-white/10 bg-neutral-950 px-4 py-3 outline-none transition focus:border-white/30"
+                  className="mt-2 w-full rounded-xl border border-[#d6b878]/20 bg-[#211812] px-4 py-3 text-[#f4ebdd] outline-none transition focus:border-[#d6b878]/70 focus:ring-2 focus:ring-[#d6b878]/10"
                 />
               </div>
             </div>
 
             <div className="mt-5">
-              <label className="text-sm text-neutral-400">Opis</label>
+              <label className="text-sm text-[#c2b5a8]">Opis</label>
               <textarea
                 value={description}
                 onChange={(event) => setDescription(event.target.value)}
                 rows={5}
-                className="mt-2 w-full resize-y rounded-xl border border-white/10 bg-neutral-950 px-4 py-3 outline-none transition focus:border-white/30"
+                className="mt-2 w-full resize-y rounded-xl border border-[#d6b878]/20 bg-[#211812] px-4 py-3 text-[#f4ebdd] outline-none transition placeholder:text-[#8f8071] focus:border-[#d6b878]/70 focus:ring-2 focus:ring-[#d6b878]/10"
               />
             </div>
           </section>
@@ -905,9 +913,11 @@ export default function EditProductPage() {
           {currentSpecificationGroups.map((group) => (
             <section
               key={group.title}
-              className="rounded-3xl border border-white/10 bg-neutral-900 p-6 sm:p-8"
+              className="rounded-3xl border border-[#d6b878]/20 bg-[#30231b] p-6 shadow-[0_18px_50px_rgba(0,0,0,0.12)] sm:p-8"
             >
-              <h2 className="text-xl font-semibold">{group.title}</h2>
+              <h2 className="text-xl font-semibold text-[#ead4a0]">
+                {group.title}
+              </h2>
 
               <div className="mt-6 space-y-4">
                 {group.fields.map((field) => {
@@ -918,11 +928,11 @@ export default function EditProductPage() {
                   return (
                     <div
                       key={field.key}
-                      className="rounded-2xl border border-white/10 bg-neutral-950 p-4"
+                      className="rounded-2xl border border-[#d6b878]/15 bg-[#211812] p-4"
                     >
                       <div className="grid gap-4 md:grid-cols-[1fr_auto] md:items-end">
                         <div>
-                          <label className="text-sm text-neutral-400">
+                          <label className="text-sm text-[#c2b5a8]">
                             {field.label}
                           </label>
                           <input
@@ -934,20 +944,22 @@ export default function EditProductPage() {
                               )
                             }
                             placeholder={`Unesi ${field.label.toLowerCase()}...`}
-                            className="mt-2 w-full rounded-xl border border-white/10 bg-neutral-900 px-4 py-3 outline-none transition focus:border-white/30"
+                            className="mt-2 w-full rounded-xl border border-[#d6b878]/20 bg-[#30231b] px-4 py-3 text-[#f4ebdd] outline-none transition placeholder:text-[#8f8071] focus:border-[#d6b878]/70 focus:ring-2 focus:ring-[#d6b878]/10"
                           />
                         </div>
 
-                        <label className="flex min-h-11 cursor-pointer items-center gap-3 rounded-xl border border-white/10 px-4 py-3 transition hover:bg-white/5">
+                        <label className="flex min-h-11 cursor-pointer items-center gap-3 rounded-xl border border-[#d6b878]/20 px-4 py-3 transition hover:border-[#d6b878]/40 hover:bg-[#30231b]">
                           <input
                             type="checkbox"
                             checked={visible}
                             onChange={() =>
                               toggleSpecificationVisibility(field.key)
                             }
-                            className="h-4 w-4 accent-white"
+                            className="h-4 w-4 accent-[#d6b878]"
                           />
-                          <span className="text-sm">Prikaži kupcu</span>
+                          <span className="text-sm text-[#f4ebdd]">
+                            Prikaži kupcu
+                          </span>
                         </label>
                       </div>
                     </div>
@@ -957,16 +969,18 @@ export default function EditProductPage() {
             </section>
           ))}
 
-          <section className="rounded-3xl border border-white/10 bg-neutral-900 p-6 sm:p-8">
-            <h2 className="text-xl font-semibold">Slike proizvoda</h2>
+          <section className="rounded-3xl border border-[#d6b878]/20 bg-[#30231b] p-6 shadow-[0_18px_50px_rgba(0,0,0,0.12)] sm:p-8">
+            <h2 className="text-xl font-semibold text-[#ead4a0]">
+              Slike proizvoda
+            </h2>
 
-            <p className="mt-2 text-sm text-neutral-500">
+            <p className="mt-2 text-sm text-[#b8a99a]">
               Postojeće slike možeš ukloniti, a nove dodati ispod.
             </p>
 
             {existingImages.length > 0 && (
               <div className="mt-6">
-                <p className="text-sm font-medium text-neutral-300">
+                <p className="text-sm font-medium text-[#ead4a0]">
                   Postojeće slike
                 </p>
 
@@ -974,9 +988,9 @@ export default function EditProductPage() {
                   {existingImages.map((image, index) => (
                     <div
                       key={`${image}-${index}`}
-                      className="overflow-hidden rounded-2xl border border-white/10 bg-neutral-950"
+                      className="overflow-hidden rounded-2xl border border-[#d6b878]/20 bg-[#211812]"
                     >
-                      <div className="aspect-square overflow-hidden bg-neutral-800">
+                      <div className="aspect-square overflow-hidden bg-[#4b3621]">
                         <img
                           src={image}
                           alt={`Slika proizvoda ${index + 1}`}
@@ -987,7 +1001,7 @@ export default function EditProductPage() {
                       <button
                         type="button"
                         onClick={() => removeExistingImage(index)}
-                        className="w-full border-t border-white/10 px-3 py-2 text-xs font-semibold text-red-400 transition hover:bg-red-500/10"
+                        className="w-full border-t border-[#d6b878]/15 px-3 py-2 text-xs font-semibold text-red-300 transition hover:bg-red-500/10"
                       >
                         Ukloni sliku
                       </button>
@@ -998,7 +1012,7 @@ export default function EditProductPage() {
             )}
 
             <div className="mt-6">
-              <label className="text-sm text-neutral-400">
+              <label className="text-sm text-[#c2b5a8]">
                 Dodaj nove slike
               </label>
               <input
@@ -1007,13 +1021,13 @@ export default function EditProductPage() {
                 accept="image/*"
                 multiple
                 onChange={handleImageChange}
-                className="mt-2 block w-full rounded-xl border border-white/10 bg-neutral-950 px-4 py-3 text-sm"
+                className="mt-2 block w-full rounded-xl border border-[#d6b878]/20 bg-[#211812] px-4 py-3 text-sm text-[#f4ebdd] file:mr-4 file:rounded-lg file:border-0 file:bg-gradient-to-b file:from-[#ead4a0] file:via-[#d6b878] file:to-[#bd9650] file:px-4 file:py-2 file:font-semibold file:text-[#211812] hover:file:brightness-105"
               />
             </div>
 
             {imageFiles.length > 0 && (
               <div className="mt-5">
-                <p className="text-sm font-medium text-neutral-300">
+                <p className="text-sm font-medium text-[#ead4a0]">
                   Nove slike: {imageFiles.length}
                 </p>
 
@@ -1021,9 +1035,9 @@ export default function EditProductPage() {
                   {imageFiles.map((file, index) => (
                     <div
                       key={`${file.name}-${file.lastModified}-${index}`}
-                      className="overflow-hidden rounded-2xl border border-white/10 bg-neutral-950"
+                      className="overflow-hidden rounded-2xl border border-[#d6b878]/20 bg-[#211812]"
                     >
-                      <div className="aspect-square overflow-hidden bg-neutral-800">
+                      <div className="aspect-square overflow-hidden bg-[#4b3621]">
                         <img
                           src={URL.createObjectURL(file)}
                           alt={`Nova slika ${index + 1}`}
@@ -1031,7 +1045,7 @@ export default function EditProductPage() {
                         />
                       </div>
 
-                      <div className="truncate px-3 py-2 text-xs text-neutral-500">
+                      <div className="truncate px-3 py-2 text-xs text-[#b8a99a]">
                         {index + 1}. {file.name}
                       </div>
                     </div>
@@ -1042,13 +1056,13 @@ export default function EditProductPage() {
           </section>
 
           {errorMessage && (
-            <div className="rounded-2xl border border-red-500/20 bg-red-500/10 p-4 text-sm text-red-300">
+            <div className="rounded-2xl border border-red-400/25 bg-red-950/30 p-4 text-sm text-red-200">
               {errorMessage}
             </div>
           )}
 
           {message && (
-            <div className="rounded-2xl border border-green-500/20 bg-green-500/10 p-4 text-sm text-green-300">
+            <div className="rounded-2xl border border-[#d6b878]/30 bg-[#d6b878]/10 p-4 text-sm text-[#ead4a0]">
               {message}
             </div>
           )}
@@ -1056,7 +1070,7 @@ export default function EditProductPage() {
           <button
             type="submit"
             disabled={saving}
-            className="w-full rounded-2xl bg-white px-6 py-4 font-semibold text-black transition-all duration-150 hover:bg-neutral-200 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-50"
+            className="w-full rounded-2xl border border-[#ead4a0]/50 bg-gradient-to-b from-[#ead4a0] via-[#d6b878] to-[#bd9650] px-6 py-4 font-semibold text-[#211812] shadow-[inset_0_1px_0_rgba(255,255,255,0.4),0_8px_24px_rgba(0,0,0,0.18)] transition-all duration-150 hover:brightness-105 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-50"
           >
             {saving ? "Čuvanje izmena..." : "Sačuvaj izmene"}
           </button>

@@ -474,23 +474,32 @@ export default function AddProductPage() {
     }
   }
 
+  const inputClassName =
+    "mt-2 w-full rounded-xl border border-[#d6b878]/20 bg-[#17110d] px-4 py-3 text-[#f4ebdd] placeholder:text-[#8f8071] outline-none transition focus:border-[#d6b878]/70 focus:ring-2 focus:ring-[#d6b878]/10";
+
+  const labelClassName =
+    "text-sm text-[#c2b5a8]";
+
+  const sectionClassName =
+    "rounded-3xl border border-[#d6b878]/20 bg-gradient-to-br from-[#30231b] to-[#211812] p-6 shadow-[inset_0_1px_0_rgba(234,212,160,0.04)] sm:p-8";
+
   return (
-    <main className="min-h-screen bg-neutral-950 px-6 py-10 text-white">
+    <main className="min-h-screen bg-[#211812] px-6 py-10 text-[#f4ebdd]">
       <div className="mx-auto max-w-5xl">
         <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
           <div>
-            <p className="text-sm text-neutral-500">
+            <p className="text-sm text-[#b8a99a]">
               Admin panel
             </p>
 
-            <h1 className="mt-1 text-3xl font-bold">
+            <h1 className="mt-1 text-3xl font-bold tracking-tight text-[#ead4a0]">
               Dodaj novi proizvod
             </h1>
           </div>
 
           <Link
             href="/admin/products"
-            className="rounded-xl border border-white/10 px-5 py-3 text-sm font-semibold transition-all duration-150 hover:bg-white hover:text-black active:scale-95"
+            className="rounded-xl border border-[#d6b878]/30 bg-[#30231b] px-5 py-3 text-sm font-semibold text-[#ead4a0] transition-all duration-150 hover:border-[#d6b878]/60 hover:bg-[#4b3621] active:scale-95"
           >
             Nazad na proizvode
           </Link>
@@ -500,12 +509,12 @@ export default function AddProductPage() {
           onSubmit={handleSubmit}
           className="space-y-8"
         >
-          <section className="rounded-3xl border border-white/10 bg-neutral-900 p-6 sm:p-8">
-            <h2 className="text-xl font-semibold">
+          <section className={sectionClassName}>
+            <h2 className="text-xl font-semibold text-[#ead4a0]">
               Tip proizvoda
             </h2>
 
-            <p className="mt-2 text-sm text-neutral-500">
+            <p className="mt-2 text-sm text-[#b8a99a]">
               Izaberi šta dodaješ u prodavnicu.
             </p>
 
@@ -522,10 +531,10 @@ export default function AddProductPage() {
                   onClick={() =>
                     handleProductTypeChange(value)
                   }
-                  className={`rounded-2xl border px-5 py-4 text-left font-semibold transition ${
+                  className={`rounded-2xl border px-5 py-4 text-left font-semibold transition-all duration-200 ${
                     productType === value
-                      ? "border-white bg-white text-black"
-                      : "border-white/10 bg-neutral-950 text-white hover:bg-white/5"
+                      ? "border-[#ead4a0]/70 bg-gradient-to-b from-[#ead4a0] via-[#d6b878] to-[#bd9650] text-[#211812] shadow-[inset_0_1px_0_rgba(255,255,255,0.4)]"
+                      : "border-[#d6b878]/20 bg-[#17110d] text-[#f4ebdd] hover:border-[#d6b878]/50 hover:bg-[#4b3621]"
                   }`}
                 >
                   {label}
@@ -534,14 +543,14 @@ export default function AddProductPage() {
             </div>
           </section>
 
-          <section className="rounded-3xl border border-white/10 bg-neutral-900 p-6 sm:p-8">
-            <h2 className="text-xl font-semibold">
+          <section className={sectionClassName}>
+            <h2 className="text-xl font-semibold text-[#ead4a0]">
               Osnovno
             </h2>
 
             <div className="mt-6 grid gap-5 sm:grid-cols-2">
               <div className="sm:col-span-2">
-                <label className="text-sm text-neutral-400">
+                <label className={labelClassName}>
                   {getNameLabel(productType)} *
                 </label>
 
@@ -551,12 +560,12 @@ export default function AddProductPage() {
                     setName(event.target.value)
                   }
                   placeholder={getNamePlaceholder(productType)}
-                  className="mt-2 w-full rounded-xl border border-white/10 bg-neutral-950 px-4 py-3 outline-none transition focus:border-white/30"
+                  className={inputClassName}
                 />
               </div>
 
               <div>
-                <label className="text-sm text-neutral-400">
+                <label className={labelClassName}>
                   Brend
                 </label>
 
@@ -566,12 +575,12 @@ export default function AddProductPage() {
                     setBrand(event.target.value)
                   }
                   placeholder="npr. Rolex"
-                  className="mt-2 w-full rounded-xl border border-white/10 bg-neutral-950 px-4 py-3 outline-none transition focus:border-white/30"
+                  className={inputClassName}
                 />
               </div>
 
               <div>
-                <label className="text-sm text-neutral-400">
+                <label className={labelClassName}>
                   Model
                 </label>
 
@@ -581,14 +590,14 @@ export default function AddProductPage() {
                     setModel(event.target.value)
                   }
                   placeholder="npr. Submariner"
-                  className="mt-2 w-full rounded-xl border border-white/10 bg-neutral-950 px-4 py-3 outline-none transition focus:border-white/30"
+                  className={inputClassName}
                 />
               </div>
 
               {productType === "watch" && (
                 <>
                   <div>
-                    <label className="text-sm text-neutral-400">
+                    <label className={labelClassName}>
                       Referenca
                     </label>
 
@@ -598,12 +607,12 @@ export default function AddProductPage() {
                         setReference(event.target.value)
                       }
                       placeholder="npr. 126610LN"
-                      className="mt-2 w-full rounded-xl border border-white/10 bg-neutral-950 px-4 py-3 outline-none transition focus:border-white/30"
+                      className={inputClassName}
                     />
                   </div>
 
                   <div>
-                    <label className="text-sm text-neutral-400">
+                    <label className={labelClassName}>
                       Godina
                     </label>
 
@@ -614,14 +623,14 @@ export default function AddProductPage() {
                         setYear(event.target.value)
                       }
                       placeholder="npr. 2024"
-                      className="mt-2 w-full rounded-xl border border-white/10 bg-neutral-950 px-4 py-3 outline-none transition focus:border-white/30"
+                      className={inputClassName}
                     />
                   </div>
                 </>
               )}
 
               <div>
-                <label className="text-sm text-neutral-400">
+                <label className={labelClassName}>
                   Kategorija
                 </label>
 
@@ -630,7 +639,7 @@ export default function AddProductPage() {
                   onChange={(event) =>
                     setCategory(event.target.value)
                   }
-                  className="mt-2 w-full rounded-xl border border-white/10 bg-neutral-950 px-4 py-3 outline-none transition focus:border-white/30"
+                  className={inputClassName}
                 >
                   <option value="muski">
                     Muški
@@ -648,14 +657,14 @@ export default function AddProductPage() {
             </div>
           </section>
 
-          <section className="rounded-3xl border border-white/10 bg-neutral-900 p-6 sm:p-8">
-            <h2 className="text-xl font-semibold">
+          <section className={sectionClassName}>
+            <h2 className="text-xl font-semibold text-[#ead4a0]">
               Prodaja
             </h2>
 
             <div className="mt-6 grid gap-5 sm:grid-cols-3">
               <div>
-                <label className="text-sm text-neutral-400">
+                <label className={labelClassName}>
                   Prodajna cena (RSD) *
                 </label>
 
@@ -668,12 +677,12 @@ export default function AddProductPage() {
                     setPrice(event.target.value)
                   }
                   placeholder="0"
-                  className="mt-2 w-full rounded-xl border border-white/10 bg-neutral-950 px-4 py-3 outline-none transition focus:border-white/30"
+                  className={inputClassName}
                 />
               </div>
 
               <div>
-                <label className="text-sm text-neutral-400">
+                <label className={labelClassName}>
                   Nabavna cena (RSD)
                 </label>
 
@@ -686,12 +695,12 @@ export default function AddProductPage() {
                     setPurchasePrice(event.target.value)
                   }
                   placeholder="Samo za admin"
-                  className="mt-2 w-full rounded-xl border border-white/10 bg-neutral-950 px-4 py-3 outline-none transition focus:border-white/30"
+                  className={inputClassName}
                 />
               </div>
 
               <div>
-                <label className="text-sm text-neutral-400">
+                <label className={labelClassName}>
                   Količina na lageru *
                 </label>
 
@@ -703,13 +712,13 @@ export default function AddProductPage() {
                   onChange={(event) =>
                     setStock(event.target.value)
                   }
-                  className="mt-2 w-full rounded-xl border border-white/10 bg-neutral-950 px-4 py-3 outline-none transition focus:border-white/30"
+                  className={inputClassName}
                 />
               </div>
             </div>
 
             <div className="mt-5">
-              <label className="text-sm text-neutral-400">
+              <label className={labelClassName}>
                 Opis
               </label>
 
@@ -724,7 +733,7 @@ export default function AddProductPage() {
                     productType
                   ].toLowerCase()
                 }...`}
-                className="mt-2 w-full resize-y rounded-xl border border-white/10 bg-neutral-950 px-4 py-3 outline-none transition focus:border-white/30"
+                className={`${inputClassName} resize-y`}
               />
             </div>
           </section>
@@ -732,9 +741,9 @@ export default function AddProductPage() {
           {activeSpecificationGroups.map((group) => (
             <section
               key={group.title}
-              className="rounded-3xl border border-white/10 bg-neutral-900 p-6 sm:p-8"
+              className={sectionClassName}
             >
-              <h2 className="text-xl font-semibold">
+              <h2 className="text-xl font-semibold text-[#ead4a0]">
                 {group.title}
               </h2>
 
@@ -754,11 +763,11 @@ export default function AddProductPage() {
                   return (
                     <div
                       key={field.key}
-                      className="rounded-2xl border border-white/10 bg-neutral-950 p-4"
+                      className="rounded-2xl border border-[#d6b878]/15 bg-[#211812]/80 p-4"
                     >
                       <div className="grid gap-4 md:grid-cols-[1fr_auto] md:items-end">
                         <div>
-                          <label className="text-sm text-neutral-400">
+                          <label className={labelClassName}>
                             {field.label}
                           </label>
 
@@ -771,7 +780,7 @@ export default function AddProductPage() {
                                   event.target.value
                                 )
                               }
-                              className="mt-2 w-full rounded-xl border border-white/10 bg-neutral-900 px-4 py-3 outline-none transition focus:border-white/30"
+                              className={inputClassName}
                             >
                               <option value="">
                                 Izaberi
@@ -799,12 +808,12 @@ export default function AddProductPage() {
                                 )
                               }
                               placeholder={`Unesi ${field.label.toLowerCase()}...`}
-                              className="mt-2 w-full rounded-xl border border-white/10 bg-neutral-900 px-4 py-3 outline-none transition focus:border-white/30"
+                              className={inputClassName}
                             />
                           )}
                         </div>
 
-                        <label className="flex min-h-11 cursor-pointer items-center gap-3 rounded-xl border border-white/10 px-4 py-3 transition hover:bg-white/5">
+                        <label className="flex min-h-11 cursor-pointer items-center gap-3 rounded-xl border border-[#d6b878]/20 px-4 py-3 transition hover:border-[#d6b878]/40 hover:bg-[#4b3621]/40">
                           <input
                             type="checkbox"
                             checked={visible}
@@ -813,10 +822,10 @@ export default function AddProductPage() {
                                 field.key
                               )
                             }
-                            className="h-4 w-4 accent-white"
+                            className="h-4 w-4 accent-[#d6b878]"
                           />
 
-                          <span className="text-sm">
+                          <span className="text-sm text-[#f4ebdd]">
                             Prikaži kupcu
                           </span>
                         </label>
@@ -828,15 +837,15 @@ export default function AddProductPage() {
             </section>
           ))}
 
-          <section className="rounded-3xl border border-white/10 bg-neutral-900 p-6 sm:p-8">
-            <h2 className="text-xl font-semibold">
+          <section className={sectionClassName}>
+            <h2 className="text-xl font-semibold text-[#ead4a0]">
               Slike{" "}
               {productTypeLabels[
                 productType
               ].toLowerCase()}
             </h2>
 
-            <p className="mt-2 text-sm text-neutral-500">
+            <p className="mt-2 text-sm text-[#b8a99a]">
               Izaberi više slika odjednom. Sve slike će
               biti sačuvane u galeriji proizvoda.
             </p>
@@ -847,12 +856,12 @@ export default function AddProductPage() {
               accept="image/*"
               multiple
               onChange={handleImageChange}
-              className="mt-5 block w-full rounded-xl border border-white/10 bg-neutral-950 px-4 py-3 text-sm"
+              className="mt-5 block w-full rounded-xl border border-[#d6b878]/20 bg-[#17110d] px-4 py-3 text-sm text-[#f4ebdd] file:mr-4 file:rounded-lg file:border-0 file:bg-[#d6b878] file:px-4 file:py-2 file:font-semibold file:text-[#211812] file:transition hover:file:bg-[#ead4a0]"
             />
 
             {imageFiles.length > 0 && (
               <div className="mt-5">
-                <p className="text-sm font-medium text-neutral-300">
+                <p className="text-sm font-medium text-[#ead4a0]">
                   Izabrano slika: {imageFiles.length}
                 </p>
 
@@ -860,9 +869,9 @@ export default function AddProductPage() {
                   {imageFiles.map((file, index) => (
                     <div
                       key={`${file.name}-${file.lastModified}-${index}`}
-                      className="overflow-hidden rounded-2xl border border-white/10 bg-neutral-950"
+                      className="overflow-hidden rounded-2xl border border-[#d6b878]/20 bg-[#17110d]"
                     >
-                      <div className="aspect-square overflow-hidden bg-neutral-800">
+                      <div className="aspect-square overflow-hidden bg-[#211812]">
                         <img
                           src={URL.createObjectURL(file)}
                           alt={`Izabrana slika ${index + 1}`}
@@ -870,7 +879,7 @@ export default function AddProductPage() {
                         />
                       </div>
 
-                      <div className="truncate px-3 py-2 text-xs text-neutral-500">
+                      <div className="truncate px-3 py-2 text-xs text-[#b8a99a]">
                         {index + 1}. {file.name}
                       </div>
                     </div>
@@ -881,13 +890,13 @@ export default function AddProductPage() {
           </section>
 
           {errorMessage && (
-            <div className="rounded-2xl border border-red-500/20 bg-red-500/10 p-4 text-sm text-red-300">
+            <div className="rounded-2xl border border-[#c46a2d]/40 bg-[#c46a2d]/10 p-4 text-sm text-[#f0a08a]">
               {errorMessage}
             </div>
           )}
 
           {message && (
-            <div className="rounded-2xl border border-green-500/20 bg-green-500/10 p-4 text-sm text-green-300">
+            <div className="rounded-2xl border border-[#d6b878]/35 bg-[#d6b878]/10 p-4 text-sm text-[#ead4a0]">
               {message}
             </div>
           )}
@@ -895,7 +904,7 @@ export default function AddProductPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full rounded-2xl bg-white px-6 py-4 font-semibold text-black transition-all duration-150 hover:bg-neutral-200 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-50"
+            className="w-full rounded-2xl border border-[#ead4a0]/60 bg-gradient-to-b from-[#ead4a0] via-[#d6b878] to-[#bd9650] px-6 py-4 font-semibold text-[#211812] shadow-[inset_0_1px_0_rgba(255,255,255,0.4)] transition-all duration-150 hover:brightness-110 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-50"
           >
             {loading
               ? "Dodavanje proizvoda..."

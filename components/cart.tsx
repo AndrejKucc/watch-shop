@@ -200,12 +200,12 @@ export function CartButton() {
   return (
     <Link
       href="/cart"
-      className="relative rounded-full border border-white/20 px-5 py-2 text-sm transition-all duration-150 hover:bg-white hover:text-black active:scale-95"
+      className="relative rounded-full border border-[#d6b878]/35 bg-gradient-to-b from-[#30231b] to-[#211812] px-5 py-2 text-sm text-[#f4ebdd] shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] transition-all duration-200 hover:border-[#ead4a0]/70 hover:text-[#ead4a0] active:scale-95"
     >
       Korpa
 
       {totalQuantity > 0 && (
-        <span className="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-white text-xs font-semibold text-black">
+        <span className="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full border border-[#ead4a0]/60 bg-gradient-to-b from-[#ead4a0] via-[#d6b878] to-[#bd9650] text-xs font-semibold text-[#211812] shadow-[inset_0_1px_0_rgba(255,255,255,0.45)]">
           {totalQuantity}
         </span>
       )}
@@ -227,10 +227,10 @@ export function AddToCartButton({
       type="button"
       onClick={() => addToCart(product)}
       disabled={isOutOfStock}
-      className={`mt-6 w-full rounded-2xl px-5 py-3 font-semibold transition-all duration-150 active:scale-95 ${
+      className={`mt-6 w-full rounded-2xl border px-5 py-3 font-semibold transition-all duration-200 active:scale-95 ${
         isOutOfStock
-          ? "cursor-not-allowed bg-neutral-800 text-neutral-500"
-          : "bg-white text-black hover:bg-neutral-200"
+          ? "cursor-not-allowed border-[#8f8071]/15 bg-[#30231b] text-[#8f8071]"
+          : "border-[#ead4a0]/60 bg-gradient-to-b from-[#ead4a0] via-[#d6b878] to-[#bd9650] text-[#211812] shadow-[inset_0_1px_0_rgba(255,255,255,0.45),0_5px_16px_rgba(214,184,120,0.12)] hover:brightness-110 hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.55),0_7px_20px_rgba(214,184,120,0.2)]"
       }`}
     >
       {isOutOfStock ? "Nije na stanju" : "Dodaj u korpu"}
