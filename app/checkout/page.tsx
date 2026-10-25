@@ -190,10 +190,10 @@ export default function CheckoutPage() {
 
   if (placedOrder) {
     return (
-      <main className="min-h-screen bg-neutral-950 px-5 py-10 text-white sm:px-6 sm:py-14">
+      <main className="min-h-screen bg-[#211812] px-5 py-10 text-[#f4ebdd] sm:px-6 sm:py-14">
         <div className="mx-auto max-w-2xl">
-          <div className="rounded-[2rem] border border-white/10 bg-neutral-900 p-7 text-center sm:p-12">
-            <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full border border-white/10 bg-white/[0.05]">
+          <div className="rounded-[2rem] border border-[#d6b878]/25 bg-gradient-to-br from-[#30231b] to-[#211812] p-7 text-center shadow-[inset_0_1px_0_rgba(255,255,255,0.07)] sm:p-12">
+            <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full border border-[#d6b878]/35 bg-gradient-to-br from-[#d6b878]/20 to-[#4b3621]/20 text-[#ead4a0] shadow-[inset_0_1px_0_rgba(255,255,255,0.15)]">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
@@ -208,7 +208,7 @@ export default function CheckoutPage() {
               </svg>
             </div>
 
-            <p className="mt-7 text-xs font-medium uppercase tracking-[0.3em] text-neutral-500">
+            <p className="mt-7 text-xs font-medium uppercase tracking-[0.3em] text-[#d6b878]">
               WATCH SHOP
             </p>
 
@@ -216,45 +216,45 @@ export default function CheckoutPage() {
               Porudžbina je uspešno poslata
             </h1>
 
-            <p className="mx-auto mt-4 max-w-lg leading-7 text-neutral-400">
+            <p className="mx-auto mt-4 max-w-lg leading-7 text-[#c2b5a8]">
               Hvala na kupovini. Kontaktiraćemo te uskoro radi potvrde
               porudžbine i dogovora oko dostave.
             </p>
 
             {emailSent ? (
-              <div className="mx-auto mt-6 max-w-lg rounded-2xl border border-emerald-500/20 bg-emerald-500/5 px-4 py-3 text-sm text-emerald-400">
+              <div className="mx-auto mt-6 max-w-lg rounded-2xl border border-[#d6b878]/25 bg-[#d6b878]/[0.07] px-4 py-3 text-sm text-[#ead4a0]">
                 Potvrda porudžbine je poslata na tvoj email.
               </div>
             ) : (
-              <div className="mx-auto mt-6 max-w-lg rounded-2xl border border-yellow-500/20 bg-yellow-500/5 px-4 py-3 text-sm text-yellow-400">
+              <div className="mx-auto mt-6 max-w-lg rounded-2xl border border-[#c46a2d]/30 bg-[#c46a2d]/[0.08] px-4 py-3 text-sm text-[#e5a06d]">
                 Porudžbina je uspešno napravljena, ali potvrda emailom trenutno
                 nije poslata.
               </div>
             )}
 
-            <div className="mt-9 overflow-hidden rounded-2xl border border-white/10 bg-neutral-950 text-left">
-              <div className="flex flex-col gap-2 border-b border-white/10 p-5 sm:flex-row sm:items-center sm:justify-between">
-                <span className="text-sm text-neutral-500">
+            <div className="mt-9 overflow-hidden rounded-2xl border border-[#d6b878]/20 bg-[#17110d]/70 text-left">
+              <div className="flex flex-col gap-2 border-b border-[#d6b878]/15 p-5 sm:flex-row sm:items-center sm:justify-between">
+                <span className="text-sm text-[#b8a99a]">
                   Broj porudžbine
                 </span>
 
-                <span className="break-all font-mono text-sm text-neutral-200 sm:text-right">
+                <span className="break-all font-mono text-sm text-[#f4ebdd] sm:text-right">
                   {placedOrder.order_id}
                 </span>
               </div>
 
-              <div className="flex items-center justify-between gap-4 border-b border-white/10 p-5">
-                <span className="text-sm text-neutral-500">
+              <div className="flex items-center justify-between gap-4 border-b border-[#d6b878]/15 p-5">
+                <span className="text-sm text-[#b8a99a]">
                   Ukupan iznos
                 </span>
 
-                <span className="text-xl font-bold">
+                <span className="text-xl font-bold text-[#ead4a0]">
                   {placedOrder.total.toFixed(2)} RSD
                 </span>
               </div>
 
               <div className="flex items-center justify-between gap-4 p-5">
-                <span className="text-sm text-neutral-500">
+                <span className="text-sm text-[#b8a99a]">
                   Način plaćanja
                 </span>
 
@@ -264,7 +264,7 @@ export default function CheckoutPage() {
 
             <Link
               href="/"
-              className="mt-8 inline-flex w-full items-center justify-center rounded-2xl bg-white px-6 py-4 font-semibold text-black transition hover:bg-neutral-200 active:scale-[0.98] sm:w-auto"
+              className="mt-8 inline-flex w-full items-center justify-center rounded-2xl border border-[#ead4a0]/50 bg-gradient-to-b from-[#ead4a0] via-[#d6b878] to-[#bd9650] px-6 py-4 font-semibold text-[#211812] shadow-[inset_0_1px_0_rgba(255,255,255,0.45),0_5px_16px_rgba(0,0,0,0.25)] transition hover:brightness-110 active:scale-[0.98] sm:w-auto"
             >
               Nazad na početnu
             </Link>
@@ -276,22 +276,22 @@ export default function CheckoutPage() {
 
   if (items.length === 0) {
     return (
-      <main className="min-h-screen bg-neutral-950 px-5 py-10 text-white sm:px-6 sm:py-14">
+      <main className="min-h-screen bg-[#211812] px-5 py-10 text-[#f4ebdd] sm:px-6 sm:py-14">
         <div className="mx-auto max-w-2xl">
-          <div className="rounded-[2rem] border border-white/10 bg-neutral-900 p-8 text-center">
-            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full border border-white/10 bg-neutral-800 text-2xl">
+          <div className="rounded-[2rem] border border-[#d6b878]/20 bg-gradient-to-br from-[#30231b] to-[#211812] p-8 text-center shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]">
+            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full border border-[#d6b878]/25 bg-[#4b3621]/40 text-2xl shadow-[inset_0_1px_0_rgba(255,255,255,0.1)]">
               🛒
             </div>
 
             <h1 className="mt-6 text-2xl font-semibold">Korpa je prazna</h1>
 
-            <p className="mt-2 text-neutral-500">
+            <p className="mt-2 text-[#b8a99a]">
               Dodaj neki sat pre nego što nastaviš na porudžbinu.
             </p>
 
             <Link
               href="/"
-              className="mt-7 inline-flex rounded-2xl bg-white px-6 py-3.5 font-semibold text-black transition hover:bg-neutral-200 active:scale-95"
+              className="mt-7 inline-flex rounded-2xl border border-[#ead4a0]/50 bg-gradient-to-b from-[#ead4a0] to-[#d6b878] px-6 py-3.5 font-semibold text-[#211812] shadow-[inset_0_1px_0_rgba(255,255,255,0.4)] transition hover:brightness-110 active:scale-95"
             >
               Nazad u prodavnicu
             </Link>
@@ -307,18 +307,18 @@ export default function CheckoutPage() {
   );
 
   return (
-    <main className="min-h-screen bg-neutral-950 px-5 py-10 text-white sm:px-6 sm:py-14">
+    <main className="min-h-screen bg-[#211812] px-5 py-10 text-[#f4ebdd] sm:px-6 sm:py-14">
       <div className="mx-auto max-w-5xl">
-        <div className="border-b border-white/10 pb-8">
+        <div className="border-b border-[#d6b878]/20 pb-8">
           <Link
             href="/cart"
-            className="inline-flex rounded-xl border border-white/10 px-4 py-2.5 text-sm text-neutral-400 transition hover:bg-white hover:text-black active:scale-95"
+            className="inline-flex rounded-xl border border-[#d6b878]/25 bg-gradient-to-b from-[#d6b878]/10 to-[#4b3621]/20 px-4 py-2.5 text-sm text-[#b8a99a] shadow-[inset_0_1px_0_rgba(255,255,255,0.1)] transition hover:border-[#d6b878]/50 hover:bg-[#4b3621]/40 hover:text-[#ead4a0] active:scale-95"
           >
             ← Nazad na korpu
           </Link>
 
           <div className="mt-8">
-            <p className="text-xs font-medium uppercase tracking-[0.3em] text-neutral-500">
+            <p className="text-xs font-medium uppercase tracking-[0.3em] text-[#d6b878]">
               WATCH SHOP
             </p>
 
@@ -326,7 +326,7 @@ export default function CheckoutPage() {
               Potvrda porudžbine
             </h1>
 
-            <p className="mt-3 max-w-2xl text-base leading-7 text-neutral-500">
+            <p className="mt-3 max-w-2xl text-base leading-7 text-[#b8a99a]">
               Unesi podatke za dostavu. Plaćanje se vrši pouzećem prilikom
               preuzimanja.
             </p>
@@ -336,10 +336,10 @@ export default function CheckoutPage() {
         <div className="mt-10 grid gap-8 lg:grid-cols-[1fr_360px] lg:items-start">
           <form
             onSubmit={handleSubmit}
-            className="rounded-[2rem] border border-white/10 bg-neutral-900 p-6 sm:p-8"
+            className="rounded-[2rem] border border-[#d6b878]/20 bg-gradient-to-br from-[#30231b] to-[#241a14] p-6 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] sm:p-8"
           >
             <div>
-              <p className="text-xs font-medium uppercase tracking-[0.22em] text-neutral-500">
+              <p className="text-xs font-medium uppercase tracking-[0.22em] text-[#d6b878]">
                 01
               </p>
 
@@ -347,7 +347,7 @@ export default function CheckoutPage() {
                 Podaci za dostavu
               </h2>
 
-              <p className="mt-2 text-sm leading-6 text-neutral-500">
+              <p className="mt-2 text-sm leading-6 text-[#b8a99a]">
                 Unesi tačne podatke kako bismo mogli da te kontaktiramo.
               </p>
             </div>
@@ -356,7 +356,7 @@ export default function CheckoutPage() {
               <div>
                 <label
                   htmlFor="fullName"
-                  className="mb-2 block text-sm font-medium text-neutral-300"
+                  className="mb-2 block text-sm font-medium text-[#e2d4c2]"
                 >
                   Ime i prezime
                 </label>
@@ -367,7 +367,7 @@ export default function CheckoutPage() {
                   onChange={(event) => setFullName(event.target.value)}
                   required
                   autoComplete="name"
-                  className="w-full rounded-2xl border border-white/10 bg-neutral-950 px-4 py-3.5 text-white outline-none transition placeholder:text-neutral-700 focus:border-white/30"
+                  className="w-full rounded-2xl border border-[#d6b878]/20 bg-[#17110d]/80 px-4 py-3.5 text-[#f4ebdd] outline-none transition placeholder:text-[#766658] focus:border-[#d6b878]/65 focus:ring-1 focus:ring-[#d6b878]/20"
                   placeholder="Petar Petrović"
                 />
               </div>
@@ -375,7 +375,7 @@ export default function CheckoutPage() {
               <div>
                 <label
                   htmlFor="phone"
-                  className="mb-2 block text-sm font-medium text-neutral-300"
+                  className="mb-2 block text-sm font-medium text-[#e2d4c2]"
                 >
                   Telefon
                 </label>
@@ -387,7 +387,7 @@ export default function CheckoutPage() {
                   onChange={(event) => setPhone(event.target.value)}
                   required
                   autoComplete="tel"
-                  className="w-full rounded-2xl border border-white/10 bg-neutral-950 px-4 py-3.5 text-white outline-none transition placeholder:text-neutral-700 focus:border-white/30"
+                  className="w-full rounded-2xl border border-[#d6b878]/20 bg-[#17110d]/80 px-4 py-3.5 text-[#f4ebdd] outline-none transition placeholder:text-[#766658] focus:border-[#d6b878]/65 focus:ring-1 focus:ring-[#d6b878]/20"
                   placeholder="+381 6X XXX XXXX"
                 />
               </div>
@@ -395,7 +395,7 @@ export default function CheckoutPage() {
               <div>
                 <label
                   htmlFor="email"
-                  className="mb-2 block text-sm font-medium text-neutral-300"
+                  className="mb-2 block text-sm font-medium text-[#e2d4c2]"
                 >
                   Email
                 </label>
@@ -407,7 +407,7 @@ export default function CheckoutPage() {
                   onChange={(event) => setEmail(event.target.value)}
                   required
                   autoComplete="email"
-                  className="w-full rounded-2xl border border-white/10 bg-neutral-950 px-4 py-3.5 text-white outline-none transition placeholder:text-neutral-700 focus:border-white/30"
+                  className="w-full rounded-2xl border border-[#d6b878]/20 bg-[#17110d]/80 px-4 py-3.5 text-[#f4ebdd] outline-none transition placeholder:text-[#766658] focus:border-[#d6b878]/65 focus:ring-1 focus:ring-[#d6b878]/20"
                   placeholder="petar@email.com"
                 />
               </div>
@@ -415,7 +415,7 @@ export default function CheckoutPage() {
               <div>
                 <label
                   htmlFor="address"
-                  className="mb-2 block text-sm font-medium text-neutral-300"
+                  className="mb-2 block text-sm font-medium text-[#e2d4c2]"
                 >
                   Adresa
                 </label>
@@ -426,7 +426,7 @@ export default function CheckoutPage() {
                   onChange={(event) => setAddress(event.target.value)}
                   required
                   autoComplete="street-address"
-                  className="w-full rounded-2xl border border-white/10 bg-neutral-950 px-4 py-3.5 text-white outline-none transition placeholder:text-neutral-700 focus:border-white/30"
+                  className="w-full rounded-2xl border border-[#d6b878]/20 bg-[#17110d]/80 px-4 py-3.5 text-[#f4ebdd] outline-none transition placeholder:text-[#766658] focus:border-[#d6b878]/65 focus:ring-1 focus:ring-[#d6b878]/20"
                   placeholder="Ulica i broj"
                 />
               </div>
@@ -434,7 +434,7 @@ export default function CheckoutPage() {
               <div>
                 <label
                   htmlFor="settlement"
-                  className="mb-2 block text-sm font-medium text-neutral-300"
+                  className="mb-2 block text-sm font-medium text-[#e2d4c2]"
                 >
                   Mesto / naselje
                 </label>
@@ -445,7 +445,7 @@ export default function CheckoutPage() {
                   onChange={(event) => setSettlement(event.target.value)}
                   required
                   autoComplete="address-line2"
-                  className="w-full rounded-2xl border border-white/10 bg-neutral-950 px-4 py-3.5 text-white outline-none transition placeholder:text-neutral-700 focus:border-white/30"
+                  className="w-full rounded-2xl border border-[#d6b878]/20 bg-[#17110d]/80 px-4 py-3.5 text-[#f4ebdd] outline-none transition placeholder:text-[#766658] focus:border-[#d6b878]/65 focus:ring-1 focus:ring-[#d6b878]/20"
                   placeholder="npr. Mladenovac"
                 />
               </div>
@@ -454,7 +454,7 @@ export default function CheckoutPage() {
                 <div className="relative">
                   <label
                     htmlFor="city"
-                    className="mb-2 block text-sm font-medium text-neutral-300"
+                    className="mb-2 block text-sm font-medium text-[#e2d4c2]"
                   >
                     Grad
                   </label>
@@ -475,13 +475,13 @@ export default function CheckoutPage() {
                     }}
                     required
                     autoComplete="address-level2"
-                    className="w-full rounded-2xl border border-white/10 bg-neutral-950 px-4 py-3.5 text-white outline-none transition placeholder:text-neutral-700 focus:border-white/30"
+                    className="w-full rounded-2xl border border-[#d6b878]/20 bg-[#17110d]/80 px-4 py-3.5 text-[#f4ebdd] outline-none transition placeholder:text-[#766658] focus:border-[#d6b878]/65 focus:ring-1 focus:ring-[#d6b878]/20"
                     placeholder="npr. Beograd"
                   />
 
                   {showCitySuggestions &&
                     citySuggestions.length > 0 && (
-                      <ul className="absolute z-20 mt-2 max-h-56 w-full overflow-y-auto rounded-2xl border border-white/10 bg-neutral-800 shadow-xl">
+                      <ul className="absolute z-20 mt-2 max-h-56 w-full overflow-y-auto rounded-2xl border border-[#d6b878]/25 bg-[#30231b] shadow-xl">
                         {citySuggestions.map((entry) => (
                           <li key={entry.name}>
                             <button
@@ -489,11 +489,11 @@ export default function CheckoutPage() {
                               onMouseDown={() =>
                                 selectCitySuggestion(entry)
                               }
-                              className="flex min-h-12 w-full items-center justify-between gap-4 px-4 py-3 text-left text-sm transition hover:bg-neutral-700"
+                              className="flex min-h-12 w-full items-center justify-between gap-4 px-4 py-3 text-left text-sm transition hover:bg-[#4b3621] hover:text-[#ead4a0]"
                             >
                               <span>{entry.name}</span>
 
-                              <span className="text-neutral-500">
+                              <span className="text-[#b8a99a]">
                                 {entry.postalCode}
                               </span>
                             </button>
@@ -506,7 +506,7 @@ export default function CheckoutPage() {
                 <div>
                   <label
                     htmlFor="postalCode"
-                    className="mb-2 block text-sm font-medium text-neutral-300"
+                    className="mb-2 block text-sm font-medium text-[#e2d4c2]"
                   >
                     Poštanski broj
                   </label>
@@ -518,15 +518,15 @@ export default function CheckoutPage() {
                     required
                     inputMode="numeric"
                     autoComplete="postal-code"
-                    className="w-full rounded-2xl border border-white/10 bg-neutral-950 px-4 py-3.5 text-white outline-none transition placeholder:text-neutral-700 focus:border-white/30"
+                    className="w-full rounded-2xl border border-[#d6b878]/20 bg-[#17110d]/80 px-4 py-3.5 text-[#f4ebdd] outline-none transition placeholder:text-[#766658] focus:border-[#d6b878]/65 focus:ring-1 focus:ring-[#d6b878]/20"
                     placeholder="37000"
                   />
                 </div>
               </div>
             </div>
 
-            <div className="mt-8 border-t border-white/10 pt-7">
-              <p className="text-xs font-medium uppercase tracking-[0.22em] text-neutral-500">
+            <div className="mt-8 border-t border-[#d6b878]/20 pt-7">
+              <p className="text-xs font-medium uppercase tracking-[0.22em] text-[#d6b878]">
                 02
               </p>
 
@@ -534,15 +534,15 @@ export default function CheckoutPage() {
                 Način plaćanja
               </h2>
 
-              <div className="mt-5 flex items-start gap-4 rounded-2xl border border-white/15 bg-neutral-950 p-5">
-                <div className="mt-0.5 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full border border-white bg-white">
-                  <div className="h-2 w-2 rounded-full bg-black" />
+              <div className="mt-5 flex items-start gap-4 rounded-2xl border border-[#d6b878]/25 bg-[#17110d]/60 p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
+                <div className="mt-0.5 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full border border-[#ead4a0] bg-[#ead4a0]">
+                  <div className="h-2 w-2 rounded-full bg-[#211812]" />
                 </div>
 
                 <div>
                   <p className="font-semibold">Plaćanje pouzećem</p>
 
-                  <p className="mt-1 text-sm leading-6 text-neutral-500">
+                  <p className="mt-1 text-sm leading-6 text-[#b8a99a]">
                     Plaćaš prilikom preuzimanja pošiljke.
                   </p>
                 </div>
@@ -550,7 +550,7 @@ export default function CheckoutPage() {
             </div>
 
             {message && (
-              <div className="mt-6 rounded-2xl border border-red-500/20 bg-red-500/5 px-4 py-3 text-sm leading-6 text-red-400">
+              <div className="mt-6 rounded-2xl border border-[#c46a2d]/40 bg-[#c46a2d]/10 px-4 py-3 text-sm leading-6 text-[#e5a06d]">
                 {message}
               </div>
             )}
@@ -558,18 +558,18 @@ export default function CheckoutPage() {
             <button
               type="submit"
               disabled={loading}
-              className="mt-8 flex w-full items-center justify-center rounded-2xl bg-white px-6 py-4 font-semibold text-black transition hover:bg-neutral-200 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
+              className="mt-8 flex w-full items-center justify-center rounded-2xl border border-[#ead4a0]/50 bg-gradient-to-b from-[#ead4a0] via-[#d6b878] to-[#bd9650] px-6 py-4 font-semibold text-[#211812] shadow-[inset_0_1px_0_rgba(255,255,255,0.45),0_5px_16px_rgba(0,0,0,0.22)] transition hover:brightness-110 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
             >
               {loading ? "Šaljem porudžbinu..." : "Potvrdi porudžbinu"}
             </button>
 
-            <p className="mt-4 text-center text-xs leading-5 text-neutral-600">
+            <p className="mt-4 text-center text-xs leading-5 text-[#8f8071]">
               Klikom na dugme potvrđuješ da su uneseni podaci tačni.
             </p>
           </form>
 
-          <aside className="rounded-[2rem] border border-white/10 bg-neutral-900 p-6 lg:sticky lg:top-24">
-            <p className="text-xs font-medium uppercase tracking-[0.22em] text-neutral-500">
+          <aside className="rounded-[2rem] border border-[#d6b878]/25 bg-gradient-to-br from-[#30231b] to-[#211812] p-6 shadow-[inset_0_1px_0_rgba(255,255,255,0.07)] lg:sticky lg:top-24">
+            <p className="text-xs font-medium uppercase tracking-[0.22em] text-[#d6b878]">
               Pregled
             </p>
 
@@ -580,7 +580,7 @@ export default function CheckoutPage() {
             <div className="mt-6 space-y-4">
               {items.map((item) => (
                 <div key={item.id} className="flex gap-4">
-                  <div className="h-16 w-16 flex-shrink-0 overflow-hidden rounded-xl bg-neutral-800">
+                  <div className="h-16 w-16 flex-shrink-0 overflow-hidden rounded-xl border border-[#d6b878]/15 bg-[#4b3621]/40">
                     {item.image ? (
                       <img
                         src={item.image}
@@ -588,7 +588,7 @@ export default function CheckoutPage() {
                         className="h-full w-full object-cover"
                       />
                     ) : (
-                      <div className="flex h-full items-center justify-center text-[10px] text-neutral-500">
+                      <div className="flex h-full items-center justify-center text-[10px] text-[#b8a99a]">
                         Slika sata
                       </div>
                     )}
@@ -599,21 +599,21 @@ export default function CheckoutPage() {
                       {item.name}
                     </p>
 
-                    <p className="mt-1 text-xs text-neutral-500">
+                    <p className="mt-1 text-xs text-[#b8a99a]">
                       {item.quantity} × {item.price.toFixed(2)} RSD
                     </p>
                   </div>
 
-                  <p className="flex-shrink-0 text-sm font-semibold">
+                  <p className="flex-shrink-0 text-sm font-semibold text-[#ead4a0]">
                     {(item.price * item.quantity).toFixed(2)} RSD
                   </p>
                 </div>
               ))}
             </div>
 
-            <div className="mt-6 space-y-3 border-t border-white/10 pt-6">
+            <div className="mt-6 space-y-3 border-t border-[#d6b878]/20 pt-6">
               <div className="flex items-center justify-between text-sm">
-                <span className="text-neutral-500">Proizvodi</span>
+                <span className="text-[#b8a99a]">Proizvodi</span>
 
                 <span>
                   {totalQuantity}{" "}
@@ -622,18 +622,18 @@ export default function CheckoutPage() {
               </div>
 
               <div className="flex items-center justify-between text-sm">
-                <span className="text-neutral-500">Plaćanje</span>
+                <span className="text-[#b8a99a]">Plaćanje</span>
 
                 <span>Pouzećem</span>
               </div>
             </div>
 
-            <div className="mt-6 border-t border-white/10 pt-6">
-              <p className="text-xs uppercase tracking-[0.18em] text-neutral-500">
+            <div className="mt-6 border-t border-[#d6b878]/20 pt-6">
+              <p className="text-xs uppercase tracking-[0.18em] text-[#b8a99a]">
                 Ukupno
               </p>
 
-              <p className="mt-2 text-4xl font-bold tracking-tight">
+              <p className="mt-2 text-4xl font-bold tracking-tight text-[#ead4a0]">
                 {totalPrice.toFixed(2)} RSD
               </p>
             </div>
