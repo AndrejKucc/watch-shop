@@ -288,8 +288,8 @@ export default async function ProductPage({
     product.images && product.images.length > 0 ? product.images : [];
 
   return (
-    <main className="min-h-screen bg-neutral-950 text-white">
-      <header className="sticky top-0 z-30 border-b border-white/10 bg-neutral-950/90 backdrop-blur-xl">
+    <main className="min-h-screen bg-[#211812] text-[#f4ebdd]">
+      <header className="sticky top-0 z-30 border-b border-[#d6b878]/20 bg-[#211812]/90 backdrop-blur-xl">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 sm:px-6">
           <Link
             href="/"
@@ -300,7 +300,7 @@ export default async function ProductPage({
 
           <Link
             href="/cart"
-            className="rounded-full border border-white/15 px-5 py-2.5 text-sm font-medium transition-all duration-200 hover:bg-white hover:text-black active:scale-95"
+            className="rounded-full border border-[#d6b878]/35 bg-gradient-to-b from-[#d6b878]/15 to-[#4b3621]/40 px-5 py-2.5 text-sm font-medium shadow-[inset_0_1px_0_rgba(255,255,255,0.16)] transition-all duration-200 hover:border-[#ead4a0]/70 hover:from-[#d6b878]/25 hover:to-[#4b3621]/60 active:scale-95"
           >
             Korpa
           </Link>
@@ -310,7 +310,7 @@ export default async function ProductPage({
       <section className="mx-auto max-w-7xl px-5 py-6 sm:px-6 sm:py-10">
         <Link
           href={isWatch ? "/satovi" : "/"}
-          className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.02] px-4 py-2.5 text-sm text-neutral-400 transition-all duration-200 hover:border-white/20 hover:bg-white hover:text-black active:scale-95"
+          className="inline-flex items-center gap-2 rounded-full border border-[#d6b878]/25 bg-gradient-to-b from-[#d6b878]/10 to-[#4b3621]/20 px-4 py-2.5 text-sm text-[#b8a99a] shadow-[inset_0_1px_0_rgba(255,255,255,0.10)] transition-all duration-200 hover:border-[#d6b878]/50 hover:from-[#d6b878]/20 hover:to-[#4b3621]/40 hover:text-[#f4ebdd] active:scale-95"
         >
           <span aria-hidden="true">←</span>
           Nazad na proizvode
@@ -326,18 +326,18 @@ export default async function ProductPage({
 
           <div className="lg:sticky lg:top-28">
             <div className="flex flex-wrap gap-2">
-              <span className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 text-[11px] font-medium uppercase tracking-[0.2em] text-neutral-400">
+              <span className="rounded-full border border-[#d6b878]/25 bg-[#d6b878]/[0.06] px-3 py-1.5 text-[11px] font-medium uppercase tracking-[0.2em] text-[#c2b5a8]">
                 {productTypeLabel}
               </span>
 
               {isWatch && (
-                <span className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 text-[11px] font-medium uppercase tracking-[0.2em] text-neutral-400">
+                <span className="rounded-full border border-[#d6b878]/25 bg-[#d6b878]/[0.06] px-3 py-1.5 text-[11px] font-medium uppercase tracking-[0.2em] text-[#c2b5a8]">
                   {categoryLabel}
                 </span>
               )}
             </div>
 
-            <p className="mt-7 text-xs font-medium uppercase tracking-[0.35em] text-neutral-500">
+            <p className="mt-7 text-xs font-medium uppercase tracking-[0.35em] text-[#d6b878]">
               {product.brand || "WATCH SHOP"}
             </p>
 
@@ -346,21 +346,21 @@ export default async function ProductPage({
             </h1>
 
             {product.model && (
-              <p className="mt-4 text-lg text-neutral-400">
+              <p className="mt-4 text-lg text-[#c2b5a8]">
                 {product.model}
               </p>
             )}
 
             {isWatch && product.reference && (
-              <p className="mt-2 text-sm text-neutral-600">
+              <p className="mt-2 text-sm text-[#8f8071]">
                 Ref. {product.reference}
               </p>
             )}
 
-            <div className="mt-9 border-y border-white/10 py-7">
+            <div className="mt-9 border-y border-[#d6b878]/20 py-7">
               <div className="flex flex-wrap items-end justify-between gap-5">
                 <div>
-                  <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-neutral-500">
+                  <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-[#b8a99a]">
                     Prodajna cena
                   </p>
 
@@ -373,8 +373,8 @@ export default async function ProductPage({
                   <p
                     className={`text-sm font-semibold ${
                       product.stock > 0
-                        ? "text-neutral-200"
-                        : "text-red-400"
+                        ? "text-[#d6b878]"
+                        : "text-[#c46a2d]"
                     }`}
                   >
                     {product.stock > 0
@@ -383,7 +383,7 @@ export default async function ProductPage({
                   </p>
 
                   {product.stock > 0 && (
-                    <p className="mt-1 text-xs text-neutral-500">
+                    <p className="mt-1 text-xs text-[#b8a99a]">
                       {product.stock}{" "}
                       {product.stock === 1 ? "komad" : "komada"}
                     </p>
@@ -405,26 +405,26 @@ export default async function ProductPage({
             </div>
 
             {isWatch && (product.year || product.reference) && (
-              <div className="mt-6 grid gap-px overflow-hidden rounded-2xl border border-white/10 bg-white/10 sm:grid-cols-2">
+              <div className="mt-6 grid gap-px overflow-hidden rounded-2xl border border-[#d6b878]/20 bg-[#d6b878]/10 sm:grid-cols-2">
                 {product.year && (
-                  <div className="bg-neutral-950 p-5">
-                    <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-neutral-500">
+                  <div className="bg-[#2b2018] p-5">
+                    <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-[#b8a99a]">
                       Godina
                     </p>
 
-                    <p className="mt-2 font-medium text-neutral-200">
+                    <p className="mt-2 font-medium text-[#f4ebdd]">
                       {product.year}
                     </p>
                   </div>
                 )}
 
                 {product.reference && (
-                  <div className="bg-neutral-950 p-5">
-                    <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-neutral-500">
+                  <div className="bg-[#2b2018] p-5">
+                    <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-[#b8a99a]">
                       Referenca
                     </p>
 
-                    <p className="mt-2 font-medium text-neutral-200">
+                    <p className="mt-2 font-medium text-[#f4ebdd]">
                       {product.reference}
                     </p>
                   </div>
@@ -435,10 +435,10 @@ export default async function ProductPage({
         </div>
 
         {product.description && (
-          <section className="mt-16 border-t border-white/10 pt-12 sm:mt-24 sm:pt-16">
+          <section className="mt-16 border-t border-[#d6b878]/20 pt-12 sm:mt-24 sm:pt-16">
             <div className="grid gap-8 lg:grid-cols-[0.35fr_0.65fr] lg:gap-16">
               <div>
-                <p className="text-[11px] font-medium uppercase tracking-[0.25em] text-neutral-500">
+                <p className="text-[11px] font-medium uppercase tracking-[0.25em] text-[#d6b878]">
                   {isWatch ? "O satu" : "O proizvodu"}
                 </p>
 
@@ -447,7 +447,7 @@ export default async function ProductPage({
                 </h2>
               </div>
 
-              <p className="max-w-3xl whitespace-pre-line text-base leading-8 text-neutral-400">
+              <p className="max-w-3xl whitespace-pre-line text-base leading-8 text-[#c2b5a8]">
                 {product.description}
               </p>
             </div>
@@ -455,10 +455,10 @@ export default async function ProductPage({
         )}
 
         {visibleGroups.length > 0 && (
-          <section className="mt-16 border-t border-white/10 pt-12 sm:mt-24 sm:pt-16">
+          <section className="mt-16 border-t border-[#d6b878]/20 pt-12 sm:mt-24 sm:pt-16">
             <div className="grid gap-8 lg:grid-cols-[0.35fr_0.65fr] lg:gap-16">
               <div>
-                <p className="text-[11px] font-medium uppercase tracking-[0.25em] text-neutral-500">
+                <p className="text-[11px] font-medium uppercase tracking-[0.25em] text-[#d6b878]">
                   {isWatch ? "Detalji sata" : "Detalji proizvoda"}
                 </p>
 
@@ -466,23 +466,23 @@ export default async function ProductPage({
                   Specifikacije
                 </h2>
 
-                <p className="mt-4 max-w-sm text-sm leading-7 text-neutral-500">
+                <p className="mt-4 max-w-sm text-sm leading-7 text-[#b8a99a]">
                   {isWatch
                     ? "Tehnički podaci prikazani su prema informacijama dostupnim za konkretan model."
                     : "Prikazane su dostupne informacije o materijalu, dimenzijama i sadržaju proizvoda."}
                 </p>
               </div>
 
-              <div className="overflow-hidden rounded-[2rem] border border-white/10 bg-neutral-900/60">
+              <div className="overflow-hidden rounded-[2rem] border border-[#d6b878]/20 bg-gradient-to-br from-[#30231b]/90 to-[#211812]/95 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]">
                 {visibleGroups.map((group, groupIndex) => (
                   <div
                     key={group.title}
                     className={
-                      groupIndex > 0 ? "border-t border-white/10" : ""
+                      groupIndex > 0 ? "border-t border-[#d6b878]/15" : ""
                     }
                   >
                     <div className="px-6 py-6 sm:px-8">
-                      <h3 className="text-lg font-semibold text-white">
+                      <h3 className="text-lg font-semibold text-[#f4ebdd]">
                         {group.title}
                       </h3>
 
@@ -493,15 +493,15 @@ export default async function ProductPage({
                               key={specification.label}
                               className={`grid grid-cols-[1fr_auto] items-start gap-6 py-4 ${
                                 specificationIndex > 0
-                                  ? "border-t border-white/10"
+                                  ? "border-t border-[#d6b878]/10"
                                   : ""
                               }`}
                             >
-                              <span className="text-sm text-neutral-500">
+                              <span className="text-sm text-[#b8a99a]">
                                 {specification.label}
                               </span>
 
-                              <span className="max-w-[55%] text-right text-sm font-medium text-neutral-200">
+                              <span className="max-w-[55%] text-right text-sm font-medium text-[#f4ebdd]">
                                 {specification.value}
                               </span>
                             </div>
@@ -519,8 +519,8 @@ export default async function ProductPage({
         <ProductReviews productId={product.id} />
       </section>
 
-      <footer className="mt-20 border-t border-white/10">
-        <div className="mx-auto max-w-7xl px-5 py-10 text-center text-sm text-neutral-500 sm:px-6">
+      <footer className="mt-20 border-t border-[#d6b878]/20 bg-[#211812]/70">
+        <div className="mx-auto max-w-7xl px-5 py-10 text-center text-sm text-[#b8a99a] sm:px-6">
           WATCH SHOP — Premium satovi i modni dodaci
         </div>
       </footer>
