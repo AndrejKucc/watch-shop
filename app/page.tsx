@@ -4,29 +4,6 @@ import { CartButton } from "@/components/cart";
 import { AccountButton } from "@/components/account-button";
 import CategoryFilter from "@/components/category-filter";
 
-const leaves = [
-  { left: "2%", delay: "0s", duration: "11s", size: "24px", rotate: "25deg" },
-  { left: "7%", delay: "2s", duration: "14s", size: "18px", rotate: "-20deg" },
-  { left: "12%", delay: "5s", duration: "12s", size: "28px", rotate: "45deg" },
-  { left: "17%", delay: "1s", duration: "15s", size: "20px", rotate: "-35deg" },
-  { left: "22%", delay: "7s", duration: "13s", size: "25px", rotate: "15deg" },
-  { left: "27%", delay: "3s", duration: "11s", size: "19px", rotate: "-25deg" },
-  { left: "32%", delay: "6s", duration: "14s", size: "27px", rotate: "35deg" },
-  { left: "37%", delay: "0s", duration: "12s", size: "21px", rotate: "-15deg" },
-  { left: "42%", delay: "8s", duration: "15s", size: "26px", rotate: "30deg" },
-  { left: "47%", delay: "4s", duration: "11s", size: "18px", rotate: "-30deg" },
-  { left: "52%", delay: "2s", duration: "13s", size: "24px", rotate: "20deg" },
-  { left: "57%", delay: "7s", duration: "15s", size: "20px", rotate: "-40deg" },
-  { left: "62%", delay: "1s", duration: "12s", size: "28px", rotate: "35deg" },
-  { left: "67%", delay: "5s", duration: "14s", size: "19px", rotate: "-20deg" },
-  { left: "72%", delay: "9s", duration: "11s", size: "25px", rotate: "45deg" },
-  { left: "77%", delay: "3s", duration: "13s", size: "21px", rotate: "-35deg" },
-  { left: "82%", delay: "6s", duration: "15s", size: "27px", rotate: "15deg" },
-  { left: "87%", delay: "0s", duration: "12s", size: "20px", rotate: "-25deg" },
-  { left: "92%", delay: "4s", duration: "14s", size: "26px", rotate: "30deg" },
-  { left: "97%", delay: "8s", duration: "11s", size: "18px", rotate: "-30deg" },
-];
-
 const mainNavigation = [
   { href: "/satovi", label: "Satovi" },
   { href: "/narukvice", label: "Narukvice" },
@@ -37,28 +14,28 @@ const mainNavigation = [
 
 const featuredBadges: Record<string, { text: string; className: string }> = {
   recommendation: {
-    text: "⭐ NAŠA PREPORUKA",
-    className: "border-amber-300/50 bg-amber-300 text-slate-950",
+    text: "NAŠA PREPORUKA",
+    className: "border-emerald-300/30 bg-[#163D30]/90 text-emerald-100",
   },
   best_buy: {
-    text: "🔥 BEST BUY",
-    className: "border-orange-300/50 bg-orange-400 text-slate-950",
+    text: "BEST BUY",
+    className: "border-[#8F2638]/60 bg-[#8F2638]/90 text-white",
   },
   new_model: {
-    text: "✨ NOVI MODEL",
-    className: "border-sky-300/50 bg-sky-300 text-slate-950",
+    text: "NOVI MODEL",
+    className: "border-white/20 bg-white/10 text-white",
   },
   great_price: {
-    text: "💰 ODLIČNA CENA",
-    className: "border-emerald-300/50 bg-emerald-300 text-slate-950",
+    text: "ODLIČNA CENA",
+    className: "border-emerald-300/30 bg-[#163D30]/90 text-emerald-100",
   },
   premium: {
-    text: "💎 PREMIUM IZBOR",
-    className: "border-violet-300/50 bg-violet-300 text-slate-950",
+    text: "PREMIUM IZBOR",
+    className: "border-white/20 bg-[#262B28]/90 text-white",
   },
   bestseller: {
-    text: "🏆 BESTSELLER",
-    className: "border-rose-300/50 bg-rose-300 text-slate-950",
+    text: "BESTSELLER",
+    className: "border-[#8F2638]/50 bg-[#8F2638]/90 text-white",
   },
 };
 
@@ -78,94 +55,149 @@ export default async function Home() {
   ).slice(0, 6);
 
   return (
-    <main className="relative min-h-screen overflow-x-clip bg-[#101827] text-[#F5F2EA]">
+    <main className="relative min-h-screen overflow-x-clip bg-[#191C1B] text-[#F3F3EE] selection:bg-[#163D30] selection:text-white">
       <style>{`
-        @keyframes autumnFall {
-          0% {
-            transform: translate3d(0, -12vh, 0) rotate(0deg);
-            opacity: 0;
-          }
-
-          10% {
-            opacity: 0.8;
-          }
-
-          50% {
-            transform: translate3d(45px, 50vh, 0) rotate(180deg);
-          }
-
-          90% {
-            opacity: 0.65;
-          }
-
-          100% {
-            transform: translate3d(-35px, 115vh, 0) rotate(360deg);
-            opacity: 0;
-          }
+        :root {
+          color-scheme: dark;
         }
 
-        .autumn-leaf {
-          position: fixed;
-          top: -40px;
-          z-index: 5;
-          pointer-events: none;
-          user-select: none;
-          animation-name: autumnFall;
-          animation-timing-function: linear;
-          animation-iteration-count: infinite;
+        html {
+          scroll-behavior: smooth;
+          background: #191C1B;
+        }
+
+        .ws-glass {
+          background: rgba(25, 28, 27, 0.72);
+          border: 1px solid rgba(255, 255, 255, 0.09);
+          -webkit-backdrop-filter: blur(22px) saturate(145%);
+          backdrop-filter: blur(22px) saturate(145%);
+        }
+
+        .ws-glass-card {
+          background: linear-gradient(
+            135deg,
+            rgba(255, 255, 255, 0.075),
+            rgba(255, 255, 255, 0.018)
+          );
+          border: 1px solid rgba(255, 255, 255, 0.095);
+          -webkit-backdrop-filter: blur(18px);
+          backdrop-filter: blur(18px);
+        }
+
+        .ws-hero {
+          background:
+            radial-gradient(ellipse at 75% 35%, rgba(22, 61, 48, 0.42), transparent 48%),
+            radial-gradient(ellipse at 10% 85%, rgba(143, 38, 56, 0.13), transparent 42%),
+            linear-gradient(115deg, #191C1B 0%, #1D2621 54%, #111513 100%);
+        }
+
+        .ws-title-gradient {
+          background: linear-gradient(
+            105deg,
+            #F3F3EE 0%,
+            #D6E3D9 48%,
+            #8EB59F 100%
+          );
+          -webkit-background-clip: text;
+          background-clip: text;
+          color: transparent;
+        }
+
+        .ws-primary-button {
+          background: linear-gradient(135deg, #205640, #163D30);
+          border: 1px solid rgba(145, 190, 160, 0.32);
+          box-shadow: 0 8px 30px rgba(10, 35, 25, 0.25);
+          transition: transform 200ms ease, border-color 200ms ease, filter 200ms ease;
+        }
+
+        .ws-primary-button:hover {
+          border-color: rgba(175, 220, 190, 0.6);
+          filter: brightness(1.12);
+          transform: translateY(-2px);
+        }
+
+        .ws-secondary-button {
+          background: rgba(143, 38, 56, 0.13);
+          border: 1px solid rgba(143, 38, 56, 0.5);
+          transition: background 200ms ease, border-color 200ms ease, transform 200ms ease;
+        }
+
+        .ws-secondary-button:hover {
+          background: rgba(143, 38, 56, 0.25);
+          border-color: rgba(205, 85, 105, 0.75);
+          transform: translateY(-2px);
+        }
+
+        .ws-nav-link {
+          position: relative;
+          border: 1px solid transparent;
+          background: rgba(255, 255, 255, 0.025);
+          transition: color 200ms ease, background 200ms ease, border-color 200ms ease;
+        }
+
+        .ws-nav-link:hover {
+          color: #E4F0E8;
+          background: rgba(22, 61, 48, 0.42);
+          border-color: rgba(122, 169, 143, 0.22);
+        }
+
+        .ws-product-card {
+          background: linear-gradient(145deg, #242A26 0%, #1D221F 52%, #191C1B 100%);
+          border: 1px solid rgba(255, 255, 255, 0.085);
+          transition: transform 300ms ease, border-color 300ms ease, box-shadow 300ms ease;
+        }
+
+        .ws-product-card:hover {
+          transform: translateY(-5px);
+          border-color: rgba(93, 151, 117, 0.48);
+          box-shadow: 0 22px 55px rgba(0, 0, 0, 0.24);
+        }
+
+        .ws-watch-image {
+          background:
+            radial-gradient(ellipse at 50% 45%, rgba(22, 61, 48, 0.30), transparent 62%),
+            linear-gradient(145deg, #252D28, #171B19);
         }
 
         @media (prefers-reduced-motion: reduce) {
-          .autumn-leaf {
-            animation: none;
-            display: none;
+          html {
+            scroll-behavior: auto;
+          }
+
+          .ws-primary-button,
+          .ws-secondary-button,
+          .ws-nav-link,
+          .ws-product-card {
+            transition: none;
           }
         }
       `}</style>
 
-      <div
-        aria-hidden="true"
-        className="pointer-events-none fixed inset-0 z-5 overflow-hidden"
-      >
-        {leaves.map((leaf, index) => (
-          <span
-            key={index}
-            className="autumn-leaf"
-            style={{
-              left: leaf.left,
-              animationDelay: leaf.delay,
-              animationDuration: leaf.duration,
-              fontSize: leaf.size,
-              transform: `rotate(${leaf.rotate})`,
-            }}
-          >
-            {index % 3 === 0 ? "🍁" : index % 3 === 1 ? "🍂" : "🍃"}
-          </span>
-        ))}
-      </div>
-
-      <header className="sticky top-0 z-50 border-b border-amber-200/15 bg-[#152238]/95 backdrop-blur-xl">
-        <div className="mx-auto max-w-7xl px-5 sm:px-6">
-          <div className="flex items-center justify-between py-5">
-            <Link href="/" className="group">
+      {/* GORNJA NAVIGACIJA */}
+      <header className="ws-glass sticky top-0 z-50 border-b border-white/[0.07]">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6">
+          <div className="flex items-center justify-between gap-3 py-4 sm:py-5">
+            <Link href="/" className="group min-w-0">
               <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-full border border-amber-200/30 bg-[#243449] transition group-hover:border-amber-200/70 group-hover:bg-[#30435b]">
-                  <span className="text-sm">⌚</span>
+                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-emerald-100/15 bg-gradient-to-br from-[#234C3A] to-[#191C1B] transition duration-300 group-hover:border-emerald-200/40">
+                  <span className="text-xl" aria-hidden="true">
+                    ⌚
+                  </span>
                 </div>
 
-                <div>
-                  <h1 className="text-xl font-bold tracking-[0.18em] text-[#F5F2EA] sm:text-2xl">
+                <div className="min-w-0">
+                  <h1 className="text-base font-bold tracking-[0.13em] text-[#F3F3EE] sm:text-xl sm:tracking-[0.18em]">
                     WATCH SHOP
                   </h1>
 
-                  <p className="mt-0.5 text-[10px] uppercase tracking-[0.3em] text-[#C4AD7B] sm:text-xs">
+                  <p className="mt-1 text-[9px] uppercase tracking-[0.18em] text-[#94B3A0] sm:text-[10px] sm:tracking-[0.25em]">
                     Premium satovi i aksesoari
                   </p>
                 </div>
               </div>
             </Link>
 
-            <div className="flex items-center gap-3">
+            <div className="flex shrink-0 items-center gap-2 sm:gap-3">
               <AccountButton />
               <CartButton />
             </div>
@@ -173,13 +205,13 @@ export default async function Home() {
 
           <nav
             aria-label="Glavna navigacija"
-            className="flex gap-2 overflow-x-auto border-t border-white/10 py-3"
+            className="flex gap-2 overflow-x-auto border-t border-white/[0.07] py-3"
           >
             {mainNavigation.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
-                className="shrink-0 rounded-xl px-4 py-2.5 text-sm font-medium text-[#C4CCDA] transition hover:bg-[#D6B56D]/10 hover:text-[#E7CA8B]"
+                className="ws-nav-link shrink-0 rounded-xl px-4 py-2.5 text-sm font-medium text-[#C7D0C9]"
               >
                 {item.label}
               </Link>
@@ -188,48 +220,182 @@ export default async function Home() {
         </div>
       </header>
 
-      <section className="relative z-10 mx-auto max-w-7xl px-6 py-20 sm:py-28">
-        <div className="pointer-events-none absolute -left-24 top-12 -z-10 h-80 w-80 rounded-full bg-[#D6B56D]/[0.07] blur-3xl" />
-        <div className="pointer-events-none absolute right-0 top-48 -z-10 h-96 w-96 rounded-full bg-sky-400/[0.06] blur-3xl" />
+      {/* LUKSUZNI HERO DEO */}
+      <section className="ws-hero relative isolate overflow-hidden border-b border-white/[0.06]">
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute -right-24 top-0 -z-10 h-[420px] w-[420px] rounded-full bg-[#163D30]/30 blur-[100px]"
+        />
 
-        <div className="max-w-4xl">
-          <p className="text-sm font-medium uppercase tracking-[0.35em] text-[#C4AD7B]">
-            Kolekcija za svaki stil
-          </p>
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute -bottom-40 left-0 -z-10 h-[360px] w-[360px] rounded-full bg-[#8F2638]/10 blur-[100px]"
+        />
 
-          <h2 className="mt-5 text-5xl font-semibold leading-[1.05] tracking-tight sm:text-7xl lg:text-8xl">
-            Vreme je za
-            <span className="block bg-gradient-to-r from-[#F5F2EA] via-[#E7CA8B] to-[#B9CDE8] bg-clip-text text-transparent">
-              pravi izbor.
-            </span>
-          </h2>
+        <div className="mx-auto grid max-w-7xl items-center gap-10 px-6 py-16 sm:py-20 lg:grid-cols-[1.05fr_0.95fr] lg:gap-8 lg:py-24">
+          <div className="relative z-10 max-w-2xl">
+            <div className="inline-flex items-center gap-2 rounded-full border border-emerald-100/15 bg-[#163D30]/25 px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.23em] text-[#B8D5C1] sm:text-xs">
+              <span className="h-1.5 w-1.5 rounded-full bg-[#8EB59F]" />
+              Vreme je za nešto posebno
+            </div>
 
-          <p className="mt-8 max-w-2xl text-base leading-7 text-[#C4CCDA] sm:text-lg sm:leading-8">
-            Otkrij satove, narukvice, ogrlice, novčanike i poklone pažljivo
-            odabrane za svaki stil i priliku.
-          </p>
+            <h2 className="mt-7 text-5xl font-semibold leading-[1.04] tracking-tight sm:text-6xl lg:text-7xl xl:text-[5.5rem]">
+              Stil koji
+              <span className="ws-title-gradient block">traje zauvek.</span>
+            </h2>
 
-          <div className="mt-10 flex flex-wrap items-center gap-3">
-            <a
-              href="#kolekcija"
-              className="rounded-2xl border border-[#E7CA8B]/70 bg-gradient-to-r from-[#E7CA8B] to-[#C4A45E] px-6 py-3.5 text-sm font-semibold text-[#172033] shadow-lg shadow-amber-950/20 transition-all duration-200 hover:from-[#F5DDA3] hover:to-[#D6B56D] active:scale-95"
-            >
-              Pogledaj kolekciju
-            </a>
+            <p className="mt-7 max-w-xl text-base leading-7 text-[#BAC5BD] sm:text-lg sm:leading-8">
+              Otkrij satove, narukvice, ogrlice, novčanike i poklone pažljivo
+              odabrane za one koji znaju da su detalji ono što čini razliku.
+            </p>
+
+            <div className="mt-9 flex flex-wrap gap-3">
+              <a
+                href="#kolekcija"
+                className="ws-primary-button inline-flex items-center justify-center gap-2 rounded-2xl px-6 py-3.5 text-sm font-semibold text-white"
+              >
+                Pogledaj kolekciju
+                <span aria-hidden="true">↗</span>
+              </a>
+
+              <Link
+                href="/satovi"
+                className="ws-secondary-button inline-flex items-center justify-center rounded-2xl px-6 py-3.5 text-sm font-semibold text-[#F1D8DC]"
+              >
+                Istraži satove
+              </Link>
+            </div>
+
+            <div className="mt-12 flex flex-wrap gap-x-8 gap-y-4 border-t border-white/[0.09] pt-6">
+              <div>
+                <p className="text-lg font-semibold text-[#F3F3EE]">Stil</p>
+                <p className="mt-1 text-xs text-[#9DAAA1]">
+                  Za svaki trenutak
+                </p>
+              </div>
+
+              <div className="h-10 w-px bg-white/10" />
+
+              <div>
+                <p className="text-lg font-semibold text-[#F3F3EE]">
+                  Pažljivo birano
+                </p>
+                <p className="mt-1 text-xs text-[#9DAAA1]">
+                  Detalji koji znače
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* VIZUELNI PROSTOR ZA LUKSUZNU FOTOGRAFIJU SATA */}
+          <div className="relative mx-auto w-full max-w-xl lg:max-w-none">
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-8 rounded-full bg-[#163D30]/40 blur-[70px]"
+            />
+
+            <div className="ws-glass-card relative overflow-hidden rounded-[2rem] p-3 sm:rounded-[2.5rem] sm:p-4">
+              <div className="ws-watch-image relative flex aspect-[4/4.5] items-center justify-center overflow-hidden rounded-[1.5rem] sm:rounded-[2rem]">
+                <div
+                  aria-hidden="true"
+                  className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_50%_42%,rgba(87,133,105,0.19),transparent_55%)]"
+                />
+
+                <div
+                  aria-hidden="true"
+                  className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#101512]/90 via-transparent to-black/10"
+                />
+
+                <div
+                  aria-hidden="true"
+                  className="pointer-events-none absolute left-1/2 top-1/2 h-[75%] w-[75%] -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/[0.045]"
+                />
+
+                <div
+                  aria-hidden="true"
+                  className="pointer-events-none absolute left-1/2 top-1/2 h-[58%] w-[58%] -translate-x-1/2 -translate-y-1/2 rounded-full border border-emerald-100/[0.06]"
+                />
+
+                <div className="relative z-10 px-6 text-center">
+                  <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full border border-emerald-100/15 bg-[#163D30]/35 text-4xl shadow-2xl shadow-black/30 backdrop-blur-xl sm:h-24 sm:w-24">
+                    ⌚
+                  </div>
+
+                  <p className="mt-7 text-[10px] font-medium uppercase tracking-[0.35em] text-[#9CBBA7] sm:text-xs">
+                    WATCH SHOP · PREMIUM SELECTION
+                  </p>
+
+                  <p className="mt-3 text-2xl font-medium tracking-wide text-[#F3F3EE] sm:text-3xl">
+                    Vreme je za pravi izbor.
+                  </p>
+
+                  <p className="mx-auto mt-3 max-w-xs text-sm leading-6 text-[#B7C2BA]">
+                    Pronađi detalj koji upotpunjuje tvoj stil.
+                  </p>
+                </div>
+
+                <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between rounded-2xl border border-white/10 bg-[#191C1B]/65 px-4 py-3 backdrop-blur-xl sm:bottom-5 sm:left-5 sm:right-5">
+                  <div>
+                    <p className="text-[9px] uppercase tracking-[0.22em] text-[#93B49F]">
+                      Tvoja sledeća priča
+                    </p>
+                    <p className="mt-1 text-sm font-medium text-white">
+                      Počinje pravim detaljem
+                    </p>
+                  </div>
+
+                  <span
+                    aria-hidden="true"
+                    className="flex h-9 w-9 items-center justify-center rounded-xl border border-[#8F2638]/40 bg-[#8F2638]/20 text-lg text-[#E5A7B1]"
+                  >
+                    ↗
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute -bottom-5 -right-3 h-24 w-24 rounded-full bg-[#8F2638]/15 blur-3xl"
+            />
           </div>
         </div>
+      </section>
 
-        <div id="satovi" className="mt-20 border-b border-amber-100/20 pb-5">
-          <h3 className="text-xl font-semibold text-[#F5F2EA]">
-            Izdvojeni satovi
-          </h3>
+      {/* IZDVOJENI SATOVI */}
+      <section className="relative mx-auto max-w-7xl px-6 py-16 sm:py-20">
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute right-0 top-10 h-64 w-64 rounded-full bg-[#163D30]/10 blur-[90px]"
+        />
 
-          <p className="mt-2 text-sm text-[#AEBACC]">
-            Naš izbor satova koji privlače pažnju.
-          </p>
+        <div
+          id="satovi"
+          className="relative flex flex-col justify-between gap-4 border-b border-white/[0.09] pb-6 sm:flex-row sm:items-end"
+        >
+          <div>
+            <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-[#8EB59F] sm:text-xs">
+              Pažljivo odabrana kolekcija
+            </p>
+
+            <h3 className="mt-3 text-2xl font-semibold tracking-tight text-[#F3F3EE] sm:text-3xl">
+              Izdvojeni satovi
+            </h3>
+
+            <p className="mt-2 text-sm text-[#AEBAB1]">
+              Naš izbor satova koji privlače pažnju.
+            </p>
+          </div>
+
+          <Link
+            href="/satovi"
+            className="inline-flex w-fit items-center gap-2 rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2.5 text-sm font-medium text-[#D5DED7] transition hover:border-emerald-200/25 hover:bg-[#163D30]/30 hover:text-white"
+          >
+            Svi satovi <span aria-hidden="true">→</span>
+          </Link>
         </div>
 
-        <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="relative mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {displayedWatches.map((product) => {
             const badgeKey =
               typeof product.featured_badge === "string"
@@ -242,70 +408,99 @@ export default async function Home() {
               <Link
                 key={product.id}
                 href={`/product/${product.id}`}
-                className="group overflow-hidden rounded-[2rem] border border-[#D6B56D]/20 bg-gradient-to-br from-[#243449] via-[#1B2638] to-[#172235] transition-all duration-300 hover:-translate-y-1 hover:border-[#D6B56D]/60 hover:shadow-xl hover:shadow-black/20"
+                className="ws-product-card group overflow-hidden rounded-[1.75rem]"
               >
-                <div className="relative aspect-[4/3] overflow-hidden bg-[#26374C]">
+                <div className="ws-watch-image relative aspect-[4/3] overflow-hidden">
                   {product.images && product.images[0] ? (
                     <img
                       src={product.images[0]}
                       alt={product.name}
                       loading="lazy"
-                      className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                      className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.045]"
                     />
                   ) : (
                     <div className="flex h-full items-center justify-center">
-                      <span className="text-sm text-[#B8C5D8]">
+                      <span className="text-sm text-[#AEBAB1]">
                         Slika sata
                       </span>
                     </div>
                   )}
 
+                  <div
+                    aria-hidden="true"
+                    className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#191C1B]/60 via-transparent to-black/5"
+                  />
+
                   {badge && (
                     <span
-                      className={`absolute left-4 top-4 z-10 inline-flex max-w-[calc(100%-2rem)] items-center rounded-md border px-3 py-2 text-[10px] font-extrabold tracking-[0.08em] shadow-lg sm:text-xs ${badge.className}`}
+                      className={`absolute left-4 top-4 z-10 inline-flex max-w-[calc(100%-2rem)] items-center rounded-xl border px-3 py-2 text-[9px] font-bold tracking-[0.1em] shadow-lg backdrop-blur-xl sm:text-[10px] ${badge.className}`}
                     >
                       {badge.text}
                     </span>
                   )}
+
+                  <span className="absolute bottom-4 right-4 flex h-10 w-10 items-center justify-center rounded-xl border border-white/15 bg-[#191C1B]/65 text-lg text-white opacity-0 backdrop-blur-xl transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100">
+                    ↗
+                  </span>
                 </div>
 
-                <div className="p-6">
-                  <p className="text-xs font-medium uppercase tracking-[0.22em] text-[#C4AD7B]">
+                <div className="p-5 sm:p-6">
+                  <p className="text-[10px] font-semibold uppercase tracking-[0.23em] text-[#8EB59F]">
                     {product.brand || "Watch Shop"}
                   </p>
 
-                  <h4 className="mt-3 text-2xl font-semibold tracking-tight text-[#F5F2EA]">
+                  <h4 className="mt-3 text-xl font-semibold tracking-tight text-[#F3F3EE] sm:text-2xl">
                     {product.name}
                   </h4>
 
-                  <p className="mt-5 border-t border-white/10 pt-4 text-2xl font-bold tracking-tight text-[#E7CA8B]">
-                    {Number(product.price).toLocaleString("sr-RS", {
-                      minimumFractionDigits: 2,
-                      maximumFractionDigits: 2,
-                    })}{" "}
-                    RSD
-                  </p>
+                  <div className="mt-5 flex items-center justify-between gap-3 border-t border-white/[0.09] pt-4">
+                    <p className="text-xl font-bold tracking-tight text-white">
+                      {Number(product.price).toLocaleString("sr-RS", {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      })}{" "}
+                      <span className="text-sm font-medium text-[#AEBAB1]">
+                        RSD
+                      </span>
+                    </p>
+
+                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-emerald-100/10 bg-[#163D30]/30 text-[#A9CFB7] transition group-hover:border-emerald-100/30 group-hover:bg-[#163D30]/60">
+                      →
+                    </span>
+                  </div>
                 </div>
               </Link>
             );
           })}
 
           {displayedWatches.length === 0 && (
-            <p className="text-[#B8C5D8]">
+            <p className="text-[#AEBAB1]">
               Trenutno nema satova za prikaz.
             </p>
           )}
         </div>
 
-        <div id="kolekcija" className="mt-20 scroll-mt-24">
-          <div className="mb-8 border-b border-amber-100/20 pb-5">
-            <h3 className="text-2xl font-semibold text-[#F5F2EA]">
-              Svi proizvodi
-            </h3>
+        {/* SVI PROIZVODI */}
+        <div id="kolekcija" className="relative mt-20 scroll-mt-36 sm:mt-24">
+          <div className="mb-8 flex flex-col justify-between gap-4 border-b border-white/[0.09] pb-6 sm:flex-row sm:items-end">
+            <div>
+              <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-[#8EB59F] sm:text-xs">
+                Istraži naš izbor
+              </p>
 
-            <p className="mt-2 text-sm text-[#B8C5D8]">
-              Pronađi pravi proizvod i prilagodi prikaz svojim željama.
-            </p>
+              <h3 className="mt-3 text-2xl font-semibold tracking-tight text-[#F3F3EE] sm:text-3xl">
+                Svi proizvodi
+              </h3>
+
+              <p className="mt-2 max-w-2xl text-sm leading-6 text-[#AEBAB1]">
+                Pronađi pravi proizvod i prilagodi prikaz svojim željama.
+              </p>
+            </div>
+
+            <div className="ws-glass-card flex w-fit items-center gap-2 rounded-xl px-3 py-2 text-xs text-[#C7D0C9]">
+              <span className="h-2 w-2 rounded-full bg-[#8EB59F]" />
+              Pronađi svoj stil
+            </div>
           </div>
 
           <CategoryFilter
@@ -318,54 +513,63 @@ export default async function Home() {
         </div>
       </section>
 
-      <footer className="relative z-10 border-t border-amber-100/15 bg-[#111C2D]">
-        <div className="mx-auto max-w-7xl px-6 py-10">
+      {/* PODNOŽJE */}
+      <footer className="relative overflow-hidden border-t border-white/[0.08] bg-[#141816]">
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute -right-20 -top-24 h-64 w-64 rounded-full bg-[#163D30]/20 blur-[100px]"
+        />
+
+        <div className="relative mx-auto max-w-7xl px-6 py-10 sm:py-12">
           <div className="flex flex-col gap-8 md:flex-row md:items-center md:justify-between">
             <div>
-              <p className="text-sm font-semibold tracking-[0.2em] text-[#F5F2EA]">
+              <Link
+                href="/"
+                className="text-sm font-bold tracking-[0.22em] text-[#F3F3EE] transition hover:text-[#B8D5C1]"
+              >
                 WATCH SHOP
-              </p>
+              </Link>
 
-              <p className="mt-2 text-sm text-[#AEBACC]">
+              <p className="mt-2 text-sm text-[#AEBAB1]">
                 Premium satovi i aksesoari
               </p>
             </div>
 
             <nav
               aria-label="Navigacija u podnožju"
-              className="flex flex-wrap gap-x-6 gap-y-3 text-sm text-[#C4CCDA]"
+              className="flex flex-wrap gap-x-6 gap-y-3 text-sm text-[#B9C4BC]"
             >
               <Link
                 href="/about"
-                className="transition hover:text-[#E7CA8B]"
+                className="transition hover:text-[#A9CFB7]"
               >
                 O nama
               </Link>
 
               <Link
                 href="/contact"
-                className="transition hover:text-[#E7CA8B]"
+                className="transition hover:text-[#A9CFB7]"
               >
                 Kontakt
               </Link>
 
               <Link
                 href="/terms"
-                className="transition hover:text-[#E7CA8B]"
+                className="transition hover:text-[#A9CFB7]"
               >
                 Uslovi kupovine
               </Link>
 
               <Link
                 href="/privacy"
-                className="transition hover:text-[#E7CA8B]"
+                className="transition hover:text-[#A9CFB7]"
               >
                 Privatnost
               </Link>
             </nav>
           </div>
 
-          <div className="mt-8 border-t border-white/10 pt-6 text-xs text-[#8996AA]">
+          <div className="mt-8 border-t border-white/[0.08] pt-6 text-xs text-[#849188]">
             © {new Date().getFullYear()} WATCH SHOP. Sva prava zadržana.
           </div>
         </div>
