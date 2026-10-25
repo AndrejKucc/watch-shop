@@ -1,68 +1,74 @@
 @import "tailwindcss";
 
 :root {
-color-scheme: dark;
+  color-scheme: dark;
 
---background: #101827;
---foreground: #f5f2ea;
+  --background: #211812;
+  --foreground: #f4ebdd;
 
---surface: #1b2638;
---surface-light: #243449;
---border: rgba(214, 181, 109, 0.22);
+  --surface: #30231b;
+  --surface-light: #4b3621;
 
---accent: #d6b56d;
---accent-hover: #e7ca8b;
+  --border: rgba(214, 184, 120, 0.28);
 
---text-muted: #b8c0cc;
+  --accent: #d6b878;
+  --accent-hover: #ead4a0;
+
+  --text-muted: #b8a99a;
 }
 
 @theme inline {
---color-background: var(--background);
---color-foreground: var(--foreground);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
 
---font-sans: var(--font-geist-sans);
---font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
 }
 
 html {
-background: var(--background);
+  background: var(--background);
 }
 
 body {
-background:
-radial-gradient(
-ellipse at top left,
-rgba(36, 52, 73, 0.55),
-transparent 48%
-),
-linear-gradient(
-145deg,
-#101827 0%,
-#131d2d 48%,
-#0d1420 100%
-);
+  background:
+    radial-gradient(
+      ellipse at top left,
+      rgba(75, 54, 33, 0.55),
+      transparent 48%
+    ),
+    radial-gradient(
+      ellipse at bottom right,
+      rgba(196, 106, 45, 0.12),
+      transparent 45%
+    ),
+    linear-gradient(
+      145deg,
+      #211812 0%,
+      #2b2018 48%,
+      #17110d 100%
+    );
 
-background-color: var(--background);
-color: var(--foreground);
+  background-color: var(--background);
+  color: var(--foreground);
 
-font-family: Arial, Helvetica, sans-serif;
-min-height: 100vh;
+  font-family: Arial, Helvetica, sans-serif;
+  min-height: 100vh;
 }
 
 ::selection {
-background: rgba(214, 181, 109, 0.35);
-color: #ffffff;
+  background: rgba(214, 184, 120, 0.35);
+  color: #ffffff;
 }
 
 button,
 a {
-transition:
-color 180ms ease,
-background-color 180ms ease,
-border-color 180ms ease;
+  transition:
+    color 180ms ease,
+    background-color 180ms ease,
+    border-color 180ms ease;
 }
 
 :focus-visible {
-outline: 2px solid var(--accent);
-outline-offset: 3px;
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
 }
