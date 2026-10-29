@@ -290,7 +290,7 @@ export default async function Home() {
             </div>
           </div>
 
-          {/* GLAVNA SLIKA SATA */}
+          {/* GLAVNA SLIKA SATA — BEZ DONJEG POLJA I STRELICE */}
           <div className="relative mx-auto w-full max-w-xl lg:max-w-none">
             <div
               aria-hidden="true"
@@ -299,7 +299,7 @@ export default async function Home() {
 
             <div className="ws-glass-card relative overflow-hidden rounded-[2rem] p-3 shadow-[0_25px_80px_rgba(0,0,0,0.25)] sm:rounded-[2.5rem] sm:p-4">
               <div className="ws-watch-image relative isolate flex aspect-[4/4.5] items-center justify-center overflow-hidden rounded-[1.5rem] sm:rounded-[2rem]">
-                {/* Suptilni dekorativni krugovi */}
+                {/* DEKORATIVNI KRUGOVI */}
                 <div
                   aria-hidden="true"
                   className="pointer-events-none absolute left-1/2 top-[42%] h-[75%] w-[75%] -translate-x-1/2 -translate-y-1/2 rounded-full border border-[#D4AF7A]/10"
@@ -310,22 +310,22 @@ export default async function Home() {
                   className="pointer-events-none absolute left-1/2 top-[42%] h-[58%] w-[58%] -translate-x-1/2 -translate-y-1/2 rounded-full border border-[#D4AF7A]/10"
                 />
 
-                {/* STVARNA SLIKA SATA */}
+                {/* SLIKA SATA */}
                 <img
-                  src="/images/hero-watch.jpg"
+                  src="/images/hero-watch.png"
                   alt="Premium sat iz WATCH SHOP kolekcije"
                   fetchPriority="high"
-                  className="absolute inset-0 z-0 h-full w-full object-contain p-5 pb-24 sm:p-8 sm:pb-28"
+                  className="absolute inset-0 z-0 h-full w-full rounded-[1.5rem] object-contain p-5 sm:rounded-[2rem] sm:p-8"
                 />
 
-                {/* Preliv preko donjeg dela slike radi čitljivosti */}
+                {/* TAMNI PRELIV ZA ČITLJIVOST TEKSTA */}
                 <div
                   aria-hidden="true"
-                  className="pointer-events-none absolute inset-0 z-[1] bg-gradient-to-t from-[#1A120D]/95 via-[#1A120D]/15 to-black/10"
+                  className="pointer-events-none absolute inset-0 z-[1] rounded-[1.5rem] bg-gradient-to-t from-[#1A120D]/90 via-[#1A120D]/10 to-black/10 sm:rounded-[2rem]"
                 />
 
-                {/* TEKST PREKO SLIKE */}
-                <div className="relative z-10 mt-auto w-full px-4 pb-28 pt-48 text-center sm:px-6 sm:pb-32">
+                {/* POSTOJEĆI TEKST PREKO SLIKE */}
+                <div className="relative z-10 mt-auto w-full px-4 pb-10 pt-64 text-center sm:px-6 sm:pb-14 sm:pt-72">
                   <p className="text-[10px] font-medium uppercase tracking-[0.35em] text-[#D4AF7A] sm:text-xs">
                     WATCH SHOP · PREMIUM SELECTION
                   </p>
@@ -337,27 +337,6 @@ export default async function Home() {
                   <p className="mx-auto mt-3 max-w-xs text-sm leading-6 text-[#D3C5B3]">
                     Pronađi detalj koji upotpunjuje tvoj stil.
                   </p>
-                </div>
-
-                {/* DONJA TRAKA SA ISPRAVNOM STRELICOM */}
-                <div className="absolute bottom-4 left-4 right-4 z-20 flex items-center justify-between gap-3 rounded-2xl border border-[#D4AF7A]/20 bg-[#241A13]/90 px-4 py-3 backdrop-blur-xl sm:bottom-5 sm:left-5 sm:right-5">
-                  <div className="min-w-0">
-                    <p className="text-[9px] uppercase tracking-[0.22em] text-[#D4AF7A]">
-                      Tvoja sledeća priča
-                    </p>
-
-                    <p className="mt-1 text-sm font-medium text-white">
-                      Počinje pravim detaljem
-                    </p>
-                  </div>
-
-                  <a
-                    href="#satovi"
-                    aria-label="Pogledaj izdvojene satove"
-                    className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-[#CC5500]/40 bg-[#CC5500]/20 text-lg text-[#F0B27A] transition duration-300 hover:scale-105 hover:border-[#D4AF7A]/60 hover:bg-[#CC5500]/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF7A]"
-                  >
-                    <span aria-hidden="true">↗</span>
-                  </a>
                 </div>
               </div>
             </div>
