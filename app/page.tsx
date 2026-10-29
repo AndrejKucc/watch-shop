@@ -290,62 +290,52 @@ export default async function Home() {
             </div>
           </div>
 
-          {/* GLAVNA SLIKA SATA — BEZ DONJEG POLJA I STRELICE */}
-          <div className="relative mx-auto w-full max-w-xl lg:max-w-none">
-            <div
-              aria-hidden="true"
-              className="pointer-events-none absolute inset-8 rounded-full bg-[#D4AF7A]/20 blur-[70px]"
-            />
+         {/* GLAVNA SLIKA SATA */}
+<div className="relative mx-auto w-full max-w-xl lg:max-w-none">
+  <div
+    aria-hidden="true"
+    className="pointer-events-none absolute inset-8 rounded-full bg-[#D4AF7A]/20 blur-[70px]"
+  />
 
-            <div className="ws-glass-card relative overflow-hidden rounded-[2rem] p-3 shadow-[0_25px_80px_rgba(0,0,0,0.25)] sm:rounded-[2.5rem] sm:p-4">
-              <div className="ws-watch-image relative isolate flex aspect-[4/4.5] items-center justify-center overflow-hidden rounded-[1.5rem] sm:rounded-[2rem]">
-                {/* DEKORATIVNI KRUGOVI */}
-                <div
-                  aria-hidden="true"
-                  className="pointer-events-none absolute left-1/2 top-[42%] h-[75%] w-[75%] -translate-x-1/2 -translate-y-1/2 rounded-full border border-[#D4AF7A]/10"
-                />
+  <div className="ws-glass-card relative overflow-hidden rounded-[2rem] p-2 shadow-[0_25px_80px_rgba(0,0,0,0.25)] sm:rounded-[2.5rem] sm:p-3">
+    <div className="ws-watch-image relative isolate flex aspect-[4/4.5] items-center justify-center overflow-hidden rounded-[1.5rem] sm:rounded-[2rem]">
 
-                <div
-                  aria-hidden="true"
-                  className="pointer-events-none absolute left-1/2 top-[42%] h-[58%] w-[58%] -translate-x-1/2 -translate-y-1/2 rounded-full border border-[#D4AF7A]/10"
-                />
+      {/* SLIKA POPUNJAVA CELO POLJE */}
+      <img
+        src="/images/hero-watch.jpg"
+        alt="Premium sat iz WATCH SHOP kolekcije"
+        fetchPriority="high"
+        className="absolute inset-0 z-0 h-full w-full rounded-[1.5rem] object-cover sm:rounded-[2rem]"
+      />
 
-                {/* SLIKA SATA */}
-                <img
-                  src="/images/hero-watch.png"
-                  alt="Premium sat iz WATCH SHOP kolekcije"
-                  fetchPriority="high"
-                  className="absolute inset-0 z-0 h-full w-full rounded-[1.5rem] object-contain p-5 sm:rounded-[2rem] sm:p-8"
-                />
+      {/* TAMNI PRELIV ZA ČITLJIVOST TEKSTA */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 z-[1] rounded-[1.5rem] bg-gradient-to-t from-[#1A120D]/90 via-[#1A120D]/10 to-black/10 sm:rounded-[2rem]"
+      />
 
-                {/* TAMNI PRELIV ZA ČITLJIVOST TEKSTA */}
-                <div
-                  aria-hidden="true"
-                  className="pointer-events-none absolute inset-0 z-[1] rounded-[1.5rem] bg-gradient-to-t from-[#1A120D]/90 via-[#1A120D]/10 to-black/10 sm:rounded-[2rem]"
-                />
+      {/* TEKST PREKO SLIKE — BEZ DONJEG POLJA I STRELICE */}
+      <div className="relative z-10 mt-auto w-full px-4 pb-10 pt-64 text-center sm:px-6 sm:pb-14 sm:pt-72">
+        <p className="text-[10px] font-medium uppercase tracking-[0.35em] text-[#D4AF7A] sm:text-xs">
+          WATCH SHOP · PREMIUM SELECTION
+        </p>
 
-                {/* POSTOJEĆI TEKST PREKO SLIKE */}
-                <div className="relative z-10 mt-auto w-full px-4 pb-10 pt-64 text-center sm:px-6 sm:pb-14 sm:pt-72">
-                  <p className="text-[10px] font-medium uppercase tracking-[0.35em] text-[#D4AF7A] sm:text-xs">
-                    WATCH SHOP · PREMIUM SELECTION
-                  </p>
+        <p className="mt-3 text-2xl font-medium tracking-wide text-[#F5EEE3] sm:text-3xl">
+          Vreme je za pravi izbor.
+        </p>
 
-                  <p className="mt-3 text-2xl font-medium tracking-wide text-[#F5EEE3] sm:text-3xl">
-                    Vreme je za pravi izbor.
-                  </p>
+        <p className="mx-auto mt-3 max-w-xs text-sm leading-6 text-[#D3C5B3]">
+          Pronađi detalj koji upotpunjuje tvoj stil.
+        </p>
+      </div>
+    </div>
+  </div>
 
-                  <p className="mx-auto mt-3 max-w-xs text-sm leading-6 text-[#D3C5B3]">
-                    Pronađi detalj koji upotpunjuje tvoj stil.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div
-              aria-hidden="true"
-              className="pointer-events-none absolute -bottom-5 -right-3 h-24 w-24 rounded-full bg-[#CC5500]/15 blur-3xl"
-            />
-          </div>
+  <div
+    aria-hidden="true"
+    className="pointer-events-none absolute -bottom-5 -right-3 h-24 w-24 rounded-full bg-[#CC5500]/15 blur-3xl"
+  />
+</div>
         </div>
       </section>
 
