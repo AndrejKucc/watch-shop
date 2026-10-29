@@ -302,7 +302,7 @@ export default async function Home() {
 
       {/* SLIKA POPUNJAVA CELO POLJE */}
       <img
-        src="/images/hero-watch.jpg"
+        src="/images/hero-watch.png"
         alt="Premium sat iz WATCH SHOP kolekcije"
         fetchPriority="high"
         className="absolute inset-0 z-0 h-full w-full rounded-[1.5rem] object-cover sm:rounded-[2rem]"
