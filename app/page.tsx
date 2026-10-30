@@ -261,12 +261,7 @@ export default async function Home() {
                 <span aria-hidden="true">↗</span>
               </a>
 
-              <Link
-                href="/satovi"
-                className="ws-secondary-button inline-flex items-center justify-center rounded-2xl px-6 py-3.5 text-sm font-semibold text-[#F1DDBA]"
-              >
-                Istraži satove
-              </Link>
+              
             </div>
 
             <div className="mt-12 flex flex-wrap gap-x-8 gap-y-4 border-t border-white/[0.09] pt-6">
