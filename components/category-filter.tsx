@@ -3,7 +3,7 @@
 import { CompareButton } from "@/components/compare-button";
 import ComparePanel from "@/components/compare-panel";
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { AddToCartButton } from "@/components/cart";
 
 type Product = {
@@ -142,6 +142,18 @@ export default function CategoryFilter({
 
   const [category, setCategory] = useState("sve");
   const [search, setSearch] = useState("");
+
+  // Pretraga se obrađuje tek 250ms nakon poslednjeg unosa.
+  const [debouncedSearch, setDebouncedSearch] = useState("");
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(search);
+    }, 250);
+
+    return () => clearTimeout(timer);
+  }, [search]);
+
   const [onlyInStock, setOnlyInStock] = useState(false);
   const [sort, setSort] = useState("newest");
   const [minPrice, setMinPrice] = useState("");
@@ -242,7 +254,7 @@ export default function CategoryFilter({
     (min !== null && max !== null && min > max);
 
   const filteredProducts = useMemo(() => {
-    const normalizedSearch = normalize(search);
+    const normalizedSearch = normalize(debouncedSearch);
 
     return products
       .filter((product) => {
@@ -393,7 +405,7 @@ export default function CategoryFilter({
   }, [
     products,
     category,
-    search,
+    debouncedSearch,
     onlyInStock,
     sort,
     min,
@@ -661,10 +673,7 @@ export default function CategoryFilter({
               strokeWidth="1.7"
             >
               <circle cx="11" cy="11" r="7" />
-              <path
-                d="m20 20-4-4"
-                strokeLinecap="round"
-              />
+              <path d="m20 20-4-4" strokeLinecap="round" />
             </svg>
 
             <input
@@ -964,7 +973,9 @@ export default function CategoryFilter({
       <div className="mt-8 flex flex-col gap-4 sm:mt-10 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="text-xs font-medium uppercase tracking-[0.16em] text-[#B9A58C]">
-            {hasActiveFilters ? "Rezultati pretrage" : `Kolekcija · ${productLabel}`}
+            {hasActiveFilters
+              ? "Rezultati pretrage"
+              : `Kolekcija · ${productLabel}`}
           </p>
 
           <div className="mt-2 flex items-baseline gap-2">
@@ -1022,10 +1033,7 @@ export default function CategoryFilter({
                           strokeWidth="1.2"
                         >
                           <circle cx="12" cy="12" r="8" />
-                          <path
-                            d="M12 7v5l3 2"
-                            strokeLinecap="round"
-                          />
+                          <path d="M12 7v5l3 2" strokeLinecap="round" />
                         </svg>
                         <span className="text-xs uppercase tracking-[0.16em]">
                           Watch Shop
@@ -1142,10 +1150,7 @@ export default function CategoryFilter({
                 strokeWidth="1.4"
               >
                 <circle cx="11" cy="11" r="7" />
-                <path
-                  d="m20 20-4-4"
-                  strokeLinecap="round"
-                />
+                <path d="m20 20-4-4" strokeLinecap="round" />
               </svg>
             </div>
 
