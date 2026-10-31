@@ -42,6 +42,7 @@ export async function POST(request: Request) {
       .select(
         `
         id,
+        order_number,
         customer_name,
         phone,
         email,
@@ -69,6 +70,8 @@ export async function POST(request: Request) {
         { status: 404 }
       );
     }
+
+    const orderNumber = order.order_number || order.id;
 
     console.log("CONFIRMATION: porudžbina pronađena");
     console.log("CONFIRMATION: email postoji:", Boolean(order.email));
@@ -181,7 +184,7 @@ export async function POST(request: Request) {
               Broj porudžbine
             </div>
             <div style="font-size:16px;font-weight:700;">
-              ${order.id}
+              ${orderNumber}
             </div>
           </div>
 
@@ -266,7 +269,7 @@ export async function POST(request: Request) {
               Broj porudžbine
             </div>
             <div style="font-size:16px;font-weight:700;">
-              ${order.id}
+              ${orderNumber}
             </div>
           </div>
 
@@ -343,7 +346,7 @@ export async function POST(request: Request) {
         body: JSON.stringify({
           from: "onboarding@resend.dev",
           to: [order.email],
-          subject: `WATCH SHOP — potvrda porudžbine ${order.id}`,
+          subject: `WATCH SHOP — potvrda porudžbine ${orderNumber}`,
           html: html,
         }),
       }
@@ -383,7 +386,7 @@ export async function POST(request: Request) {
         body: JSON.stringify({
           from: "onboarding@resend.dev",
           to: ["kucc.andrej@gmail.com"],
-          subject: `WATCH SHOP — NOVA PORUDŽBINA ${order.id}`,
+          subject: `WATCH SHOP — NOVA PORUDŽBINA ${orderNumber}`,
           html: sellerHtml,
         }),
       }

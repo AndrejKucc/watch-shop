@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase";
 
 type Order = {
   id: string;
+  order_number: string | null;
   customer_name: string;
   phone: string;
   email: string | null;
@@ -75,7 +76,7 @@ export default function AdminOrdersPage() {
   useEffect(() => {
     const supabase = createClient();
 
-    loadOrders();
+    void loadOrders();
 
     const channel = supabase
       .channel("admin-orders-realtime")
@@ -89,6 +90,8 @@ export default function AdminOrdersPage() {
         (payload) => {
           if (payload.eventType === "INSERT") {
             const newOrder = payload.new as Order;
+
+            if (newOrder.status === "completed") return;
 
             setOrders((currentOrders) => {
               const alreadyExists = currentOrders.some(
@@ -108,13 +111,47 @@ export default function AdminOrdersPage() {
           if (payload.eventType === "UPDATE") {
             const updatedOrder = payload.new as Order;
 
-            setOrders((currentOrders) =>
-              currentOrders.map((order) =>
+            if (updatedOrder.status === "completed") {
+              setOrders((currentOrders) =>
+                currentOrders.filter(
+                  (order) => order.id !== updatedOrder.id
+                )
+              );
+
+              setOrderItemsByOrderId((current) => {
+                const next = { ...current };
+                delete next[updatedOrder.id];
+                return next;
+              });
+
+              setDetailsError((current) => {
+                const next = { ...current };
+                delete next[updatedOrder.id];
+                return next;
+              });
+
+              setExpandedOrderId((current) =>
+                current === updatedOrder.id ? null : current
+              );
+
+              return;
+            }
+
+            setOrders((currentOrders) => {
+              const exists = currentOrders.some(
+                (order) => order.id === updatedOrder.id
+              );
+
+              if (!exists) {
+                return [updatedOrder, ...currentOrders];
+              }
+
+              return currentOrders.map((order) =>
                 order.id === updatedOrder.id
                   ? { ...order, ...updatedOrder }
                   : order
-              )
-            );
+              );
+            });
           }
 
           if (payload.eventType === "DELETE") {
@@ -164,8 +201,9 @@ export default function AdminOrdersPage() {
     const { data, error } = await supabase
       .from("orders")
       .select(
-        "id, customer_name, phone, email, address, settlement, city, postal_code, payment_method, status, total, created_at"
+        "id, order_number, customer_name, phone, email, address, settlement, city, postal_code, payment_method, status, total, created_at"
       )
+      .neq("status", "completed")
       .order("created_at", { ascending: false });
 
     if (error) {
@@ -249,6 +287,32 @@ export default function AdminOrdersPage() {
       console.error(error);
       setMessage("Greška pri promeni statusa: " + error.message);
       setStatusUpdatingId(null);
+      return;
+    }
+
+    if (newStatus === "completed") {
+      setOrders((currentOrders) =>
+        currentOrders.filter((order) => order.id !== orderId)
+      );
+
+      setOrderItemsByOrderId((current) => {
+        const next = { ...current };
+        delete next[orderId];
+        return next;
+      });
+
+      setDetailsError((current) => {
+        const next = { ...current };
+        delete next[orderId];
+        return next;
+      });
+
+      setExpandedOrderId(null);
+      setStatusUpdatingId(null);
+      setMessage(
+        "Porudžbina je završena i uklonjena iz aktivnog pregleda."
+      );
+
       return;
     }
 
@@ -431,7 +495,7 @@ export default function AdminOrdersPage() {
                     </p>
 
                     <p className="mt-1 break-all font-mono text-sm text-[#d6b878]">
-                      {order.id}
+                      {order.order_number || order.id}
                     </p>
                   </div>
 
@@ -553,8 +617,7 @@ export default function AdminOrdersPage() {
                               Način plaćanja:{" "}
                             </dt>
                             <dd className="inline">
-                              {order.payment_method ===
-                              "cash_on_delivery"
+                              {order.payment_method === "cash_on_delivery"
                                 ? "Pouzećem"
                                 : order.payment_method}
                             </dd>

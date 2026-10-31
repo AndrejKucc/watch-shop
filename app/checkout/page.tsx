@@ -7,6 +7,7 @@ import { useCart } from "@/components/cart";
 
 type OrderResult = {
   order_id: string;
+  order_number: string;
   total: number;
 };
 
@@ -152,8 +153,22 @@ export default function CheckoutPage() {
       return;
     }
 
-    const orderResult = {
+    const { data: orderDetails, error: orderDetailsError } = await supabase
+      .from("orders")
+      .select("order_number")
+      .eq("id", result.order_id)
+      .single();
+
+    if (orderDetailsError) {
+      console.error(
+        "GREŠKA PRI ČITANJU BROJA PORUDŽBINE:",
+        orderDetailsError
+      );
+    }
+
+    const orderResult: OrderResult = {
       order_id: result.order_id,
+      order_number: orderDetails?.order_number || result.order_id,
       total: Number(result.total),
     };
 
@@ -238,8 +253,8 @@ export default function CheckoutPage() {
                   Broj porudžbine
                 </span>
 
-                <span className="break-all font-mono text-sm text-[#f4ebdd] sm:text-right">
-                  {placedOrder.order_id}
+                <span className="font-mono text-sm font-semibold text-[#ead4a0] sm:text-right">
+                  {placedOrder.order_number}
                 </span>
               </div>
 
