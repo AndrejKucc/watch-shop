@@ -43,22 +43,54 @@ type CouponValidationResult = {
   message: string;
 };
 
+export type VipStatus = {
+  lifetime_spend: number;
+  points_balance: number;
+  points_value: number;
+  vip_tier: string;
+  next_tier_spend: number | null;
+  progress_percent: number;
+};
+
+type VipStatusResult = {
+  lifetime_spend: number | string;
+  points_balance: number | string;
+  points_value: number | string;
+  vip_tier: string;
+  next_tier_spend: number | string | null;
+  progress_percent: number | string;
+};
+
 type CartContextValue = {
   items: CartItem[];
   totalQuantity: number;
   totalPrice: number;
+
   appliedCoupon: AppliedCoupon | null;
   couponDiscount: number;
+
   finalTotal: number;
+
   couponLoading: boolean;
   couponMessage: string;
+
+  vipStatus: VipStatus | null;
+  vipLoading: boolean;
+  vipPointsToRedeem: number;
+  vipPointsDiscount: number;
+  vipMessage: string;
+
   addToCart: (product: CartProduct) => void;
   increaseQuantity: (id: string) => void;
   decreaseQuantity: (id: string) => void;
   removeFromCart: (id: string) => void;
   clearCart: () => void;
+
   applyCoupon: (code: string) => Promise<boolean>;
   removeCoupon: () => void;
+
+  setVipPointsToRedeem: (points: number) => void;
+  refreshVipStatus: () => Promise<void>;
 };
 
 const CartContext = createContext<CartContextValue | null>(null);
@@ -72,6 +104,62 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   const [couponLoading, setCouponLoading] = useState(false);
   const [couponMessage, setCouponMessage] = useState("");
+
+  const [vipStatus, setVipStatus] = useState<VipStatus | null>(null);
+  const [vipLoading, setVipLoading] = useState(true);
+  const [vipPointsToRedeem, setVipPointsToRedeemState] = useState(0);
+  const [vipMessage, setVipMessage] = useState("");
+
+  async function refreshVipStatus() {
+    try {
+      const supabase = createClient();
+
+      const {
+        data: { user },
+        error: userError,
+      } = await supabase.auth.getUser();
+
+      if (userError || !user) {
+        setVipStatus(null);
+        setVipPointsToRedeemState(0);
+        return;
+      }
+
+      const { data, error } = await supabase.rpc("get_my_vip_status");
+
+      if (error) {
+        console.error("Greška pri učitavanju VIP statusa:", error);
+        setVipStatus(null);
+        return;
+      }
+
+      const result = (
+        Array.isArray(data) ? data[0] : data
+      ) as VipStatusResult | null;
+
+      if (!result) {
+        setVipStatus(null);
+        return;
+      }
+
+      setVipStatus({
+        lifetime_spend: Number(result.lifetime_spend) || 0,
+        points_balance: Number(result.points_balance) || 0,
+        points_value: Number(result.points_value) || 0,
+        vip_tier: result.vip_tier,
+        next_tier_spend:
+          result.next_tier_spend === null
+            ? null
+            : Number(result.next_tier_spend),
+        progress_percent: Number(result.progress_percent) || 0,
+      });
+    } catch (error) {
+      console.error("Greška pri učitavanju VIP statusa:", error);
+      setVipStatus(null);
+    } finally {
+      setVipLoading(false);
+    }
+  }
 
   useEffect(() => {
     try {
@@ -151,12 +239,30 @@ export function CartProvider({ children }: { children: ReactNode }) {
         window.localStorage.removeItem(COUPON_STORAGE_KEY);
       }
     } catch (error) {
-      console.error(
-        "Greška pri čuvanju kupona:",
-        error
-      );
+      console.error("Greška pri čuvanju kupona:", error);
     }
   }, [appliedCoupon, isLoaded]);
+
+  useEffect(() => {
+    const supabase = createClient();
+
+    refreshVipStatus();
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange(() => {
+      setVipPointsToRedeemState(0);
+      setVipMessage("");
+
+      setTimeout(() => {
+        refreshVipStatus();
+      }, 0);
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, []);
 
   function addToCart(product: CartProduct) {
     if (product.stock <= 0) {
@@ -234,6 +340,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
     setItems([]);
     setAppliedCoupon(null);
     setCouponMessage("");
+    setVipPointsToRedeemState(0);
+    setVipMessage("");
   }
 
   function removeCoupon() {
@@ -257,13 +365,100 @@ export function CartProvider({ children }: { children: ReactNode }) {
       )
     : 0;
 
-  const finalTotal = Math.max(0, totalPrice - couponDiscount);
+  const vipPointsDiscount = vipPointsToRedeem * 2;
+
+  const finalTotal = Math.max(
+    0,
+    totalPrice - couponDiscount - vipPointsDiscount
+  );
+
+  function setVipPointsToRedeem(points: number) {
+    if (points <= 0) {
+      setVipPointsToRedeemState(0);
+      setVipMessage("VIP poeni nisu iskorišćeni.");
+      return;
+    }
+
+    if (appliedCoupon) {
+      setVipMessage(
+        "Prvo ukloni kupon da bi koristio VIP poene."
+      );
+      return;
+    }
+
+    if (!vipStatus) {
+      setVipMessage(
+        "Moraš biti prijavljen da bi koristio VIP poene."
+      );
+      return;
+    }
+
+    const maximumPoints = Math.min(
+      vipStatus.points_balance,
+      Math.floor(totalPrice / 100) * 50
+    );
+
+    const roundedPoints =
+      Math.floor(points / 50) * 50;
+
+    if (roundedPoints < 50) {
+      setVipPointsToRedeemState(0);
+      setVipMessage(
+        "VIP poeni se koriste u koracima od 50 poena."
+      );
+      return;
+    }
+
+    if (roundedPoints > maximumPoints) {
+      setVipPointsToRedeemState(
+        Math.floor(maximumPoints / 50) * 50
+      );
+
+      setVipMessage(
+        `Možeš iskoristiti najviše ${Math.floor(
+          maximumPoints / 50
+        ) * 50} poena za ovu porudžbinu.`
+      );
+
+      return;
+    }
+
+    setVipPointsToRedeemState(roundedPoints);
+    setVipMessage(
+      `Uspešno si izabrao ${roundedPoints} VIP poena.`
+    );
+  }
+
+  useEffect(() => {
+    if (vipPointsToRedeem <= 0 || !vipStatus) {
+      return;
+    }
+
+    const maximumPoints = Math.min(
+      vipStatus.points_balance,
+      Math.floor(totalPrice / 100) * 50
+    );
+
+    const allowedPoints =
+      Math.floor(maximumPoints / 50) * 50;
+
+    if (vipPointsToRedeem > allowedPoints) {
+      setVipPointsToRedeemState(allowedPoints);
+    }
+  }, [totalPrice, vipStatus, vipPointsToRedeem]);
 
   async function applyCoupon(code: string): Promise<boolean> {
     const normalizedCode = code.trim().toUpperCase();
 
     if (!normalizedCode) {
       setCouponMessage("Unesi kod kupona.");
+      return false;
+    }
+
+    if (vipPointsToRedeem > 0) {
+      setCouponMessage(
+        "Prvo ukloni izabrane VIP poene da bi koristio kupon."
+      );
       return false;
     }
 
@@ -316,9 +511,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       return true;
     } catch (error) {
       console.error("Greška pri primeni kupona:", error);
-      setCouponMessage(
-        "Došlo je do greške. Pokušaj ponovo."
-      );
+      setCouponMessage("Došlo je do greške. Pokušaj ponovo.");
       return false;
     } finally {
       setCouponLoading(false);
@@ -336,13 +529,24 @@ export function CartProvider({ children }: { children: ReactNode }) {
         finalTotal,
         couponLoading,
         couponMessage,
+
+        vipStatus,
+        vipLoading,
+        vipPointsToRedeem,
+        vipPointsDiscount,
+        vipMessage,
+
         addToCart,
         increaseQuantity,
         decreaseQuantity,
         removeFromCart,
         clearCart,
+
         applyCoupon,
         removeCoupon,
+
+        setVipPointsToRedeem,
+        refreshVipStatus,
       }}
     >
       {children}

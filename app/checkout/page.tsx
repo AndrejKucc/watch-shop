@@ -74,6 +74,14 @@ export default function CheckoutPage() {
     appliedCoupon,
     couponDiscount,
     finalTotal,
+    vipStatus,
+    vipLoading,
+    vipPointsToRedeem,
+    vipPointsDiscount,
+    vipMessage,
+    setVipPointsToRedeem,
+    refreshVipStatus,
+    removeCoupon,
   } = useCart();
 
   const [fullName, setFullName] = useState("");
@@ -102,6 +110,15 @@ export default function CheckoutPage() {
     ).slice(0, 8);
   }, [city]);
 
+  const maximumRedeemablePoints = vipStatus
+    ? Math.floor(
+        Math.min(
+          vipStatus.points_balance,
+          Math.floor(totalPrice / 100) * 50
+        ) / 50
+      ) * 50
+    : 0;
+
   function selectCitySuggestion(entry: {
     name: string;
     postalCode: string;
@@ -111,11 +128,23 @@ export default function CheckoutPage() {
     setShowCitySuggestions(false);
   }
 
+  function handleRemoveCouponForVip() {
+    removeCoupon();
+    setVipPointsToRedeem(0);
+  }
+
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
     if (items.length === 0) {
       setMessage("Greška: korpa je prazna.");
+      return;
+    }
+
+    if (appliedCoupon && vipPointsToRedeem > 0) {
+      setMessage(
+        "Ne možeš koristiti kupon i VIP poene istovremeno. Ukloni jedno od ta dva."
+      );
       return;
     }
 
@@ -139,6 +168,7 @@ export default function CheckoutPage() {
       p_postal_code: postalCode,
       p_items: rpcItems,
       p_coupon_code: appliedCoupon?.code ?? null,
+      p_points_to_redeem: vipPointsToRedeem,
     });
 
     if (error) {
@@ -188,6 +218,11 @@ export default function CheckoutPage() {
     };
 
     setPlacedOrder(orderResult);
+
+    // Osvežavanje VIP stanja nakon iskorišćavanja poena.
+    if (vipPointsToRedeem > 0) {
+      await refreshVipStatus();
+    }
 
     // Preuzimanje kupona koji je kupac osvojio ovom porudžbinom.
     try {
@@ -338,7 +373,9 @@ export default function CheckoutPage() {
               🛒
             </div>
 
-            <h1 className="mt-6 text-2xl font-semibold">Korpa je prazna</h1>
+            <h1 className="mt-6 text-2xl font-semibold">
+              Korpa je prazna
+            </h1>
 
             <p className="mt-2 text-[#b8a99a]">
               Dodaj neki sat pre nego što nastaviš na porudžbinu.
@@ -534,28 +571,27 @@ export default function CheckoutPage() {
                     placeholder="npr. Beograd"
                   />
 
-                  {showCitySuggestions &&
-                    citySuggestions.length > 0 && (
-                      <ul className="absolute z-20 mt-2 max-h-56 w-full overflow-y-auto rounded-2xl border border-[#d6b878]/25 bg-[#30231b] shadow-xl">
-                        {citySuggestions.map((entry) => (
-                          <li key={entry.name}>
-                            <button
-                              type="button"
-                              onMouseDown={() =>
-                                selectCitySuggestion(entry)
-                              }
-                              className="flex min-h-12 w-full items-center justify-between gap-4 px-4 py-3 text-left text-sm transition hover:bg-[#4b3621] hover:text-[#ead4a0]"
-                            >
-                              <span>{entry.name}</span>
+                  {showCitySuggestions && citySuggestions.length > 0 && (
+                    <ul className="absolute z-20 mt-2 max-h-56 w-full overflow-y-auto rounded-2xl border border-[#d6b878]/25 bg-[#30231b] shadow-xl">
+                      {citySuggestions.map((entry) => (
+                        <li key={entry.name}>
+                          <button
+                            type="button"
+                            onMouseDown={() =>
+                              selectCitySuggestion(entry)
+                            }
+                            className="flex min-h-12 w-full items-center justify-between gap-4 px-4 py-3 text-left text-sm transition hover:bg-[#4b3621] hover:text-[#ead4a0]"
+                          >
+                            <span>{entry.name}</span>
 
-                              <span className="text-[#b8a99a]">
-                                {entry.postalCode}
-                              </span>
-                            </button>
-                          </li>
-                        ))}
-                      </ul>
-                    )}
+                            <span className="text-[#b8a99a]">
+                              {entry.postalCode}
+                            </span>
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                 </div>
 
                 <div>
@@ -666,6 +702,172 @@ export default function CheckoutPage() {
               ))}
             </div>
 
+            {/* VIP PROGRAM */}
+            <div className="mt-6 rounded-2xl border border-[#d6b878]/30 bg-[#17110d]/65 p-5">
+              <div className="flex items-center justify-between gap-3">
+                <div>
+                  <p className="text-xs font-medium uppercase tracking-[0.2em] text-[#d6b878]">
+                    WATCH SHOP
+                  </p>
+
+                  <h3 className="mt-1 text-lg font-semibold text-[#ead4a0]">
+                    VIP program
+                  </h3>
+                </div>
+
+                <span className="rounded-full border border-[#d6b878]/35 bg-[#d6b878]/10 px-3 py-1 text-xs font-semibold text-[#ead4a0]">
+                  {vipLoading ? "..." : vipStatus?.vip_tier || "VIP"}
+                </span>
+              </div>
+
+              {vipLoading ? (
+                <p className="mt-4 text-sm text-[#b8a99a]">
+                  Učitavanje VIP statusa...
+                </p>
+              ) : vipStatus ? (
+                <>
+                  <div className="mt-4 flex items-center justify-between gap-3">
+                    <span className="text-sm text-[#b8a99a]">
+                      Raspoloživi poeni
+                    </span>
+
+                    <span className="text-xl font-bold text-[#ead4a0]">
+                      {vipStatus.points_balance.toLocaleString("sr-RS")}
+                    </span>
+                  </div>
+
+                  <p className="mt-1 text-xs text-[#8f8071]">
+                    Vrednost poena:{" "}
+                    {vipStatus.points_value.toLocaleString("sr-RS")} RSD
+                  </p>
+
+                  {appliedCoupon && (
+                    <div className="mt-5 rounded-xl border border-[#d6b878]/20 bg-[#211812]/70 p-4">
+                      <p className="text-sm text-[#b8a99a]">
+                        Već koristiš kupon{" "}
+                        <span className="font-mono font-semibold text-[#ead4a0]">
+                          {appliedCoupon.code}
+                        </span>
+                        .
+                      </p>
+
+                      <p className="mt-2 text-xs leading-5 text-[#8f8071]">
+                        Možeš koristiti kupon ili VIP poene, ali ne oba
+                        istovremeno.
+                      </p>
+
+                      <button
+                        type="button"
+                        onClick={handleRemoveCouponForVip}
+                        className="mt-3 w-full rounded-xl border border-[#d6b878]/40 bg-[#d6b878]/10 px-4 py-2.5 text-xs font-semibold text-[#ead4a0] transition hover:bg-[#d6b878]/20"
+                      >
+                        Ukloni kupon i koristi VIP poene
+                      </button>
+                    </div>
+                  )}
+
+                  <div className="mt-5 border-t border-[#d6b878]/15 pt-4">
+                    <label
+                      htmlFor="vipPoints"
+                      className="block text-sm font-medium text-[#e2d4c2]"
+                    >
+                      Koliko poena želiš da iskoristiš?
+                    </label>
+
+                    <p className="mt-1 text-xs leading-5 text-[#8f8071]">
+                      50 poena = 100 RSD popusta.
+                    </p>
+
+                    <div className="mt-3 flex items-center gap-3">
+                      <input
+                        id="vipPoints"
+                        type="number"
+                        min={0}
+                        max={maximumRedeemablePoints}
+                        step={50}
+                        value={vipPointsToRedeem}
+                        disabled={
+                          Boolean(appliedCoupon) ||
+                          maximumRedeemablePoints < 50
+                        }
+                        onChange={(event) =>
+                          setVipPointsToRedeem(
+                            Number(event.target.value)
+                          )
+                        }
+                        className="min-w-0 flex-1 rounded-xl border border-[#d6b878]/25 bg-[#211812] px-4 py-3 text-[#f4ebdd] outline-none focus:border-[#d6b878]/60 disabled:cursor-not-allowed disabled:opacity-50"
+                      />
+
+                      <button
+                        type="button"
+                        disabled={
+                          Boolean(appliedCoupon) ||
+                          maximumRedeemablePoints < 50
+                        }
+                        onClick={() =>
+                          setVipPointsToRedeem(
+                            maximumRedeemablePoints
+                          )
+                        }
+                        className="rounded-xl border border-[#d6b878]/35 px-3 py-3 text-xs font-semibold text-[#ead4a0] transition hover:bg-[#d6b878]/10 disabled:cursor-not-allowed disabled:opacity-40"
+                      >
+                        Maksimum
+                      </button>
+                    </div>
+
+                    {vipPointsToRedeem > 0 && (
+                      <div className="mt-3 flex items-center justify-between gap-3 text-sm">
+                        <span className="text-[#b8a99a]">
+                          VIP popust
+                        </span>
+
+                        <span className="font-semibold text-green-400">
+                          -{vipPointsDiscount.toFixed(2)} RSD
+                        </span>
+                      </div>
+                    )}
+
+                    {maximumRedeemablePoints < 50 &&
+                      vipPointsToRedeem === 0 && (
+                        <p className="mt-3 text-xs leading-5 text-[#8f8071]">
+                          Trenutno nemaš dovoljno poena za ovu porudžbinu.
+                        </p>
+                      )}
+
+                    {vipMessage && (
+                      <p className="mt-3 text-xs leading-5 text-[#d6b878]">
+                        {vipMessage}
+                      </p>
+                    )}
+
+                    {vipPointsToRedeem > 0 && (
+                      <button
+                        type="button"
+                        onClick={() => setVipPointsToRedeem(0)}
+                        className="mt-3 text-xs text-[#b8a99a] underline underline-offset-4 transition hover:text-[#ead4a0]"
+                      >
+                        Ukloni VIP poene
+                      </button>
+                    )}
+                  </div>
+                </>
+              ) : (
+                <div className="mt-4">
+                  <p className="text-sm leading-6 text-[#b8a99a]">
+                    Prijavi se na svoj nalog da bi sakupljao i koristio VIP
+                    poene.
+                  </p>
+
+                  <Link
+                    href="/nalog/prijava"
+                    className="mt-3 inline-flex text-sm font-semibold text-[#ead4a0] underline underline-offset-4"
+                  >
+                    Prijavi se
+                  </Link>
+                </div>
+              )}
+            </div>
+
             <div className="mt-6 space-y-3 border-t border-[#d6b878]/20 pt-6">
               <div className="flex items-center justify-between text-sm">
                 <span className="text-[#b8a99a]">Proizvodi</span>
@@ -701,10 +903,22 @@ export default function CheckoutPage() {
                   </div>
                 </>
               )}
+
+              {vipPointsToRedeem > 0 && (
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-[#b8a99a]">
+                    Iskorišćeni VIP poeni
+                  </span>
+
+                  <span className="font-semibold text-green-400">
+                    -{vipPointsDiscount.toFixed(2)} RSD
+                  </span>
+                </div>
+              )}
             </div>
 
             <div className="mt-6 border-t border-[#d6b878]/20 pt-6">
-              {appliedCoupon && (
+              {(appliedCoupon || vipPointsToRedeem > 0) && (
                 <p className="text-sm text-[#b8a99a] line-through">
                   {totalPrice.toFixed(2)} RSD
                 </p>

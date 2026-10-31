@@ -29,6 +29,26 @@ type CustomerCoupon = {
   source_order_number: string | null;
 };
 
+type VipStatus = {
+  lifetime_spend: number;
+  points_balance: number;
+  points_value: number;
+  vip_tier: string;
+  next_tier_spend: number | null;
+  progress_percent: number;
+};
+
+type VipLedgerEntry = {
+  id: string;
+  order_id: string | null;
+  order_number: string | null;
+  transaction_type: string;
+  points_change: number;
+  amount_rsd: number;
+  description: string | null;
+  created_at: string;
+};
+
 const STATUS_STEPS = [
   { value: "new", label: "Poručena" },
   { value: "confirmed", label: "Potvrđena" },
@@ -37,6 +57,13 @@ const STATUS_STEPS = [
 
 function formatDate(value: string) {
   return new Date(value).toLocaleString("sr-RS");
+}
+
+function formatRsd(value: number) {
+  return Number(value || 0).toLocaleString("sr-RS", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
 }
 
 function OrderStatus({ status }: { status: string }) {
@@ -97,6 +124,42 @@ function OrderStatus({ status }: { status: string }) {
   );
 }
 
+function VipTierLabel({ tier }: { tier: string }) {
+  const normalized = tier.toLowerCase();
+
+  if (normalized === "gold") return "GOLD";
+  if (normalized === "silver") return "SILVER";
+  if (normalized === "bronze") return "BRONZE";
+
+  return tier.toUpperCase();
+}
+
+function VipTierDescription({ tier }: { tier: string }) {
+  const normalized = tier.toLowerCase();
+
+  if (normalized === "gold") {
+    return "Dostigao si najviši VIP nivo. Uživaj u pogodnostima!";
+  }
+
+  if (normalized === "silver") {
+    return "Odlično napreduješ! Nastavi da kupuješ i približi se Gold nivou.";
+  }
+
+  return "Svaka kupovina te približava Silver nivou. Sakupljaj VIP poene!";
+}
+
+function VipHistoryLabel({ entry }: { entry: VipLedgerEntry }) {
+  if (entry.transaction_type === "purchase_completed") {
+    return "Poeni osvojeni kupovinom";
+  }
+
+  if (entry.transaction_type === "redeemed") {
+    return "Iskorišćeni VIP poeni";
+  }
+
+  return entry.description || "VIP transakcija";
+}
+
 export default function AccountPage() {
   const router = useRouter();
 
@@ -113,6 +176,14 @@ export default function AccountPage() {
   const [couponsError, setCouponsError] = useState("");
 
   const [copiedCode, setCopiedCode] = useState("");
+
+  const [vipStatus, setVipStatus] = useState<VipStatus | null>(null);
+  const [vipLoading, setVipLoading] = useState(true);
+  const [vipError, setVipError] = useState("");
+
+  const [vipLedger, setVipLedger] = useState<VipLedgerEntry[]>([]);
+  const [vipLedgerLoading, setVipLedgerLoading] = useState(true);
+  const [vipLedgerError, setVipLedgerError] = useState("");
 
   useEffect(() => {
     const supabase = createClient();
@@ -158,6 +229,63 @@ export default function AccountPage() {
       setCouponsLoading(false);
     }
 
+    async function loadVipStatus() {
+      const { data, error } = await supabase.rpc("get_my_vip_status");
+
+      if (!active) return;
+
+      if (error) {
+        console.error("Greška pri učitavanju VIP statusa:", error);
+        setVipError("VIP status trenutno nije moguće učitati.");
+        setVipLoading(false);
+        return;
+      }
+
+      const result = Array.isArray(data) ? data[0] : data;
+
+      if (!result) {
+        setVipStatus(null);
+        setVipLoading(false);
+        return;
+      }
+
+      setVipStatus({
+        lifetime_spend: Number(result.lifetime_spend || 0),
+        points_balance: Number(result.points_balance || 0),
+        points_value: Number(result.points_value || 0),
+        vip_tier: result.vip_tier || result.tier || "Bronze",
+        next_tier_spend:
+          result.next_tier_spend === null ||
+          result.next_tier_spend === undefined
+            ? null
+            : Number(result.next_tier_spend),
+        progress_percent: Math.min(
+          100,
+          Math.max(0, Number(result.progress_percent || 0))
+        ),
+      });
+
+      setVipError("");
+      setVipLoading(false);
+    }
+
+    async function loadVipLedger() {
+      const { data, error } = await supabase.rpc("get_my_vip_ledger");
+
+      if (!active) return;
+
+      if (error) {
+        console.error("Greška pri učitavanju VIP istorije:", error);
+        setVipLedgerError("Istorija VIP poena trenutno nije dostupna.");
+        setVipLedgerLoading(false);
+        return;
+      }
+
+      setVipLedger(data || []);
+      setVipLedgerError("");
+      setVipLedgerLoading(false);
+    }
+
     async function loadAccount() {
       const {
         data: { user },
@@ -174,7 +302,12 @@ export default function AccountPage() {
       setUser(user);
       setLoading(false);
 
-      await Promise.all([loadOrders(user.id), loadCoupons()]);
+      await Promise.all([
+        loadOrders(user.id),
+        loadCoupons(),
+        loadVipStatus(),
+        loadVipLedger(),
+      ]);
 
       if (!active) return;
 
@@ -191,6 +324,8 @@ export default function AccountPage() {
           () => {
             void loadOrders(user.id);
             void loadCoupons();
+            void loadVipStatus();
+            void loadVipLedger();
           }
         )
         .subscribe((status) => {
@@ -248,6 +383,15 @@ export default function AccountPage() {
   }
 
   if (!user) return null;
+
+  const normalizedTier = vipStatus?.vip_tier.toLowerCase() || "bronze";
+
+  const tierColor =
+    normalizedTier === "gold"
+      ? "border-[#ead4a0]/50 bg-[#d6b878]/15 text-[#ead4a0]"
+      : normalizedTier === "silver"
+        ? "border-[#c8c8c8]/40 bg-[#c8c8c8]/10 text-[#dedede]"
+        : "border-[#bd9650]/40 bg-[#bd9650]/10 text-[#d6b878]";
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-[#211812] via-[#2b2018] to-[#17110d] px-5 py-16 text-[#f4ebdd]">
@@ -313,6 +457,298 @@ export default function AccountPage() {
               {error}
             </p>
           )}
+        </section>
+
+        {/* VIP PROGRAM */}
+        <section className="mt-8 overflow-hidden rounded-3xl border border-[#d6b878]/30 bg-gradient-to-br from-[#30231b] via-[#2b2018] to-[#211812] shadow-[inset_0_1px_0_rgba(234,212,160,0.08),0_12px_40px_rgba(0,0,0,0.2)]">
+          <div className="border-b border-[#d6b878]/20 bg-gradient-to-r from-[#4b3621]/40 to-transparent p-6 sm:p-8">
+            <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#d6b878]">
+              WATCH SHOP REWARDS
+            </p>
+
+            <div className="mt-3 flex flex-wrap items-center justify-between gap-4">
+              <h2 className="text-2xl font-bold text-[#f4ebdd]">
+                Moj VIP status
+              </h2>
+
+              {!vipLoading && vipStatus && (
+                <span
+                  className={`rounded-full border px-4 py-2 text-xs font-bold tracking-[0.15em] ${tierColor}`}
+                >
+                  {VipTierLabel({ tier: vipStatus.vip_tier })}
+                </span>
+              )}
+            </div>
+
+            <p className="mt-2 text-sm leading-6 text-[#b8a99a]">
+              Sakupljaj poene kupovinom i napreduj kroz VIP nivoe.
+            </p>
+          </div>
+
+          {vipLoading ? (
+            <div className="p-6 sm:p-8">
+              <p className="text-sm text-[#b8a99a]">
+                Učitavanje VIP statusa...
+              </p>
+            </div>
+          ) : vipError ? (
+            <div className="p-6 sm:p-8">
+              <p className="rounded-xl border border-[#c46a2d]/30 bg-[#c46a2d]/10 p-4 text-sm text-[#e8a078]">
+                {vipError}
+              </p>
+            </div>
+          ) : vipStatus ? (
+            <div className="p-6 sm:p-8">
+              <p className="text-sm leading-6 text-[#c2b5a8]">
+                {VipTierDescription({ tier: vipStatus.vip_tier })}
+              </p>
+
+              <div className="mt-6 grid gap-4 sm:grid-cols-2">
+                <div className="rounded-2xl border border-[#d6b878]/20 bg-[#17110d]/60 p-5">
+                  <p className="text-xs uppercase tracking-wider text-[#8f8071]">
+                    Dostupni VIP poeni
+                  </p>
+
+                  <p className="mt-3 text-3xl font-bold text-[#ead4a0]">
+                    {vipStatus.points_balance.toLocaleString("sr-RS")}
+                  </p>
+
+                  <p className="mt-2 text-xs text-[#b8a99a]">
+                    50 poena = 100 RSD popusta
+                  </p>
+                </div>
+
+                <div className="rounded-2xl border border-[#d6b878]/20 bg-[#17110d]/60 p-5">
+                  <p className="text-xs uppercase tracking-wider text-[#8f8071]">
+                    Vrednost tvojih poena
+                  </p>
+
+                  <p className="mt-3 text-3xl font-bold text-[#ead4a0]">
+                    {formatRsd(vipStatus.points_value)}
+                  </p>
+
+                  <p className="mt-2 text-xs text-[#b8a99a]">
+                    RSD popusta za narednu kupovinu
+                  </p>
+                </div>
+
+                <div className="rounded-2xl border border-[#d6b878]/20 bg-[#17110d]/60 p-5 sm:col-span-2">
+                  <p className="text-xs uppercase tracking-wider text-[#8f8071]">
+                    Ukupna vrednost završenih kupovina
+                  </p>
+
+                  <p className="mt-3 text-3xl font-bold text-[#ead4a0]">
+                    {formatRsd(vipStatus.lifetime_spend)} RSD
+                  </p>
+                </div>
+              </div>
+
+              <div className="mt-7 rounded-2xl border border-[#d6b878]/20 bg-[#17110d]/60 p-5">
+                <div className="flex items-center justify-between gap-3">
+                  <div>
+                    <p className="text-xs uppercase tracking-wider text-[#8f8071]">
+                      Tvoj VIP napredak
+                    </p>
+
+                    <p className="mt-2 font-semibold text-[#ead4a0]">
+                      {normalizedTier === "gold"
+                        ? "Gold nivo dostignut!"
+                        : normalizedTier === "silver"
+                          ? "Napredak ka Gold nivou"
+                          : "Napredak ka Silver nivou"}
+                    </p>
+                  </div>
+
+                  <span className="text-lg font-bold text-[#ead4a0]">
+                    {Math.round(vipStatus.progress_percent)}%
+                  </span>
+                </div>
+
+                <div className="mt-4 h-3 overflow-hidden rounded-full bg-[#30231b]">
+                  <div
+                    className="h-full rounded-full bg-gradient-to-r from-[#bd9650] via-[#d6b878] to-[#ead4a0] transition-all duration-700"
+                    style={{
+                      width: `${vipStatus.progress_percent}%`,
+                    }}
+                  />
+                </div>
+
+                {vipStatus.next_tier_spend !== null ? (
+                  <p className="mt-3 text-xs leading-5 text-[#b8a99a]">
+                    Do sledećeg nivoa potrebno je još{" "}
+                    <span className="font-semibold text-[#ead4a0]">
+                      {formatRsd(
+                        Math.max(
+                          0,
+                          vipStatus.next_tier_spend -
+                            vipStatus.lifetime_spend
+                        )
+                      )}{" "}
+                      RSD
+                    </span>{" "}
+                    potrošnje na završenim porudžbinama.
+                  </p>
+                ) : (
+                  <p className="mt-3 text-xs leading-5 text-[#b8a99a]">
+                    Čestitamo! Dostigao si najviši VIP nivo.
+                  </p>
+                )}
+              </div>
+
+              <div className="mt-6 grid grid-cols-3 gap-2">
+                <div
+                  className={`rounded-xl border p-3 text-center ${
+                    normalizedTier === "bronze"
+                      ? "border-[#bd9650]/60 bg-[#bd9650]/10"
+                      : "border-[#d6b878]/10 bg-[#17110d]/40"
+                  }`}
+                >
+                  <p className="text-xs font-bold text-[#bd9650]">
+                    BRONZE
+                  </p>
+                  <p className="mt-1 text-[10px] text-[#8f8071]">
+                    0–14.999 RSD
+                  </p>
+                </div>
+
+                <div
+                  className={`rounded-xl border p-3 text-center ${
+                    normalizedTier === "silver"
+                      ? "border-[#c8c8c8]/60 bg-[#c8c8c8]/10"
+                      : "border-[#d6b878]/10 bg-[#17110d]/40"
+                  }`}
+                >
+                  <p className="text-xs font-bold text-[#dedede]">
+                    SILVER
+                  </p>
+                  <p className="mt-1 text-[10px] text-[#8f8071]">
+                    15.000–39.999 RSD
+                  </p>
+                </div>
+
+                <div
+                  className={`rounded-xl border p-3 text-center ${
+                    normalizedTier === "gold"
+                      ? "border-[#ead4a0]/60 bg-[#d6b878]/10"
+                      : "border-[#d6b878]/10 bg-[#17110d]/40"
+                  }`}
+                >
+                  <p className="text-xs font-bold text-[#ead4a0]">
+                    GOLD
+                  </p>
+                  <p className="mt-1 text-[10px] text-[#8f8071]">
+                    40.000+ RSD
+                  </p>
+                </div>
+              </div>
+
+              <p className="mt-5 text-xs leading-5 text-[#8f8071]">
+                VIP poeni se dodaju nakon što porudžbina bude označena kao
+                završena. Za svakih potrošenih 100 RSD dobijaš 1 poen.
+              </p>
+            </div>
+          ) : (
+            <div className="p-6 sm:p-8">
+              <p className="text-sm text-[#b8a99a]">
+                VIP status trenutno nije dostupan.
+              </p>
+            </div>
+          )}
+        </section>
+
+        {/* VIP HISTORY */}
+        <section className="mt-8 rounded-3xl border border-[#d6b878]/25 bg-gradient-to-br from-[#30231b] via-[#2b2018] to-[#211812] p-6 shadow-[inset_0_1px_0_rgba(234,212,160,0.08),0_12px_40px_rgba(0,0,0,0.2)] sm:p-8">
+          <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#d6b878]">
+            WATCH SHOP REWARDS
+          </p>
+
+          <h2 className="mt-3 text-2xl font-bold text-[#f4ebdd]">
+            Istorija VIP poena
+          </h2>
+
+          <p className="mt-2 text-sm leading-6 text-[#b8a99a]">
+            Pregled svih osvojenih i iskorišćenih VIP poena.
+          </p>
+
+          {vipLedgerLoading && (
+            <p className="mt-6 text-sm text-[#b8a99a]">
+              Učitavanje istorije...
+            </p>
+          )}
+
+          {vipLedgerError && (
+            <p className="mt-6 rounded-xl border border-[#c46a2d]/30 bg-[#c46a2d]/10 p-4 text-sm text-[#e8a078]">
+              {vipLedgerError}
+            </p>
+          )}
+
+          {!vipLedgerLoading &&
+            !vipLedgerError &&
+            vipLedger.length === 0 && (
+              <div className="mt-6 rounded-2xl border border-[#d6b878]/15 bg-[#17110d]/50 p-6 text-center">
+                <p className="text-2xl">⭐</p>
+                <p className="mt-3 font-semibold text-[#ead4a0]">
+                  Još nema VIP transakcija
+                </p>
+                <p className="mt-2 text-sm text-[#b8a99a]">
+                  Kada završiš prvu kupovinu, ovde će se pojaviti tvoji
+                  osvojeni poeni.
+                </p>
+              </div>
+            )}
+
+          {!vipLedgerLoading &&
+            !vipLedgerError &&
+            vipLedger.length > 0 && (
+              <div className="mt-6 space-y-3">
+                {vipLedger.map((entry) => {
+                  const earned = Number(entry.points_change) > 0;
+
+                  return (
+                    <article
+                      key={entry.id}
+                      className="flex flex-col gap-3 rounded-2xl border border-[#d6b878]/15 bg-[#17110d]/50 p-4 sm:flex-row sm:items-center sm:justify-between"
+                    >
+                      <div className="min-w-0">
+                        <p className="font-semibold text-[#ead4a0]">
+                          <VipHistoryLabel entry={entry} />
+                        </p>
+
+                        {entry.order_number && (
+                          <p className="mt-1 text-xs text-[#8f8071]">
+                            Porudžbina: {entry.order_number}
+                          </p>
+                        )}
+
+                        <p className="mt-1 text-xs text-[#8f8071]">
+                          {formatDate(entry.created_at)}
+                        </p>
+
+                        {Number(entry.amount_rsd) > 0 && (
+                          <p className="mt-1 text-xs text-[#b8a99a]">
+                            Iznos: {formatRsd(entry.amount_rsd)} RSD
+                          </p>
+                        )}
+                      </div>
+
+                      <div className="flex-shrink-0">
+                        <span
+                          className={`text-lg font-bold ${
+                            earned ? "text-green-400" : "text-[#e8a078]"
+                          }`}
+                        >
+                          {earned ? "+" : ""}
+                          {Number(entry.points_change).toLocaleString(
+                            "sr-RS"
+                          )}{" "}
+                          poena
+                        </span>
+                      </div>
+                    </article>
+                  );
+                })}
+              </div>
+            )}
         </section>
 
         <section className="mt-8 rounded-3xl border border-[#d6b878]/25 bg-gradient-to-br from-[#30231b] via-[#2b2018] to-[#211812] p-6 shadow-[inset_0_1px_0_rgba(234,212,160,0.08),0_12px_40px_rgba(0,0,0,0.2)] sm:p-8">
