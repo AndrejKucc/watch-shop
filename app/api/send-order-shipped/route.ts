@@ -1,27 +1,109 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
+import { createServerClient } from "@supabase/ssr";
+import { cookies } from "next/headers";
 
 export async function POST(request: Request) {
   try {
-    const body = await request.json();
-    const orderId = body.orderId;
+    // 1. Provera konfiguracije
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const supabaseSecretKey = process.env.SUPABASE_SECRET_KEY;
+    const resendApiKey = process.env.RESEND_API_KEY;
 
-    if (!orderId) {
+    if (!supabaseUrl || !supabaseSecretKey || !resendApiKey) {
+      console.error("Nedostaje konfiguracija za slanje emaila.");
+
       return NextResponse.json(
-        { error: "Nedostaje ID porudžbine." },
+        { error: "Serverska konfiguracija nije ispravna." },
+        { status: 500 }
+      );
+    }
+
+    // 2. Provera administratorske sesije
+    const cookieStore = await cookies();
+
+    const authSupabase = createServerClient(
+      supabaseUrl,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      {
+        cookies: {
+          getAll() {
+            return cookieStore.getAll();
+          },
+          setAll(cookiesToSet) {
+            cookiesToSet.forEach(({ name, value, options }) => {
+              cookieStore.set(name, value, options);
+            });
+          },
+        },
+      }
+    );
+
+    const {
+      data: { user },
+      error: authError,
+    } = await authSupabase.auth.getUser();
+
+    if (authError || !user) {
+      return NextResponse.json(
+        { error: "Morate biti prijavljeni." },
+        { status: 401 }
+      );
+    }
+
+    // 3. Provera da li je korisnik administrator
+    const { data: admin, error: adminError } = await authSupabase
+      .from("admin_users")
+      .select("user_id")
+      .eq("user_id", user.id)
+      .maybeSingle();
+
+    if (adminError || !admin) {
+      return NextResponse.json(
+        { error: "Nemate dozvolu za ovu akciju." },
+        { status: 403 }
+      );
+    }
+
+    // 4. Provera podataka zahteva
+    let body: { orderId?: string };
+
+    try {
+      body = await request.json();
+    } catch {
+      return NextResponse.json(
+        { error: "Neispravan zahtev." },
         { status: 400 }
       );
     }
 
+    const orderId = body.orderId;
+
+    const uuidRegex =
+      /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
+    if (!orderId || typeof orderId !== "string" || !uuidRegex.test(orderId)) {
+      return NextResponse.json(
+        { error: "Neispravan ID porudžbine." },
+        { status: 400 }
+      );
+    }
+
+    // 5. Privilegovani klijent se koristi tek nakon provere administratora
     const supabase = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.SUPABASE_SECRET_KEY!
+      supabaseUrl,
+      supabaseSecretKey,
+      {
+        auth: {
+          autoRefreshToken: false,
+          persistSession: false,
+        },
+      }
     );
 
     const { data: order, error: orderError } = await supabase
       .from("orders")
-      .select(
-        `
+      .select(`
         id,
         customer_name,
         email,
@@ -29,27 +111,60 @@ export async function POST(request: Request) {
         settlement,
         city,
         postal_code,
-        total
-      `
-      )
+        total,
+        status
+      `)
       .eq("id", orderId)
-      .single();
+      .maybeSingle();
 
-    if (orderError || !order) {
+    if (orderError) {
       console.error("Greška pri čitanju porudžbine:", orderError);
 
+      return NextResponse.json(
+        { error: "Greška pri čitanju porudžbine." },
+        { status: 500 }
+      );
+    }
+
+    if (!order) {
       return NextResponse.json(
         { error: "Porudžbina nije pronađena." },
         { status: 404 }
       );
     }
 
-    if (!order.email) {
+    // 6. Porudžbina mora zaista biti poslata
+    if (order.status !== "shipped") {
       return NextResponse.json(
-        { error: "Porudžbina nema email adresu kupca." },
+        { error: "Email se može poslati samo za poslatu porudžbinu." },
         { status: 400 }
       );
     }
+
+    if (!order.email || !order.email.includes("@")) {
+      return NextResponse.json(
+        { error: "Porudžbina nema validnu email adresu kupca." },
+        { status: 400 }
+      );
+    }
+
+    // 7. Zaštita od HTML ubacivanja
+    const escapeHtml = (value: unknown): string => {
+      return String(value ?? "").replace(/[&<>"']/g, (character) => {
+        const entities: Record<string, string> = {
+          "&": "&amp;",
+          "<": "&lt;",
+          ">": "&gt;",
+          '"': "&quot;",
+          "'": "&#39;",
+        };
+
+        return entities[character];
+      });
+    };
+
+    const customerName = escapeHtml(order.customer_name);
+    const safeOrderId = escapeHtml(order.id);
 
     const addressLine = [
       order.address,
@@ -58,8 +173,19 @@ export async function POST(request: Request) {
       order.postal_code,
     ]
       .filter(Boolean)
+      .map(escapeHtml)
       .join(", ");
 
+    const total = Number(order.total);
+
+    if (!Number.isFinite(total) || total < 0) {
+      return NextResponse.json(
+        { error: "Neispravan iznos porudžbine." },
+        { status: 400 }
+      );
+    }
+
+    // 8. Email dizajn
     const html = `
       <div style="margin:0;padding:40px 20px;background:#f5f5f5;font-family:Arial,sans-serif;color:#111;">
         <div style="max-width:650px;margin:0 auto;background:#ffffff;padding:40px;border-radius:20px;">
@@ -78,7 +204,7 @@ export async function POST(request: Request) {
           </h1>
 
           <p style="font-size:15px;line-height:1.6;color:#555;">
-            Zdravo ${order.customer_name}, obaveštavamo vas da je vaša
+            Zdravo ${customerName}, obaveštavamo vas da je vaša
             porudžbina poslata.
           </p>
 
@@ -88,7 +214,7 @@ export async function POST(request: Request) {
             </div>
 
             <div style="font-size:16px;font-weight:700;">
-              ${order.id}
+              ${safeOrderId}
             </div>
           </div>
 
@@ -111,7 +237,7 @@ export async function POST(request: Request) {
           </p>
 
           <p style="font-size:14px;line-height:1.7;color:#555;">
-            Ukupan iznos: <strong>${Number(order.total).toFixed(2)} €</strong>
+            Ukupan iznos: <strong>${total.toFixed(2)} €</strong>
           </p>
 
           <p style="font-size:14px;line-height:1.7;color:#555;">
@@ -128,19 +254,23 @@ export async function POST(request: Request) {
       </div>
     `;
 
-    const resendResponse = await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        from: "onboarding@resend.dev",
-        to: [order.email],
-        subject: `WATCH SHOP — porudžbina ${order.id} je poslata`,
-        html,
-      }),
-    });
+    // 9. Slanje emaila
+    const resendResponse = await fetch(
+      "https://api.resend.com/emails",
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${resendApiKey}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          from: "onboarding@resend.dev",
+          to: [order.email],
+          subject: `WATCH SHOP — porudžbina ${order.id} je poslata`,
+          html,
+        }),
+      }
+    );
 
     const resendData = await resendResponse.json();
 
@@ -157,6 +287,7 @@ export async function POST(request: Request) {
       success: true,
       emailId: resendData.id,
     });
+
   } catch (error) {
     console.error("Greška pri slanju emaila:", error);
 
