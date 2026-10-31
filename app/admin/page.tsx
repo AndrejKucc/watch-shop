@@ -23,8 +23,21 @@ export default function AdminPage() {
       password,
     });
 
-    if (result.error) {
+    if (result.error || !result.data.user) {
       setMessage("Pogrešan email ili lozinka.");
+      setLoading(false);
+      return;
+    }
+
+    // Provera da li je korisnik administrator
+    const { data: adminUser, error } = await supabase
+      .from("admin_users")
+      .select("user_id")
+      .eq("user_id", result.data.user.id)
+      .maybeSingle();
+
+    if (error || !adminUser) {
+      setMessage("Nemate ovlašćenje za pristup admin panelu.");
       setLoading(false);
       return;
     }
@@ -41,6 +54,7 @@ export default function AdminPage() {
     setLoggedIn(false);
     setEmail("");
     setPassword("");
+    setMessage("");
   }
 
   if (loggedIn) {
@@ -209,7 +223,7 @@ export default function AdminPage() {
             disabled={loading}
             className="w-full rounded-xl border border-[#ead4a0]/60 bg-gradient-to-b from-[#ead4a0] via-[#d6b878] to-[#bd9650] px-4 py-3 font-semibold text-[#211812] shadow-[inset_0_1px_0_rgba(255,255,255,0.4)] transition hover:brightness-110 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-50"
           >
-            {loading ? "Prijavljivanje..." : "Prijavi se"}
+            {loading ? "Proveravam pristup..." : "Prijavi se"}
           </button>
 
           {message && (
