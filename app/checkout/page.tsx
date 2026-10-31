@@ -4,11 +4,17 @@ import { useMemo, useState } from "react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase";
 import { useCart } from "@/components/cart";
+import ScratchCard from "@/components/scratch-card";
 
 type OrderResult = {
   order_id: string;
   order_number: string;
   total: number;
+};
+
+type EarnedCoupon = {
+  code: string;
+  discount_percent: number;
 };
 
 const SERBIAN_CITIES: { name: string; postalCode: string }[] = [
@@ -61,7 +67,14 @@ const SERBIAN_CITIES: { name: string; postalCode: string }[] = [
 ];
 
 export default function CheckoutPage() {
-  const { items, totalPrice, clearCart } = useCart();
+  const {
+    items,
+    totalPrice,
+    clearCart,
+    appliedCoupon,
+    couponDiscount,
+    finalTotal,
+  } = useCart();
 
   const [fullName, setFullName] = useState("");
   const [phone, setPhone] = useState("");
@@ -75,7 +88,7 @@ export default function CheckoutPage() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [placedOrder, setPlacedOrder] = useState<OrderResult | null>(null);
-  const [emailSent, setEmailSent] = useState(false);
+  const [earnedCoupon, setEarnedCoupon] = useState<EarnedCoupon | null>(null);
 
   const citySuggestions = useMemo(() => {
     const query = city.trim().toLowerCase();
@@ -125,6 +138,7 @@ export default function CheckoutPage() {
       p_city: city,
       p_postal_code: postalCode,
       p_items: rpcItems,
+      p_coupon_code: appliedCoupon?.code ?? null,
     });
 
     if (error) {
@@ -153,11 +167,12 @@ export default function CheckoutPage() {
       return;
     }
 
-    const { data: orderDetails, error: orderDetailsError } = await supabase
-      .from("orders")
-      .select("order_number")
-      .eq("id", result.order_id)
-      .single();
+    const { data: orderDetails, error: orderDetailsError } =
+      await supabase
+        .from("orders")
+        .select("order_number")
+        .eq("id", result.order_id)
+        .single();
 
     if (orderDetailsError) {
       console.error(
@@ -174,8 +189,35 @@ export default function CheckoutPage() {
 
     setPlacedOrder(orderResult);
 
+    // Preuzimanje kupona koji je kupac osvojio ovom porudžbinom.
     try {
-      const emailResponse = await fetch("/api/send-order-confirmation", {
+      const { data: couponData, error: couponError } =
+        await supabase.rpc("get_order_coupon", {
+          p_order_id: orderResult.order_id,
+          p_email: email,
+        });
+
+      if (couponError) {
+        console.error("GREŠKA PRI PREUZIMANJU KUPONA:", couponError);
+      } else {
+        const coupon = Array.isArray(couponData)
+          ? couponData[0]
+          : couponData;
+
+        if (coupon?.code) {
+          setEarnedCoupon({
+            code: coupon.code,
+            discount_percent: Number(coupon.discount_percent),
+          });
+        }
+      }
+    } catch (couponError) {
+      console.error("GREŠKA PRI POZIVU FUNKCIJE ZA KUPON:", couponError);
+    }
+
+    // Email se i dalje pokušava poslati, ali neuspeh ne prikazujemo kupcu.
+    try {
+      await fetch("/api/send-order-confirmation", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -185,18 +227,8 @@ export default function CheckoutPage() {
           email,
         }),
       });
-
-      const emailData = await emailResponse.json();
-
-      if (!emailResponse.ok) {
-        console.error("GREŠKA PRI SLANJU EMAILA:", emailData);
-        setEmailSent(false);
-      } else {
-        setEmailSent(true);
-      }
     } catch (emailError) {
-      console.error("GREŠKA PRI POZIVU EMAIL API-JA:", emailError);
-      setEmailSent(false);
+      console.error("GREŠKA PRI SLANJU EMAILA:", emailError);
     }
 
     clearCart();
@@ -236,17 +268,6 @@ export default function CheckoutPage() {
               porudžbine i dogovora oko dostave.
             </p>
 
-            {emailSent ? (
-              <div className="mx-auto mt-6 max-w-lg rounded-2xl border border-[#d6b878]/25 bg-[#d6b878]/[0.07] px-4 py-3 text-sm text-[#ead4a0]">
-                Potvrda porudžbine je poslata na tvoj email.
-              </div>
-            ) : (
-              <div className="mx-auto mt-6 max-w-lg rounded-2xl border border-[#c46a2d]/30 bg-[#c46a2d]/[0.08] px-4 py-3 text-sm text-[#e5a06d]">
-                Porudžbina je uspešno napravljena, ali potvrda emailom trenutno
-                nije poslata.
-              </div>
-            )}
-
             <div className="mt-9 overflow-hidden rounded-2xl border border-[#d6b878]/20 bg-[#17110d]/70 text-left">
               <div className="flex flex-col gap-2 border-b border-[#d6b878]/15 p-5 sm:flex-row sm:items-center sm:justify-between">
                 <span className="text-sm text-[#b8a99a]">
@@ -276,6 +297,25 @@ export default function CheckoutPage() {
                 <span className="font-semibold">Pouzećem</span>
               </div>
             </div>
+
+            {earnedCoupon && (
+              <ScratchCard
+                code={earnedCoupon.code}
+                discountPercent={earnedCoupon.discount_percent}
+              />
+            )}
+
+            {!earnedCoupon && (
+              <div className="mt-8 rounded-2xl border border-[#d6b878]/20 bg-[#17110d]/60 p-5">
+                <p className="font-semibold text-[#ead4a0]">
+                  Hvala ti na kupovini!
+                </p>
+                <p className="mt-2 text-sm leading-6 text-[#b8a99a]">
+                  Tvoja porudžbina je zabeležena. Kupon će biti dostupan u
+                  tvom nalogu ako si prijavljen.
+                </p>
+              </div>
+            )}
 
             <Link
               href="/"
@@ -641,15 +681,41 @@ export default function CheckoutPage() {
 
                 <span>Pouzećem</span>
               </div>
+
+              {appliedCoupon && (
+                <>
+                  <div className="flex items-center justify-between gap-3 text-sm">
+                    <span className="text-[#b8a99a]">Kupon</span>
+
+                    <span className="font-mono text-[#ead4a0]">
+                      {appliedCoupon.code}
+                    </span>
+                  </div>
+
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="text-[#b8a99a]">Popust</span>
+
+                    <span className="font-semibold text-green-400">
+                      -{couponDiscount.toFixed(2)} RSD
+                    </span>
+                  </div>
+                </>
+              )}
             </div>
 
             <div className="mt-6 border-t border-[#d6b878]/20 pt-6">
+              {appliedCoupon && (
+                <p className="text-sm text-[#b8a99a] line-through">
+                  {totalPrice.toFixed(2)} RSD
+                </p>
+              )}
+
               <p className="text-xs uppercase tracking-[0.18em] text-[#b8a99a]">
                 Ukupno
               </p>
 
               <p className="mt-2 text-4xl font-bold tracking-tight text-[#ead4a0]">
-                {totalPrice.toFixed(2)} RSD
+                {finalTotal.toFixed(2)} RSD
               </p>
             </div>
           </aside>

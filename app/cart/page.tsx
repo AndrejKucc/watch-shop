@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useState } from "react";
 import { useCart } from "@/components/cart";
 
 export default function CartPage() {
@@ -10,7 +11,24 @@ export default function CartPage() {
     increaseQuantity,
     decreaseQuantity,
     removeFromCart,
+    appliedCoupon,
+    couponDiscount,
+    finalTotal,
+    couponLoading,
+    couponMessage,
+    applyCoupon,
+    removeCoupon,
   } = useCart();
+
+  const [couponInput, setCouponInput] = useState("");
+
+  async function handleApplyCoupon() {
+    const success = await applyCoupon(couponInput);
+
+    if (success) {
+      setCouponInput("");
+    }
+  }
 
   return (
     <main className="min-h-screen bg-[#211812] px-5 py-10 text-[#f4ebdd] sm:px-6 sm:py-14">
@@ -183,13 +201,112 @@ export default function CartPage() {
                 </div>
               </div>
 
-              <div className="mt-6">
+              {/* KU PON */}
+              <div className="mt-6 rounded-2xl border border-[#d6b878]/20 bg-[#17110d]/50 p-4">
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#d6b878]">
+                  Imaš kupon kod?
+                </p>
+
+                {!appliedCoupon ? (
+                  <>
+                    <div className="mt-3 flex gap-2">
+                      <input
+                        type="text"
+                        value={couponInput}
+                        onChange={(event) =>
+                          setCouponInput(event.target.value.toUpperCase())
+                        }
+                        onKeyDown={(event) => {
+                          if (event.key === "Enter") {
+                            event.preventDefault();
+                            void handleApplyCoupon();
+                          }
+                        }}
+                        placeholder="Unesi kod"
+                        maxLength={30}
+                        className="min-w-0 flex-1 rounded-xl border border-[#d6b878]/25 bg-[#211812] px-3 py-3 text-sm font-mono text-[#f4ebdd] outline-none placeholder:text-[#8f8071] focus:border-[#d6b878]/70"
+                      />
+
+                      <button
+                        type="button"
+                        onClick={() => void handleApplyCoupon()}
+                        disabled={couponLoading || !couponInput.trim()}
+                        className="rounded-xl border border-[#ead4a0]/40 bg-gradient-to-b from-[#ead4a0] to-[#bd9650] px-4 py-3 text-sm font-semibold text-[#211812] transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-50"
+                      >
+                        {couponLoading ? "..." : "Primeni"}
+                      </button>
+                    </div>
+                  </>
+                ) : (
+                  <div className="mt-3">
+                    <div className="flex items-center justify-between gap-3">
+                      <div>
+                        <p className="font-mono text-sm font-bold tracking-wider text-[#ead4a0]">
+                          {appliedCoupon.code}
+                        </p>
+                        <p className="mt-1 text-xs text-[#b8a99a]">
+                          {appliedCoupon.discountPercent}% popusta
+                        </p>
+                      </div>
+
+                      <button
+                        type="button"
+                        onClick={removeCoupon}
+                        className="rounded-lg border border-[#c46a2d]/30 px-3 py-2 text-xs text-[#e8a078] transition hover:bg-[#c46a2d]/10"
+                      >
+                        Ukloni
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                {couponMessage && (
+                  <p
+                    role="status"
+                    className={`mt-3 text-xs leading-5 ${
+                      appliedCoupon
+                        ? "text-[#d6b878]"
+                        : couponMessage.includes("uklonjen")
+                          ? "text-[#b8a99a]"
+                          : "text-[#e8a078]"
+                    }`}
+                  >
+                    {couponMessage}
+                  </p>
+                )}
+              </div>
+
+              <div className="mt-6 space-y-3">
+                <div className="flex items-center justify-between gap-4 text-sm">
+                  <span className="text-[#b8a99a]">
+                    Cena proizvoda
+                  </span>
+
+                  <span className="text-[#f4ebdd]">
+                    {totalPrice.toFixed(2)} RSD
+                  </span>
+                </div>
+
+                {appliedCoupon && (
+                  <div className="flex items-center justify-between gap-4 text-sm">
+                    <span className="text-[#d6b878]">
+                      Popust ({appliedCoupon.discountPercent}%)
+                    </span>
+
+                    <span className="font-semibold text-[#d6b878]">
+                      -{couponDiscount.toFixed(2)} RSD
+                    </span>
+                  </div>
+                )}
+              </div>
+
+              <div className="mt-5 border-t border-[#d6b878]/20 pt-5">
                 <p className="text-xs uppercase tracking-[0.18em] text-[#b8a99a]">
-                  Ukupno
+                  Ukupno za plaćanje
                 </p>
 
                 <p className="mt-2 text-4xl font-bold tracking-tight text-[#ead4a0]">
-                  {totalPrice.toFixed(2)} RSD
+                  {finalTotal.toFixed(2)} RSD
                 </p>
               </div>
 

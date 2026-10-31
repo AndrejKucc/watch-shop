@@ -8,8 +8,10 @@ import {
   useState,
   type ReactNode,
 } from "react";
+import { createClient } from "@/lib/supabase";
 
 const CART_STORAGE_KEY = "watch-shop-cart";
+const COUPON_STORAGE_KEY = "watch-shop-coupon";
 
 type CartItem = {
   id: string;
@@ -28,15 +30,35 @@ type CartProduct = {
   stock: number;
 };
 
+type AppliedCoupon = {
+  code: string;
+  discountPercent: number;
+};
+
+type CouponValidationResult = {
+  valid: boolean;
+  discount_percent: number;
+  discount_amount: number;
+  final_total: number;
+  message: string;
+};
+
 type CartContextValue = {
   items: CartItem[];
   totalQuantity: number;
   totalPrice: number;
+  appliedCoupon: AppliedCoupon | null;
+  couponDiscount: number;
+  finalTotal: number;
+  couponLoading: boolean;
+  couponMessage: string;
   addToCart: (product: CartProduct) => void;
   increaseQuantity: (id: string) => void;
   decreaseQuantity: (id: string) => void;
   removeFromCart: (id: string) => void;
   clearCart: () => void;
+  applyCoupon: (code: string) => Promise<boolean>;
+  removeCoupon: () => void;
 };
 
 const CartContext = createContext<CartContextValue | null>(null);
@@ -44,6 +66,12 @@ const CartContext = createContext<CartContextValue | null>(null);
 export function CartProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);
   const [isLoaded, setIsLoaded] = useState(false);
+
+  const [appliedCoupon, setAppliedCoupon] =
+    useState<AppliedCoupon | null>(null);
+
+  const [couponLoading, setCouponLoading] = useState(false);
+  const [couponMessage, setCouponMessage] = useState("");
 
   useEffect(() => {
     try {
@@ -61,8 +89,30 @@ export function CartProvider({ children }: { children: ReactNode }) {
           );
         }
       }
+
+      const storedCoupon = window.localStorage.getItem(
+        COUPON_STORAGE_KEY
+      );
+
+      if (storedCoupon) {
+        const parsedCoupon = JSON.parse(storedCoupon);
+
+        if (
+          parsedCoupon &&
+          typeof parsedCoupon.code === "string" &&
+          Number(parsedCoupon.discountPercent) > 0
+        ) {
+          setAppliedCoupon({
+            code: parsedCoupon.code,
+            discountPercent: Number(parsedCoupon.discountPercent),
+          });
+        }
+      }
     } catch (error) {
-      console.error("Greška pri čitanju korpe iz localStorage-a:", error);
+      console.error(
+        "Greška pri čitanju korpe ili kupona iz localStorage-a:",
+        error
+      );
     }
 
     setIsLoaded(true);
@@ -74,11 +124,39 @@ export function CartProvider({ children }: { children: ReactNode }) {
     }
 
     try {
-      window.localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(items));
+      window.localStorage.setItem(
+        CART_STORAGE_KEY,
+        JSON.stringify(items)
+      );
     } catch (error) {
-      console.error("Greška pri čuvanju korpe u localStorage:", error);
+      console.error(
+        "Greška pri čuvanju korpe u localStorage:",
+        error
+      );
     }
   }, [items, isLoaded]);
+
+  useEffect(() => {
+    if (!isLoaded) {
+      return;
+    }
+
+    try {
+      if (appliedCoupon) {
+        window.localStorage.setItem(
+          COUPON_STORAGE_KEY,
+          JSON.stringify(appliedCoupon)
+        );
+      } else {
+        window.localStorage.removeItem(COUPON_STORAGE_KEY);
+      }
+    } catch (error) {
+      console.error(
+        "Greška pri čuvanju kupona:",
+        error
+      );
+    }
+  }, [appliedCoupon, isLoaded]);
 
   function addToCart(product: CartProduct) {
     if (product.stock <= 0) {
@@ -154,6 +232,13 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   function clearCart() {
     setItems([]);
+    setAppliedCoupon(null);
+    setCouponMessage("");
+  }
+
+  function removeCoupon() {
+    setAppliedCoupon(null);
+    setCouponMessage("Kupon je uklonjen.");
   }
 
   const totalQuantity = items.reduce(
@@ -166,17 +251,98 @@ export function CartProvider({ children }: { children: ReactNode }) {
     0
   );
 
+  const couponDiscount = appliedCoupon
+    ? Number(
+        ((totalPrice * appliedCoupon.discountPercent) / 100).toFixed(2)
+      )
+    : 0;
+
+  const finalTotal = Math.max(0, totalPrice - couponDiscount);
+
+  async function applyCoupon(code: string): Promise<boolean> {
+    const normalizedCode = code.trim().toUpperCase();
+
+    if (!normalizedCode) {
+      setCouponMessage("Unesi kod kupona.");
+      return false;
+    }
+
+    if (items.length === 0 || totalPrice <= 0) {
+      setCouponMessage("Korpa je prazna.");
+      return false;
+    }
+
+    setCouponLoading(true);
+    setCouponMessage("");
+
+    try {
+      const supabase = createClient();
+
+      const { data, error } = await supabase.rpc("validate_coupon", {
+        p_code: normalizedCode,
+        p_subtotal: totalPrice,
+      });
+
+      if (error) {
+        console.error("Greška pri proveri kupona:", error);
+        setCouponMessage(
+          "Provera kupona trenutno nije uspela. Pokušaj ponovo."
+        );
+        return false;
+      }
+
+      const result = (
+        Array.isArray(data) ? data[0] : data
+      ) as CouponValidationResult | null;
+
+      if (!result || !result.valid) {
+        setAppliedCoupon(null);
+        setCouponMessage(
+          result?.message ||
+            "Kupon nije validan ili je već iskorišćen."
+        );
+        return false;
+      }
+
+      setAppliedCoupon({
+        code: normalizedCode,
+        discountPercent: Number(result.discount_percent),
+      });
+
+      setCouponMessage(
+        `Kupon je uspešno primenjen! Ostvaruješ ${result.discount_percent}% popusta.`
+      );
+
+      return true;
+    } catch (error) {
+      console.error("Greška pri primeni kupona:", error);
+      setCouponMessage(
+        "Došlo je do greške. Pokušaj ponovo."
+      );
+      return false;
+    } finally {
+      setCouponLoading(false);
+    }
+  }
+
   return (
     <CartContext.Provider
       value={{
         items,
         totalQuantity,
         totalPrice,
+        appliedCoupon,
+        couponDiscount,
+        finalTotal,
+        couponLoading,
+        couponMessage,
         addToCart,
         increaseQuantity,
         decreaseQuantity,
         removeFromCart,
         clearCart,
+        applyCoupon,
+        removeCoupon,
       }}
     >
       {children}

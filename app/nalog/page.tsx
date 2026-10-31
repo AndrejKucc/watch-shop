@@ -21,6 +21,14 @@ type CustomerOrder = {
   created_at: string;
 };
 
+type CustomerCoupon = {
+  code: string;
+  discount_percent: number;
+  redeemed_at: string | null;
+  created_at: string;
+  source_order_number: string | null;
+};
+
 const STATUS_STEPS = [
   { value: "new", label: "Poručena" },
   { value: "confirmed", label: "Potvrđena" },
@@ -100,6 +108,12 @@ export default function AccountPage() {
   const [ordersLoading, setOrdersLoading] = useState(true);
   const [ordersError, setOrdersError] = useState("");
 
+  const [coupons, setCoupons] = useState<CustomerCoupon[]>([]);
+  const [couponsLoading, setCouponsLoading] = useState(true);
+  const [couponsError, setCouponsError] = useState("");
+
+  const [copiedCode, setCopiedCode] = useState("");
+
   useEffect(() => {
     const supabase = createClient();
     let active = true;
@@ -127,6 +141,23 @@ export default function AccountPage() {
       setOrdersLoading(false);
     }
 
+    async function loadCoupons() {
+      const { data, error } = await supabase.rpc("get_my_coupons");
+
+      if (!active) return;
+
+      if (error) {
+        console.error("Greška pri učitavanju kupona:", error);
+        setCouponsError("Kuponi trenutno nisu mogli da se učitaju.");
+        setCouponsLoading(false);
+        return;
+      }
+
+      setCoupons(data || []);
+      setCouponsError("");
+      setCouponsLoading(false);
+    }
+
     async function loadAccount() {
       const {
         data: { user },
@@ -143,7 +174,7 @@ export default function AccountPage() {
       setUser(user);
       setLoading(false);
 
-      await loadOrders(user.id);
+      await Promise.all([loadOrders(user.id), loadCoupons()]);
 
       if (!active) return;
 
@@ -159,6 +190,7 @@ export default function AccountPage() {
           },
           () => {
             void loadOrders(user.id);
+            void loadCoupons();
           }
         )
         .subscribe((status) => {
@@ -192,6 +224,19 @@ export default function AccountPage() {
 
     router.replace("/");
     router.refresh();
+  }
+
+  async function copyCoupon(code: string) {
+    try {
+      await navigator.clipboard.writeText(code);
+      setCopiedCode(code);
+
+      window.setTimeout(() => {
+        setCopiedCode((current) => (current === code ? "" : current));
+      }, 2000);
+    } catch {
+      setCopiedCode("");
+    }
   }
 
   if (loading) {
@@ -339,6 +384,130 @@ export default function AccountPage() {
                 <OrderStatus status={order.status} />
               </article>
             ))}
+          </div>
+        </section>
+
+        <section className="mt-8 rounded-3xl border border-[#d6b878]/30 bg-gradient-to-br from-[#30231b] via-[#2b2018] to-[#211812] p-6 shadow-[inset_0_1px_0_rgba(234,212,160,0.08),0_12px_40px_rgba(0,0,0,0.2)] sm:p-8">
+          <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#d6b878]">
+            WATCH SHOP REWARDS
+          </p>
+
+          <h2 className="mt-3 text-2xl font-bold text-[#f4ebdd]">
+            Moji kuponi
+          </h2>
+
+          <p className="mt-2 text-sm leading-6 text-[#b8a99a]">
+            Kao znak zahvalnosti za kupovinu, dobijaš popust za svoju
+            narednu porudžbinu. Sačuvaj kod i iskoristi ga kada ponovo
+            kupuješ.
+          </p>
+
+          {couponsLoading && (
+            <p className="mt-6 text-sm text-[#b8a99a]">
+              Učitavanje kupona...
+            </p>
+          )}
+
+          {couponsError && (
+            <p className="mt-6 rounded-xl border border-[#c46a2d]/30 bg-[#c46a2d]/10 p-4 text-sm text-[#e8a078]">
+              {couponsError}
+            </p>
+          )}
+
+          {!couponsLoading &&
+            !couponsError &&
+            coupons.length === 0 && (
+              <div className="mt-6 rounded-2xl border border-[#d6b878]/15 bg-[#17110d]/50 p-6 text-center">
+                <div className="text-3xl">🎁</div>
+                <p className="mt-3 font-semibold text-[#ead4a0]">
+                  Još nemaš osvojenih kupona
+                </p>
+                <p className="mt-2 text-sm text-[#b8a99a]">
+                  Nakon prve kupovine dobićeš kupon za sledeću porudžbinu.
+                </p>
+              </div>
+            )}
+
+          <div className="mt-6 space-y-4">
+            {coupons.map((coupon) => {
+              const isUsed = Boolean(coupon.redeemed_at);
+
+              return (
+                <article
+                  key={coupon.code}
+                  className={`relative overflow-hidden rounded-2xl border p-5 ${
+                    isUsed
+                      ? "border-[#8f8071]/20 bg-[#17110d]/40"
+                      : "border-[#d6b878]/45 bg-gradient-to-br from-[#4b3621]/70 via-[#30231b] to-[#211812]"
+                  }`}
+                >
+                  <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                    <div>
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span className="text-3xl font-bold text-[#ead4a0]">
+                          {coupon.discount_percent}%
+                        </span>
+
+                        <span className="text-sm text-[#c2b5a8]">
+                          popusta na sledeću kupovinu
+                        </span>
+                      </div>
+
+                      <p className="mt-3 text-xs uppercase tracking-wider text-[#8f8071]">
+                        Tvoj kupon kod
+                      </p>
+
+                      <p className="mt-1 break-all font-mono text-lg font-bold tracking-wider text-[#f4ebdd]">
+                        {coupon.code}
+                      </p>
+
+                      <p className="mt-2 text-xs text-[#8f8071]">
+                        Osvojen: {formatDate(coupon.created_at)}
+                      </p>
+
+                      {coupon.source_order_number && (
+                        <p className="mt-1 text-xs text-[#8f8071]">
+                          Porudžbina: {coupon.source_order_number}
+                        </p>
+                      )}
+                    </div>
+
+                    <div className="flex flex-col items-start gap-3 sm:items-end">
+                      <span
+                        className={`rounded-full border px-3 py-1.5 text-xs font-semibold ${
+                          isUsed
+                            ? "border-[#8f8071]/30 bg-[#8f8071]/10 text-[#b8a99a]"
+                            : "border-[#d6b878]/40 bg-[#d6b878]/10 text-[#ead4a0]"
+                        }`}
+                      >
+                        {isUsed ? "Iskorišćen" : "Dostupan"}
+                      </span>
+
+                      {!isUsed && (
+                        <button
+                          type="button"
+                          onClick={() => copyCoupon(coupon.code)}
+                          className="rounded-xl border border-[#ead4a0]/50 bg-gradient-to-b from-[#ead4a0] via-[#d6b878] to-[#bd9650] px-4 py-2.5 text-sm font-semibold text-[#211812] transition hover:brightness-110 active:scale-95"
+                        >
+                          {copiedCode === coupon.code
+                            ? "✓ Kopirano"
+                            : "Kopiraj kod"}
+                        </button>
+                      )}
+                    </div>
+                  </div>
+
+                  {!isUsed && (
+                    <div className="mt-5 border-t border-[#d6b878]/15 pt-4">
+                      <p className="text-xs leading-5 text-[#b8a99a]">
+                        Unesi ovaj kod u korpi prilikom sledeće kupovine.
+                        Kupon može da se iskoristi samo jednom.
+                      </p>
+                    </div>
+                  )}
+                </article>
+              );
+            })}
           </div>
         </section>
       </div>
