@@ -149,3 +149,30 @@ main [class*="grid"] > article.scroll-reveal {
     transition: none;
   }
 }
+/* WATCH SHOP — SLOW PREMIUM PAGE INTRO */
+
+main.page-intro {
+  opacity: 0;
+  transform: translateY(35px);
+  filter: blur(7px);
+
+  transition:
+    opacity 1800ms cubic-bezier(0.16, 1, 0.3, 1),
+    transform 1800ms cubic-bezier(0.16, 1, 0.3, 1),
+    filter 1800ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+main.page-intro.page-intro-visible {
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  main.page-intro {
+    opacity: 1;
+    transform: none;
+    filter: none;
+    transition: none;
+  }
+}

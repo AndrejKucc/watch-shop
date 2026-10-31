@@ -40,12 +40,15 @@ export function ScrollReveal({ children }: { children: React.ReactNode }) {
 
       const elements = document.querySelectorAll(revealSelectors.join(","));
 
-      const hero = document.querySelector("main > section:first-child");
+      const main = document.querySelector("main");
 
-if (hero && !hero.classList.contains("hero-reveal")) {
-  hero.classList.add("hero-reveal");
+if (main) {
+  main.classList.add("page-intro");
+
   requestAnimationFrame(() => {
-    hero.classList.add("hero-visible");
+    requestAnimationFrame(() => {
+      main.classList.add("page-intro-visible");
+    });
   });
 }
 
