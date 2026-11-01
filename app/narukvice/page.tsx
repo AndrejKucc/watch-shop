@@ -2,6 +2,7 @@ import Link from "next/link";
 import { getProducts } from "@/lib/products";
 import { CartButton } from "@/components/cart";
 import CategoryFilter from "@/components/category-filter";
+import SiteFooter from "@/components/site-footer";
 
 export default async function NarukvicePage() {
   const allProducts = await getProducts();
@@ -50,27 +51,7 @@ export default async function NarukvicePage() {
         />
       </section>
 
-      <footer className="border-t border-[#d6b878]/20 bg-[#17110d]/60">
-        <div className="mx-auto flex max-w-7xl flex-col gap-4 px-6 py-8 text-sm text-[#a99987] sm:flex-row sm:items-center sm:justify-between lg:px-8">
-          <p>© {new Date().getFullYear()} WATCH SHOP</p>
-
-          <div className="flex gap-6">
-            <Link
-              href="/"
-              className="transition-colors duration-200 hover:text-[#ead4a0]"
-            >
-              Početna
-            </Link>
-
-            <Link
-              href="/satovi"
-              className="transition-colors duration-200 hover:text-[#ead4a0]"
-            >
-              Satovi
-            </Link>
-          </div>
-        </div>
-      </footer>
+      <SiteFooter />
     </main>
   );
 }
