@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { getProducts } from "@/lib/products";
 import { CartButton } from "@/components/cart";
 import { AccountButton } from "@/components/account-button";
@@ -180,24 +181,15 @@ export default async function Home() {
       <header className="ws-glass sticky top-0 z-50 border-b border-white/[0.07]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6">
           <div className="flex items-center justify-between gap-3 py-4 sm:py-5">
-            <Link href="/" className="group min-w-0">
-              <div className="flex items-center gap-3">
-                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-[#D4AF7A]/20 bg-gradient-to-br from-[#6B4B2C] to-[#241A13] transition duration-300 group-hover:border-[#D4AF7A]/45">
-                  <span className="text-xl" aria-hidden="true">
-                    ⌚
-                  </span>
-                </div>
-
-                <div className="min-w-0">
-                  <h1 className="text-base font-bold tracking-[0.13em] text-[#F5EEE3] sm:text-xl sm:tracking-[0.18em]">
-                    WATCH SHOP
-                  </h1>
-
-                  <p className="mt-1 text-[9px] uppercase tracking-[0.18em] text-[#D4AF7A] sm:text-[10px] sm:tracking-[0.25em]">
-                    Premium satovi i aksesoari
-                  </p>
-                </div>
-              </div>
+            <Link href="/" className="group flex min-w-0 items-center">
+              <Image
+                src="/images/logo.png"
+                alt="WATCH SHOP"
+                width={180}
+                height={60}
+                priority
+                className="h-11 w-auto object-contain transition duration-300 group-hover:scale-[1.03] sm:h-14"
+              />
             </Link>
 
             <div className="flex shrink-0 items-center gap-2 sm:gap-3">
@@ -260,8 +252,6 @@ export default async function Home() {
                 Pogledaj kolekciju
                 <span aria-hidden="true">↗</span>
               </a>
-
-              
             </div>
 
             <div className="mt-12 flex flex-wrap gap-x-8 gap-y-4 border-t border-white/[0.09] pt-6">
@@ -285,52 +275,51 @@ export default async function Home() {
             </div>
           </div>
 
-         {/* GLAVNA SLIKA SATA */}
-<div className="relative mx-auto w-full max-w-xl lg:max-w-none">
-  <div
-    aria-hidden="true"
-    className="pointer-events-none absolute inset-8 rounded-full bg-[#D4AF7A]/20 blur-[70px]"
-  />
+          {/* GLAVNA SLIKA SATA */}
+          <div className="relative mx-auto w-full max-w-xl lg:max-w-none">
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-8 rounded-full bg-[#D4AF7A]/20 blur-[70px]"
+            />
 
-  <div className="ws-glass-card relative overflow-hidden rounded-[2rem] p-2 shadow-[0_25px_80px_rgba(0,0,0,0.25)] sm:rounded-[2.5rem] sm:p-3">
-    <div className="ws-watch-image relative isolate flex aspect-[4/4.5] items-center justify-center overflow-hidden rounded-[1.5rem] sm:rounded-[2rem]">
+            <div className="ws-glass-card relative overflow-hidden rounded-[2rem] p-2 shadow-[0_25px_80px_rgba(0,0,0,0.25)] sm:rounded-[2.5rem] sm:p-3">
+              <div className="ws-watch-image relative isolate flex aspect-[4/4.5] items-center justify-center overflow-hidden rounded-[1.5rem] sm:rounded-[2rem]">
+                {/* SLIKA POPUNJAVA CELO POLJE */}
+                <img
+                  src="/images/hero-watch.png"
+                  alt="Premium sat iz WATCH SHOP kolekcije"
+                  fetchPriority="high"
+                  className="absolute inset-0 z-0 h-full w-full rounded-[1.5rem] object-cover sm:rounded-[2rem]"
+                />
 
-      {/* SLIKA POPUNJAVA CELO POLJE */}
-      <img
-        src="/images/hero-watch.png"
-        alt="Premium sat iz WATCH SHOP kolekcije"
-        fetchPriority="high"
-        className="absolute inset-0 z-0 h-full w-full rounded-[1.5rem] object-cover sm:rounded-[2rem]"
-      />
+                {/* TAMNI PRELIV ZA ČITLJIVOST TEKSTA */}
+                <div
+                  aria-hidden="true"
+                  className="pointer-events-none absolute inset-0 z-[1] rounded-[1.5rem] bg-gradient-to-t from-[#1A120D]/90 via-[#1A120D]/10 to-black/10 sm:rounded-[2rem]"
+                />
 
-      {/* TAMNI PRELIV ZA ČITLJIVOST TEKSTA */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 z-[1] rounded-[1.5rem] bg-gradient-to-t from-[#1A120D]/90 via-[#1A120D]/10 to-black/10 sm:rounded-[2rem]"
-      />
+                {/* TEKST PREKO SLIKE */}
+                <div className="relative z-10 mt-auto w-full px-4 pb-10 pt-64 text-center sm:px-6 sm:pb-14 sm:pt-72">
+                  <p className="text-[10px] font-medium uppercase tracking-[0.35em] text-[#D4AF7A] sm:text-xs">
+                    WATCH SHOP · PREMIUM SELECTION
+                  </p>
 
-      {/* TEKST PREKO SLIKE — BEZ DONJEG POLJA I STRELICE */}
-      <div className="relative z-10 mt-auto w-full px-4 pb-10 pt-64 text-center sm:px-6 sm:pb-14 sm:pt-72">
-        <p className="text-[10px] font-medium uppercase tracking-[0.35em] text-[#D4AF7A] sm:text-xs">
-          WATCH SHOP · PREMIUM SELECTION
-        </p>
+                  <p className="mt-3 text-2xl font-medium tracking-wide text-[#F5EEE3] sm:text-3xl">
+                    Vreme je za pravi izbor.
+                  </p>
 
-        <p className="mt-3 text-2xl font-medium tracking-wide text-[#F5EEE3] sm:text-3xl">
-          Vreme je za pravi izbor.
-        </p>
+                  <p className="mx-auto mt-3 max-w-xs text-sm leading-6 text-[#D3C5B3]">
+                    Pronađi detalj koji upotpunjuje tvoj stil.
+                  </p>
+                </div>
+              </div>
+            </div>
 
-        <p className="mx-auto mt-3 max-w-xs text-sm leading-6 text-[#D3C5B3]">
-          Pronađi detalj koji upotpunjuje tvoj stil.
-        </p>
-      </div>
-    </div>
-  </div>
-
-  <div
-    aria-hidden="true"
-    className="pointer-events-none absolute -bottom-5 -right-3 h-24 w-24 rounded-full bg-[#CC5500]/15 blur-3xl"
-  />
-</div>
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute -bottom-5 -right-3 h-24 w-24 rounded-full bg-[#CC5500]/15 blur-3xl"
+            />
+          </div>
         </div>
       </section>
 
@@ -495,11 +484,14 @@ export default async function Home() {
         <div className="relative mx-auto max-w-7xl px-6 py-10 sm:py-12">
           <div className="flex flex-col gap-8 md:flex-row md:items-center md:justify-between">
             <div>
-              <Link
-                href="/"
-                className="text-sm font-bold tracking-[0.22em] text-[#F5EEE3] transition hover:text-[#D4AF7A]"
-              >
-                WATCH SHOP
+              <Link href="/" className="inline-flex">
+                <Image
+                  src="/images/logo.png"
+                  alt="WATCH SHOP"
+                  width={150}
+                  height={50}
+                  className="h-10 w-auto object-contain transition hover:scale-[1.03]"
+                />
               </Link>
 
               <p className="mt-2 text-sm text-[#C5B5A0]">
