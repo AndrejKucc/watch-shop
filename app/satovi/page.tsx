@@ -28,7 +28,7 @@ export default async function WatchesPage() {
       <section className="mx-auto max-w-7xl px-6 pb-20 pt-16 lg:px-8">
         <div className="max-w-3xl">
           <p className="text-sm font-medium uppercase tracking-[0.25em] text-[#c49a55]">
-            WATCH SHOP
+            Kolekcija
           </p>
 
           <h1 className="mt-4 text-5xl font-semibold tracking-tight text-[#f4ebdd] sm:text-6xl">
