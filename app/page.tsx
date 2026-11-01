@@ -7,11 +7,59 @@ import { WishlistCountButton } from "@/components/wishlist";
 import CategoryFilter from "@/components/category-filter";
 
 const mainNavigation = [
-  { href: "/satovi", label: "Satovi" },
-  { href: "/narukvice", label: "Narukvice" },
-  { href: "/ogrlice", label: "Ogrlice" },
-  { href: "/novcanici", label: "Novčanici" },
-  { href: "/pokloni", label: "Pokloni" },
+  {
+    href: "/satovi",
+    label: "Satovi",
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-6 w-6">
+        <rect x="7" y="6" width="10" height="12" rx="3" />
+        <path d="M9 6V3h6v3M9 18v3h6v-3M12 9v3l2 1" />
+      </svg>
+    ),
+  },
+  {
+    href: "/narukvice",
+    label: "Narukvice",
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-6 w-6">
+        <path d="M5 8c0-2 3-4 7-4s7 2 7 4-3 4-7 4-7-2-7-4Z" />
+        <path d="M5 8v8c0 2 3 4 7 4s7-2 7-4V8" />
+        <path d="M5 12c0 2 3 4 7 4s7-2 7-4" />
+      </svg>
+    ),
+  },
+  {
+    href: "/ogrlice",
+    label: "Ogrlice",
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-6 w-6">
+        <path d="M4 4c1 8 4 13 8 13s7-5 8-13" />
+        <path d="M12 17v2" />
+        <path d="m12 19-2 2h4l-2-2Z" />
+      </svg>
+    ),
+  },
+  {
+    href: "/novcanici",
+    label: "Novčanici",
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-6 w-6">
+        <rect x="3" y="6" width="18" height="14" rx="2" />
+        <path d="M3 9h18M16 14h2" />
+        <path d="M6 6V4h12v2" />
+      </svg>
+    ),
+  },
+  {
+    href: "/pokloni",
+    label: "Pokloni",
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-6 w-6">
+        <rect x="3" y="10" width="18" height="11" rx="1" />
+        <path d="M2 7h20v3H2zM12 7v14M12 7H8a2 2 0 1 1 2-2c0 2 2 2 2 2Zm0 0h4a2 2 0 1 0-2-2c0 2-2 2-2 2Z" />
+      </svg>
+    ),
+  },
 ];
 
 const featuredBadges: Record<string, { text: string; className: string }> = {
@@ -212,17 +260,24 @@ export default async function Home() {
             </div>
           </div>
 
+          {/* KATEGORIJE SA IKONICAMA */}
           <nav
             aria-label="Glavna navigacija"
-            className="flex gap-2 overflow-x-auto border-t border-white/[0.07] py-3"
+            className="grid grid-cols-5 gap-2 border-t border-white/[0.07] py-3 sm:gap-4"
           >
             {mainNavigation.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
-                className="ws-nav-link shrink-0 rounded-xl px-4 py-2.5 text-sm font-medium text-[#D8C7B0]"
+                className="group flex min-w-0 flex-col items-center justify-center gap-2 rounded-xl border border-transparent px-1 py-2 text-[#D8C7B0] transition-all duration-300 hover:border-[#D4AF7A]/25 hover:bg-[#D4AF7A]/[0.08] hover:text-[#F1DDBA]"
               >
-                {item.label}
+                <span className="flex h-10 w-10 items-center justify-center rounded-full border border-[#D4AF7A]/20 bg-[#D4AF7A]/[0.05] text-[#D4AF7A] transition-all duration-300 group-hover:scale-110 group-hover:border-[#D4AF7A]/60 group-hover:bg-[#D4AF7A]/15">
+                  {item.icon}
+                </span>
+
+                <span className="text-[10px] font-medium tracking-wide sm:text-xs">
+                  {item.label}
+                </span>
               </Link>
             ))}
           </nav>
@@ -523,31 +578,19 @@ export default async function Home() {
               aria-label="Navigacija u podnožju"
               className="flex flex-wrap gap-x-6 gap-y-3 text-sm text-[#D8C7B0]"
             >
-              <Link
-                href="/about"
-                className="transition hover:text-[#D4AF7A]"
-              >
+              <Link href="/about" className="transition hover:text-[#D4AF7A]">
                 O nama
               </Link>
 
-              <Link
-                href="/contact"
-                className="transition hover:text-[#D4AF7A]"
-              >
+              <Link href="/contact" className="transition hover:text-[#D4AF7A]">
                 Kontakt
               </Link>
 
-              <Link
-                href="/terms"
-                className="transition hover:text-[#D4AF7A]"
-              >
+              <Link href="/terms" className="transition hover:text-[#D4AF7A]">
                 Uslovi kupovine
               </Link>
 
-              <Link
-                href="/privacy"
-                className="transition hover:text-[#D4AF7A]"
-              >
+              <Link href="/privacy" className="transition hover:text-[#D4AF7A]">
                 Privatnost
               </Link>
             </nav>
