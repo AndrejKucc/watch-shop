@@ -1,7 +1,18 @@
 import Link from "next/link";
+import Image from "next/image";
 import { getProducts } from "@/lib/products";
 import { CartButton } from "@/components/cart";
+import { AccountButton } from "@/components/account-button";
+import { WishlistCountButton } from "@/components/wishlist";
 import CategoryFilter from "@/components/category-filter";
+
+const mainNavigation = [
+  { href: "/satovi", label: "Satovi" },
+  { href: "/narukvice", label: "Narukvice" },
+  { href: "/ogrlice", label: "Ogrlice" },
+  { href: "/novcanici", label: "Novčanici" },
+  { href: "/pokloni", label: "Pokloni" },
+];
 
 export default async function WatchesPage() {
   const allProducts = await getProducts();
@@ -11,51 +22,99 @@ export default async function WatchesPage() {
   );
 
   return (
-    <main className="min-h-screen bg-[#211812] text-[#f4ebdd]">
-      <header className="sticky top-0 z-50 border-b border-[#d6b878]/20 bg-[#211812]/90 backdrop-blur-xl">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-5 sm:px-6">
-          <Link href="/" className="group">
-            <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full border border-[#d6b878]/30 bg-[#d6b878]/[0.05] transition group-hover:border-[#d6b878]/60">
-                <span className="text-sm">⌚</span>
-              </div>
+    <main className="relative min-h-screen overflow-x-clip bg-[#241A13] text-[#F5EEE3]">
+      {/* GORNJA NAVIGACIJA */}
+      <header className="sticky top-0 z-50 border-b border-white/[0.07] bg-[#241A13]/90 backdrop-blur-2xl">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6">
+          <div className="flex items-center justify-between gap-3 py-4 sm:py-5">
+            <Link href="/" className="group min-w-0">
+              <div className="flex items-center gap-3">
+                <div className="relative h-11 w-11 shrink-0 overflow-hidden rounded-full border border-[#D4AF7A]/40 shadow-lg transition duration-300 group-hover:scale-105 group-hover:border-[#D4AF7A]/80">
+                  <Image
+                    src="/images/logo.png"
+                    alt="WATCH SHOP logo"
+                    fill
+                    priority
+                    sizes="56px"
+                    className="object-cover"
+                  />
+                </div>
 
-              <div>
-                <h1 className="text-xl font-bold tracking-[0.18em] sm:text-2xl">
-                  WATCH SHOP
-                </h1>
+                <div className="min-w-0">
+                  <h1 className="text-base font-bold tracking-[0.13em] text-[#F5EEE3] sm:text-xl sm:tracking-[0.18em]">
+                    WATCH SHOP
+                  </h1>
 
-                <p className="mt-0.5 text-[10px] uppercase tracking-[0.3em] text-[#b8a99a] sm:text-xs">
-                  Premium satovi
-                </p>
+                  <p className="mt-1 text-[9px] uppercase tracking-[0.18em] text-[#D4AF7A] sm:text-[10px] sm:tracking-[0.25em]">
+                    Premium satovi i aksesoari
+                  </p>
+                </div>
               </div>
+            </Link>
+
+            <div className="flex shrink-0 items-center gap-2 sm:gap-3">
+              <AccountButton />
+              <WishlistCountButton />
+              <CartButton />
             </div>
-          </Link>
+          </div>
 
-          <CartButton />
+          <nav
+            aria-label="Glavna navigacija"
+            className="flex gap-2 overflow-x-auto border-t border-white/[0.07] py-3"
+          >
+            {mainNavigation.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="shrink-0 rounded-xl border border-transparent bg-white/[0.025] px-4 py-2.5 text-sm font-medium text-[#D8C7B0] transition hover:border-[#D4AF7A]/25 hover:bg-[#D4AF7A]/[0.12] hover:text-[#F1DDBA]"
+              >
+                {item.label}
+              </Link>
+            ))}
+          </nav>
         </div>
       </header>
 
-      <section className="mx-auto max-w-7xl px-6 py-16 sm:py-24">
-        <div className="max-w-3xl">
-          <p className="text-sm font-medium uppercase tracking-[0.35em] text-[#d6b878]">
-            WATCH SHOP
-          </p>
+      {/* NASLOV STRANICE */}
+      <section className="relative overflow-hidden border-b border-white/[0.06] bg-[radial-gradient(ellipse_at_75%_35%,rgba(212,175,122,0.15),transparent_48%),linear-gradient(115deg,#241A13_0%,#352719_54%,#1A120D_100%)]">
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute -right-24 top-0 h-[350px] w-[350px] rounded-full bg-[#D4AF7A]/10 blur-[100px]"
+        />
 
-          <h2 className="mt-5 text-5xl font-semibold leading-[1.05] tracking-tight sm:text-7xl">
-            Satovi
-          </h2>
+        <div className="relative mx-auto max-w-7xl px-6 py-16 sm:py-24">
+          <div className="max-w-3xl">
+            <p className="text-sm font-medium uppercase tracking-[0.35em] text-[#D4AF7A]">
+              WATCH SHOP
+            </p>
 
-          <p className="mt-6 max-w-2xl text-base leading-7 text-[#c2b5a8] sm:text-lg sm:leading-8">
-            Pažljivo odabrani satovi za muškarce, žene i unisex kolekciju.
-          </p>
+            <h2 className="mt-5 text-5xl font-semibold leading-[1.05] tracking-tight text-[#F5EEE3] sm:text-7xl">
+              Satovi
+            </h2>
+
+            <p className="mt-6 max-w-2xl text-base leading-7 text-[#D3C5B3] sm:text-lg sm:leading-8">
+              Pažljivo odabrani satovi za muškarce, žene i unisex kolekciju.
+            </p>
+          </div>
         </div>
+      </section>
 
-        <div className="mt-16 border-b border-[#d6b878]/20 pb-5">
+      {/* KOLEKCIJA SATOVA */}
+      <section className="relative mx-auto max-w-7xl px-6 py-16 sm:py-20">
+        <div className="border-b border-white/[0.09] pb-6">
           <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
-            <h3 className="text-xl font-semibold">Kolekcija satova</h3>
+            <div>
+              <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-[#D4AF7A] sm:text-xs">
+                Pažljivo odabrana kolekcija
+              </p>
 
-            <p className="text-sm text-[#b8a99a]">
+              <h3 className="mt-3 text-2xl font-semibold tracking-tight text-[#F5EEE3] sm:text-3xl">
+                Kolekcija satova
+              </h3>
+            </div>
+
+            <p className="text-sm text-[#B9A58C]">
               {watches.length}{" "}
               {watches.length === 1 ? "proizvod" : "proizvoda"}
             </p>
@@ -73,61 +132,75 @@ export default async function WatchesPage() {
         </div>
       </section>
 
-      <footer className="border-t border-[#d6b878]/20 bg-[#211812]/90">
-        <div className="mx-auto max-w-7xl px-6 py-10">
-          <div className="flex flex-col gap-8 md:flex-row md:items-center md:justify-between">
-            <div>
-              <p className="text-sm font-semibold tracking-[0.2em]">
-                WATCH SHOP
-              </p>
+      {/* PODNOŽJE */}
+      <footer className="relative overflow-hidden border-t border-white/[0.08] bg-[#1D140E]">
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute -right-20 -top-24 h-64 w-64 rounded-full bg-[#D4AF7A]/15 blur-[100px]"
+        />
 
-              <p className="mt-2 text-sm text-[#b8a99a]">
-                Premium satovi
-              </p>
+        <div className="relative mx-auto max-w-7xl px-6 py-10 sm:py-12">
+          <div className="flex flex-col gap-8 md:flex-row md:items-center md:justify-between">
+            <div className="flex items-center gap-3">
+              <div className="relative h-11 w-11 shrink-0 overflow-hidden rounded-full border border-[#D4AF7A]/40 shadow-lg sm:h-14 sm:w-14">
+                <Image
+                  src="/images/logo.png"
+                  alt="WATCH SHOP logo"
+                  fill
+                  sizes="56px"
+                  className="object-cover"
+                />
+              </div>
+
+              <div>
+                <Link
+                  href="/"
+                  className="text-sm font-bold tracking-[0.22em] text-[#F5EEE3] transition hover:text-[#D4AF7A]"
+                >
+                  WATCH SHOP
+                </Link>
+
+                <p className="mt-2 text-sm text-[#C5B5A0]">
+                  Premium satovi i aksesoari
+                </p>
+              </div>
             </div>
 
             <nav
-              aria-label="Dodatne informacije"
-              className="flex flex-wrap gap-x-6 gap-y-3 text-sm text-[#c2b5a8]"
+              aria-label="Navigacija u podnožju"
+              className="flex flex-wrap gap-x-6 gap-y-3 text-sm text-[#D8C7B0]"
             >
               <Link
-                href="/"
-                className="transition hover:text-[#d6b878]"
-              >
-                Početna
-              </Link>
-
-              <Link
                 href="/about"
-                className="transition hover:text-[#d6b878]"
+                className="transition hover:text-[#D4AF7A]"
               >
                 O nama
               </Link>
 
               <Link
                 href="/contact"
-                className="transition hover:text-[#d6b878]"
+                className="transition hover:text-[#D4AF7A]"
               >
                 Kontakt
               </Link>
 
               <Link
                 href="/terms"
-                className="transition hover:text-[#d6b878]"
+                className="transition hover:text-[#D4AF7A]"
               >
                 Uslovi kupovine
               </Link>
 
               <Link
                 href="/privacy"
-                className="transition hover:text-[#d6b878]"
+                className="transition hover:text-[#D4AF7A]"
               >
                 Privatnost
               </Link>
             </nav>
           </div>
 
-          <div className="mt-8 border-t border-[#d6b878]/15 pt-6 text-xs text-[#8f8071]">
+          <div className="mt-8 border-t border-white/[0.08] pt-6 text-xs text-[#AD9A83]">
             © {new Date().getFullYear()} WATCH SHOP. Sva prava zadržana.
           </div>
         </div>
