@@ -18,12 +18,9 @@ export default function WishlistPage() {
             WATCH SHOP
           </Link>
 
-          <Link
-            href="/satovi"
-            className="text-sm text-[#d6b878] transition hover:text-[#f4ebdd]"
-          >
-            Nastavi kupovinu →
-          </Link>
+          <Link href="/" className="text-sm text-[#d6b878] transition hover:text-[#f4ebdd]">
+  Nastavi kupovinu →
+</Link>
         </div>
       </header>
 
