@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase-server";
-import { AddToCartButton } from "@/components/cart";
+import { AddToCartButton, CartButton } from "@/components/cart";
 import ProductReviews from "@/components/product-reviews";
 import ProductGallery from "@/components/product-gallery";
 
@@ -298,12 +298,7 @@ export default async function ProductPage({
             WATCH SHOP
           </Link>
 
-          <Link
-            href="/cart"
-            className="rounded-full border border-[#d6b878]/35 bg-gradient-to-b from-[#d6b878]/15 to-[#4b3621]/40 px-5 py-2.5 text-sm font-medium shadow-[inset_0_1px_0_rgba(255,255,255,0.16)] transition-all duration-200 hover:border-[#ead4a0]/70 hover:from-[#d6b878]/25 hover:to-[#4b3621]/60 active:scale-95"
-          >
-            Korpa
-          </Link>
+          <CartButton />
         </div>
       </header>
 
