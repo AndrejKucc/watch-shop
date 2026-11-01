@@ -5,6 +5,7 @@ import ComparePanel from "@/components/compare-panel";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { AddToCartButton } from "@/components/cart";
+import { WishlistButton } from "@/components/wishlist";
 
 type Product = {
   id: string;
@@ -143,7 +144,6 @@ export default function CategoryFilter({
   const [category, setCategory] = useState("sve");
   const [search, setSearch] = useState("");
 
-  // Pretraga se obrađuje tek 250ms nakon poslednjeg unosa.
   const [debouncedSearch, setDebouncedSearch] = useState("");
 
   useEffect(() => {
@@ -735,69 +735,14 @@ export default function CategoryFilter({
               </div>
 
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                <FilterSelect
-                  id="filter-brand"
-                  label="Brend"
-                  value={brand}
-                  onChange={setBrand}
-                  options={brands}
-                />
-
-                <FilterSelect
-                  id="filter-movement"
-                  label="Mehanizam"
-                  value={movement}
-                  onChange={setMovement}
-                  options={movements}
-                />
-
-                <FilterSelect
-                  id="filter-diameter"
-                  label="Prečnik kućišta"
-                  value={diameter}
-                  onChange={setDiameter}
-                  options={diameters}
-                />
-
-                <FilterSelect
-                  id="filter-case-material"
-                  label="Materijal kućišta"
-                  value={caseMaterial}
-                  onChange={setCaseMaterial}
-                  options={caseMaterials}
-                />
-
-                <FilterSelect
-                  id="filter-bracelet-material"
-                  label="Materijal narukvice"
-                  value={braceletMaterial}
-                  onChange={setBraceletMaterial}
-                  options={braceletMaterials}
-                />
-
-                <FilterSelect
-                  id="filter-water-resistance"
-                  label="Vodootpornost"
-                  value={waterResistance}
-                  onChange={setWaterResistance}
-                  options={waterResistances}
-                />
-
-                <FilterSelect
-                  id="filter-chronograph"
-                  label="Hronograf"
-                  value={chronograph}
-                  onChange={setChronograph}
-                  options={chronographOptions}
-                />
-
-                <FilterSelect
-                  id="filter-gmt"
-                  label="GMT"
-                  value={gmt}
-                  onChange={setGmt}
-                  options={gmtOptions}
-                />
+                <FilterSelect id="filter-brand" label="Brend" value={brand} onChange={setBrand} options={brands} />
+                <FilterSelect id="filter-movement" label="Mehanizam" value={movement} onChange={setMovement} options={movements} />
+                <FilterSelect id="filter-diameter" label="Prečnik kućišta" value={diameter} onChange={setDiameter} options={diameters} />
+                <FilterSelect id="filter-case-material" label="Materijal kućišta" value={caseMaterial} onChange={setCaseMaterial} options={caseMaterials} />
+                <FilterSelect id="filter-bracelet-material" label="Materijal narukvice" value={braceletMaterial} onChange={setBraceletMaterial} options={braceletMaterials} />
+                <FilterSelect id="filter-water-resistance" label="Vodootpornost" value={waterResistance} onChange={setWaterResistance} options={waterResistances} />
+                <FilterSelect id="filter-chronograph" label="Hronograf" value={chronograph} onChange={setChronograph} options={chronographOptions} />
+                <FilterSelect id="filter-gmt" label="GMT" value={gmt} onChange={setGmt} options={gmtOptions} />
               </div>
             </div>
           )}
@@ -812,30 +757,11 @@ export default function CategoryFilter({
               </div>
 
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                <FilterSelect
-                  id="filter-accessory-material"
-                  label="Materijal"
-                  value={accessoryMaterial}
-                  onChange={setAccessoryMaterial}
-                  options={accessoryMaterials}
-                />
-
-                <FilterSelect
-                  id="filter-accessory-color"
-                  label="Boja"
-                  value={accessoryColor}
-                  onChange={setAccessoryColor}
-                  options={accessoryColors}
-                />
+                <FilterSelect id="filter-accessory-material" label="Materijal" value={accessoryMaterial} onChange={setAccessoryMaterial} options={accessoryMaterials} />
+                <FilterSelect id="filter-accessory-color" label="Boja" value={accessoryColor} onChange={setAccessoryColor} options={accessoryColors} />
 
                 {isWalletMode && (
-                  <FilterSelect
-                    id="filter-accessory-size"
-                    label="Veličina"
-                    value={accessorySize}
-                    onChange={setAccessorySize}
-                    options={accessorySizes}
-                  />
+                  <FilterSelect id="filter-accessory-size" label="Veličina" value={accessorySize} onChange={setAccessorySize} options={accessorySizes} />
                 )}
               </div>
             </div>
@@ -851,13 +777,7 @@ export default function CategoryFilter({
               </div>
 
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                <FilterSelect
-                  id="filter-gift-for"
-                  label="Za koga"
-                  value={giftFor}
-                  onChange={setGiftFor}
-                  options={giftForOptions}
-                />
+                <FilterSelect id="filter-gift-for" label="Za koga" value={giftFor} onChange={setGiftFor} options={giftForOptions} />
               </div>
             </div>
           )}
@@ -872,10 +792,7 @@ export default function CategoryFilter({
 
             <div className="grid gap-4 sm:grid-cols-2">
               <div>
-                <label htmlFor="min-price" className={labelClass}>
-                  Cena od
-                </label>
-
+                <label htmlFor="min-price" className={labelClass}>Cena od</label>
                 <div className="relative">
                   <input
                     id="min-price"
@@ -887,7 +804,6 @@ export default function CategoryFilter({
                     placeholder="0"
                     className={`${inputClass} pr-16`}
                   />
-
                   <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-xs font-medium text-[#A18B72]">
                     RSD
                   </span>
@@ -895,10 +811,7 @@ export default function CategoryFilter({
               </div>
 
               <div>
-                <label htmlFor="max-price" className={labelClass}>
-                  Cena do
-                </label>
-
+                <label htmlFor="max-price" className={labelClass}>Cena do</label>
                 <div className="relative">
                   <input
                     id="max-price"
@@ -910,7 +823,6 @@ export default function CategoryFilter({
                     placeholder="Bez limita"
                     className={`${inputClass} pr-16`}
                   />
-
                   <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-xs font-medium text-[#A18B72]">
                     RSD
                   </span>
@@ -920,12 +832,8 @@ export default function CategoryFilter({
           </div>
 
           {invalidPriceRange && (
-            <p
-              role="alert"
-              className="rounded-xl border border-[#CC5500]/40 bg-[#CC5500]/10 px-4 py-3 text-sm leading-6 text-[#FFD0A3]"
-            >
-              Proveri cene: obe moraju biti nenegativne, a cena „od” ne može
-              biti veća od cene „do”.
+            <p role="alert" className="rounded-xl border border-[#CC5500]/40 bg-[#CC5500]/10 px-4 py-3 text-sm leading-6 text-[#FFD0A3]">
+              Proveri cene: obe moraju biti nenegativne, a cena „od” ne može biti veća od cene „do”.
             </p>
           )}
 
@@ -937,15 +845,11 @@ export default function CategoryFilter({
                 onChange={(event) => setOnlyInStock(event.target.checked)}
                 className="h-4 w-4 rounded border-[#D4AF7A]/30 bg-[#241A13] accent-[#D4AF7A]"
               />
-
               <span>Samo proizvodi na stanju</span>
             </label>
 
             <div className="flex min-w-0 items-center gap-3">
-              <label
-                htmlFor="sort-products"
-                className="shrink-0 text-xs font-medium uppercase tracking-[0.1em] text-[#B9A58C]"
-              >
+              <label htmlFor="sort-products" className="shrink-0 text-xs font-medium uppercase tracking-[0.1em] text-[#B9A58C]">
                 Sortiraj
               </label>
 
@@ -956,11 +860,7 @@ export default function CategoryFilter({
                 className="ws-glass-control min-h-11 min-w-0 flex-1 rounded-xl bg-[#241A13]/80 px-3 text-sm text-[#F5EEE3] outline-none focus:border-[#D4AF7A] sm:flex-none"
               >
                 {sortOptions.map((option) => (
-                  <option
-                    key={option.value}
-                    value={option.value}
-                    className="bg-[#241A13]"
-                  >
+                  <option key={option.value} value={option.value} className="bg-[#241A13]">
                     {option.label}
                   </option>
                 ))}
@@ -973,16 +873,13 @@ export default function CategoryFilter({
       <div className="mt-8 flex flex-col gap-4 sm:mt-10 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="text-xs font-medium uppercase tracking-[0.16em] text-[#B9A58C]">
-            {hasActiveFilters
-              ? "Rezultati pretrage"
-              : `Kolekcija · ${productLabel}`}
+            {hasActiveFilters ? "Rezultati pretrage" : `Kolekcija · ${productLabel}`}
           </p>
 
           <div className="mt-2 flex items-baseline gap-2">
             <p className="text-3xl font-semibold tracking-tight text-[#F5EEE3]">
               {invalidPriceRange ? 0 : filteredProducts.length}
             </p>
-
             <span className="text-sm text-[#B9A58C]">
               {filteredProducts.length === 1 ? "proizvod" : "proizvoda"}
             </span>
@@ -997,9 +894,7 @@ export default function CategoryFilter({
             onClick={resetFilters}
             className="ws-reset-button w-fit rounded-xl px-4 py-3 text-sm font-medium"
           >
-            <span className="mr-2" aria-hidden="true">
-              ↺
-            </span>
+            <span className="mr-2" aria-hidden="true">↺</span>
             Resetuj filtere
           </button>
         )}
@@ -1012,84 +907,91 @@ export default function CategoryFilter({
               key={product.id}
               className="ws-product-card group overflow-hidden rounded-[26px]"
             >
-              <Link href={`/product/${product.id}`} className="block">
-                <div className="relative overflow-hidden bg-[#302116]">
-                  <div className="aspect-[4/3]">
-                    {product.images && product.images[0] ? (
-                      <img
-                        src={product.images[0]}
-                        alt={product.name}
-                        loading="lazy"
-                        className="ws-product-image h-full w-full object-cover"
-                      />
-                    ) : (
-                      <div className="flex h-full flex-col items-center justify-center gap-3 text-[#A18B72]">
-                        <svg
-                          aria-hidden="true"
-                          viewBox="0 0 24 24"
-                          className="h-10 w-10 opacity-70"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="1.2"
-                        >
-                          <circle cx="12" cy="12" r="8" />
-                          <path d="M12 7v5l3 2" strokeLinecap="round" />
-                        </svg>
-                        <span className="text-xs uppercase tracking-[0.16em]">
-                          Watch Shop
+              <div className="relative">
+                <Link href={`/product/${product.id}`} className="block">
+                  <div className="relative overflow-hidden bg-[#302116]">
+                    <div className="aspect-[4/3]">
+                      {product.images && product.images[0] ? (
+                        <img
+                          src={product.images[0]}
+                          alt={product.name}
+                          loading="lazy"
+                          className="ws-product-image h-full w-full object-cover"
+                        />
+                      ) : (
+                        <div className="flex h-full flex-col items-center justify-center gap-3 text-[#A18B72]">
+                          <svg
+                            aria-hidden="true"
+                            viewBox="0 0 24 24"
+                            className="h-10 w-10 opacity-70"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="1.2"
+                          >
+                            <circle cx="12" cy="12" r="8" />
+                            <path d="M12 7v5l3 2" strokeLinecap="round" />
+                          </svg>
+                          <span className="text-xs uppercase tracking-[0.16em]">
+                            Watch Shop
+                          </span>
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#241A13]/60 via-transparent to-transparent" />
+
+                    {isWatchMode && showGenderFilter && (
+                      <div className="absolute left-4 top-4">
+                        <span className="rounded-full border border-[#D4AF7A]/20 bg-[#241A13]/80 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-[#F5EEE3] backdrop-blur-xl">
+                          {normalize(product.category) === "muski"
+                            ? "Muški"
+                            : normalize(product.category) === "zenski"
+                              ? "Ženski"
+                              : "Unisex"}
+                        </span>
+                      </div>
+                    )}
+
+                    {product.stock <= 0 && (
+                      <div className="absolute inset-0 flex items-center justify-center bg-[#241A13]/75 backdrop-blur-[3px]">
+                        <span className="ws-out-of-stock rounded-full px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.16em] text-[#FFD0A3]">
+                          Nije na stanju
+                        </span>
+                      </div>
+                    )}
+
+                    {product.stock > 0 && (
+                      <div className="absolute bottom-4 left-4 flex items-center gap-2 rounded-full border border-[#D4AF7A]/20 bg-[#241A13]/80 px-3 py-2 backdrop-blur-xl">
+                        <span className="ws-stock-dot h-1.5 w-1.5 rounded-full" />
+                        <span className="text-[10px] font-medium uppercase tracking-[0.12em] text-[#F1DDBA]">
+                          Dostupno
                         </span>
                       </div>
                     )}
                   </div>
 
-                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#241A13]/60 via-transparent to-transparent" />
-
-                  {isWatchMode && showGenderFilter && (
-                    <div className="absolute left-4 top-4">
-                      <span className="rounded-full border border-[#D4AF7A]/20 bg-[#241A13]/80 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-[#F5EEE3] backdrop-blur-xl">
-                        {normalize(product.category) === "muski"
-                          ? "Muški"
-                          : normalize(product.category) === "zenski"
-                            ? "Ženski"
-                            : "Unisex"}
-                      </span>
-                    </div>
-                  )}
-
-                  {product.stock <= 0 && (
-                    <div className="absolute inset-0 flex items-center justify-center bg-[#241A13]/75 backdrop-blur-[3px]">
-                      <span className="ws-out-of-stock rounded-full px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.16em] text-[#FFD0A3]">
-                        Nije na stanju
-                      </span>
-                    </div>
-                  )}
-
-                  {product.stock > 0 && (
-                    <div className="absolute bottom-4 left-4 flex items-center gap-2 rounded-full border border-[#D4AF7A]/20 bg-[#241A13]/80 px-3 py-2 backdrop-blur-xl">
-                      <span className="ws-stock-dot h-1.5 w-1.5 rounded-full" />
-                      <span className="text-[10px] font-medium uppercase tracking-[0.12em] text-[#F1DDBA]">
-                        Dostupno
-                      </span>
-                    </div>
-                  )}
-                </div>
-
-                <div className="p-5 pb-3 sm:p-6 sm:pb-3">
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#D4AF7A]">
-                    {product.brand || "Watch Shop"}
-                  </p>
-
-                  <h3 className="mt-3 text-xl font-semibold leading-snug tracking-tight text-[#F5EEE3] transition-colors duration-200 group-hover:text-white sm:text-2xl">
-                    {product.name}
-                  </h3>
-
-                  {product.model && (
-                    <p className="mt-1.5 text-sm text-[#B9A58C]">
-                      {product.model}
+                  <div className="p-5 pb-3 sm:p-6 sm:pb-3">
+                    <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#D4AF7A]">
+                      {product.brand || "Watch Shop"}
                     </p>
-                  )}
-                </div>
-              </Link>
+
+                    <h3 className="mt-3 text-xl font-semibold leading-snug tracking-tight text-[#F5EEE3] transition-colors duration-200 group-hover:text-white sm:text-2xl">
+                      {product.name}
+                    </h3>
+
+                    {product.model && (
+                      <p className="mt-1.5 text-sm text-[#B9A58C]">
+                        {product.model}
+                      </p>
+                    )}
+                  </div>
+                </Link>
+
+                <WishlistButton
+                  productId={product.id}
+                  className="absolute right-4 top-4 z-20 shadow-lg"
+                />
+              </div>
 
               <div className="p-5 pt-3 sm:p-6 sm:pt-3">
                 <div className="mb-5 flex items-end justify-between gap-3 border-t border-[#D4AF7A]/15 pt-4">
@@ -1114,9 +1016,7 @@ export default function CategoryFilter({
                     }
                   >
                     {product.stock > 0
-                      ? `${product.stock} ${
-                          product.stock === 1 ? "komad" : "komada"
-                        }`
+                      ? `${product.stock} ${product.stock === 1 ? "komad" : "komada"}`
                       : "Nije na stanju"}
                   </span>
                 </div>

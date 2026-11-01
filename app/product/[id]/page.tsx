@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase-server";
 import { AddToCartButton, CartButton } from "@/components/cart";
+import { WishlistButton } from "@/components/wishlist";
 import ProductReviews from "@/components/product-reviews";
 import ProductGallery from "@/components/product-gallery";
 
@@ -386,15 +387,22 @@ export default async function ProductPage({
                 </div>
               </div>
 
-              <div className="mt-7">
-                <AddToCartButton
-                  product={{
-                    id: product.id,
-                    name: product.name,
-                    price: Number(product.price),
-                    image: imageList[0] ?? null,
-                    stock: product.stock,
-                  }}
+              <div className="mt-7 flex items-center gap-3">
+                <div className="flex-1">
+                  <AddToCartButton
+                    product={{
+                      id: product.id,
+                      name: product.name,
+                      price: Number(product.price),
+                      image: imageList[0] ?? null,
+                      stock: product.stock,
+                    }}
+                  />
+                </div>
+
+                <WishlistButton
+                  productId={product.id}
+                  className="h-12 w-12 shrink-0"
                 />
               </div>
             </div>

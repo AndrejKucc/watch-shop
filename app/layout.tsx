@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { CartProvider } from "@/components/cart";
+import { WishlistProvider } from "@/components/wishlist";
 import { ScrollReveal } from "@/components/scroll-reveal";
 
 const geistSans = Geist({
@@ -34,9 +35,7 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
-  children,
-}: LayoutProps<"/">) {
+export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="sr"
@@ -44,7 +43,9 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col">
         <CartProvider>
-          <ScrollReveal>{children}</ScrollReveal>
+          <WishlistProvider>
+            <ScrollReveal>{children}</ScrollReveal>
+          </WishlistProvider>
         </CartProvider>
       </body>
     </html>
