@@ -16,8 +16,7 @@ const mainNavigation = [
 const featuredBadges: Record<string, { text: string; className: string }> = {
   recommendation: {
     text: "NAŠA PREPORUKA",
-    className:
-      "border-[#D4AF7A]/30 bg-[#4B3621]/90 text-[#F1DDBA]",
+    className: "border-[#D4AF7A]/30 bg-[#4B3621]/90 text-[#F1DDBA]",
   },
   best_buy: {
     text: "BEST BUY",
@@ -29,8 +28,7 @@ const featuredBadges: Record<string, { text: string; className: string }> = {
   },
   great_price: {
     text: "ODLIČNA CENA",
-    className:
-      "border-[#D4AF7A]/30 bg-[#4B3621]/90 text-[#F1DDBA]",
+    className: "border-[#D4AF7A]/30 bg-[#4B3621]/90 text-[#F1DDBA]",
   },
   premium: {
     text: "PREMIUM IZBOR",
@@ -181,15 +179,29 @@ export default async function Home() {
       <header className="ws-glass sticky top-0 z-50 border-b border-white/[0.07]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6">
           <div className="flex items-center justify-between gap-3 py-4 sm:py-5">
-            <Link href="/" className="group flex min-w-0 items-center">
-              <Image
-                src="/images/logo.png"
-                alt="WATCH SHOP"
-                width={180}
-                height={60}
-                priority
-                className="h-11 w-auto object-contain transition duration-300 group-hover:scale-[1.03] sm:h-14"
-              />
+            <Link href="/" className="group min-w-0">
+              <div className="flex items-center gap-3">
+                <div className="relative h-11 w-11 shrink-0 overflow-hidden rounded-full border border-[#D4AF7A]/40 shadow-lg transition duration-300 group-hover:scale-105 group-hover:border-[#D4AF7A]/80">
+                  <Image
+                    src="/images/logo.png"
+                    alt="WATCH SHOP logo"
+                    fill
+                    priority
+                    sizes="56px"
+                    className="object-cover"
+                  />
+                </div>
+
+                <div className="min-w-0">
+                  <h1 className="text-base font-bold tracking-[0.13em] text-[#F5EEE3] sm:text-xl sm:tracking-[0.18em]">
+                    WATCH SHOP
+                  </h1>
+
+                  <p className="mt-1 text-[9px] uppercase tracking-[0.18em] text-[#D4AF7A] sm:text-[10px] sm:tracking-[0.25em]">
+                    Premium satovi i aksesoari
+                  </p>
+                </div>
+              </div>
             </Link>
 
             <div className="flex shrink-0 items-center gap-2 sm:gap-3">
@@ -284,7 +296,6 @@ export default async function Home() {
 
             <div className="ws-glass-card relative overflow-hidden rounded-[2rem] p-2 shadow-[0_25px_80px_rgba(0,0,0,0.25)] sm:rounded-[2.5rem] sm:p-3">
               <div className="ws-watch-image relative isolate flex aspect-[4/4.5] items-center justify-center overflow-hidden rounded-[1.5rem] sm:rounded-[2rem]">
-                {/* SLIKA POPUNJAVA CELO POLJE */}
                 <img
                   src="/images/hero-watch.png"
                   alt="Premium sat iz WATCH SHOP kolekcije"
@@ -292,13 +303,11 @@ export default async function Home() {
                   className="absolute inset-0 z-0 h-full w-full rounded-[1.5rem] object-cover sm:rounded-[2rem]"
                 />
 
-                {/* TAMNI PRELIV ZA ČITLJIVOST TEKSTA */}
                 <div
                   aria-hidden="true"
                   className="pointer-events-none absolute inset-0 z-[1] rounded-[1.5rem] bg-gradient-to-t from-[#1A120D]/90 via-[#1A120D]/10 to-black/10 sm:rounded-[2rem]"
                 />
 
-                {/* TEKST PREKO SLIKE */}
                 <div className="relative z-10 mt-auto w-full px-4 pb-10 pt-64 text-center sm:px-6 sm:pb-14 sm:pt-72">
                   <p className="text-[10px] font-medium uppercase tracking-[0.35em] text-[#D4AF7A] sm:text-xs">
                     WATCH SHOP · PREMIUM SELECTION
@@ -483,20 +492,29 @@ export default async function Home() {
 
         <div className="relative mx-auto max-w-7xl px-6 py-10 sm:py-12">
           <div className="flex flex-col gap-8 md:flex-row md:items-center md:justify-between">
-            <div>
-              <Link href="/" className="inline-flex">
+            <div className="flex items-center gap-3">
+              <div className="relative h-11 w-11 shrink-0 overflow-hidden rounded-full border border-[#D4AF7A]/40 shadow-lg sm:h-14 sm:w-14">
                 <Image
                   src="/images/logo.png"
-                  alt="WATCH SHOP"
-                  width={150}
-                  height={50}
-                  className="h-10 w-auto object-contain transition hover:scale-[1.03]"
+                  alt="WATCH SHOP logo"
+                  fill
+                  sizes="56px"
+                  className="object-cover"
                 />
-              </Link>
+              </div>
 
-              <p className="mt-2 text-sm text-[#C5B5A0]">
-                Premium satovi i aksesoari
-              </p>
+              <div>
+                <Link
+                  href="/"
+                  className="text-sm font-bold tracking-[0.22em] text-[#F5EEE3] transition hover:text-[#D4AF7A]"
+                >
+                  WATCH SHOP
+                </Link>
+
+                <p className="mt-2 text-sm text-[#C5B5A0]">
+                  Premium satovi i aksesoari
+                </p>
+              </div>
             </div>
 
             <nav
