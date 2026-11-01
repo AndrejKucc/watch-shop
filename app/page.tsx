@@ -3,6 +3,7 @@ import Image from "next/image";
 import { getProducts } from "@/lib/products";
 import { CartButton } from "@/components/cart";
 import { AccountButton } from "@/components/account-button";
+import { WishlistCountButton } from "@/components/wishlist";
 import CategoryFilter from "@/components/category-filter";
 
 const mainNavigation = [
@@ -206,6 +207,7 @@ export default async function Home() {
 
             <div className="flex shrink-0 items-center gap-2 sm:gap-3">
               <AccountButton />
+              <WishlistCountButton />
               <CartButton />
             </div>
           </div>
