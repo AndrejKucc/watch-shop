@@ -570,9 +570,25 @@ export function CartButton() {
   return (
     <Link
       href="/cart"
-      className="relative rounded-full border border-[#d6b878]/35 bg-gradient-to-b from-[#30231b] to-[#211812] px-5 py-2 text-sm text-[#f4ebdd] shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] transition-all duration-200 hover:border-[#ead4a0]/70 hover:text-[#ead4a0] active:scale-95"
+      aria-label={`Korpa${totalQuantity > 0 ? `, ${totalQuantity} proizvoda` : ""}`}
+      className="relative flex h-11 w-11 items-center justify-center rounded-xl border border-[#d6b878]/35 bg-gradient-to-b from-[#30231b] to-[#211812] text-[#ead4a0] shadow-[inset_0_1px_0_rgba(234,212,160,0.06)] transition-all duration-200 hover:border-[#d6b878]/70 hover:bg-[#4b3621] hover:text-white active:scale-95"
     >
-      Korpa
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="22"
+        height="22"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.7"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        aria-hidden="true"
+      >
+        <circle cx="9" cy="21" r="1" />
+        <circle cx="20" cy="21" r="1" />
+        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+      </svg>
 
       {totalQuantity > 0 && (
         <span className="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full border border-[#ead4a0]/60 bg-gradient-to-b from-[#ead4a0] via-[#d6b878] to-[#bd9650] text-xs font-semibold text-[#211812] shadow-[inset_0_1px_0_rgba(255,255,255,0.45)]">
