@@ -8,8 +8,6 @@ export async function getProducts() {
     .select("*")
     .order("created_at", { ascending: false });
 
-  console.log("SUPABASE RESULT:", result);
-
   if (result.error) {
     throw new Error(result.error.message);
   }
