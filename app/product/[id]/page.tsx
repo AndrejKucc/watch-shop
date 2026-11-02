@@ -192,12 +192,6 @@ export default async function ProductPage({
     product.old_price !== null &&
     Number(product.old_price) > Number(product.price);
 
-  const discountPercentage = hasDiscount
-    ? Math.round(
-        (1 - Number(product.price) / Number(product.old_price)) * 100
-      )
-    : 0;
-
   const categoryLabel =
     product.category === "muski"
       ? "Muški"
@@ -385,29 +379,23 @@ export default async function ProductPage({
                   </p>
 
                   {hasDiscount && (
-                    <div className="mb-3 mt-3 flex flex-wrap items-center gap-2">
-                      <span className="rounded-full bg-[#c46a2d] px-3 py-1 text-[11px] font-bold tracking-wider text-white">
-                        NA POPUSTU
-                      </span>
-
-                      <span className="rounded-full border border-[#c46a2d]/40 px-3 py-1 text-[11px] font-bold text-[#e99a62]">
-                        -{discountPercentage}%
-                      </span>
-                    </div>
-                  )}
-
-                  {hasDiscount && (
-                    <p className="text-lg text-[#8f8071] line-through">
-                      {Number(product.old_price).toLocaleString("sr-RS")} RSD
+                    <p className="mb-1 mt-3 text-lg font-medium text-[#B9A58C] line-through decoration-[#D4AF7A]/60">
+                      {Number(product.old_price).toLocaleString("sr-RS", {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      })}{" "}
+                      RSD
                     </p>
                   )}
 
-                  <p
-                    className={`mt-2 text-4xl font-semibold tracking-tight sm:text-5xl ${
-                      hasDiscount ? "text-[#e99a62]" : ""
-                    }`}
-                  >
-                    {Number(product.price).toLocaleString("sr-RS")} RSD
+                  <p className="mt-2 text-4xl font-semibold tracking-tight text-[#E2C18B] sm:text-5xl">
+                    {Number(product.price).toLocaleString("sr-RS", {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })}{" "}
+                    <span className="text-xl font-medium text-[#B9A58C]">
+                      RSD
+                    </span>
                   </p>
                 </div>
 
