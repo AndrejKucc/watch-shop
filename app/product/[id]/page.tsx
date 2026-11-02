@@ -5,7 +5,6 @@ import { AddToCartButton, CartButton } from "@/components/cart";
 import { WishlistButton } from "@/components/wishlist";
 import ProductReviews from "@/components/product-reviews";
 import ProductGallery from "@/components/product-gallery";
-import RestockNotificationButton from "@/components/restock-notification-button";
 
 type Product = {
   id: string;
@@ -401,20 +400,22 @@ export default async function ProductPage({
                 </div>
 
                 <div className="text-left sm:text-right">
-                  {product.stock > 0 ? (
-                    <>
-                      <p className="text-sm font-semibold text-[#d6b878]">
-                        ✓ Na stanju
-                      </p>
+                  <p
+                    className={`text-sm font-semibold ${
+                      product.stock > 0
+                        ? "text-[#d6b878]"
+                        : "text-[#c46a2d]"
+                    }`}
+                  >
+                    {product.stock > 0
+                      ? "✓ Na stanju"
+                      : "Nije na stanju"}
+                  </p>
 
-                      <p className="mt-1 text-xs text-[#b8a99a]">
-                        {product.stock}{" "}
-                        {product.stock === 1 ? "komad" : "komada"}
-                      </p>
-                    </>
-                  ) : (
-                    <p className="text-sm font-semibold text-[#c46a2d]">
-                      Nije na stanju
+                  {product.stock > 0 && (
+                    <p className="mt-1 text-xs text-[#b8a99a]">
+                      {product.stock}{" "}
+                      {product.stock === 1 ? "komad" : "komada"}
                     </p>
                   )}
                 </div>
@@ -422,19 +423,15 @@ export default async function ProductPage({
 
               <div className="mt-7 flex items-center gap-3">
                 <div className="flex-1">
-                  {product.product_type === "watch" ? (
-                    <RestockNotificationButton productId={product.id} />
-                  ) : (
-                    <AddToCartButton
-                      product={{
-                        id: product.id,
-                        name: product.name,
-                        price: Number(product.price),
-                        image: imageList[0] ?? null,
-                        stock: product.stock,
-                      }}
-                    />
-                  )}
+                  <AddToCartButton
+                    product={{
+                      id: product.id,
+                      name: product.name,
+                      price: Number(product.price),
+                      image: imageList[0] ?? null,
+                      stock: product.stock,
+                    }}
+                  />
                 </div>
 
                 <WishlistButton
