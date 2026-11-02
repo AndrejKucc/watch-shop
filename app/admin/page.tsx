@@ -144,6 +144,22 @@ export default function AdminPage() {
                 Pregledaj ocene i briši neželjene recenzije.
               </p>
             </Link>
+
+            {/* NOVA KARTICA - KORISNICI */}
+            <Link
+              href="/admin/customers"
+              className="rounded-3xl border border-[#d6b878]/25 bg-gradient-to-br from-[#30231b] to-[#211812] p-8 text-left shadow-[inset_0_1px_0_rgba(234,212,160,0.05)] transition hover:border-[#d6b878]/65 hover:bg-[#4b3621]"
+            >
+              <div className="text-3xl">👥</div>
+
+              <h2 className="mt-5 text-xl font-semibold text-[#ead4a0]">
+                Korisnici i omiljeni proizvodi
+              </h2>
+
+              <p className="mt-2 text-sm text-[#b8a99a]">
+                Pregledaj email adrese korisnika i njihove omiljene proizvode.
+              </p>
+            </Link>
           </div>
         </div>
       </main>
