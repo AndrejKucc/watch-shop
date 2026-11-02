@@ -1030,7 +1030,7 @@ export default function CategoryFilter({
                         {product.stock}{" "}
                         {product.stock === 1 ? "komad" : "komada"}
                       </span>
-                    ) : isWatchMode ? (
+                    ) : product.product_type === "watch" ? (
                       <RestockNotificationButton productId={product.id} />
                     ) : (
                       <span className="shrink-0 text-right text-xs text-[#F0B27A]">
