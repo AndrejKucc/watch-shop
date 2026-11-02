@@ -412,8 +412,6 @@ export default async function ProductPage({
                         {product.stock === 1 ? "komad" : "komada"}
                       </p>
                     </>
-                  ) : isWatch ? (
-                    <RestockNotificationButton productId={product.id} />
                   ) : (
                     <p className="text-sm font-semibold text-[#c46a2d]">
                       Nije na stanju
@@ -424,15 +422,19 @@ export default async function ProductPage({
 
               <div className="mt-7 flex items-center gap-3">
                 <div className="flex-1">
-                  <AddToCartButton
-                    product={{
-                      id: product.id,
-                      name: product.name,
-                      price: Number(product.price),
-                      image: imageList[0] ?? null,
-                      stock: product.stock,
-                    }}
-                  />
+                  {product.product_type === "watch" ? (
+                    <RestockNotificationButton productId={product.id} />
+                  ) : (
+                    <AddToCartButton
+                      product={{
+                        id: product.id,
+                        name: product.name,
+                        price: Number(product.price),
+                        image: imageList[0] ?? null,
+                        stock: product.stock,
+                      }}
+                    />
+                  )}
                 </div>
 
                 <WishlistButton
