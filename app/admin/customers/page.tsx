@@ -9,10 +9,26 @@ type Favorite = {
   brand: string | null;
 };
 
+type RestockRequest = {
+  id: string;
+  name: string;
+  brand: string | null;
+  createdAt: string;
+};
+
 type Customer = {
   id: string;
   email: string;
   favorites: Favorite[];
+  restockRequests: RestockRequest[];
+};
+
+type CustomersResponse = {
+  customers: Customer[];
+  totalUsers: number;
+  usersWithFavorites: number;
+  usersWithRestockRequests: number;
+  totalRestockRequests: number;
 };
 
 export default function AdminCustomersPage() {
@@ -34,7 +50,13 @@ export default function AdminCustomersPage() {
           throw new Error(result.error || "Greška pri učitavanju.");
         }
 
-        setCustomers(result.customers || []);
+        setCustomers(
+          (result.customers || []).map((customer: Customer) => ({
+            ...customer,
+            favorites: customer.favorites || [],
+            restockRequests: customer.restockRequests || [],
+          }))
+        );
       } catch (err) {
         setError(
           err instanceof Error
@@ -71,9 +93,22 @@ export default function AdminCustomersPage() {
     (customer) => customer.favorites.length > 0
   );
 
+  const customersWithRestockRequests = customers.filter(
+    (customer) => customer.restockRequests.length > 0
+  );
+
+  const totalRestockRequests = customers.reduce(
+    (total, customer) => total + customer.restockRequests.length,
+    0
+  );
+
   const allEmails = customers.map((customer) => customer.email);
 
   const favoriteEmails = customersWithFavorites.map(
+    (customer) => customer.email
+  );
+
+  const restockEmails = customersWithRestockRequests.map(
     (customer) => customer.email
   );
 
@@ -106,7 +141,7 @@ export default function AdminCustomersPage() {
             </h1>
 
             <p className="mt-3 text-sm text-[#b8a99a]">
-              Pregled registrovanih korisnika i njihovih lista želja.
+              Pregled registrovanih korisnika, njihovih lista želja i prijava za obaveštenje o dostupnosti.
             </p>
           </div>
 
@@ -124,7 +159,8 @@ export default function AdminCustomersPage() {
           </div>
         ) : (
           <>
-            <div className="mt-10 grid gap-5 sm:grid-cols-3">
+            {/* STATISTIKA */}
+            <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
               <div className="rounded-2xl border border-[#d6b878]/20 bg-[#30231b] p-6">
                 <p className="text-sm text-[#b8a99a]">
                   Ukupno registrovanih korisnika
@@ -147,19 +183,26 @@ export default function AdminCustomersPage() {
 
               <div className="rounded-2xl border border-[#d6b878]/20 bg-[#30231b] p-6">
                 <p className="text-sm text-[#b8a99a]">
-                  Ukupno sačuvanih omiljenih proizvoda
+                  Korisnici koji čekaju dostupnost
                 </p>
 
                 <p className="mt-3 text-4xl font-bold text-[#ead4a0]">
-                  {customers.reduce(
-                    (total, customer) =>
-                      total + customer.favorites.length,
-                    0
-                  )}
+                  {customersWithRestockRequests.length}
+                </p>
+              </div>
+
+              <div className="rounded-2xl border border-[#d6b878]/20 bg-[#30231b] p-6">
+                <p className="text-sm text-[#b8a99a]">
+                  Ukupno prijava za dostupnost
+                </p>
+
+                <p className="mt-3 text-4xl font-bold text-[#ead4a0]">
+                  {totalRestockRequests}
                 </p>
               </div>
             </div>
 
+            {/* SVE EMAIL ADRESE */}
             <section className="mt-8 rounded-2xl border border-[#d6b878]/20 bg-[#30231b] p-6">
               <h2 className="text-xl font-semibold text-[#ead4a0]">
                 Sve email adrese
@@ -180,6 +223,7 @@ export default function AdminCustomersPage() {
               </button>
             </section>
 
+            {/* EMAIL ADRESE OMILJENIH */}
             <section className="mt-6 rounded-2xl border border-[#d6b878]/20 bg-[#30231b] p-6">
               <h2 className="text-xl font-semibold text-[#ead4a0]">
                 Korisnici koji imaju omiljene proizvode
@@ -203,6 +247,30 @@ export default function AdminCustomersPage() {
               </button>
             </section>
 
+            {/* EMAIL ADRESE ZA RESTOCK */}
+            <section className="mt-6 rounded-2xl border border-[#d6b878]/30 bg-[#30231b] p-6">
+              <h2 className="text-xl font-semibold text-[#ead4a0]">
+                Obaveštenja o ponovnoj dostupnosti
+              </h2>
+
+              <p className="mt-2 text-sm text-[#b8a99a]">
+                Email adrese korisnika koji čekaju da sat ponovo bude dostupan.
+              </p>
+
+              <button
+                type="button"
+                onClick={() =>
+                  copyEmails(
+                    restockEmails,
+                    "Email adrese korisnika koji čekaju dostupnost su kopirane!"
+                  )
+                }
+                className="mt-5 rounded-xl bg-[#d6b878] px-6 py-3 text-sm font-semibold text-[#211812] transition hover:bg-[#ead4a0]"
+              >
+                📋 Kopiraj email adrese korisnika koji čekaju satove
+              </button>
+            </section>
+
             {copied && (
               <div
                 role="status"
@@ -212,6 +280,7 @@ export default function AdminCustomersPage() {
               </div>
             )}
 
+            {/* SPISAK KORISNIKA */}
             <section className="mt-10">
               <h2 className="mb-5 text-2xl font-semibold text-[#ead4a0]">
                 Spisak korisnika
@@ -228,6 +297,7 @@ export default function AdminCustomersPage() {
                       key={customer.id}
                       className="rounded-2xl border border-[#d6b878]/20 bg-[#30231b] p-5 sm:p-6"
                     >
+                      {/* PODACI O KORISNIKU */}
                       <div className="flex flex-wrap items-center justify-between gap-3">
                         <div className="min-w-0">
                           <p className="break-all font-semibold text-[#ead4a0]">
@@ -236,6 +306,8 @@ export default function AdminCustomersPage() {
 
                           <p className="mt-1 text-xs text-[#b8a99a]">
                             {customer.favorites.length} omiljenih proizvoda
+                            {" · "}
+                            {customer.restockRequests.length} prijava za dostupnost
                           </p>
                         </div>
 
@@ -253,6 +325,66 @@ export default function AdminCustomersPage() {
                         </button>
                       </div>
 
+                      {/* PRIJAVE ZA DOSTUPNOST */}
+                      <div className="mt-5 border-t border-[#d6b878]/20 pt-5">
+                        <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+                          <p className="text-xs font-semibold uppercase tracking-widest text-[#ead4a0]">
+                            Čeka obaveštenje za sledeće satove
+                          </p>
+
+                          {customer.restockRequests.length > 0 && (
+                            <span className="rounded-full border border-[#d6b878]/30 bg-[#d6b878]/10 px-3 py-1 text-xs text-[#ead4a0]">
+                              {customer.restockRequests.length} prijava
+                            </span>
+                          )}
+                        </div>
+
+                        {customer.restockRequests.length === 0 ? (
+                          <p className="text-sm text-[#8f8071]">
+                            Ovaj korisnik trenutno ne čeka dostupnost nijednog sata.
+                          </p>
+                        ) : (
+                          <div className="space-y-3">
+                            {customer.restockRequests.map((request) => (
+                              <div
+                                key={request.id}
+                                className="flex flex-col gap-3 rounded-xl border border-[#d6b878]/20 bg-[#211812] p-4 sm:flex-row sm:items-center sm:justify-between"
+                              >
+                                <div className="min-w-0">
+                                  <Link
+                                    href={`/product/${request.id}`}
+                                    className="font-semibold text-[#ead4a0] transition hover:text-white"
+                                  >
+                                    {request.brand
+                                      ? `${request.brand} — `
+                                      : ""}
+                                    {request.name}
+                                  </Link>
+
+                                  <p className="mt-1 text-xs text-[#b8a99a]">
+                                    Prijavljen:{" "}
+                                    {new Date(
+                                      request.createdAt
+                                    ).toLocaleString("sr-RS", {
+                                      day: "2-digit",
+                                      month: "2-digit",
+                                      year: "numeric",
+                                      hour: "2-digit",
+                                      minute: "2-digit",
+                                    })}
+                                  </p>
+                                </div>
+
+                                <span className="w-fit shrink-0 rounded-full border border-[#d6b878]/30 bg-[#d6b878]/10 px-3 py-1.5 text-xs font-semibold text-[#ead4a0]">
+                                  Čeka dostupnost
+                                </span>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+
+                      {/* OMILJENI PROIZVODI */}
                       <div className="mt-5 border-t border-[#d6b878]/15 pt-4">
                         <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-[#b8a99a]">
                           Omiljeni proizvodi
@@ -286,10 +418,10 @@ export default function AdminCustomersPage() {
             </section>
 
             <p className="mt-8 text-xs leading-6 text-[#8f8071]">
-              Napomena: Za slanje promotivnih poruka koristi samo email adrese
-              korisnika koji su dali odgovarajući pristanak za marketing.
-              Sama registracija ili čuvanje proizvoda u listi želja ne znači
-              automatski pristanak na promotivne poruke.
+              Napomena: Email adrese korisnika koji su zatražili obaveštenje o
+              dostupnosti mogu se koristiti za slanje obaveštenja u vezi sa
+              konkretnim proizvodom. Za promotivne poruke koristi samo email
+              adrese korisnika koji su dali odgovarajući pristanak za marketing.
             </p>
           </>
         )}

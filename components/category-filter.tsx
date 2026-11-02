@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { AddToCartButton } from "@/components/cart";
 import { WishlistButton } from "@/components/wishlist";
+import RestockNotificationButton from "@/components/restock-notification-button";
 
 type Product = {
   id: string;
@@ -963,14 +964,6 @@ export default function CategoryFilter({
                         </div>
                       )}
 
-                      {product.stock <= 0 && (
-                        <div className="absolute inset-0 flex items-center justify-center bg-[#241A13]/75 backdrop-blur-[3px]">
-                          <span className="ws-out-of-stock rounded-full px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.16em] text-[#FFD0A3]">
-                            Nije na stanju
-                          </span>
-                        </div>
-                      )}
-
                       {product.stock > 0 && (
                         <div className="absolute bottom-4 left-4 flex items-center gap-2 rounded-full border border-[#D4AF7A]/20 bg-[#241A13]/80 px-3 py-2 backdrop-blur-xl">
                           <span className="ws-stock-dot h-1.5 w-1.5 rounded-full" />
@@ -1032,17 +1025,18 @@ export default function CategoryFilter({
                       </p>
                     </div>
 
-                    <span
-                      className={
-                        product.stock > 0
-                          ? "shrink-0 text-right text-xs text-[#B9A58C]"
-                          : "shrink-0 text-right text-xs text-[#F0B27A]"
-                      }
-                    >
-                      {product.stock > 0
-                        ? `${product.stock} ${product.stock === 1 ? "komad" : "komada"}`
-                        : "Nije na stanju"}
-                    </span>
+                    {product.stock > 0 ? (
+                      <span className="shrink-0 text-right text-xs text-[#B9A58C]">
+                        {product.stock}{" "}
+                        {product.stock === 1 ? "komad" : "komada"}
+                      </span>
+                    ) : isWatchMode ? (
+                      <RestockNotificationButton productId={product.id} />
+                    ) : (
+                      <span className="shrink-0 text-right text-xs text-[#F0B27A]">
+                        Nije na stanju
+                      </span>
+                    )}
                   </div>
 
                   <AddToCartButton

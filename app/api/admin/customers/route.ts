@@ -108,11 +108,43 @@ export async function GET() {
       offset += pageSize;
     }
 
-    // Učitavanje naziva proizvoda
+    // Učitavanje prijava za obaveštenje o dostupnosti
+    const restockItems: {
+      user_id: string;
+      product_id: string;
+      created_at: string;
+    }[] = [];
+
+    offset = 0;
+
+    while (true) {
+      const { data, error } = await supabaseAdmin
+        .from("restock_notifications")
+        .select("user_id, product_id, created_at")
+        .range(offset, offset + pageSize - 1);
+
+      if (error) {
+        throw error;
+      }
+
+      restockItems.push(...(data ?? []));
+
+      if (!data || data.length < pageSize) {
+        break;
+      }
+
+      offset += pageSize;
+    }
+
+    // Svi ID-jevi proizvoda iz omiljenih i restock prijava
     const productIds = [
-      ...new Set(wishlistItems.map((item) => item.product_id)),
+      ...new Set([
+        ...wishlistItems.map((item) => item.product_id),
+        ...restockItems.map((item) => item.product_id),
+      ]),
     ];
 
+    // Učitavanje naziva i brendova proizvoda
     const productMap = new Map<
       string,
       { name: string; brand: string | null }
@@ -138,7 +170,7 @@ export async function GET() {
       }
     }
 
-    // Povezivanje korisnika sa njihovim omiljenim proizvodima
+    // Povezivanje korisnika sa omiljenim proizvodima i prijavama
     const customers = users
       .filter((customer) => customer.email)
       .map((customer) => {
@@ -157,10 +189,32 @@ export async function GET() {
           })
           .filter((product) => product !== null);
 
+        const restockRequests = restockItems
+          .filter((item) => item.user_id === customer.id)
+          .map((item) => {
+            const product = productMap.get(item.product_id);
+
+            return product
+              ? {
+                  id: item.product_id,
+                  name: product.name,
+                  brand: product.brand,
+                  createdAt: item.created_at,
+                }
+              : null;
+          })
+          .filter((product) => product !== null)
+          .sort(
+            (a, b) =>
+              new Date(b.createdAt).getTime() -
+              new Date(a.createdAt).getTime()
+          );
+
         return {
           id: customer.id,
           email: customer.email,
           favorites,
+          restockRequests,
         };
       })
       .sort((a, b) => a.email.localeCompare(b.email));
@@ -168,9 +222,16 @@ export async function GET() {
     return NextResponse.json({
       customers,
       totalUsers: customers.length,
+
       usersWithFavorites: customers.filter(
         (customer) => customer.favorites.length > 0
       ).length,
+
+      usersWithRestockRequests: customers.filter(
+        (customer) => customer.restockRequests.length > 0
+      ).length,
+
+      totalRestockRequests: restockItems.length,
     });
   } catch (error) {
     console.error("Greška pri učitavanju korisnika:", error);
