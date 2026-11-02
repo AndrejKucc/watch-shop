@@ -73,6 +73,15 @@ const productTypeLabels: Record<string, string> = {
   gift_set: "Poklon set",
 };
 
+const returnPathByProductType: Record<string, string> = {
+  watch: "/satovi",
+  bracelet: "/narukvice",
+  necklace: "/ogrlice",
+  wallet: "/novcanici",
+  gift_box: "/pokloni",
+  gift_set: "/pokloni",
+};
+
 export async function generateMetadata({
   params,
 }: {
@@ -186,6 +195,9 @@ export default async function ProductPage({
 
   const productTypeLabel =
     productTypeLabels[product.product_type] || "Proizvod";
+
+  const returnPath =
+    returnPathByProductType[product.product_type] || "/";
 
   const watchSpecificationGroups: SpecificationGroup[] = [
     {
@@ -305,7 +317,7 @@ export default async function ProductPage({
 
       <section className="mx-auto max-w-7xl px-5 py-6 sm:px-6 sm:py-10">
         <Link
-          href={isWatch ? "/satovi" : "/"}
+          href={returnPath}
           className="inline-flex items-center gap-2 rounded-full border border-[#d6b878]/25 bg-gradient-to-b from-[#d6b878]/10 to-[#4b3621]/20 px-4 py-2.5 text-sm text-[#b8a99a] shadow-[inset_0_1px_0_rgba(255,255,255,0.10)] transition-all duration-200 hover:border-[#d6b878]/50 hover:from-[#d6b878]/20 hover:to-[#4b3621]/40 hover:text-[#f4ebdd] active:scale-95"
         >
           <span aria-hidden="true">←</span>
