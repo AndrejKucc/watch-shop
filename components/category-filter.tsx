@@ -14,6 +14,7 @@ type Product = {
   model: string | null;
   description: string | null;
   price: number;
+  old_price?: number | null;
   stock: number;
   category: string | null;
   product_type?: string | null;
@@ -902,141 +903,182 @@ export default function CategoryFilter({
 
       <div className="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
         {!invalidPriceRange &&
-          filteredProducts.map((product) => (
-            <article
-              key={product.id}
-              className="ws-product-card group overflow-hidden rounded-[26px]"
-            >
-              <div className="relative">
-                <Link href={`/product/${product.id}`} className="block">
-                  <div className="relative overflow-hidden bg-[#302116]">
-                    <div className="aspect-[4/3]">
-                      {product.images && product.images[0] ? (
-                        <img
-                          src={product.images[0]}
-                          alt={product.name}
-                          loading="lazy"
-                          className="ws-product-image h-full w-full object-cover"
-                        />
-                      ) : (
-                        <div className="flex h-full flex-col items-center justify-center gap-3 text-[#A18B72]">
-                          <svg
-                            aria-hidden="true"
-                            viewBox="0 0 24 24"
-                            className="h-10 w-10 opacity-70"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="1.2"
-                          >
-                            <circle cx="12" cy="12" r="8" />
-                            <path d="M12 7v5l3 2" strokeLinecap="round" />
-                          </svg>
-                          <span className="text-xs uppercase tracking-[0.16em]">
-                            Watch Shop
+          filteredProducts.map((product) => {
+            const hasDiscount =
+              product.old_price !== null &&
+              product.old_price !== undefined &&
+              Number(product.old_price) > Number(product.price);
+
+            const discountPercentage = hasDiscount
+              ? Math.round(
+                  (1 -
+                    Number(product.price) / Number(product.old_price)) *
+                    100,
+                )
+              : 0;
+
+            return (
+              <article
+                key={product.id}
+                className="ws-product-card group overflow-hidden rounded-[26px]"
+              >
+                <div className="relative">
+                  <Link href={`/product/${product.id}`} className="block">
+                    <div className="relative overflow-hidden bg-[#302116]">
+                      <div className="aspect-[4/3]">
+                        {product.images && product.images[0] ? (
+                          <img
+                            src={product.images[0]}
+                            alt={product.name}
+                            loading="lazy"
+                            className="ws-product-image h-full w-full object-cover"
+                          />
+                        ) : (
+                          <div className="flex h-full flex-col items-center justify-center gap-3 text-[#A18B72]">
+                            <svg
+                              aria-hidden="true"
+                              viewBox="0 0 24 24"
+                              className="h-10 w-10 opacity-70"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="1.2"
+                            >
+                              <circle cx="12" cy="12" r="8" />
+                              <path d="M12 7v5l3 2" strokeLinecap="round" />
+                            </svg>
+                            <span className="text-xs uppercase tracking-[0.16em]">
+                              Watch Shop
+                            </span>
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#241A13]/60 via-transparent to-transparent" />
+
+                      {isWatchMode && showGenderFilter && (
+                        <div className="absolute left-4 top-4">
+                          <span className="rounded-full border border-[#D4AF7A]/20 bg-[#241A13]/80 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-[#F5EEE3] backdrop-blur-xl">
+                            {normalize(product.category) === "muski"
+                              ? "Muški"
+                              : normalize(product.category) === "zenski"
+                                ? "Ženski"
+                                : "Unisex"}
+                          </span>
+                        </div>
+                      )}
+
+                      {hasDiscount && (
+                        <div className="absolute right-4 top-4 z-10 flex flex-col items-end gap-1.5">
+                          <span className="rounded-full border border-red-300/30 bg-red-600 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.12em] text-white shadow-lg">
+                            NA POPUSTU
+                          </span>
+                          <span className="rounded-full bg-white px-3 py-1 text-xs font-bold text-red-600 shadow-lg">
+                            -{discountPercentage}%
+                          </span>
+                        </div>
+                      )}
+
+                      {product.stock <= 0 && (
+                        <div className="absolute inset-0 flex items-center justify-center bg-[#241A13]/75 backdrop-blur-[3px]">
+                          <span className="ws-out-of-stock rounded-full px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.16em] text-[#FFD0A3]">
+                            Nije na stanju
+                          </span>
+                        </div>
+                      )}
+
+                      {product.stock > 0 && (
+                        <div className="absolute bottom-4 left-4 flex items-center gap-2 rounded-full border border-[#D4AF7A]/20 bg-[#241A13]/80 px-3 py-2 backdrop-blur-xl">
+                          <span className="ws-stock-dot h-1.5 w-1.5 rounded-full" />
+                          <span className="text-[10px] font-medium uppercase tracking-[0.12em] text-[#F1DDBA]">
+                            Dostupno
                           </span>
                         </div>
                       )}
                     </div>
 
-                    <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#241A13]/60 via-transparent to-transparent" />
-
-                    {isWatchMode && showGenderFilter && (
-                      <div className="absolute left-4 top-4">
-                        <span className="rounded-full border border-[#D4AF7A]/20 bg-[#241A13]/80 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-[#F5EEE3] backdrop-blur-xl">
-                          {normalize(product.category) === "muski"
-                            ? "Muški"
-                            : normalize(product.category) === "zenski"
-                              ? "Ženski"
-                              : "Unisex"}
-                        </span>
-                      </div>
-                    )}
-
-                    {product.stock <= 0 && (
-                      <div className="absolute inset-0 flex items-center justify-center bg-[#241A13]/75 backdrop-blur-[3px]">
-                        <span className="ws-out-of-stock rounded-full px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.16em] text-[#FFD0A3]">
-                          Nije na stanju
-                        </span>
-                      </div>
-                    )}
-
-                    {product.stock > 0 && (
-                      <div className="absolute bottom-4 left-4 flex items-center gap-2 rounded-full border border-[#D4AF7A]/20 bg-[#241A13]/80 px-3 py-2 backdrop-blur-xl">
-                        <span className="ws-stock-dot h-1.5 w-1.5 rounded-full" />
-                        <span className="text-[10px] font-medium uppercase tracking-[0.12em] text-[#F1DDBA]">
-                          Dostupno
-                        </span>
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="p-5 pb-3 sm:p-6 sm:pb-3">
-                    <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#D4AF7A]">
-                      {product.brand || "Watch Shop"}
-                    </p>
-
-                    <h3 className="mt-3 text-xl font-semibold leading-snug tracking-tight text-[#F5EEE3] transition-colors duration-200 group-hover:text-white sm:text-2xl">
-                      {product.name}
-                    </h3>
-
-                    {product.model && (
-                      <p className="mt-1.5 text-sm text-[#B9A58C]">
-                        {product.model}
+                    <div className="p-5 pb-3 sm:p-6 sm:pb-3">
+                      <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#D4AF7A]">
+                        {product.brand || "Watch Shop"}
                       </p>
-                    )}
-                  </div>
-                </Link>
 
-                <WishlistButton
-                  productId={product.id}
-                  className="absolute right-4 top-4 z-20 shadow-lg"
-                />
-              </div>
+                      <h3 className="mt-3 text-xl font-semibold leading-snug tracking-tight text-[#F5EEE3] transition-colors duration-200 group-hover:text-white sm:text-2xl">
+                        {product.name}
+                      </h3>
 
-              <div className="p-5 pt-3 sm:p-6 sm:pt-3">
-                <div className="mb-5 flex items-end justify-between gap-3 border-t border-[#D4AF7A]/15 pt-4">
-                  <div className="min-w-0">
-                    <p className="text-[10px] font-medium uppercase tracking-[0.16em] text-[#A18B72]">
-                      Cena
-                    </p>
+                      {product.model && (
+                        <p className="mt-1.5 text-sm text-[#B9A58C]">
+                          {product.model}
+                        </p>
+                      )}
+                    </div>
+                  </Link>
 
-                    <p className="ws-price mt-1.5 text-xl font-semibold tracking-tight sm:text-2xl">
-                      {Number(product.price).toLocaleString("sr-RS")}{" "}
-                      <span className="text-xs font-medium text-[#B9A58C]">
-                        RSD
-                      </span>
-                    </p>
-                  </div>
-
-                  <span
-                    className={
-                      product.stock > 0
-                        ? "shrink-0 text-right text-xs text-[#B9A58C]"
-                        : "shrink-0 text-right text-xs text-[#F0B27A]"
-                    }
-                  >
-                    {product.stock > 0
-                      ? `${product.stock} ${product.stock === 1 ? "komad" : "komada"}`
-                      : "Nije na stanju"}
-                  </span>
+                  <WishlistButton
+                    productId={product.id}
+                    className="absolute right-4 top-4 z-20 shadow-lg"
+                  />
                 </div>
 
-                <AddToCartButton
-                  product={{
-                    id: product.id,
-                    name: product.name,
-                    price: Number(product.price),
-                    image: product.images?.[0] ?? null,
-                    stock: product.stock,
-                  }}
-                />
+                <div className="p-5 pt-3 sm:p-6 sm:pt-3">
+                  <div className="mb-5 flex items-end justify-between gap-3 border-t border-[#D4AF7A]/15 pt-4">
+                    <div className="min-w-0">
+                      <p className="text-[10px] font-medium uppercase tracking-[0.16em] text-[#A18B72]">
+                        Cena
+                      </p>
 
-                <div className="mt-3">
-                  <CompareButton productId={product.id} />
+                      {hasDiscount && (
+                        <div className="mt-1.5 flex flex-wrap items-center gap-2">
+                          <span className="text-sm font-medium text-[#A18B72] line-through decoration-red-400/80">
+                            {Number(product.old_price).toLocaleString("sr-RS")} RSD
+                          </span>
+                          <span className="rounded-md bg-red-600/15 px-2 py-0.5 text-[10px] font-bold text-red-400">
+                            -{discountPercentage}%
+                          </span>
+                        </div>
+                      )}
+
+                      <p
+                        className={`mt-1.5 text-xl font-semibold tracking-tight tabular-nums sm:text-2xl ${
+                          hasDiscount ? "text-red-400" : "ws-price"
+                        }`}
+                      >
+                        {Number(product.price).toLocaleString("sr-RS")}{" "}
+                        <span className="text-xs font-medium text-[#B9A58C]">
+                          RSD
+                        </span>
+                      </p>
+                    </div>
+
+                    <span
+                      className={
+                        product.stock > 0
+                          ? "shrink-0 text-right text-xs text-[#B9A58C]"
+                          : "shrink-0 text-right text-xs text-[#F0B27A]"
+                      }
+                    >
+                      {product.stock > 0
+                        ? `${product.stock} ${product.stock === 1 ? "komad" : "komada"}`
+                        : "Nije na stanju"}
+                    </span>
+                  </div>
+
+                  <AddToCartButton
+                    product={{
+                      id: product.id,
+                      name: product.name,
+                      price: Number(product.price),
+                      image: product.images?.[0] ?? null,
+                      stock: product.stock,
+                    }}
+                  />
+
+                  <div className="mt-3">
+                    <CompareButton productId={product.id} />
+                  </div>
                 </div>
-              </div>
-            </article>
-          ))}
+              </article>
+            );
+          })}
 
         {(invalidPriceRange || filteredProducts.length === 0) && (
           <div className="ws-glass-panel col-span-full rounded-[28px] p-8 text-center sm:p-12">
