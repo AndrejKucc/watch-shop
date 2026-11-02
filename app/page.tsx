@@ -440,10 +440,6 @@ export default async function Home() {
               Number.isFinite(oldPrice) &&
               oldPrice > currentPrice;
 
-            const discountPercentage = hasDiscount
-              ? Math.round((1 - currentPrice / oldPrice) * 100)
-              : 0;
-
             return (
               <Link
                 key={product.id}
@@ -479,18 +475,6 @@ export default async function Home() {
                     </span>
                   )}
 
-                  {hasDiscount && (
-                    <div className="absolute right-4 top-4 z-10 flex flex-col items-end gap-1">
-                      <span className="rounded-xl border border-red-400/40 bg-red-600/95 px-3 py-2 text-[10px] font-extrabold tracking-wider text-white shadow-lg backdrop-blur-xl">
-                        NA POPUSTU
-                      </span>
-
-                      <span className="rounded-lg bg-white px-2.5 py-1 text-xs font-extrabold text-red-600 shadow-lg">
-                        -{discountPercentage}%
-                      </span>
-                    </div>
-                  )}
-
                   <span className="absolute bottom-4 right-4 flex h-10 w-10 items-center justify-center rounded-xl border border-white/15 bg-[#241A13]/70 text-lg text-white opacity-0 backdrop-blur-xl transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100">
                     ↗
                   </span>
@@ -508,7 +492,7 @@ export default async function Home() {
                   <div className="mt-5 flex items-center justify-between gap-3 border-t border-white/[0.09] pt-4">
                     <div className="min-w-0">
                       {hasDiscount && (
-                        <p className="mb-1 text-sm font-medium text-[#B9A58C] line-through decoration-red-400/80">
+                        <p className="mb-1 text-sm font-medium text-[#B9A58C] line-through decoration-[#D4AF7A]/60">
                           {oldPrice.toLocaleString("sr-RS", {
                             minimumFractionDigits: 2,
                             maximumFractionDigits: 2,
@@ -517,11 +501,7 @@ export default async function Home() {
                         </p>
                       )}
 
-                      <p
-                        className={`text-xl font-bold tracking-tight ${
-                          hasDiscount ? "text-red-400" : "text-white"
-                        }`}
-                      >
+                      <p className="text-xl font-bold tracking-tight text-[#E2C18B]">
                         {currentPrice.toLocaleString("sr-RS", {
                           minimumFractionDigits: 2,
                           maximumFractionDigits: 2,
