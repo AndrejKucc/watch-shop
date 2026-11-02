@@ -9,6 +9,7 @@ import {
   type ReactNode,
 } from "react";
 import { createClient } from "@/lib/supabase";
+import RestockNotificationButton from "@/components/restock-notification-button";
 
 const CART_STORAGE_KEY = "watch-shop-cart";
 const COUPON_STORAGE_KEY = "watch-shop-coupon";
@@ -28,6 +29,7 @@ type CartProduct = {
   price: number;
   image: string | null;
   stock: number;
+  enableRestockNotification?: boolean;
 };
 
 type AppliedCoupon = {
@@ -65,30 +67,23 @@ type CartContextValue = {
   items: CartItem[];
   totalQuantity: number;
   totalPrice: number;
-
   appliedCoupon: AppliedCoupon | null;
   couponDiscount: number;
-
   finalTotal: number;
-
   couponLoading: boolean;
   couponMessage: string;
-
   vipStatus: VipStatus | null;
   vipLoading: boolean;
   vipPointsToRedeem: number;
   vipPointsDiscount: number;
   vipMessage: string;
-
   addToCart: (product: CartProduct) => void;
   increaseQuantity: (id: string) => void;
   decreaseQuantity: (id: string) => void;
   removeFromCart: (id: string) => void;
   clearCart: () => void;
-
   applyCoupon: (code: string) => Promise<boolean>;
   removeCoupon: () => void;
-
   setVipPointsToRedeem: (points: number) => void;
   refreshVipStatus: () => Promise<void>;
 };
@@ -178,9 +173,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
         }
       }
 
-      const storedCoupon = window.localStorage.getItem(
-        COUPON_STORAGE_KEY
-      );
+      const storedCoupon = window.localStorage.getItem(COUPON_STORAGE_KEY);
 
       if (storedCoupon) {
         const parsedCoupon = JSON.parse(storedCoupon);
@@ -207,9 +200,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   }, []);
 
   useEffect(() => {
-    if (!isLoaded) {
-      return;
-    }
+    if (!isLoaded) return;
 
     try {
       window.localStorage.setItem(
@@ -225,9 +216,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   }, [items, isLoaded]);
 
   useEffect(() => {
-    if (!isLoaded) {
-      return;
-    }
+    if (!isLoaded) return;
 
     try {
       if (appliedCoupon) {
@@ -265,9 +254,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   }, []);
 
   function addToCart(product: CartProduct) {
-    if (product.stock <= 0) {
-      return;
-    }
+    if (product.stock <= 0) return;
 
     setItems((currentItems) => {
       const existingItem = currentItems.find(
@@ -398,8 +385,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       Math.floor(totalPrice / 100) * 50
     );
 
-    const roundedPoints =
-      Math.floor(points / 50) * 50;
+    const roundedPoints = Math.floor(points / 50) * 50;
 
     if (roundedPoints < 50) {
       setVipPointsToRedeemState(0);
@@ -415,9 +401,9 @@ export function CartProvider({ children }: { children: ReactNode }) {
       );
 
       setVipMessage(
-        `Možeš iskoristiti najviše ${Math.floor(
-          maximumPoints / 50
-        ) * 50} poena za ovu porudžbinu.`
+        `Možeš iskoristiti najviše ${
+          Math.floor(maximumPoints / 50) * 50
+        } poena za ovu porudžbinu.`
       );
 
       return;
@@ -430,17 +416,14 @@ export function CartProvider({ children }: { children: ReactNode }) {
   }
 
   useEffect(() => {
-    if (vipPointsToRedeem <= 0 || !vipStatus) {
-      return;
-    }
+    if (vipPointsToRedeem <= 0 || !vipStatus) return;
 
     const maximumPoints = Math.min(
       vipStatus.points_balance,
       Math.floor(totalPrice / 100) * 50
     );
 
-    const allowedPoints =
-      Math.floor(maximumPoints / 50) * 50;
+    const allowedPoints = Math.floor(maximumPoints / 50) * 50;
 
     if (vipPointsToRedeem > allowedPoints) {
       setVipPointsToRedeemState(allowedPoints);
@@ -529,22 +512,18 @@ export function CartProvider({ children }: { children: ReactNode }) {
         finalTotal,
         couponLoading,
         couponMessage,
-
         vipStatus,
         vipLoading,
         vipPointsToRedeem,
         vipPointsDiscount,
         vipMessage,
-
         addToCart,
         increaseQuantity,
         decreaseQuantity,
         removeFromCart,
         clearCart,
-
         applyCoupon,
         removeCoupon,
-
         setVipPointsToRedeem,
         refreshVipStatus,
       }}
@@ -570,7 +549,9 @@ export function CartButton() {
   return (
     <Link
       href="/cart"
-      aria-label={`Korpa${totalQuantity > 0 ? `, ${totalQuantity} proizvoda` : ""}`}
+      aria-label={`Korpa${
+        totalQuantity > 0 ? `, ${totalQuantity} proizvoda` : ""
+      }`}
       className="relative flex h-11 w-11 items-center justify-center rounded-xl border border-[#d6b878]/35 bg-gradient-to-b from-[#30231b] to-[#211812] text-[#ead4a0] shadow-[inset_0_1px_0_rgba(234,212,160,0.06)] transition-all duration-200 hover:border-[#d6b878]/70 hover:bg-[#4b3621] hover:text-white active:scale-95"
     >
       <svg
@@ -605,6 +586,10 @@ export function AddToCartButton({
   product: CartProduct;
 }) {
   const { addToCart } = useCart();
+
+  if (product.stock <= 0 && product.enableRestockNotification) {
+    return <RestockNotificationButton productId={product.id} variant="cart" />;
+  }
 
   const isOutOfStock = product.stock <= 0;
 
