@@ -209,6 +209,7 @@ type Product = {
   year: number | null;
   description: string | null;
   price: number;
+  old_price: number | null;
   purchase_price: number | null;
   stock: number;
   category: string;
@@ -299,6 +300,7 @@ export default function EditProductPage() {
           year,
           description,
           price,
+          old_price,
           purchase_price,
           stock,
           category,
@@ -437,6 +439,18 @@ export default function EditProductPage() {
     try {
       const parsedPrice = Number(price);
 
+      const previousPrice = Number(product.price);
+
+      let priceHistoryUpdate: { old_price?: number | null } = {};
+
+      if (parsedPrice < previousPrice) {
+        // Cena je snižena – čuvamo prethodnu cenu.
+        priceHistoryUpdate.old_price = previousPrice;
+      } else if (parsedPrice > previousPrice) {
+        // Cena je povećana – uklanjamo sniženje.
+        priceHistoryUpdate.old_price = null;
+      }
+
       const parsedPurchasePrice =
         purchasePrice.trim() === "" ? null : Number(purchasePrice);
 
@@ -537,6 +551,7 @@ export default function EditProductPage() {
           category,
           description: description.trim() || null,
           price: parsedPrice,
+          ...priceHistoryUpdate,
           purchase_price: parsedPurchasePrice,
           stock: parsedStock,
           images: finalImages,
@@ -563,6 +578,10 @@ export default function EditProductPage() {
               category,
               description: description.trim() || null,
               price: parsedPrice,
+              old_price:
+                priceHistoryUpdate.old_price !== undefined
+                  ? priceHistoryUpdate.old_price
+                  : current.old_price,
               purchase_price: parsedPurchasePrice,
               stock: parsedStock,
               images: finalImages,

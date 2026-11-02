@@ -13,6 +13,7 @@ type Product = {
   model: string | null;
   description: string | null;
   price: number;
+  old_price: number | null;
   stock: number;
   category: string;
   product_type: string;
@@ -143,6 +144,7 @@ export default async function ProductPage({
         model,
         description,
         price,
+        old_price,
         stock,
         category,
         product_type,
@@ -185,6 +187,16 @@ export default async function ProductPage({
 
   const product = data as Product;
   const isWatch = product.product_type === "watch";
+
+  const hasDiscount =
+    product.old_price !== null &&
+    Number(product.old_price) > Number(product.price);
+
+  const discountPercentage = hasDiscount
+    ? Math.round(
+        (1 - Number(product.price) / Number(product.old_price)) * 100
+      )
+    : 0;
 
   const categoryLabel =
     product.category === "muski"
@@ -372,7 +384,29 @@ export default async function ProductPage({
                     Prodajna cena
                   </p>
 
-                  <p className="mt-2 text-4xl font-semibold tracking-tight sm:text-5xl">
+                  {hasDiscount && (
+                    <div className="mb-3 mt-3 flex flex-wrap items-center gap-2">
+                      <span className="rounded-full bg-[#c46a2d] px-3 py-1 text-[11px] font-bold tracking-wider text-white">
+                        NA POPUSTU
+                      </span>
+
+                      <span className="rounded-full border border-[#c46a2d]/40 px-3 py-1 text-[11px] font-bold text-[#e99a62]">
+                        -{discountPercentage}%
+                      </span>
+                    </div>
+                  )}
+
+                  {hasDiscount && (
+                    <p className="text-lg text-[#8f8071] line-through">
+                      {Number(product.old_price).toLocaleString("sr-RS")} RSD
+                    </p>
+                  )}
+
+                  <p
+                    className={`mt-2 text-4xl font-semibold tracking-tight sm:text-5xl ${
+                      hasDiscount ? "text-[#e99a62]" : ""
+                    }`}
+                  >
                     {Number(product.price).toLocaleString("sr-RS")} RSD
                   </p>
                 </div>
