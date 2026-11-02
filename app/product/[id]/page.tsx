@@ -5,6 +5,7 @@ import { AddToCartButton, CartButton } from "@/components/cart";
 import { WishlistButton } from "@/components/wishlist";
 import ProductReviews from "@/components/product-reviews";
 import ProductGallery from "@/components/product-gallery";
+import RestockNotificationButton from "@/components/restock-notification-button";
 
 type Product = {
   id: string;
@@ -400,22 +401,22 @@ export default async function ProductPage({
                 </div>
 
                 <div className="text-left sm:text-right">
-                  <p
-                    className={`text-sm font-semibold ${
-                      product.stock > 0
-                        ? "text-[#d6b878]"
-                        : "text-[#c46a2d]"
-                    }`}
-                  >
-                    {product.stock > 0
-                      ? "✓ Na stanju"
-                      : "Nije na stanju"}
-                  </p>
+                  {product.stock > 0 ? (
+                    <>
+                      <p className="text-sm font-semibold text-[#d6b878]">
+                        ✓ Na stanju
+                      </p>
 
-                  {product.stock > 0 && (
-                    <p className="mt-1 text-xs text-[#b8a99a]">
-                      {product.stock}{" "}
-                      {product.stock === 1 ? "komad" : "komada"}
+                      <p className="mt-1 text-xs text-[#b8a99a]">
+                        {product.stock}{" "}
+                        {product.stock === 1 ? "komad" : "komada"}
+                      </p>
+                    </>
+                  ) : isWatch ? (
+                    <RestockNotificationButton productId={product.id} />
+                  ) : (
+                    <p className="text-sm font-semibold text-[#c46a2d]">
+                      Nije na stanju
                     </p>
                   )}
                 </div>
