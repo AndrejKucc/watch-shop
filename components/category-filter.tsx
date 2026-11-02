@@ -561,7 +561,7 @@ export default function CategoryFilter({
         }
 
         .ws-price {
-          color: #F5EEE3;
+          color: #E2C18B;
           font-variant-numeric: tabular-nums;
         }
 
@@ -904,18 +904,14 @@ export default function CategoryFilter({
       <div className="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
         {!invalidPriceRange &&
           filteredProducts.map((product) => {
+            const oldPrice = Number(product.old_price);
+            const currentPrice = Number(product.price);
+
             const hasDiscount =
               product.old_price !== null &&
               product.old_price !== undefined &&
-              Number(product.old_price) > Number(product.price);
-
-            const discountPercentage = hasDiscount
-              ? Math.round(
-                  (1 -
-                    Number(product.price) / Number(product.old_price)) *
-                    100,
-                )
-              : 0;
+              Number.isFinite(oldPrice) &&
+              oldPrice > currentPrice;
 
             return (
               <article
@@ -963,17 +959,6 @@ export default function CategoryFilter({
                               : normalize(product.category) === "zenski"
                                 ? "Ženski"
                                 : "Unisex"}
-                          </span>
-                        </div>
-                      )}
-
-                      {hasDiscount && (
-                        <div className="absolute right-4 top-4 z-10 flex flex-col items-end gap-1.5">
-                          <span className="rounded-full border border-red-300/30 bg-red-600 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.12em] text-white shadow-lg">
-                            NA POPUSTU
-                          </span>
-                          <span className="rounded-full bg-white px-3 py-1 text-xs font-bold text-red-600 shadow-lg">
-                            -{discountPercentage}%
                           </span>
                         </div>
                       )}
@@ -1027,22 +1012,20 @@ export default function CategoryFilter({
                       </p>
 
                       {hasDiscount && (
-                        <div className="mt-1.5 flex flex-wrap items-center gap-2">
-                          <span className="text-sm font-medium text-[#A18B72] line-through decoration-red-400/80">
-                            {Number(product.old_price).toLocaleString("sr-RS")} RSD
-                          </span>
-                          <span className="rounded-md bg-red-600/15 px-2 py-0.5 text-[10px] font-bold text-red-400">
-                            -{discountPercentage}%
-                          </span>
-                        </div>
+                        <p className="mb-1 mt-1.5 text-sm font-medium text-[#B9A58C] line-through decoration-[#D4AF7A]/60">
+                          {oldPrice.toLocaleString("sr-RS", {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2,
+                          })}{" "}
+                          RSD
+                        </p>
                       )}
 
-                      <p
-                        className={`mt-1.5 text-xl font-semibold tracking-tight tabular-nums sm:text-2xl ${
-                          hasDiscount ? "text-red-400" : "ws-price"
-                        }`}
-                      >
-                        {Number(product.price).toLocaleString("sr-RS")}{" "}
+                      <p className="ws-price mt-1.5 text-xl font-semibold tracking-tight tabular-nums sm:text-2xl">
+                        {currentPrice.toLocaleString("sr-RS", {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2,
+                        })}{" "}
                         <span className="text-xs font-medium text-[#B9A58C]">
                           RSD
                         </span>
