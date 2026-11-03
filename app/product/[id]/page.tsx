@@ -412,12 +412,8 @@ export default async function ProductPage({
                         {product.stock === 1 ? "komad" : "komada"}
                       </p>
                     </>
-                  ) : isWatch ? (
-                    <RestockNotificationButton productId={product.id} />
                   ) : (
-                    <p className="text-sm font-semibold text-[#c46a2d]">
-                      Nije na stanju
-                    </p>
+                    <RestockNotificationButton productId={product.id} />
                   )}
                 </div>
               </div>
