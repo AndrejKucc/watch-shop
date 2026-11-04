@@ -163,7 +163,7 @@ export async function POST(request: Request) {
 
           <div style="margin-bottom:32px;">
             <div style="font-size:24px;font-weight:700;letter-spacing:3px;">
-              WATCH SHOP
+              WATCH STORE
             </div>
             <div style="margin-top:6px;color:#777;font-size:13px;">
               Premium satovi
@@ -239,7 +239,7 @@ export async function POST(request: Request) {
           <div style="margin-top:35px;padding-top:25px;border-top:1px solid #e5e5e5;">
             <p style="font-size:13px;color:#888;line-height:1.6;margin:0;">
               Ovo je automatska potvrda vaše porudžbine.
-              Za sva pitanja možete kontaktirati WATCH SHOP.
+              Za sva pitanja možete kontaktirati WATCH STORE.
             </p>
           </div>
 
@@ -253,7 +253,7 @@ export async function POST(request: Request) {
 
           <div style="margin-bottom:30px;">
             <div style="font-size:24px;font-weight:700;letter-spacing:3px;">
-              WATCH SHOP
+              WATCH STORE
             </div>
             <div style="margin-top:6px;color:#777;font-size:13px;">
               Nova porudžbina
@@ -346,7 +346,7 @@ export async function POST(request: Request) {
         body: JSON.stringify({
           from: "onboarding@resend.dev",
           to: [order.email],
-          subject: `WATCH SHOP — potvrda porudžbine ${orderNumber}`,
+          subject: `WATCH STORE — potvrda porudžbine ${orderNumber}`,
           html: html,
         }),
       }
@@ -386,7 +386,7 @@ export async function POST(request: Request) {
         body: JSON.stringify({
           from: "onboarding@resend.dev",
           to: ["kucc.andrej@gmail.com"],
-          subject: `WATCH SHOP — NOVA PORUDŽBINA ${orderNumber}`,
+          subject: `WATCH STORE — NOVA PORUDŽBINA ${orderNumber}`,
           html: sellerHtml,
         }),
       }

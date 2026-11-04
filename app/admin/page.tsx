@@ -64,7 +64,7 @@ export default function AdminPage() {
           <div className="flex items-center justify-between gap-4">
             <div>
               <p className="text-sm uppercase tracking-[0.3em] text-[#d6b878]">
-                WATCH SHOP
+                WATCH STORE
               </p>
 
               <h1 className="mt-2 text-4xl font-bold text-[#f4ebdd]">

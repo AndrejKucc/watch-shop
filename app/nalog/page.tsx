@@ -405,7 +405,7 @@ export default function AccountPage() {
 
         <section className="mt-8 rounded-3xl border border-[#d6b878]/25 bg-gradient-to-br from-[#30231b] via-[#2b2018] to-[#211812] p-6 shadow-[inset_0_1px_0_rgba(234,212,160,0.08),0_12px_40px_rgba(0,0,0,0.2)] sm:p-10">
           <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#d6b878]">
-            WATCH SHOP
+            WATCH STORE
           </p>
 
           <h1 className="mt-4 text-3xl font-bold text-[#f4ebdd] sm:text-4xl">
@@ -463,7 +463,7 @@ export default function AccountPage() {
         <section className="mt-8 overflow-hidden rounded-3xl border border-[#d6b878]/30 bg-gradient-to-br from-[#30231b] via-[#2b2018] to-[#211812] shadow-[inset_0_1px_0_rgba(234,212,160,0.08),0_12px_40px_rgba(0,0,0,0.2)]">
           <div className="border-b border-[#d6b878]/20 bg-gradient-to-r from-[#4b3621]/40 to-transparent p-6 sm:p-8">
             <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#d6b878]">
-              WATCH SHOP REWARDS
+              WATCH STORE REWARDS
             </p>
 
             <div className="mt-3 flex flex-wrap items-center justify-between gap-4">
@@ -659,7 +659,7 @@ export default function AccountPage() {
         {/* VIP HISTORY */}
         <section className="mt-8 rounded-3xl border border-[#d6b878]/25 bg-gradient-to-br from-[#30231b] via-[#2b2018] to-[#211812] p-6 shadow-[inset_0_1px_0_rgba(234,212,160,0.08),0_12px_40px_rgba(0,0,0,0.2)] sm:p-8">
           <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#d6b878]">
-            WATCH SHOP REWARDS
+            WATCH STORE REWARDS
           </p>
 
           <h2 className="mt-3 text-2xl font-bold text-[#f4ebdd]">
@@ -753,7 +753,7 @@ export default function AccountPage() {
 
         <section className="mt-8 rounded-3xl border border-[#d6b878]/25 bg-gradient-to-br from-[#30231b] via-[#2b2018] to-[#211812] p-6 shadow-[inset_0_1px_0_rgba(234,212,160,0.08),0_12px_40px_rgba(0,0,0,0.2)] sm:p-8">
           <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#d6b878]">
-            WATCH SHOP
+            WATCH STORE
           </p>
 
           <h2 className="mt-3 text-2xl font-bold text-[#f4ebdd]">
@@ -825,7 +825,7 @@ export default function AccountPage() {
 
         <section className="mt-8 rounded-3xl border border-[#d6b878]/30 bg-gradient-to-br from-[#30231b] via-[#2b2018] to-[#211812] p-6 shadow-[inset_0_1px_0_rgba(234,212,160,0.08),0_12px_40px_rgba(0,0,0,0.2)] sm:p-8">
           <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#d6b878]">
-            WATCH SHOP REWARDS
+            WATCH STORE REWARDS
           </p>
 
           <h2 className="mt-3 text-2xl font-bold text-[#f4ebdd]">

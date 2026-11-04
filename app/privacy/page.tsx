@@ -13,7 +13,7 @@ export default function PrivacyPage() {
           </Link>
 
           <p className="mt-10 text-sm uppercase tracking-[0.3em] text-[#d6b878]">
-            WATCH SHOP
+            WATCH STORE
           </p>
 
           <h1 className="mt-3 text-4xl font-semibold tracking-tight text-[#f4ebdd] sm:text-5xl">

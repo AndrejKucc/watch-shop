@@ -15,7 +15,7 @@ export default function WishlistPage() {
             href="/"
             className="text-xl font-bold tracking-[0.18em]"
           >
-            WATCH SHOP
+            WATCH STORE
           </Link>
 
           <Link href="/" className="text-sm text-[#d6b878] transition hover:text-[#f4ebdd]">
@@ -27,7 +27,7 @@ export default function WishlistPage() {
       <section className="mx-auto max-w-7xl px-5 py-12 sm:px-6 sm:py-16">
         <div className="mb-10">
           <p className="text-xs font-medium uppercase tracking-[0.3em] text-[#d6b878]">
-            WATCH SHOP
+            WATCH STORE
           </p>
 
           <h1 className="mt-4 text-4xl font-semibold tracking-tight sm:text-5xl">
@@ -44,7 +44,7 @@ export default function WishlistPage() {
 
       <footer className="border-t border-[#d6b878]/20">
         <div className="mx-auto max-w-7xl px-5 py-8 text-center text-sm text-[#b8a99a] sm:px-6">
-          WATCH SHOP — Premium satovi i modni dodaci
+          WATCH STORE — Premium satovi i modni dodaci
         </div>
       </footer>
     </main>

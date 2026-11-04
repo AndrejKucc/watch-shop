@@ -51,7 +51,7 @@ export default function ScratchCard({
     ctx.fillStyle = "#30231b";
     ctx.textAlign = "center";
     ctx.font = "bold 32px Arial";
-    ctx.fillText("WATCH SHOP", 350, 100);
+    ctx.fillText("WATCH STORE", 350, 100);
 
     ctx.font = "bold 22px Arial";
     ctx.fillText("PREĐI PRSTOM ILI MIŠEM", 350, 145);

@@ -69,7 +69,7 @@ a {
 }
 
 /* ========================================
-   WATCH SHOP — PREMIUM SCROLL ANIMATIONS
+   WATCH STORE — PREMIUM SCROLL ANIMATIONS
 ======================================== */
 
 .scroll-reveal {
@@ -120,7 +120,7 @@ main [class*="grid"] > article.scroll-reveal {
   }
 }
 
-/* WATCH SHOP — HERO INTRO ANIMATION */
+/* WATCH STORE — HERO INTRO ANIMATION */
 
 .hero-reveal {
   opacity: 0;
@@ -145,7 +145,7 @@ main [class*="grid"] > article.scroll-reveal {
   }
 }
 
-/* WATCH SHOP — SLOW PREMIUM PAGE INTRO */
+/* WATCH STORE — SLOW PREMIUM PAGE INTRO */
 
 main.page-intro {
   opacity: 0;

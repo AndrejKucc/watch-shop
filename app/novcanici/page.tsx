@@ -19,7 +19,7 @@ export default async function NovcaniciPage() {
             href="/"
             className="text-xl font-bold tracking-[0.2em] text-[#ead4a0] transition-colors hover:text-[#d6b878]"
           >
-            WATCH SHOP
+            WATCH STORE
           </Link>
 
           <CartButton />

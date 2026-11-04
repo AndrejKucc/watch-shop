@@ -233,7 +233,7 @@ export default async function Home() {
                 <div className="relative h-11 w-11 shrink-0 overflow-hidden rounded-full border border-[#D4AF7A]/40 shadow-lg transition duration-300 group-hover:scale-105 group-hover:border-[#D4AF7A]/80">
                   <Image
                     src="/images/logo.png"
-                    alt="WATCH SHOP logo"
+                    alt="WATCH STORE logo"
                     fill
                     priority
                     sizes="56px"
@@ -243,7 +243,7 @@ export default async function Home() {
 
                 <div className="min-w-0">
                   <h1 className="text-base font-bold tracking-[0.13em] text-[#F5EEE3] sm:text-xl sm:tracking-[0.18em]">
-                    WATCH SHOP
+                    WATCH STORE
                   </h1>
 
                   <p className="mt-1 text-[9px] uppercase tracking-[0.18em] text-[#D4AF7A] sm:text-[10px] sm:tracking-[0.25em]">
@@ -355,7 +355,7 @@ export default async function Home() {
               <div className="ws-watch-image relative isolate flex aspect-[4/4.5] items-center justify-center overflow-hidden rounded-[1.5rem] sm:rounded-[2rem]">
                 <img
                   src="/images/hero-watch.png"
-                  alt="Premium sat iz WATCH SHOP kolekcije"
+                  alt="Premium sat iz WATCH STORE kolekcije"
                   fetchPriority="high"
                   className="absolute inset-0 z-0 h-full w-full rounded-[1.5rem] object-cover sm:rounded-[2rem]"
                 />
@@ -367,7 +367,7 @@ export default async function Home() {
 
                 <div className="relative z-10 mt-auto w-full px-4 pb-10 pt-64 text-center sm:px-6 sm:pb-14 sm:pt-72">
                   <p className="text-[10px] font-medium uppercase tracking-[0.35em] text-[#D4AF7A] sm:text-xs">
-                    WATCH SHOP · PREMIUM SELECTION
+                    WATCH STORE · PREMIUM SELECTION
                   </p>
 
                   <p className="mt-3 text-2xl font-medium tracking-wide text-[#F5EEE3] sm:text-3xl">
@@ -482,7 +482,7 @@ export default async function Home() {
 
                 <div className="p-5 sm:p-6">
                   <p className="text-[10px] font-semibold uppercase tracking-[0.23em] text-[#D4AF7A]">
-                    {product.brand || "Watch Shop"}
+                    {product.brand || "WATCH STORE"}
                   </p>
 
                   <h4 className="mt-3 text-xl font-semibold tracking-tight text-[#F5EEE3] sm:text-2xl">
@@ -574,7 +574,7 @@ export default async function Home() {
               <div className="relative h-11 w-11 shrink-0 overflow-hidden rounded-full border border-[#D4AF7A]/40 shadow-lg sm:h-14 sm:w-14">
                 <Image
                   src="/images/logo.png"
-                  alt="WATCH SHOP logo"
+                  alt="WATCH STORE logo"
                   fill
                   sizes="56px"
                   className="object-cover"
@@ -586,7 +586,7 @@ export default async function Home() {
                   href="/"
                   className="text-sm font-bold tracking-[0.22em] text-[#F5EEE3] transition hover:text-[#D4AF7A]"
                 >
-                  WATCH SHOP
+                  WATCH STORE
                 </Link>
 
                 <p className="mt-2 text-sm text-[#C5B5A0]">
@@ -618,7 +618,7 @@ export default async function Home() {
           </div>
 
           <div className="mt-8 border-t border-white/[0.08] pt-6 text-xs text-[#AD9A83]">
-            © {new Date().getFullYear()} WATCH SHOP. Sva prava zadržana.
+            © {new Date().getFullYear()} WATCH STORE. Sva prava zadržana.
           </div>
         </div>
       </footer>

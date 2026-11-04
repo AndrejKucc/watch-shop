@@ -192,7 +192,7 @@ export async function POST(request: Request) {
 
           <div style="margin-bottom:32px;">
             <div style="font-size:24px;font-weight:700;letter-spacing:3px;">
-              WATCH SHOP
+              WATCH STORE
             </div>
             <div style="margin-top:6px;color:#777;font-size:13px;">
               Premium satovi
@@ -246,7 +246,7 @@ export async function POST(request: Request) {
 
           <div style="margin-top:35px;padding-top:25px;border-top:1px solid #e5e5e5;">
             <p style="font-size:13px;color:#888;line-height:1.6;margin:0;">
-              Hvala vam na poverenju i kupovini u WATCH SHOP-u.
+              Hvala vam na poverenju i kupovini u WATCH STORE-u.
             </p>
           </div>
 
@@ -266,7 +266,7 @@ export async function POST(request: Request) {
         body: JSON.stringify({
           from: "onboarding@resend.dev",
           to: [order.email],
-          subject: `WATCH SHOP — porudžbina ${order.id} je poslata`,
+          subject: `WATCH STORE — porudžbina ${order.id} je poslata`,
           html,
         }),
       }

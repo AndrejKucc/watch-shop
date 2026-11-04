@@ -88,7 +88,7 @@ export default function SiteFooter() {
         </div>
 
         <div className="mt-10 border-t border-[#d6b878]/15 pt-6 text-center text-xs text-[#8f8071]">
-          © {new Date().getFullYear()} WATCH SHOP. Sva prava zadržana.
+          © {new Date().getFullYear()} WATCH STORE. Sva prava zadržana.
         </div>
       </div>
     </footer>

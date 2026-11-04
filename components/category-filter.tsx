@@ -944,7 +944,7 @@ export default function CategoryFilter({
                               <path d="M12 7v5l3 2" strokeLinecap="round" />
                             </svg>
                             <span className="text-xs uppercase tracking-[0.16em]">
-                              Watch Shop
+                              WATCH STORE
                             </span>
                           </div>
                         )}
@@ -976,7 +976,7 @@ export default function CategoryFilter({
 
                     <div className="p-5 pb-3 sm:p-6 sm:pb-3">
                       <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#D4AF7A]">
-                        {product.brand || "Watch Shop"}
+                        {product.brand || "WATCH STORE"}
                       </p>
 
                       <h3 className="mt-3 text-xl font-semibold leading-snug tracking-tight text-[#F5EEE3] transition-colors duration-200 group-hover:text-white sm:text-2xl">

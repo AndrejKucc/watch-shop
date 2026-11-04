@@ -17,18 +17,18 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "WATCH SHOP — Premium satovi",
-    template: "%s | WATCH SHOP",
+    default: "WATCH STORE — Premium satovi",
+    template: "%s | WATCH STORE",
   },
   description:
-    "WATCH SHOP — pažljivo odabrani satovi za one koji cene kvalitet, stil i karakter.",
+    "WATCH STORE — pažljivo odabrani satovi za one koji cene kvalitet, stil i karakter.",
   keywords: [
     "satovi",
     "ručni satovi",
     "premium satovi",
     "muški satovi",
     "ženski satovi",
-    "WATCH SHOP",
+    "WATCH STORE",
   ],
   verification: {
     google: "GoGcL66qUqShFA1qXMtp7AkJ0mGMu7f1MG5D06ZIpIU",

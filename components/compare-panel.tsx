@@ -143,7 +143,7 @@ export default function ComparePanel({
                     )}
 
                     <p className="text-xs uppercase tracking-wider text-[#c49a55]">
-                      {product.brand || "Watch Shop"}
+                      {product.brand || "WATCH STORE"}
                     </p>
 
                     <p className="mt-1 font-semibold text-[#f4ebdd]">

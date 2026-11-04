@@ -291,7 +291,7 @@ export default function CheckoutPage() {
             </div>
 
             <p className="mt-7 text-xs font-medium uppercase tracking-[0.3em] text-[#d6b878]">
-              WATCH SHOP
+              WATCH STORE
             </p>
 
             <h1 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
@@ -411,7 +411,7 @@ export default function CheckoutPage() {
 
           <div className="mt-8">
             <p className="text-xs font-medium uppercase tracking-[0.3em] text-[#d6b878]">
-              WATCH SHOP
+              WATCH STORE
             </p>
 
             <h1 className="mt-3 text-4xl font-semibold tracking-tight sm:text-5xl">
@@ -707,7 +707,7 @@ export default function CheckoutPage() {
               <div className="flex items-center justify-between gap-3">
                 <div>
                   <p className="text-xs font-medium uppercase tracking-[0.2em] text-[#d6b878]">
-                    WATCH SHOP
+                    WATCH STORE
                   </p>
 
                   <h3 className="mt-1 text-lg font-semibold text-[#ead4a0]">

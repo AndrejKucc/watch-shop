@@ -13,7 +13,7 @@ export default function AboutPage() {
           </Link>
 
           <p className="mt-10 text-sm uppercase tracking-[0.3em] text-[#d6b878]">
-            WATCH SHOP
+            WATCH STORE
           </p>
 
           <h1 className="mt-3 text-4xl font-semibold tracking-tight text-[#f4ebdd] sm:text-5xl">
@@ -21,7 +21,7 @@ export default function AboutPage() {
           </h1>
 
           <p className="mt-5 max-w-2xl text-base leading-7 text-[#c2b5a8]">
-            Dobrodošli u WATCH SHOP — mesto za ljubitelje satova koji cene
+            Dobrodošli u WATCH STORE — mesto za ljubitelje satova koji cene
             kvalitet, karakter i pažljivo odabrane modele.
           </p>
         </div>
@@ -71,7 +71,7 @@ export default function AboutPage() {
             </h2>
 
             <p className="mt-4 max-w-3xl text-sm leading-7 text-[#c2b5a8]">
-              WATCH SHOP gradimo kao prodavnicu u kojoj su proizvod,
+              WATCH STORE gradimo kao prodavnicu u kojoj su proizvod,
               transparentne informacije i iskustvo kupca na prvom mestu.
               Kolekciju ćemo vremenom širiti i pažljivo birati nove modele.
             </p>

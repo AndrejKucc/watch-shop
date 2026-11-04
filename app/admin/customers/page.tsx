@@ -133,7 +133,7 @@ export default function AdminCustomersPage() {
             </Link>
 
             <p className="mt-6 text-xs uppercase tracking-[0.3em] text-[#d6b878]">
-              WATCH SHOP
+              WATCH STORE
             </p>
 
             <h1 className="mt-3 text-3xl font-bold sm:text-4xl">

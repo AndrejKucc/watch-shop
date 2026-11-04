@@ -100,7 +100,7 @@ export async function generateMetadata({
 
   if (!product) {
     return {
-      title: "Proizvod nije pronađen | WATCH SHOP",
+      title: "Proizvod nije pronađen | WATCH STORE",
     };
   }
 
@@ -110,11 +110,11 @@ export async function generateMetadata({
     product.reference,
   ].filter(Boolean);
 
-  const title = `${titleParts.join(" ")} | WATCH SHOP`;
+  const title = `${titleParts.join(" ")} | WATCH STORE`;
 
   const description =
     product.description ||
-    `${titleParts.join(" ")} — dostupan u WATCH SHOP-u.`;
+    `${titleParts.join(" ")} — dostupan u WATCH STORE-u.`;
 
   return {
     title,
@@ -315,7 +315,7 @@ export default async function ProductPage({
             href="/"
             className="text-xl font-bold tracking-[0.18em] transition-transform duration-150 active:scale-95 sm:text-2xl"
           >
-            WATCH SHOP
+            WATCH STORE
           </Link>
 
           <CartButton />
@@ -353,7 +353,7 @@ export default async function ProductPage({
             </div>
 
             <p className="mt-7 text-xs font-medium uppercase tracking-[0.35em] text-[#d6b878]">
-              {product.brand || "WATCH SHOP"}
+              {product.brand || "WATCH STORE"}
             </p>
 
             <h1 className="mt-4 text-4xl font-semibold leading-[1.05] tracking-tight sm:text-5xl xl:text-6xl">
@@ -555,7 +555,7 @@ export default async function ProductPage({
 
       <footer className="mt-20 border-t border-[#d6b878]/20 bg-[#211812]/70">
         <div className="mx-auto max-w-7xl px-5 py-10 text-center text-sm text-[#b8a99a] sm:px-6">
-          WATCH SHOP — Premium satovi i modni dodaci
+          WATCH STORE — Premium satovi i modni dodaci
         </div>
       </footer>
     </main>
