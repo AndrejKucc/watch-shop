@@ -159,7 +159,7 @@ export default function CheckoutPage() {
     }));
 
     const { data, error } = await supabase.rpc(
-      "create_order_with_email_token",
+      "create_order_with_email_token_v2",
       {
         p_customer_name: fullName,
         p_phone: phone,
@@ -189,9 +189,14 @@ export default function CheckoutPage() {
 
     const result = Array.isArray(data) ? data[0] : data;
 
-    if (!result || !result.order_id || !result.email_token) {
+    if (
+      !result ||
+      !result.order_id ||
+      !result.email_token ||
+      !result.order_number
+    ) {
       console.error(
-        "NEOČEKIVAN ODGOVOR OD create_order_with_email_token:",
+        "NEOČEKIVAN ODGOVOR OD create_order_with_email_token_v2:",
         data
       );
 
@@ -203,34 +208,18 @@ export default function CheckoutPage() {
       return;
     }
 
-    const { data: orderDetails, error: orderDetailsError } =
-      await supabase
-        .from("orders")
-        .select("order_number")
-        .eq("id", result.order_id)
-        .single();
-
-    if (orderDetailsError) {
-      console.error(
-        "GREŠKA PRI ČITANJU BROJA PORUDŽBINE:",
-        orderDetailsError
-      );
-    }
-
     const orderResult: OrderResult = {
       order_id: result.order_id,
-      order_number: orderDetails?.order_number || result.order_id,
+      order_number: result.order_number,
       total: Number(result.total),
     };
 
     setPlacedOrder(orderResult);
 
-    // Osvežavanje VIP stanja nakon iskorišćavanja poena.
     if (vipPointsToRedeem > 0) {
       await refreshVipStatus();
     }
 
-    // Preuzimanje kupona koji je kupac osvojio ovom porudžbinom.
     try {
       const { data: couponData, error: couponError } =
         await supabase.rpc("get_order_coupon", {
@@ -256,7 +245,6 @@ export default function CheckoutPage() {
       console.error("GREŠKA PRI POZIVU FUNKCIJE ZA KUPON:", couponError);
     }
 
-    // Slanje emaila uz jednokratni token za autorizaciju.
     try {
       const emailResponse = await fetch("/api/send-order-confirmation", {
         method: "POST",
@@ -271,6 +259,7 @@ export default function CheckoutPage() {
 
       if (!emailResponse.ok) {
         const emailError = await emailResponse.text();
+
         console.error(
           "EMAIL POTVRDA NIJE POSLATA:",
           emailResponse.status,
@@ -360,6 +349,7 @@ export default function CheckoutPage() {
                 <p className="font-semibold text-[#ead4a0]">
                   Hvala ti na kupovini!
                 </p>
+
                 <p className="mt-2 text-sm leading-6 text-[#b8a99a]">
                   Tvoja porudžbina je zabeležena. Kupon će biti dostupan u
                   tvom nalogu ako si prijavljen.
@@ -806,9 +796,7 @@ export default function CheckoutPage() {
                           maximumRedeemablePoints < 50
                         }
                         onChange={(event) =>
-                          setVipPointsToRedeem(
-                            Number(event.target.value)
-                          )
+                          setVipPointsToRedeem(Number(event.target.value))
                         }
                         className="min-w-0 flex-1 rounded-xl border border-[#d6b878]/25 bg-[#211812] px-4 py-3 text-[#f4ebdd] outline-none focus:border-[#d6b878]/60 disabled:cursor-not-allowed disabled:opacity-50"
                       />
