@@ -5,6 +5,7 @@ export const runtime = "nodejs";
 
 const FROM_EMAIL = "WATCH STORE <info@watchstore.rs>";
 const SELLER_EMAIL = "kucc.andrej@gmail.com";
+const SHIPPING_COST = 480;
 
 function escapeHtml(value: unknown): string {
   return String(value ?? "")
@@ -246,7 +247,17 @@ export async function POST(request: Request) {
       order.payment_method || "Plaćanje pouzećem"
     );
 
-    const total = Number(order.total || 0).toFixed(2);
+    const orderTotal = Number(order.total || 0);
+
+    if (
+      !Number.isFinite(orderTotal) ||
+      orderTotal < SHIPPING_COST
+    ) {
+      throw new Error("Neispravan ukupan iznos porudžbine.");
+    }
+
+    const productTotal = orderTotal - SHIPPING_COST;
+    const total = orderTotal.toFixed(2);
 
     const emailWrapper = (content: string) => `
       <div style="margin:0;padding:40px 20px;background:#f5f5f5;font-family:Arial,sans-serif;color:#111;">
@@ -293,7 +304,23 @@ export async function POST(request: Request) {
       </table>
 
       <div style="margin-top:24px;padding-top:20px;border-top:2px solid #111;text-align:right;">
-        <div style="font-size:14px;color:#777;">Ukupno</div>
+        <div style="font-size:14px;color:#777;">
+          Iznos proizvoda nakon popusta
+        </div>
+        <div style="font-size:16px;margin-top:4px;">
+          ${productTotal.toFixed(2)} RSD
+        </div>
+
+        <div style="font-size:14px;color:#777;margin-top:12px;">
+          Dostava
+        </div>
+        <div style="font-size:16px;margin-top:4px;">
+          ${SHIPPING_COST.toFixed(2)} RSD
+        </div>
+
+        <div style="font-size:14px;color:#777;margin-top:12px;">
+          Ukupno za plaćanje
+        </div>
         <div style="font-size:24px;font-weight:700;margin-top:4px;">
           ${total} RSD
         </div>

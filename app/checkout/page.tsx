@@ -6,6 +6,8 @@ import { createClient } from "@/lib/supabase";
 import { useCart } from "@/components/cart";
 import ScratchCard from "@/components/scratch-card";
 
+const SHIPPING_COST = 480;
+
 type OrderResult = {
   order_id: string;
   order_number: string;
@@ -83,6 +85,8 @@ export default function CheckoutPage() {
     refreshVipStatus,
     removeCoupon,
   } = useCart();
+
+  const totalWithShipping = finalTotal + SHIPPING_COST;
 
   const [fullName, setFullName] = useState("");
   const [phone, setPhone] = useState("");
@@ -920,18 +924,40 @@ export default function CheckoutPage() {
 
             <div className="mt-6 border-t border-[#d6b878]/20 pt-6">
               {(appliedCoupon || vipPointsToRedeem > 0) && (
-                <p className="text-sm text-[#b8a99a] line-through">
-                  {totalPrice.toFixed(2)} RSD
-                </p>
+                <div className="mb-3 flex items-center justify-between text-sm">
+                  <span className="text-[#b8a99a]">
+                    Iznos pre popusta
+                  </span>
+
+                  <span className="text-[#b8a99a] line-through">
+                    {totalPrice.toFixed(2)} RSD
+                  </span>
+                </div>
               )}
 
-              <p className="text-xs uppercase tracking-[0.18em] text-[#b8a99a]">
-                Ukupno
-              </p>
+              <div className="flex items-center justify-between text-sm">
+                <span className="text-[#b8a99a]">
+                  Iznos proizvoda
+                </span>
 
-              <p className="mt-2 text-4xl font-bold tracking-tight text-[#ead4a0]">
-                {finalTotal.toFixed(2)} RSD
-              </p>
+                <span>{finalTotal.toFixed(2)} RSD</span>
+              </div>
+
+              <div className="mt-3 flex items-center justify-between text-sm">
+                <span className="text-[#b8a99a]">Dostava</span>
+
+                <span>{SHIPPING_COST.toFixed(2)} RSD</span>
+              </div>
+
+              <div className="mt-5 border-t border-[#d6b878]/15 pt-5">
+                <p className="text-xs uppercase tracking-[0.18em] text-[#b8a99a]">
+                  Ukupno za plaćanje
+                </p>
+
+                <p className="mt-2 text-4xl font-bold tracking-tight text-[#ead4a0]">
+                  {totalWithShipping.toFixed(2)} RSD
+                </p>
+              </div>
             </div>
           </aside>
         </div>
