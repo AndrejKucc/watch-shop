@@ -158,18 +158,21 @@ export default function CheckoutPage() {
       quantity: item.quantity,
     }));
 
-    const { data, error } = await supabase.rpc("create_order", {
-      p_customer_name: fullName,
-      p_phone: phone,
-      p_email: email,
-      p_address: address,
-      p_settlement: settlement,
-      p_city: city,
-      p_postal_code: postalCode,
-      p_items: rpcItems,
-      p_coupon_code: appliedCoupon?.code ?? null,
-      p_points_to_redeem: vipPointsToRedeem,
-    });
+    const { data, error } = await supabase.rpc(
+      "create_order_with_email_token",
+      {
+        p_customer_name: fullName,
+        p_phone: phone,
+        p_email: email,
+        p_address: address,
+        p_settlement: settlement,
+        p_city: city,
+        p_postal_code: postalCode,
+        p_items: rpcItems,
+        p_coupon_code: appliedCoupon?.code ?? null,
+        p_points_to_redeem: vipPointsToRedeem,
+      }
+    );
 
     if (error) {
       console.error("GREŠKA PRI KREIRANJU PORUDŽBINE:", error);
@@ -186,8 +189,11 @@ export default function CheckoutPage() {
 
     const result = Array.isArray(data) ? data[0] : data;
 
-    if (!result || !result.order_id) {
-      console.error("NEOČEKIVAN ODGOVOR OD create_order:", data);
+    if (!result || !result.order_id || !result.email_token) {
+      console.error(
+        "NEOČEKIVAN ODGOVOR OD create_order_with_email_token:",
+        data
+      );
 
       setMessage(
         "Porudžbina nije mogla da se potvrdi zbog neočekivane greške. Pokušaj ponovo."
@@ -250,18 +256,27 @@ export default function CheckoutPage() {
       console.error("GREŠKA PRI POZIVU FUNKCIJE ZA KUPON:", couponError);
     }
 
-    // Email se i dalje pokušava poslati, ali neuspeh ne prikazujemo kupcu.
+    // Slanje emaila uz jednokratni token za autorizaciju.
     try {
-      await fetch("/api/send-order-confirmation", {
+      const emailResponse = await fetch("/api/send-order-confirmation", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
           orderId: orderResult.order_id,
-          email,
+          emailToken: result.email_token,
         }),
       });
+
+      if (!emailResponse.ok) {
+        const emailError = await emailResponse.text();
+        console.error(
+          "EMAIL POTVRDA NIJE POSLATA:",
+          emailResponse.status,
+          emailError
+        );
+      }
     } catch (emailError) {
       console.error("GREŠKA PRI SLANJU EMAILA:", emailError);
     }
@@ -805,9 +820,7 @@ export default function CheckoutPage() {
                           maximumRedeemablePoints < 50
                         }
                         onClick={() =>
-                          setVipPointsToRedeem(
-                            maximumRedeemablePoints
-                          )
+                          setVipPointsToRedeem(maximumRedeemablePoints)
                         }
                         className="rounded-xl border border-[#d6b878]/35 px-3 py-3 text-xs font-semibold text-[#ead4a0] transition hover:bg-[#d6b878]/10 disabled:cursor-not-allowed disabled:opacity-40"
                       >
