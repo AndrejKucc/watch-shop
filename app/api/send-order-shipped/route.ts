@@ -3,14 +3,23 @@ import { createClient } from "@supabase/supabase-js";
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 
+export const runtime = "nodejs";
+
+const FROM_EMAIL = "WATCH STORE <info@watchstore.rs>";
+
 export async function POST(request: Request) {
   try {
-    // 1. Provera konfiguracije
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
     const supabaseSecretKey = process.env.SUPABASE_SECRET_KEY;
+    const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
     const resendApiKey = process.env.RESEND_API_KEY;
 
-    if (!supabaseUrl || !supabaseSecretKey || !resendApiKey) {
+    if (
+      !supabaseUrl ||
+      !supabaseSecretKey ||
+      !supabaseAnonKey ||
+      !resendApiKey
+    ) {
       console.error("Nedostaje konfiguracija za slanje emaila.");
 
       return NextResponse.json(
@@ -19,12 +28,12 @@ export async function POST(request: Request) {
       );
     }
 
-    // 2. Provera administratorske sesije
+    // PROVERA ADMINISTRATORSKE SESIJE
     const cookieStore = await cookies();
 
     const authSupabase = createServerClient(
       supabaseUrl,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      supabaseAnonKey,
       {
         cookies: {
           getAll() {
@@ -51,7 +60,7 @@ export async function POST(request: Request) {
       );
     }
 
-    // 3. Provera da li je korisnik administrator
+    // PROVERA ADMINISTRATORA
     const { data: admin, error: adminError } = await authSupabase
       .from("admin_users")
       .select("user_id")
@@ -65,7 +74,7 @@ export async function POST(request: Request) {
       );
     }
 
-    // 4. Provera podataka zahteva
+    // PROVERA ZAHTEVA
     let body: { orderId?: string };
 
     try {
@@ -82,14 +91,17 @@ export async function POST(request: Request) {
     const uuidRegex =
       /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
-    if (!orderId || typeof orderId !== "string" || !uuidRegex.test(orderId)) {
+    if (
+      typeof orderId !== "string" ||
+      !uuidRegex.test(orderId)
+    ) {
       return NextResponse.json(
         { error: "Neispravan ID porudžbine." },
         { status: 400 }
       );
     }
 
-    // 5. Privilegovani klijent se koristi tek nakon provere administratora
+    // PRIVILEGOVANI SUPABASE KLIJENT
     const supabase = createClient(
       supabaseUrl,
       supabaseSecretKey,
@@ -101,16 +113,19 @@ export async function POST(request: Request) {
       }
     );
 
+    // ČITANJE PORUDŽBINE
     const { data: order, error: orderError } = await supabase
       .from("orders")
       .select(`
         id,
+        order_number,
         customer_name,
         email,
         address,
         settlement,
         city,
         postal_code,
+        payment_method,
         total,
         status
       `)
@@ -133,22 +148,32 @@ export async function POST(request: Request) {
       );
     }
 
-    // 6. Porudžbina mora zaista biti poslata
+    // PROVERA STATUSA
     if (order.status !== "shipped") {
       return NextResponse.json(
-        { error: "Email se može poslati samo za poslatu porudžbinu." },
+        {
+          error:
+            "Email se može poslati samo za poslatu porudžbinu.",
+        },
         { status: 400 }
       );
     }
 
-    if (!order.email || !order.email.includes("@")) {
+    // PROVERA EMAIL ADRESE
+    if (
+      !order.email ||
+      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(order.email)
+    ) {
       return NextResponse.json(
-        { error: "Porudžbina nema validnu email adresu kupca." },
+        {
+          error:
+            "Porudžbina nema validnu email adresu kupca.",
+        },
         { status: 400 }
       );
     }
 
-    // 7. Zaštita od HTML ubacivanja
+    // ZAŠTITA HTML SADRŽAJA
     const escapeHtml = (value: unknown): string => {
       return String(value ?? "").replace(/[&<>"']/g, (character) => {
         const entities: Record<string, string> = {
@@ -164,7 +189,10 @@ export async function POST(request: Request) {
     };
 
     const customerName = escapeHtml(order.customer_name);
-    const safeOrderId = escapeHtml(order.id);
+
+    const orderNumber = escapeHtml(
+      order.order_number || order.id
+    );
 
     const addressLine = [
       order.address,
@@ -185,7 +213,14 @@ export async function POST(request: Request) {
       );
     }
 
-    // 8. Email dizajn
+    const paymentMethod =
+      order.payment_method === "cash_on_delivery"
+        ? "Plaćanje pouzećem"
+        : order.payment_method || "Plaćanje pouzećem";
+
+    const safePaymentMethod = escapeHtml(paymentMethod);
+
+    // SADRŽAJ EMAILA
     const html = `
       <div style="margin:0;padding:40px 20px;background:#f5f5f5;font-family:Arial,sans-serif;color:#111;">
         <div style="max-width:650px;margin:0 auto;background:#ffffff;padding:40px;border-radius:20px;">
@@ -194,18 +229,19 @@ export async function POST(request: Request) {
             <div style="font-size:24px;font-weight:700;letter-spacing:3px;">
               WATCH STORE
             </div>
+
             <div style="margin-top:6px;color:#777;font-size:13px;">
               Premium satovi
             </div>
           </div>
 
           <h1 style="font-size:26px;margin:0 0 12px;">
-            Vaša porudžbina je poslata
+            Vaša porudžbina je poslata!
           </h1>
 
           <p style="font-size:15px;line-height:1.6;color:#555;">
             Zdravo ${customerName}, obaveštavamo vas da je vaša
-            porudžbina poslata.
+            porudžbina uspešno poslata.
           </p>
 
           <div style="margin:30px 0;padding:20px;background:#f7f7f7;border-radius:14px;">
@@ -214,7 +250,7 @@ export async function POST(request: Request) {
             </div>
 
             <div style="font-size:16px;font-weight:700;">
-              ${safeOrderId}
+              ${orderNumber}
             </div>
           </div>
 
@@ -229,24 +265,32 @@ export async function POST(request: Request) {
           </div>
 
           <h2 style="font-size:18px;margin:35px 0 12px;">
-            Dostava
+            Adresa za dostavu
           </h2>
 
           <p style="font-size:14px;line-height:1.7;color:#555;">
             ${addressLine}
           </p>
 
-          <p style="font-size:14px;line-height:1.7;color:#555;">
-            Ukupan iznos: <strong>${total.toFixed(2)} €</strong>
-          </p>
+          <div style="margin-top:24px;padding:20px;background:#f7f7f7;border-radius:14px;">
 
-          <p style="font-size:14px;line-height:1.7;color:#555;">
-            Način plaćanja: Plaćanje pouzećem
-          </p>
+            <p style="font-size:14px;color:#555;margin:0 0 10px;">
+              Način plaćanja:
+              <strong>${safePaymentMethod}</strong>
+            </p>
+
+            <p style="font-size:14px;color:#555;margin:0;">
+              Ukupan iznos:
+              <strong>${total.toFixed(2)} RSD</strong>
+            </p>
+
+          </div>
 
           <div style="margin-top:35px;padding-top:25px;border-top:1px solid #e5e5e5;">
             <p style="font-size:13px;color:#888;line-height:1.6;margin:0;">
               Hvala vam na poverenju i kupovini u WATCH STORE-u.
+              Za sva pitanja možete nas kontaktirati na
+              info@watchstore.rs.
             </p>
           </div>
 
@@ -254,7 +298,12 @@ export async function POST(request: Request) {
       </div>
     `;
 
-    // 9. Slanje emaila
+    // SLANJE PREKO RESEND-A
+    console.log(
+      "SHIPPED EMAIL: šaljem email na:",
+      order.email
+    );
+
     const resendResponse = await fetch(
       "https://api.resend.com/emails",
       {
@@ -264,9 +313,9 @@ export async function POST(request: Request) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          from: "onboarding@resend.dev",
+          from: FROM_EMAIL,
           to: [order.email],
-          subject: `WATCH STORE — porudžbina ${order.id} je poslata`,
+          subject: `WATCH STORE — porudžbina ${order.order_number || order.id} je poslata`,
           html,
         }),
       }
@@ -275,21 +324,36 @@ export async function POST(request: Request) {
     const resendData = await resendResponse.json();
 
     if (!resendResponse.ok) {
-      console.error("Resend greška:", resendData);
+      console.error(
+        "RESEND GREŠKA PRI SLANJU EMAILA:",
+        resendData
+      );
 
       return NextResponse.json(
-        { error: "Email nije uspešno poslat." },
+        {
+          error: "Resend nije uspeo da pošalje email.",
+          details: resendData,
+        },
         { status: 500 }
       );
     }
 
+    console.log(
+      "SHIPPED EMAIL: email uspešno prihvaćen od Resend-a:",
+      resendData.id
+    );
+
     return NextResponse.json({
       success: true,
       emailId: resendData.id,
+      message: "Email o slanju porudžbine je uspešno poslat.",
     });
 
   } catch (error) {
-    console.error("Greška pri slanju emaila:", error);
+    console.error(
+      "GREŠKA PRI SLANJU EMAILA O SLANJU:",
+      error
+    );
 
     return NextResponse.json(
       { error: "Došlo je do greške pri slanju emaila." },
