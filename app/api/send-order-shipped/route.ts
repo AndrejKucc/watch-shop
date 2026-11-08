@@ -11,7 +11,6 @@ export async function POST(request: Request) {
   try {
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 
-    // Podržava oba naziva Supabase secret ključa
     const supabaseSecretKey =
       process.env.SUPABASE_SECRET_KEY ||
       process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -38,7 +37,7 @@ export async function POST(request: Request) {
 
       return NextResponse.json(
         {
-          error: "Serverska konfiguracija nije ispravna.",
+          error: `Nedostaju serverske promenljive: ${missingVariables.join(", ")}`,
           missing: missingVariables,
         },
         { status: 500 }
