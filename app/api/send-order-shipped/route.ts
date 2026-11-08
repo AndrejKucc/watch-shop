@@ -10,20 +10,37 @@ const FROM_EMAIL = "WATCH STORE <info@watchstore.rs>";
 export async function POST(request: Request) {
   try {
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-    const supabaseSecretKey = process.env.SUPABASE_SECRET_KEY;
-    const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+    // Podržava oba naziva Supabase secret ključa
+    const supabaseSecretKey =
+      process.env.SUPABASE_SECRET_KEY ||
+      process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+    const supabaseAnonKey =
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
     const resendApiKey = process.env.RESEND_API_KEY;
 
-    if (
-      !supabaseUrl ||
-      !supabaseSecretKey ||
-      !supabaseAnonKey ||
-      !resendApiKey
-    ) {
-      console.error("Nedostaje konfiguracija za slanje emaila.");
+    // PROVERA SERVERSKE KONFIGURACIJE
+    const missingVariables = [
+      !supabaseUrl && "NEXT_PUBLIC_SUPABASE_URL",
+      !supabaseSecretKey &&
+        "SUPABASE_SECRET_KEY ili SUPABASE_SERVICE_ROLE_KEY",
+      !supabaseAnonKey && "NEXT_PUBLIC_SUPABASE_ANON_KEY",
+      !resendApiKey && "RESEND_API_KEY",
+    ].filter(Boolean);
+
+    if (missingVariables.length > 0) {
+      console.error(
+        "NEDOSTAJU VERCEL PROMENLJIVE:",
+        missingVariables
+      );
 
       return NextResponse.json(
-        { error: "Serverska konfiguracija nije ispravna." },
+        {
+          error: "Serverska konfiguracija nije ispravna.",
+          missing: missingVariables,
+        },
         { status: 500 }
       );
     }
@@ -32,8 +49,8 @@ export async function POST(request: Request) {
     const cookieStore = await cookies();
 
     const authSupabase = createServerClient(
-      supabaseUrl,
-      supabaseAnonKey,
+      supabaseUrl!,
+      supabaseAnonKey!,
       {
         cookies: {
           getAll() {
@@ -68,6 +85,8 @@ export async function POST(request: Request) {
       .maybeSingle();
 
     if (adminError || !admin) {
+      console.error("ADMIN PROVERA:", adminError);
+
       return NextResponse.json(
         { error: "Nemate dozvolu za ovu akciju." },
         { status: 403 }
@@ -103,8 +122,8 @@ export async function POST(request: Request) {
 
     // PRIVILEGOVANI SUPABASE KLIJENT
     const supabase = createClient(
-      supabaseUrl,
-      supabaseSecretKey,
+      supabaseUrl!,
+      supabaseSecretKey!,
       {
         auth: {
           autoRefreshToken: false,
@@ -133,7 +152,10 @@ export async function POST(request: Request) {
       .maybeSingle();
 
     if (orderError) {
-      console.error("Greška pri čitanju porudžbine:", orderError);
+      console.error(
+        "GREŠKA PRI ČITANJU PORUDŽBINE:",
+        orderError
+      );
 
       return NextResponse.json(
         { error: "Greška pri čitanju porudžbine." },
@@ -315,7 +337,9 @@ export async function POST(request: Request) {
         body: JSON.stringify({
           from: FROM_EMAIL,
           to: [order.email],
-          subject: `WATCH STORE — porudžbina ${order.order_number || order.id} je poslata`,
+          subject: `WATCH STORE — porudžbina ${
+            order.order_number || order.id
+          } je poslata`,
           html,
         }),
       }
