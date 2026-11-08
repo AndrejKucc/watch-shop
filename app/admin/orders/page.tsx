@@ -71,6 +71,8 @@ export default function AdminOrdersPage() {
     null
   );
 
+  const [sendingEmailId, setSendingEmailId] = useState<string | null>(null);
+
   const [deletingOrderId, setDeletingOrderId] = useState<string | null>(null);
 
   useEffect(() => {
@@ -264,6 +266,70 @@ export default function AdminOrdersPage() {
     setDetailsLoading(null);
   }
 
+  // Slanje emaila kupcu da je porudžbina poslata.
+  // Ova funkcija omogućava i ponovno slanje emaila.
+  async function sendShippedEmail(orderId: string, isRetry = false) {
+    setSendingEmailId(orderId);
+    setMessage("");
+
+    try {
+      const emailResponse = await fetch("/api/send-order-shipped", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ orderId }),
+      });
+
+      const responseText = await emailResponse.text();
+
+      let emailData: any = {};
+
+      try {
+        emailData = responseText ? JSON.parse(responseText) : {};
+      } catch {
+        emailData = { message: responseText };
+      }
+
+      console.log("SEND SHIPPED EMAIL STATUS:", emailResponse.status);
+      console.log("SEND SHIPPED EMAIL RESPONSE:", emailData);
+
+      if (!emailResponse.ok || emailData.success === false) {
+        const serverMessage =
+          emailData.error ||
+          emailData.message ||
+          (emailData.details
+            ? JSON.stringify(emailData.details)
+            : `HTTP ${emailResponse.status}`);
+
+        console.error("GREŠKA PRI SLANJU EMAILA O SLANJU:", emailData);
+
+        setMessage(
+          `Status je ${isRetry ? "ostao" : "promenjen"} „Poslata“, ali email nije poslat. Greška: ${serverMessage}`
+        );
+
+        return;
+      }
+
+      setMessage(
+        isRetry
+          ? "Email o slanju porudžbine je ponovo uspešno poslat kupcu."
+          : "Status je promenjen u „Poslata“ i email kupcu je uspešno poslat."
+      );
+    } catch (emailError) {
+      console.error(
+        "GREŠKA PRI POZIVU API-JA ZA EMAIL O SLANJU:",
+        emailError
+      );
+
+      setMessage(
+        `Status je ${isRetry ? "ostao" : "promenjen"} „Poslata“, ali email nije poslat. Proveri konzolu i Vercel logove.`
+      );
+    } finally {
+      setSendingEmailId(null);
+    }
+  }
+
   async function handleStatusChange(orderId: string, newStatus: string) {
     const currentOrder = orders.find((order) => order.id === orderId);
 
@@ -309,6 +375,7 @@ export default function AdminOrdersPage() {
 
       setExpandedOrderId(null);
       setStatusUpdatingId(null);
+
       setMessage(
         "Porudžbina je završena i uklonjena iz aktivnog pregleda."
       );
@@ -325,42 +392,7 @@ export default function AdminOrdersPage() {
     setStatusUpdatingId(null);
 
     if (newStatus === "shipped" && previousStatus !== "shipped") {
-      try {
-        const emailResponse = await fetch("/api/send-order-shipped", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            orderId,
-          }),
-        });
-
-        const emailData = await emailResponse.json();
-
-        if (!emailResponse.ok) {
-          console.error("GREŠKA PRI SLANJU EMAILA O SLANJU:", emailData);
-
-          setMessage(
-            "Status je promenjen u „Poslata“, ali email kupcu nije poslat."
-          );
-
-          return;
-        }
-
-        setMessage(
-          "Status je promenjen u „Poslata“ i email kupcu je uspešno poslat."
-        );
-      } catch (emailError) {
-        console.error(
-          "GREŠKA PRI POZIVU API-JA ZA EMAIL O SLANJU:",
-          emailError
-        );
-
-        setMessage(
-          "Status je promenjen u „Poslata“, ali email kupcu nije poslat."
-        );
-      }
+      await sendShippedEmail(orderId);
     } else {
       setMessage("Status porudžbine je uspešno promenjen.");
     }
@@ -656,6 +688,19 @@ export default function AdminOrdersPage() {
                           <p className="mt-2 text-xs text-[#b8a99a]">
                             Čuvanje statusa...
                           </p>
+                        )}
+
+                        {order.status === "shipped" && (
+                          <button
+                            type="button"
+                            onClick={() => sendShippedEmail(order.id, true)}
+                            disabled={sendingEmailId === order.id}
+                            className="mt-4 w-full rounded-xl border border-[#d6b878]/40 bg-[#d6b878]/10 px-4 py-3 text-sm font-semibold text-[#ead4a0] transition hover:border-[#d6b878]/70 hover:bg-[#d6b878]/20 disabled:cursor-not-allowed disabled:opacity-50"
+                          >
+                            {sendingEmailId === order.id
+                              ? "Slanje emaila..."
+                              : "Pošalji ponovo email o slanju"}
+                          </button>
                         )}
 
                         <div className="mt-5">
