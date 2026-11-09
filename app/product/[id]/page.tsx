@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase-server";
@@ -6,6 +7,8 @@ import { WishlistButton } from "@/components/wishlist";
 import ProductReviews from "@/components/product-reviews";
 import ProductGallery from "@/components/product-gallery";
 import RestockNotificationButton from "@/components/restock-notification-button";
+
+const BASE_URL = "https://watchstore.rs";
 
 type Product = {
   id: string;
@@ -84,45 +87,124 @@ const returnPathByProductType: Record<string, string> = {
   gift_set: "/pokloni",
 };
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
-  const { id } = await params;
-  const supabase = await createClient();
-
-  const { data: product } = await supabase
-    .from("public_products_v2")
-    .select("name, brand, model, reference, description, images")
-    .eq("id", id)
-    .single();
-
-  if (!product) {
-    return {
-      title: "Proizvod nije pronađen | WATCH STORE",
-    };
+function getCategoryLabel(product: Product) {
+  if (product.product_type !== "watch") {
+    return productTypeLabels[product.product_type] || "Proizvod";
   }
 
-  const titleParts = [
+  if (product.category === "muski") return "Muški ručni sat";
+  if (product.category === "zenski") return "Ženski ručni sat";
+
+  return "Unisex ručni sat";
+}
+
+function getProductTitle(product: Product) {
+  const parts = [
     product.brand,
     product.model || product.name,
     product.reference,
   ].filter(Boolean);
 
-  const title = `${titleParts.join(" ")} | WATCH STORE`;
+  const uniqueParts = [...new Set(parts)];
 
-  const description =
-    product.description ||
-    `${titleParts.join(" ")} — dostupan u WATCH STORE-u.`;
+  return `${uniqueParts.join(" ")} – ${getCategoryLabel(product)}`;
+}
+
+function getProductDescription(product: Product) {
+  const fallback = [
+    getProductTitle(product),
+    "Pogledajte cenu, fotografije i detaljne specifikacije.",
+    "Dostupno u WATCH STORE online prodavnici.",
+  ].join(" ");
+
+  const description = product.description?.trim() || fallback;
+
+  return description.length > 160
+    ? `${description.slice(0, 157).trim()}...`
+    : description;
+}
+
+function getAbsoluteImageUrl(image: string) {
+  try {
+    return new URL(image, BASE_URL).toString();
+  } catch {
+    return image;
+  }
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}): Promise<Metadata> {
+  const { id } = await params;
+  const supabase = await createClient();
+
+  const { data: product } = await supabase
+    .from("public_products_v2")
+    .select(
+      "id, name, brand, model, reference, description, images, category, product_type"
+    )
+    .eq("id", id)
+    .single();
+
+  if (!product) {
+    return {
+      title: "Proizvod nije pronađen",
+      description: "Traženi proizvod nije pronađen u WATCH STORE prodavnici.",
+      robots: {
+        index: false,
+        follow: true,
+      },
+    };
+  }
+
+  const title = getProductTitle(product as Product);
+  const description = getProductDescription(product as Product);
+
+  const image = product.images?.[0]
+    ? getAbsoluteImageUrl(product.images[0])
+    : `${BASE_URL}/images/hero-watch.png`;
+
+  const canonicalUrl = `${BASE_URL}/product/${product.id}`;
 
   return {
     title,
     description,
+
+    alternates: {
+      canonical: canonicalUrl,
+    },
+
     openGraph: {
+      type: "website",
+      locale: "sr_RS",
+      siteName: "WATCH STORE",
+      url: canonicalUrl,
       title,
       description,
-      images: product.images?.[0] ? [product.images[0]] : [],
+      images: [
+        {
+          url: image,
+          alt: `${product.name} – WATCH STORE`,
+        },
+      ],
+    },
+
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [image],
+    },
+
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+      },
     },
   };
 }
@@ -205,6 +287,50 @@ export default async function ProductPage({
 
   const returnPath =
     returnPathByProductType[product.product_type] || "/";
+
+  const imageList =
+    product.images && product.images.length > 0 ? product.images : [];
+
+  const seoTitle = getProductTitle(product);
+  const seoDescription = getProductDescription(product);
+
+  const canonicalUrl = `${BASE_URL}/product/${product.id}`;
+
+  // Strukturirani podaci za Google (Product Schema)
+  const productJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: product.name,
+    description: seoDescription,
+    image: imageList.map(getAbsoluteImageUrl),
+    sku: product.reference || product.id,
+    ...(product.brand
+      ? {
+          brand: {
+            "@type": "Brand",
+            name: product.brand,
+          },
+        }
+      : {}),
+    ...(product.model ? { model: product.model } : {}),
+    category: getCategoryLabel(product),
+    url: canonicalUrl,
+    offers: {
+      "@type": "Offer",
+      url: canonicalUrl,
+      priceCurrency: "RSD",
+      price: Number(product.price).toFixed(2),
+      availability:
+        product.stock > 0
+          ? "https://schema.org/InStock"
+          : "https://schema.org/OutOfStock",
+      seller: {
+        "@type": "Organization",
+        name: "WATCH STORE",
+        url: BASE_URL,
+      },
+    },
+  };
 
   const watchSpecificationGroups: SpecificationGroup[] = [
     {
@@ -304,11 +430,15 @@ export default async function ProductPage({
     (group) => group.specifications.length > 0
   );
 
-  const imageList =
-    product.images && product.images.length > 0 ? product.images : [];
-
   return (
     <main className="min-h-screen bg-[#211812] text-[#f4ebdd]">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(productJsonLd).replace(/</g, "\\u003c"),
+        }}
+      />
+
       <header className="sticky top-0 z-30 border-b border-[#d6b878]/20 bg-[#211812]/90 backdrop-blur-xl">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 sm:px-6">
           <Link
