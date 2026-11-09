@@ -5,7 +5,8 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: "*",
       allow: "/",
-      disallow: ["/admin/", "/api/"],
     },
+    sitemap: "https://watchstore.rs/sitemap.xml",
+    host: "https://watchstore.rs",
   };
 }
