@@ -242,9 +242,9 @@ export default async function Home() {
                 </div>
 
                 <div className="min-w-0">
-                  <h1 className="text-base font-bold tracking-[0.13em] text-[#F5EEE3] sm:text-xl sm:tracking-[0.18em]">
+                  <span className="text-base font-bold tracking-[0.13em] text-[#F5EEE3] sm:text-xl sm:tracking-[0.18em]">
                     WATCH STORE
-                  </h1>
+                  </span>
 
                   <p className="mt-1 text-[9px] uppercase tracking-[0.18em] text-[#D4AF7A] sm:text-[10px] sm:tracking-[0.25em]">
                     Premium satovi i aksesoari
@@ -303,14 +303,15 @@ export default async function Home() {
               Vreme je za nešto posebno
             </div>
 
-            <h2 className="mt-7 text-5xl font-semibold leading-[1.04] tracking-tight sm:text-6xl lg:text-7xl xl:text-[5.5rem]">
-              Stil koji
-              <span className="ws-title-gradient block">traje zauvek.</span>
-            </h2>
+            <h1 className="mt-7 text-5xl font-semibold leading-[1.04] tracking-tight sm:text-6xl lg:text-7xl xl:text-[5.5rem]">
+              Muški i ženski
+              <span className="ws-title-gradient block">ručni satovi.</span>
+            </h1>
 
             <p className="mt-7 max-w-xl text-base leading-7 text-[#D3C5B3] sm:text-lg sm:leading-8">
-              Otkrij satove, narukvice, ogrlice, novčanike i poklone pažljivo
-              odabrane za one koji znaju da su detalji ono što čini razliku.
+              Otkrij kolekciju muških i ženskih ručnih satova u WATCH STORE-u.
+              Pronađi elegantne, moderne i pažljivo odabrane satove, kao i
+              narukvice, ogrlice, novčanike i poklone za svaki stil.
             </p>
 
             <div className="mt-9 flex flex-wrap gap-3">
@@ -355,7 +356,7 @@ export default async function Home() {
               <div className="ws-watch-image relative isolate flex aspect-[4/4.5] items-center justify-center overflow-hidden rounded-[1.5rem] sm:rounded-[2rem]">
                 <img
                   src="/images/hero-watch.png"
-                  alt="Premium sat iz WATCH STORE kolekcije"
+                  alt="Muški i ženski ručni satovi iz WATCH STORE kolekcije"
                   fetchPriority="high"
                   className="absolute inset-0 z-0 h-full w-full rounded-[1.5rem] object-cover sm:rounded-[2rem]"
                 />
@@ -405,9 +406,9 @@ export default async function Home() {
               Pažljivo odabrana kolekcija
             </p>
 
-            <h3 className="mt-3 text-2xl font-semibold tracking-tight text-[#F5EEE3] sm:text-3xl">
+            <h2 className="mt-3 text-2xl font-semibold tracking-tight text-[#F5EEE3] sm:text-3xl">
               Izdvojeni satovi
-            </h3>
+            </h2>
 
             <p className="mt-2 text-sm text-[#C5B5A0]">
               Naš izbor satova koji privlače pažnju.
@@ -450,7 +451,7 @@ export default async function Home() {
                   {product.images && product.images[0] ? (
                     <img
                       src={product.images[0]}
-                      alt={product.name}
+                      alt={`${product.name} – ručni sat`}
                       loading="lazy"
                       className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.045]"
                     />
@@ -485,9 +486,9 @@ export default async function Home() {
                     {product.brand || "WATCH STORE"}
                   </p>
 
-                  <h4 className="mt-3 text-xl font-semibold tracking-tight text-[#F5EEE3] sm:text-2xl">
+                  <h3 className="mt-3 text-xl font-semibold tracking-tight text-[#F5EEE3] sm:text-2xl">
                     {product.name}
-                  </h4>
+                  </h3>
 
                   <div className="mt-5 flex items-center justify-between gap-3 border-t border-white/[0.09] pt-4">
                     <div className="min-w-0">
@@ -536,9 +537,9 @@ export default async function Home() {
                 Istraži naš izbor
               </p>
 
-              <h3 className="mt-3 text-2xl font-semibold tracking-tight text-[#F5EEE3] sm:text-3xl">
+              <h2 className="mt-3 text-2xl font-semibold tracking-tight text-[#F5EEE3] sm:text-3xl">
                 Svi proizvodi
-              </h3>
+              </h2>
 
               <p className="mt-2 max-w-2xl text-sm leading-6 text-[#C5B5A0]">
                 Pronađi pravi proizvod i prilagodi prikaz svojim željama.
