@@ -232,7 +232,7 @@ export default async function Home() {
               <div className="flex items-center gap-3">
                 <div className="relative h-11 w-11 shrink-0 overflow-hidden rounded-full border border-[#D4AF7A]/40 shadow-lg transition duration-300 group-hover:scale-105 group-hover:border-[#D4AF7A]/80">
                   <Image
-                    src="/images/logo.png"
+                    src="/public/images/logo.png"
                     alt="WATCH STORE logo"
                     fill
                     priority
