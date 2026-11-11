@@ -12,19 +12,23 @@ type Product = {
   stock: number;
   category: string | null;
   images: string[] | null;
+  is_active: boolean;
 };
 
 export default function ProductsPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState("");
+  const [updatingId, setUpdatingId] = useState<string | null>(null);
 
   async function loadProducts() {
     const supabase = createClient();
 
     const { data, error } = await supabase
       .from("products")
-      .select("id, name, brand, model, price, stock, category, images")
+      .select(
+        "id, name, brand, model, price, stock, category, images, is_active"
+      )
       .order("created_at", { ascending: false });
 
     if (error) {
@@ -47,6 +51,53 @@ export default function ProductsPage() {
     if (category === "zenski") return "Ženski";
     return "Unisex";
   }
+
+  async function toggleProductStatus(product: Product) {
+    const newStatus = !product.is_active;
+
+    const potvrda = window.confirm(
+      newStatus
+        ? `Da li želiš da vratiš proizvod "${product.name}" u prodaju?`
+        : `Da li želiš da ukloniš proizvod "${product.name}" iz prodaje?`
+    );
+
+    if (!potvrda) return;
+
+    setUpdatingId(product.id);
+    setMessage("");
+
+    const supabase = createClient();
+
+    const { error } = await supabase
+      .from("products")
+      .update({ is_active: newStatus })
+      .eq("id", product.id);
+
+    if (error) {
+      console.error(error);
+      setMessage("Greška: " + error.message);
+      setUpdatingId(null);
+      return;
+    }
+
+    setProducts((currentProducts) =>
+      currentProducts.map((item) =>
+        item.id === product.id
+          ? { ...item, is_active: newStatus }
+          : item
+      )
+    );
+
+    setUpdatingId(null);
+  }
+
+  const activeCount = products.filter(
+    (product) => product.is_active
+  ).length;
+
+  const inactiveCount = products.filter(
+    (product) => !product.is_active
+  ).length;
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-[#211812] via-[#30231b] to-[#17110d] px-6 py-12 text-[#f4ebdd]">
@@ -71,18 +122,40 @@ export default function ProductsPage() {
             </h1>
 
             <p className="mt-2 text-[#b8a99a]">
-              Svi proizvodi u tvojoj prodavnici.
+              Upravljaj proizvodima u svojoj prodavnici.
             </p>
           </div>
 
-          <div className="rounded-2xl border border-[#d6b878]/30 bg-gradient-to-br from-[#30231b] to-[#211812] px-5 py-4 shadow-[inset_0_1px_0_rgba(234,212,160,0.05)]">
-            <p className="text-xs uppercase tracking-[0.2em] text-[#b8a99a]">
-              Ukupno
-            </p>
+          <div className="grid grid-cols-3 gap-3">
+            <div className="rounded-2xl border border-[#d6b878]/30 bg-gradient-to-br from-[#30231b] to-[#211812] px-5 py-4">
+              <p className="text-xs uppercase tracking-[0.15em] text-[#b8a99a]">
+                Ukupno
+              </p>
 
-            <p className="mt-1 text-2xl font-bold text-[#ead4a0]">
-              {products.length}
-            </p>
+              <p className="mt-1 text-2xl font-bold text-[#ead4a0]">
+                {products.length}
+              </p>
+            </div>
+
+            <div className="rounded-2xl border border-[#d6b878]/30 bg-gradient-to-br from-[#30231b] to-[#211812] px-5 py-4">
+              <p className="text-xs uppercase tracking-[0.15em] text-[#b8a99a]">
+                Aktivni
+              </p>
+
+              <p className="mt-1 text-2xl font-bold text-[#ead4a0]">
+                {activeCount}
+              </p>
+            </div>
+
+            <div className="rounded-2xl border border-[#c46a2d]/30 bg-gradient-to-br from-[#30231b] to-[#211812] px-5 py-4">
+              <p className="text-xs uppercase tracking-[0.15em] text-[#b8a99a]">
+                Uklonjeni
+              </p>
+
+              <p className="mt-1 text-2xl font-bold text-[#e7a17b]">
+                {inactiveCount}
+              </p>
+            </div>
           </div>
         </div>
 
@@ -102,7 +175,7 @@ export default function ProductsPage() {
           </div>
         )}
 
-        {!loading && !message && products.length === 0 && (
+        {!loading && products.length === 0 && !message && (
           <div className="mt-10 rounded-3xl border border-[#d6b878]/20 bg-gradient-to-br from-[#30231b] to-[#211812] p-12 text-center">
             <p className="text-lg font-semibold text-[#f4ebdd]">
               Trenutno nema proizvoda.
@@ -114,12 +187,16 @@ export default function ProductsPage() {
           </div>
         )}
 
-        {!loading && !message && products.length > 0 && (
+        {!loading && products.length > 0 && (
           <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {products.map((product) => (
               <div
                 key={product.id}
-                className="group overflow-hidden rounded-[2rem] border border-[#d6b878]/20 bg-gradient-to-br from-[#30231b] to-[#211812] shadow-[inset_0_1px_0_rgba(234,212,160,0.04)] transition-all duration-300 hover:-translate-y-1 hover:border-[#d6b878]/55"
+                className={`group overflow-hidden rounded-[2rem] border bg-gradient-to-br from-[#30231b] to-[#211812] shadow-[inset_0_1px_0_rgba(234,212,160,0.04)] transition-all duration-300 hover:-translate-y-1 ${
+                  product.is_active
+                    ? "border-[#d6b878]/20 hover:border-[#d6b878]/55"
+                    : "border-[#c46a2d]/40 opacity-75 hover:opacity-100"
+                }`}
               >
                 <div className="relative overflow-hidden bg-[#17110d]">
                   <div className="aspect-[4/3]">
@@ -127,7 +204,9 @@ export default function ProductsPage() {
                       <img
                         src={product.images[0]}
                         alt={product.name}
-                        className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                        className={`h-full w-full object-cover transition-transform duration-500 group-hover:scale-105 ${
+                          !product.is_active ? "grayscale" : ""
+                        }`}
                       />
                     ) : (
                       <div className="flex h-full items-center justify-center">
@@ -147,16 +226,12 @@ export default function ProductsPage() {
                   <div className="absolute right-4 top-4">
                     <span
                       className={`rounded-full border px-3 py-1.5 text-[11px] font-semibold backdrop-blur ${
-                        product.stock > 0
-                          ? "border-[#d6b878]/35 bg-[#211812]/90 text-[#ead4a0]"
+                        product.is_active
+                          ? "border-[#d6b878]/50 bg-[#211812]/90 text-[#ead4a0]"
                           : "border-[#c46a2d]/50 bg-[#211812]/95 text-[#f0a08a]"
                       }`}
                     >
-                      {product.stock > 0
-                        ? `${product.stock} ${
-                            product.stock === 1 ? "komad" : "komada"
-                          }`
-                        : "Nema na stanju"}
+                      {product.is_active ? "Aktivan" : "Uklonjen iz prodaje"}
                     </span>
                   </div>
                 </div>
@@ -214,37 +289,19 @@ export default function ProductsPage() {
                   </button>
 
                   <button
-                    onClick={async () => {
-                      const potvrda = window.confirm(
-                        "Da li stvarno želiš da obrišeš ovaj proizvod?"
-                      );
-
-                      if (!potvrda) {
-                        return;
-                      }
-
-                      const supabase = createClient();
-
-                      const { error } = await supabase
-                        .from("products")
-                        .delete()
-                        .eq("id", product.id);
-
-                      if (error) {
-                        console.error(error);
-                        setMessage("Greška: " + error.message);
-                        return;
-                      }
-
-                      setProducts((trenutniProizvodi) =>
-                        trenutniProizvodi.filter(
-                          (stavka) => stavka.id !== product.id
-                        )
-                      );
-                    }}
-                    className="mt-3 w-full rounded-xl border border-[#c46a2d]/40 px-4 py-3 text-sm text-[#e7a17b] transition hover:border-[#c46a2d]/70 hover:bg-[#c46a2d]/10 active:scale-[0.99]"
+                    onClick={() => toggleProductStatus(product)}
+                    disabled={updatingId === product.id}
+                    className={`mt-3 w-full rounded-xl border px-4 py-3 text-sm font-semibold transition active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-50 ${
+                      product.is_active
+                        ? "border-[#c46a2d]/40 text-[#e7a17b] hover:border-[#c46a2d]/70 hover:bg-[#c46a2d]/10"
+                        : "border-[#d6b878]/40 text-[#ead4a0] hover:border-[#d6b878]/70 hover:bg-[#d6b878]/10"
+                    }`}
                   >
-                    Obriši proizvod
+                    {updatingId === product.id
+                      ? "Sačekaj..."
+                      : product.is_active
+                        ? "Ukloni iz prodaje"
+                        : "Vrati u prodaju"}
                   </button>
                 </div>
               </div>
