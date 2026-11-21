@@ -105,40 +105,25 @@ export default async function Home() {
   ).slice(0, 6);
 
   return (
-
-    <main className="relative min-h-screen overflow-x-clip bg-[#F7F1E7] text-[#241A13] selection:bg-[#B38B4D] selection:text-white">
+    <main className="relative min-h-screen overflow-x-clip bg-[#241A13] text-[#F5EEE3] selection:bg-[#D4AF7A] selection:text-[#241A13]">
       <style>{`
         :root {
-          color-scheme: light;
+          color-scheme: dark;
         }
 
         html {
           scroll-behavior: smooth;
-          background: #F7F1E7;
+          background: #241A13;
         }
 
-        /* Paleta: krem #F7F1E7 · espreso #241A13 · zlato #B38B4D (tamnije #8A6830 za tekst) */
-
         .ws-glass {
-          background: rgba(247, 241, 231, 0.74);
-          border: 1px solid rgba(179, 139, 77, 0.22);
+          background: rgba(36, 26, 19, 0.72);
+          border: 1px solid rgba(212, 175, 122, 0.14);
           -webkit-backdrop-filter: blur(22px) saturate(145%);
           backdrop-filter: blur(22px) saturate(145%);
         }
 
         .ws-glass-card {
-          background: linear-gradient(
-            135deg,
-            rgba(255, 255, 255, 0.62),
-            rgba(179, 139, 77, 0.10)
-          );
-          border: 1px solid rgba(179, 139, 77, 0.28);
-          -webkit-backdrop-filter: blur(18px);
-          backdrop-filter: blur(18px);
-        }
-
-        /* Staklo za tamnu sekciju (originalni izgled) */
-        .ws-glass-card-dark {
           background: linear-gradient(
             135deg,
             rgba(212, 175, 122, 0.10),
@@ -151,17 +136,17 @@ export default async function Home() {
 
         .ws-hero {
           background:
-            radial-gradient(ellipse at 78% 30%, rgba(179, 139, 77, 0.22), transparent 50%),
-            radial-gradient(ellipse at 8% 90%, rgba(255, 255, 255, 0.75), transparent 45%),
-            linear-gradient(115deg, #FBF7F0 0%, #F4EBDC 55%, #EADFCB 100%);
+            radial-gradient(ellipse at 75% 35%, rgba(212, 175, 122, 0.19), transparent 48%),
+            radial-gradient(ellipse at 10% 85%, rgba(204, 85, 0, 0.14), transparent 42%),
+            linear-gradient(115deg, #241A13 0%, #352719 54%, #1A120D 100%);
         }
 
         .ws-title-gradient {
           background: linear-gradient(
             105deg,
-            #8A6830 0%,
-            #B38B4D 55%,
-            #C9A468 100%
+            #F5EEE3 0%,
+            #E9D2A6 48%,
+            #D4AF7A 100%
           );
           -webkit-background-clip: text;
           background-clip: text;
@@ -169,36 +154,60 @@ export default async function Home() {
         }
 
         .ws-primary-button {
-          background: linear-gradient(135deg, #33261C, #241A13);
-          border: 1px solid rgba(179, 139, 77, 0.55);
-          box-shadow: 0 10px 28px rgba(36, 26, 19, 0.22);
-          color: #F7F1E7;
+          background: linear-gradient(135deg, #E2C18B, #B99155);
+          border: 1px solid rgba(241, 221, 186, 0.40);
+          box-shadow: 0 8px 30px rgba(10, 6, 3, 0.25);
+          color: #241A13;
           transition: transform 200ms ease, border-color 200ms ease, filter 200ms ease;
         }
 
         .ws-primary-button:hover {
-          border-color: rgba(179, 139, 77, 1);
-          filter: brightness(1.15);
+          border-color: rgba(255, 235, 196, 0.75);
+          filter: brightness(1.08);
           transform: translateY(-2px);
         }
 
+        .ws-secondary-button {
+          background: rgba(204, 85, 0, 0.13);
+          border: 1px solid rgba(204, 85, 0, 0.50);
+          transition: background 200ms ease, border-color 200ms ease, transform 200ms ease;
+        }
+
+        .ws-secondary-button:hover {
+          background: rgba(204, 85, 0, 0.25);
+          border-color: rgba(230, 126, 49, 0.75);
+          transform: translateY(-2px);
+        }
+
+        .ws-nav-link {
+          position: relative;
+          border: 1px solid transparent;
+          background: rgba(255, 255, 255, 0.025);
+          transition: color 200ms ease, background 200ms ease, border-color 200ms ease;
+        }
+
+        .ws-nav-link:hover {
+          color: #F1DDBA;
+          background: rgba(212, 175, 122, 0.12);
+          border-color: rgba(212, 175, 122, 0.25);
+        }
+
         .ws-product-card {
-          background: linear-gradient(160deg, #FFFFFF 0%, #FBF6EC 100%);
-          border: 1px solid rgba(179, 139, 77, 0.22);
-          box-shadow: 0 10px 30px rgba(60, 40, 20, 0.07);
+          background: linear-gradient(145deg, #3A2A1D 0%, #2E2117 52%, #241A13 100%);
+          border: 1px solid rgba(212, 175, 122, 0.13);
           transition: transform 300ms ease, border-color 300ms ease, box-shadow 300ms ease;
         }
 
         .ws-product-card:hover {
           transform: translateY(-5px);
-          border-color: rgba(179, 139, 77, 0.65);
-          box-shadow: 0 24px 55px rgba(60, 40, 20, 0.16);
+          border-color: rgba(212, 175, 122, 0.48);
+          box-shadow: 0 22px 55px rgba(0, 0, 0, 0.24);
         }
 
         .ws-watch-image {
           background:
-            radial-gradient(ellipse at 50% 45%, rgba(179, 139, 77, 0.18), transparent 62%),
-            linear-gradient(145deg, #EFE5D4, #E2D4BC);
+            radial-gradient(ellipse at 50% 45%, rgba(212, 175, 122, 0.16), transparent 62%),
+            linear-gradient(145deg, #443020, #211710);
         }
 
         @media (prefers-reduced-motion: reduce) {
@@ -207,6 +216,8 @@ export default async function Home() {
           }
 
           .ws-primary-button,
+          .ws-secondary-button,
+          .ws-nav-link,
           .ws-product-card {
             transition: none;
           }
@@ -214,15 +225,15 @@ export default async function Home() {
       `}</style>
 
       {/* GORNJA NAVIGACIJA */}
-      <header className="ws-glass sticky top-0 z-50 border-b border-[#B38B4D]/20">
+      <header className="ws-glass sticky top-0 z-50 border-b border-white/[0.07]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6">
           <div className="flex items-center justify-between gap-3 py-4 sm:py-5">
             <Link href="/" className="group min-w-0">
               <div className="flex items-center gap-3">
-                <div className="relative h-11 w-11 shrink-0 overflow-hidden rounded-full border border-[#B38B4D]/50 shadow-md transition duration-300 group-hover:scale-105 group-hover:border-[#B38B4D]">
+                <div className="relative h-11 w-11 shrink-0 overflow-hidden rounded-full border border-[#D4AF7A]/40 shadow-lg transition duration-300 group-hover:scale-105 group-hover:border-[#D4AF7A]/80">
                   <Image
-                    src="/images/logo.png"
-                    alt="WATCH SHOP logo"
+                    src="/images/logo1.png"
+                    alt="WATCH STORE logo"
                     fill
                     priority
                     sizes="56px"
@@ -231,11 +242,11 @@ export default async function Home() {
                 </div>
 
                 <div className="min-w-0">
-                  <h1 className="text-base font-bold tracking-[0.13em] text-[#241A13] sm:text-xl sm:tracking-[0.18em]">
-                    WATCH SHOP
-                  </h1>
+                  <span className="text-base font-bold tracking-[0.13em] text-[#F5EEE3] sm:text-xl sm:tracking-[0.18em]">
+                    WATCH STORE
+                  </span>
 
-                  <p className="mt-1 text-[9px] uppercase tracking-[0.18em] text-[#8A6830] sm:text-[10px] sm:tracking-[0.25em]">
+                  <p className="mt-1 text-[9px] uppercase tracking-[0.18em] text-[#D4AF7A] sm:text-[10px] sm:tracking-[0.25em]">
                     Premium satovi i aksesoari
                   </p>
                 </div>
@@ -252,15 +263,15 @@ export default async function Home() {
           {/* KATEGORIJE SA IKONICAMA */}
           <nav
             aria-label="Glavna navigacija"
-            className="grid grid-cols-5 gap-2 border-t border-[#B38B4D]/20 py-3 sm:gap-4"
+            className="grid grid-cols-5 gap-2 border-t border-white/[0.07] py-3 sm:gap-4"
           >
             {mainNavigation.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
-                className="group flex min-w-0 flex-col items-center justify-center gap-2 rounded-xl border border-transparent px-1 py-2 text-[#5E4D3E] transition-all duration-300 hover:border-[#B38B4D]/35 hover:bg-[#B38B4D]/10 hover:text-[#241A13]"
+                className="group flex min-w-0 flex-col items-center justify-center gap-2 rounded-xl border border-transparent px-1 py-2 text-[#D8C7B0] transition-all duration-300 hover:border-[#D4AF7A]/25 hover:bg-[#D4AF7A]/[0.08] hover:text-[#F1DDBA]"
               >
-                <span className="flex h-10 w-10 items-center justify-center rounded-full border border-[#B38B4D]/35 bg-white/50 text-[#8A6830] transition-all duration-300 group-hover:scale-110 group-hover:border-[#B38B4D] group-hover:bg-[#B38B4D]/15">
+                <span className="flex h-10 w-10 items-center justify-center rounded-full border border-[#D4AF7A]/20 bg-[#D4AF7A]/[0.05] text-[#D4AF7A] transition-all duration-300 group-hover:scale-110 group-hover:border-[#D4AF7A]/60 group-hover:bg-[#D4AF7A]/15">
                   {item.icon}
                 </span>
 
@@ -274,32 +285,33 @@ export default async function Home() {
       </header>
 
       {/* LUKSUZNI HERO DEO */}
-      <section className="ws-hero relative isolate overflow-hidden border-b border-[#B38B4D]/20">
+      <section className="ws-hero relative isolate overflow-hidden border-b border-white/[0.06]">
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute -right-24 top-0 -z-10 h-[420px] w-[420px] rounded-full bg-[#B38B4D]/20 blur-[100px]"
+          className="pointer-events-none absolute -right-24 top-0 -z-10 h-[420px] w-[420px] rounded-full bg-[#D4AF7A]/15 blur-[100px]"
         />
 
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute -bottom-40 left-0 -z-10 h-[360px] w-[360px] rounded-full bg-white/70 blur-[100px]"
+          className="pointer-events-none absolute -bottom-40 left-0 -z-10 h-[360px] w-[360px] rounded-full bg-[#CC5500]/10 blur-[100px]"
         />
 
         <div className="mx-auto grid max-w-7xl items-center gap-10 px-6 py-16 sm:py-20 lg:grid-cols-[1.05fr_0.95fr] lg:gap-8 lg:py-24">
           <div className="relative z-10 max-w-2xl">
-            <div className="inline-flex items-center gap-2 rounded-full border border-[#B38B4D]/35 bg-white/55 px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.23em] text-[#8A6830] sm:text-xs">
-              <span className="h-1.5 w-1.5 rounded-full bg-[#B38B4D]" />
+            <div className="inline-flex items-center gap-2 rounded-full border border-[#D4AF7A]/20 bg-[#4B3621]/35 px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.23em] text-[#E9D2A6] sm:text-xs">
+              <span className="h-1.5 w-1.5 rounded-full bg-[#D4AF7A]" />
               Vreme je za nešto posebno
             </div>
 
-            <h2 className="mt-7 text-5xl font-semibold leading-[1.04] tracking-tight text-[#241A13] sm:text-6xl lg:text-7xl xl:text-[5.5rem]">
-              Stil koji
-              <span className="ws-title-gradient block">traje zauvek.</span>
-            </h2>
+            <h1 className="mt-7 text-5xl font-semibold leading-[1.04] tracking-tight sm:text-6xl lg:text-7xl xl:text-[5.5rem]">
+              Muški i ženski
+              <span className="ws-title-gradient block">ručni satovi.</span>
+            </h1>
 
-            <p className="mt-7 max-w-xl text-base leading-7 text-[#5E4D3E] sm:text-lg sm:leading-8">
-              Otkrij satove, narukvice, ogrlice, novčanike i poklone pažljivo
-              odabrane za one koji znaju da su detalji ono što čini razliku.
+            <p className="mt-7 max-w-xl text-base leading-7 text-[#D3C5B3] sm:text-lg sm:leading-8">
+              Otkrij kolekciju muških i ženskih ručnih satova u WATCH STORE-u.
+              Pronađi elegantne, moderne i pažljivo odabrane satove, kao i
+              narukvice, ogrlice, novčanike i poklone za svaki stil.
             </p>
 
             <div className="mt-9 flex flex-wrap gap-3">
@@ -312,21 +324,21 @@ export default async function Home() {
               </a>
             </div>
 
-            <div className="mt-12 flex flex-wrap gap-x-8 gap-y-4 border-t border-[#241A13]/10 pt-6">
+            <div className="mt-12 flex flex-wrap gap-x-8 gap-y-4 border-t border-white/[0.09] pt-6">
               <div>
-                <p className="text-lg font-semibold text-[#241A13]">Stil</p>
-                <p className="mt-1 text-xs text-[#85715D]">
+                <p className="text-lg font-semibold text-[#F5EEE3]">Stil</p>
+                <p className="mt-1 text-xs text-[#B9A58C]">
                   Za svaki trenutak
                 </p>
               </div>
 
-              <div className="h-10 w-px bg-[#241A13]/15" />
+              <div className="h-10 w-px bg-white/10" />
 
               <div>
-                <p className="text-lg font-semibold text-[#241A13]">
+                <p className="text-lg font-semibold text-[#F5EEE3]">
                   Pažljivo birano
                 </p>
-                <p className="mt-1 text-xs text-[#85715D]">
+                <p className="mt-1 text-xs text-[#B9A58C]">
                   Detalji koji znače
                 </p>
               </div>
@@ -337,33 +349,33 @@ export default async function Home() {
           <div className="relative mx-auto w-full max-w-xl lg:max-w-none">
             <div
               aria-hidden="true"
-              className="pointer-events-none absolute inset-8 rounded-full bg-[#B38B4D]/25 blur-[70px]"
+              className="pointer-events-none absolute inset-8 rounded-full bg-[#D4AF7A]/20 blur-[70px]"
             />
 
-            <div className="ws-glass-card relative overflow-hidden rounded-[2rem] p-2 shadow-[0_25px_70px_rgba(60,40,20,0.20)] sm:rounded-[2.5rem] sm:p-3">
+            <div className="ws-glass-card relative overflow-hidden rounded-[2rem] p-2 shadow-[0_25px_80px_rgba(0,0,0,0.25)] sm:rounded-[2.5rem] sm:p-3">
               <div className="ws-watch-image relative isolate flex aspect-[4/4.5] items-center justify-center overflow-hidden rounded-[1.5rem] sm:rounded-[2rem]">
                 <img
                   src="/images/hero-watch.png"
-                  alt="Premium sat iz WATCH SHOP kolekcije"
+                  alt="Muški i ženski ručni satovi iz WATCH STORE kolekcije"
                   fetchPriority="high"
                   className="absolute inset-0 z-0 h-full w-full rounded-[1.5rem] object-cover sm:rounded-[2rem]"
                 />
 
                 <div
                   aria-hidden="true"
-                  className="pointer-events-none absolute inset-0 z-[1] rounded-[1.5rem] bg-gradient-to-t from-[#1A120D]/85 via-[#1A120D]/10 to-black/5 sm:rounded-[2rem]"
+                  className="pointer-events-none absolute inset-0 z-[1] rounded-[1.5rem] bg-gradient-to-t from-[#1A120D]/90 via-[#1A120D]/10 to-black/10 sm:rounded-[2rem]"
                 />
 
                 <div className="relative z-10 mt-auto w-full px-4 pb-10 pt-64 text-center sm:px-6 sm:pb-14 sm:pt-72">
                   <p className="text-[10px] font-medium uppercase tracking-[0.35em] text-[#D4AF7A] sm:text-xs">
-                    WATCH SHOP · PREMIUM SELECTION
+                    WATCH STORE · PREMIUM SELECTION
                   </p>
 
                   <p className="mt-3 text-2xl font-medium tracking-wide text-[#F5EEE3] sm:text-3xl">
                     Vreme je za pravi izbor.
                   </p>
 
-                  <p className="mx-auto mt-3 max-w-xs text-sm leading-6 text-[#E2D4C1]">
+                  <p className="mx-auto mt-3 max-w-xs text-sm leading-6 text-[#D3C5B3]">
                     Pronađi detalj koji upotpunjuje tvoj stil.
                   </p>
                 </div>
@@ -372,7 +384,7 @@ export default async function Home() {
 
             <div
               aria-hidden="true"
-              className="pointer-events-none absolute -bottom-5 -right-3 h-24 w-24 rounded-full bg-[#B38B4D]/20 blur-3xl"
+              className="pointer-events-none absolute -bottom-5 -right-3 h-24 w-24 rounded-full bg-[#CC5500]/15 blur-3xl"
             />
           </div>
         </div>
@@ -382,30 +394,30 @@ export default async function Home() {
       <section className="relative mx-auto max-w-7xl px-6 py-16 sm:py-20">
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute right-0 top-10 h-64 w-64 rounded-full bg-[#B38B4D]/10 blur-[90px]"
+          className="pointer-events-none absolute right-0 top-10 h-64 w-64 rounded-full bg-[#D4AF7A]/10 blur-[90px]"
         />
 
         <div
           id="satovi"
-          className="relative scroll-mt-36 flex flex-col justify-between gap-4 border-b border-[#241A13]/10 pb-6 sm:flex-row sm:items-end"
+          className="relative scroll-mt-36 flex flex-col justify-between gap-4 border-b border-white/[0.09] pb-6 sm:flex-row sm:items-end"
         >
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-[#8A6830] sm:text-xs">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-[#D4AF7A] sm:text-xs">
               Pažljivo odabrana kolekcija
             </p>
 
-            <h3 className="mt-3 text-2xl font-semibold tracking-tight text-[#241A13] sm:text-3xl">
+            <h2 className="mt-3 text-2xl font-semibold tracking-tight text-[#F5EEE3] sm:text-3xl">
               Izdvojeni satovi
-            </h3>
+            </h2>
 
-            <p className="mt-2 text-sm text-[#5E4D3E]">
+            <p className="mt-2 text-sm text-[#C5B5A0]">
               Naš izbor satova koji privlače pažnju.
             </p>
           </div>
 
           <Link
             href="/satovi"
-            className="inline-flex w-fit items-center gap-2 rounded-xl border border-[#241A13]/15 bg-white/60 px-4 py-2.5 text-sm font-medium text-[#241A13] transition hover:border-[#B38B4D] hover:bg-white hover:text-[#8A6830]"
+            className="inline-flex w-fit items-center gap-2 rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2.5 text-sm font-medium text-[#E2D4C1] transition hover:border-[#D4AF7A]/30 hover:bg-[#4B3621]/45 hover:text-white"
           >
             Svi satovi <span aria-hidden="true">→</span>
           </Link>
@@ -439,13 +451,13 @@ export default async function Home() {
                   {product.images && product.images[0] ? (
                     <img
                       src={product.images[0]}
-                      alt={product.name}
+                      alt={`${product.name} – ručni sat`}
                       loading="lazy"
                       className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.045]"
                     />
                   ) : (
                     <div className="flex h-full items-center justify-center">
-                      <span className="text-sm text-[#85715D]">
+                      <span className="text-sm text-[#C5B5A0]">
                         Slika sata
                       </span>
                     </div>
@@ -453,7 +465,7 @@ export default async function Home() {
 
                   <div
                     aria-hidden="true"
-                    className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#241A13]/35 via-transparent to-black/0"
+                    className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#241A13]/60 via-transparent to-black/5"
                   />
 
                   {badge && (
@@ -470,18 +482,18 @@ export default async function Home() {
                 </div>
 
                 <div className="p-5 sm:p-6">
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.23em] text-[#8A6830]">
-                    {product.brand || "Watch Shop"}
+                  <p className="text-[10px] font-semibold uppercase tracking-[0.23em] text-[#D4AF7A]">
+                    {product.brand || "WATCH STORE"}
                   </p>
 
-                  <h4 className="mt-3 text-xl font-semibold tracking-tight text-[#241A13] sm:text-2xl">
+                  <h3 className="mt-3 text-xl font-semibold tracking-tight text-[#F5EEE3] sm:text-2xl">
                     {product.name}
-                  </h4>
+                  </h3>
 
-                  <div className="mt-5 flex items-center justify-between gap-3 border-t border-[#241A13]/10 pt-4">
+                  <div className="mt-5 flex items-center justify-between gap-3 border-t border-white/[0.09] pt-4">
                     <div className="min-w-0">
                       {hasDiscount && (
-                        <p className="mb-1 text-sm font-medium text-[#85715D] line-through decoration-[#B38B4D]/70">
+                        <p className="mb-1 text-sm font-medium text-[#B9A58C] line-through decoration-[#D4AF7A]/60">
                           {oldPrice.toLocaleString("sr-RS", {
                             minimumFractionDigits: 2,
                             maximumFractionDigits: 2,
@@ -490,18 +502,18 @@ export default async function Home() {
                         </p>
                       )}
 
-                      <p className="text-xl font-bold tracking-tight text-[#8A6830]">
+                      <p className="text-xl font-bold tracking-tight text-[#E2C18B]">
                         {currentPrice.toLocaleString("sr-RS", {
                           minimumFractionDigits: 2,
                           maximumFractionDigits: 2,
                         })}{" "}
-                        <span className="text-sm font-medium text-[#85715D]">
+                        <span className="text-sm font-medium text-[#C5B5A0]">
                           RSD
                         </span>
                       </p>
                     </div>
 
-                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-[#B38B4D]/30 bg-[#B38B4D]/10 text-[#8A6830] transition group-hover:border-[#B38B4D] group-hover:bg-[#241A13] group-hover:text-[#F7F1E7]">
+                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-[#D4AF7A]/15 bg-[#4B3621]/50 text-[#E9D2A6] transition group-hover:border-[#D4AF7A]/35 group-hover:bg-[#4B3621]/80">
                       →
                     </span>
                   </div>
@@ -511,51 +523,47 @@ export default async function Home() {
           })}
 
           {displayedWatches.length === 0 && (
-            <p className="text-[#85715D]">
+            <p className="text-[#C5B5A0]">
               Trenutno nema satova za prikaz.
             </p>
           )}
         </div>
-      </section>
 
-      {/* SVI PROIZVODI — tamna espreso sekcija (filter ostaje u svom originalnom izgledu) */}
-      <section className="relative border-t border-[#B38B4D]/25 bg-[#241A13] text-[#F5EEE3]">
-        <div className="mx-auto max-w-7xl px-6 py-16 sm:py-20">
-          <div id="kolekcija" className="relative scroll-mt-36">
-            <div className="mb-8 flex flex-col justify-between gap-4 border-b border-white/[0.09] pb-6 sm:flex-row sm:items-end">
-              <div>
-                <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-[#D4AF7A] sm:text-xs">
-                  Istraži naš izbor
-                </p>
+        {/* SVI PROIZVODI */}
+        <div id="kolekcija" className="relative mt-20 scroll-mt-36 sm:mt-24">
+          <div className="mb-8 flex flex-col justify-between gap-4 border-b border-white/[0.09] pb-6 sm:flex-row sm:items-end">
+            <div>
+              <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-[#D4AF7A] sm:text-xs">
+                Istraži naš izbor
+              </p>
 
-                <h3 className="mt-3 text-2xl font-semibold tracking-tight text-[#F5EEE3] sm:text-3xl">
-                  Svi proizvodi
-                </h3>
+              <h2 className="mt-3 text-2xl font-semibold tracking-tight text-[#F5EEE3] sm:text-3xl">
+                Svi proizvodi
+              </h2>
 
-                <p className="mt-2 max-w-2xl text-sm leading-6 text-[#C5B5A0]">
-                  Pronađi pravi proizvod i prilagodi prikaz svojim željama.
-                </p>
-              </div>
-
-              <div className="ws-glass-card-dark flex w-fit items-center gap-2 rounded-xl px-3 py-2 text-xs text-[#E2D4C1]">
-                <span className="h-2 w-2 rounded-full bg-[#D4AF7A]" />
-                Pronađi svoj stil
-              </div>
+              <p className="mt-2 max-w-2xl text-sm leading-6 text-[#C5B5A0]">
+                Pronađi pravi proizvod i prilagodi prikaz svojim željama.
+              </p>
             </div>
 
-            <CategoryFilter
-              products={products}
-              filterMode="basic"
-              productLabel="proizvodi"
-              searchPlaceholder="Pretraži sat, narukvicu, ogrlicu, novčanik ili poklon..."
-              showGenderFilter={false}
-            />
+            <div className="ws-glass-card flex w-fit items-center gap-2 rounded-xl px-3 py-2 text-xs text-[#E2D4C1]">
+              <span className="h-2 w-2 rounded-full bg-[#D4AF7A]" />
+              Pronađi svoj stil
+            </div>
           </div>
+
+          <CategoryFilter
+  products={products}
+  filterMode="basic"
+  productLabel="proizvodi"
+  searchPlaceholder="Pretraži sat, narukvicu, ogrlicu, novčanik ili poklon..."
+  showGenderFilter={true}
+/>
         </div>
       </section>
 
       {/* PODNOŽJE */}
-      <footer className="relative overflow-hidden border-t border-white/[0.08] bg-[#1D140E] text-[#F5EEE3]">
+      <footer className="relative overflow-hidden border-t border-white/[0.08] bg-[#1D140E]">
         <div
           aria-hidden="true"
           className="pointer-events-none absolute -right-20 -top-24 h-64 w-64 rounded-full bg-[#D4AF7A]/15 blur-[100px]"
@@ -566,8 +574,8 @@ export default async function Home() {
             <div className="flex items-center gap-3">
               <div className="relative h-11 w-11 shrink-0 overflow-hidden rounded-full border border-[#D4AF7A]/40 shadow-lg sm:h-14 sm:w-14">
                 <Image
-                  src="/images/logo.png"
-                  alt="WATCH SHOP logo"
+                  src="/images/logo1.png"
+                  alt="WATCH STORE logo"
                   fill
                   sizes="56px"
                   className="object-cover"
@@ -579,7 +587,7 @@ export default async function Home() {
                   href="/"
                   className="text-sm font-bold tracking-[0.22em] text-[#F5EEE3] transition hover:text-[#D4AF7A]"
                 >
-                  WATCH SHOP
+                  WATCH STORE
                 </Link>
 
                 <p className="mt-2 text-sm text-[#C5B5A0]">
@@ -611,7 +619,7 @@ export default async function Home() {
           </div>
 
           <div className="mt-8 border-t border-white/[0.08] pt-6 text-xs text-[#AD9A83]">
-            © {new Date().getFullYear()} WATCH SHOP. Sva prava zadržana.
+            © {new Date().getFullYear()} WATCH STORE. Sva prava zadržana.
           </div>
         </div>
       </footer>
