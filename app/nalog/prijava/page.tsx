@@ -40,25 +40,25 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-[#211812] via-[#2b2018] to-[#17110d] px-5 py-16 text-[#f4ebdd]">
+    <main className="min-h-screen bg-gradient-to-br from-[#F8F4E7] via-[#FFFFFF] to-[#FFFFFF]/100 px-5 py-16 text-[#1F2A3C]">
       <div className="mx-auto max-w-md">
         <Link
           href="/"
-          className="text-sm text-[#b8a99a] transition hover:text-[#ead4a0]"
+          className="text-sm text-[#1F2A3C]/72 transition hover:text-[#8A6A33]"
         >
           ← Nazad u prodavnicu
         </Link>
 
-        <div className="mt-10 rounded-3xl border border-[#d6b878]/25 bg-gradient-to-br from-[#30231b]/95 via-[#2b2018]/95 to-[#211812]/95 p-6 shadow-[inset_0_1px_0_rgba(234,212,160,0.08),0_12px_40px_rgba(0,0,0,0.2)] sm:p-8">
-          <p className="text-xs uppercase tracking-[0.25em] text-[#d6b878]">
+        <div className="mt-10 rounded-3xl border border-[#B8955A]/40 bg-gradient-to-br from-[#FFFFFF]/95 via-[#FFFFFF]/95 to-[#F8F4E7]/95 p-6 shadow-[inset_0_1px_0_rgba(184,149,90,0.08),0_12px_40px_rgba(31,42,60,0.12)] sm:p-8">
+          <p className="text-xs uppercase tracking-[0.25em] text-[#8A6A33]">
             Dobro došao nazad
           </p>
 
-          <h1 className="mt-3 text-3xl font-semibold text-[#f4ebdd]">
+          <h1 className="mt-3 text-3xl font-semibold text-[#1F2A3C]">
             Prijava
           </h1>
 
-          <p className="mt-3 text-sm leading-6 text-[#c2b5a8]">
+          <p className="mt-3 text-sm leading-6 text-[#1F2A3C]/72">
             Prijavi se da bi mogao da ostavljaš i uređuješ svoje recenzije.
           </p>
 
@@ -66,7 +66,7 @@ export default function LoginPage() {
             <div>
               <label
                 htmlFor="login-email"
-                className="block text-sm text-[#ead4a0]"
+                className="block text-sm text-[#8A6A33]"
               >
                 Email adresa
               </label>
@@ -78,7 +78,7 @@ export default function LoginPage() {
                 required
                 value={email}
                 onChange={(event) => setEmail(event.target.value)}
-                className="mt-2 min-h-12 w-full rounded-xl border border-[#d6b878]/25 bg-[#211812]/80 px-4 py-3 text-[#f4ebdd] outline-none placeholder:text-[#8f8071] focus:border-[#d6b878]/70 focus:ring-1 focus:ring-[#d6b878]/30"
+                className="mt-2 min-h-12 w-full rounded-xl border border-[#B8955A]/40 bg-[#1F2A3C]/80 px-4 py-3 text-[#F8F4E7] outline-none placeholder:text-[#1F2A3C]/50 focus:border-[#B8955A]/100 focus:ring-1 focus:ring-[#B8955A]/45"
                 placeholder="ime@email.com"
               />
             </div>
@@ -86,7 +86,7 @@ export default function LoginPage() {
             <div>
               <label
                 htmlFor="login-password"
-                className="block text-sm text-[#ead4a0]"
+                className="block text-sm text-[#8A6A33]"
               >
                 Lozinka
               </label>
@@ -98,7 +98,7 @@ export default function LoginPage() {
                 required
                 value={password}
                 onChange={(event) => setPassword(event.target.value)}
-                className="mt-2 min-h-12 w-full rounded-xl border border-[#d6b878]/25 bg-[#211812]/80 px-4 py-3 text-[#f4ebdd] outline-none placeholder:text-[#8f8071] focus:border-[#d6b878]/70 focus:ring-1 focus:ring-[#d6b878]/30"
+                className="mt-2 min-h-12 w-full rounded-xl border border-[#B8955A]/40 bg-[#1F2A3C]/80 px-4 py-3 text-[#F8F4E7] outline-none placeholder:text-[#1F2A3C]/50 focus:border-[#B8955A]/100 focus:ring-1 focus:ring-[#B8955A]/45"
                 placeholder="Unesi lozinku"
               />
             </div>
@@ -106,7 +106,7 @@ export default function LoginPage() {
             {error && (
               <p
                 role="alert"
-                className="rounded-xl border border-[#c46a2d]/40 bg-[#c46a2d]/10 px-4 py-3 text-sm text-[#f0a477]"
+                className="rounded-xl border border-[#c46a2d]/40 bg-[#c46a2d]/10 px-4 py-3 text-sm text-[#B4501F]"
               >
                 {error}
               </p>
@@ -115,17 +115,17 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="min-h-12 w-full rounded-xl border border-[#ead4a0]/50 bg-gradient-to-b from-[#ead4a0] via-[#d6b878] to-[#bd9650] px-5 py-3 font-semibold text-[#211812] shadow-[inset_0_1px_0_rgba(255,255,255,0.45),0_4px_14px_rgba(0,0,0,0.2)] transition hover:brightness-110 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
+              className="min-h-12 w-full rounded-xl border border-[#B8955A]/75 bg-gradient-to-b from-[#1F2A3C] via-[#1F2A3C] to-[#1F2A3C] px-5 py-3 font-semibold text-[#F8F4E7] shadow-[inset_0_1px_0_rgba(255,255,255,0.45),0_4px_14px_rgba(31,42,60,0.12)] transition hover:brightness-110 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
             >
               {loading ? "Prijavljivanje..." : "Prijavi se"}
             </button>
           </form>
 
-          <p className="mt-6 text-center text-sm text-[#b8a99a]">
+          <p className="mt-6 text-center text-sm text-[#1F2A3C]/72">
             Nemaš nalog?{" "}
             <Link
               href="/nalog/registracija"
-              className="font-medium text-[#ead4a0] underline decoration-[#d6b878]/50 underline-offset-4 transition hover:text-white"
+              className="font-medium text-[#8A6A33] underline decoration-[#8A6A33]/50 underline-offset-4 transition hover:text-white"
             >
               Registruj se
             </Link>

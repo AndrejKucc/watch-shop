@@ -552,7 +552,7 @@ export function CartButton() {
       aria-label={`Korpa${
         totalQuantity > 0 ? `, ${totalQuantity} proizvoda` : ""
       }`}
-      className="relative flex h-11 w-11 items-center justify-center rounded-xl border border-[#aebbd0]/35 bg-gradient-to-b from-[#2c3a52] to-[#1b2535] text-[#dce4ef] shadow-[inset_0_1px_0_rgba(220,228,239,0.06)] transition-all duration-200 hover:border-[#aebbd0]/70 hover:bg-[#3e4c66] hover:text-white active:scale-95"
+      className="relative flex h-11 w-11 items-center justify-center rounded-xl border border-[#B8955A]/50 bg-gradient-to-b from-[#1F2A3C] to-[#1F2A3C] text-[#F8F4E7] shadow-[inset_0_1px_0_rgba(184,149,90,0.06)] transition-all duration-200 hover:border-[#B8955A]/100 hover:bg-[#1F2A3C]/85 hover:text-white active:scale-95"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -572,7 +572,7 @@ export function CartButton() {
       </svg>
 
       {totalQuantity > 0 && (
-        <span className="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full border border-[#dce4ef]/60 bg-gradient-to-b from-[#dce4ef] via-[#aebbd0] to-[#7f8fa9] text-xs font-semibold text-[#1b2535] shadow-[inset_0_1px_0_rgba(255,255,255,0.45)]">
+        <span className="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full border border-[#B8955A]/90 bg-gradient-to-b from-[#1F2A3C] via-[#1F2A3C] to-[#1F2A3C] text-xs font-semibold text-[#F8F4E7] shadow-[inset_0_1px_0_rgba(255,255,255,0.45)]">
           {totalQuantity}
         </span>
       )}
@@ -600,8 +600,8 @@ export function AddToCartButton({
       disabled={isOutOfStock}
       className={`mt-6 w-full rounded-2xl border px-5 py-3 font-semibold transition-all duration-200 active:scale-95 ${
         isOutOfStock
-          ? "cursor-not-allowed border-[#8d9ab0]/15 bg-[#2c3a52] text-[#8d9ab0]"
-          : "border-[#dce4ef]/60 bg-gradient-to-b from-[#dce4ef] via-[#aebbd0] to-[#7f8fa9] text-[#1b2535] shadow-[inset_0_1px_0_rgba(255,255,255,0.45),0_5px_16px_rgba(174,187,208,0.12)] hover:brightness-110 hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.55),0_7px_20px_rgba(174,187,208,0.2)]"
+          ? "cursor-not-allowed border-[#1F2A3C]/15 bg-[#FFFFFF] text-[#1F2A3C]/60"
+          : "border-[#B8955A]/90 bg-gradient-to-b from-[#1F2A3C] via-[#1F2A3C] to-[#1F2A3C] text-[#F8F4E7] shadow-[inset_0_1px_0_rgba(255,255,255,0.45),0_5px_16px_rgba(184,149,90,0.12)] hover:brightness-110 hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.55),0_7px_20px_rgba(184,149,90,0.2)]"
       }`}
     >
       {isOutOfStock ? "Nije na stanju" : "Dodaj u korpu"}

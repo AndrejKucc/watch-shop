@@ -18,7 +18,7 @@ export default function RestockNotificationButton({
     "mt-6 w-full rounded-2xl border px-5 py-3 font-semibold transition-all duration-200 active:scale-95";
 
   const cartGoldClass =
-    "border-[#ead4a0]/60 bg-gradient-to-b from-[#ead4a0] via-[#d6b878] to-[#bd9650] text-[#211812] shadow-[inset_0_1px_0_rgba(255,255,255,0.45),0_5px_16px_rgba(214,184,120,0.12)] hover:brightness-110 hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.55),0_7px_20px_rgba(214,184,120,0.2)]";
+    "border-[#B8955A]/90 bg-gradient-to-b from-[#1F2A3C] via-[#1F2A3C] to-[#1F2A3C] text-[#F8F4E7] shadow-[inset_0_1px_0_rgba(255,255,255,0.45),0_5px_16px_rgba(184,149,90,0.12)] hover:brightness-110 hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.55),0_7px_20px_rgba(184,149,90,0.2)]";
 
   useEffect(() => {
     let active = true;
@@ -90,7 +90,7 @@ export default function RestockNotificationButton({
         <button
           type="button"
           disabled
-          className={`${cartButtonClass} cursor-wait border-[#8f8071]/20 bg-[#30231b] text-[#b8a99a]`}
+          className={`${cartButtonClass} cursor-wait border-[#1F2A3C]/15 bg-[#FFFFFF] text-[#1F2A3C]/72`}
         >
           Učitavanje...
         </button>
@@ -102,7 +102,7 @@ export default function RestockNotificationButton({
         <button
           type="button"
           disabled
-          className={`${cartButtonClass} cursor-not-allowed border-[#8f8071]/15 bg-[#30231b] text-[#8f8071]`}
+          className={`${cartButtonClass} cursor-not-allowed border-[#1F2A3C]/15 bg-[#FFFFFF] text-[#1F2A3C]/60`}
         >
           Nije na stanju
         </button>
@@ -121,7 +121,7 @@ export default function RestockNotificationButton({
           </button>
 
           {message && (
-            <p className="mt-2 text-center text-xs text-[#d6b878]">
+            <p className="mt-2 text-center text-xs text-[#8A6A33]">
               {message}
             </p>
           )}
@@ -141,7 +141,7 @@ export default function RestockNotificationButton({
         </button>
 
         {message && (
-          <p role="alert" className="mt-2 text-center text-xs text-[#FFD0A3]">
+          <p role="alert" className="mt-2 text-center text-xs text-[#B4501F]">
             {message}
           </p>
         )}
@@ -151,7 +151,7 @@ export default function RestockNotificationButton({
 
   if (!loggedIn) {
     return (
-      <span className="rounded-full border border-[#d6b878]/30 bg-[#211812]/90 px-4 py-2 text-xs font-semibold text-[#FFD0A3]">
+      <span className="rounded-full border border-[#B8955A]/45 bg-[#F8F4E7]/90 px-4 py-2 text-xs font-semibold text-[#B4501F]">
         Nije na stanju
       </span>
     );
@@ -159,7 +159,7 @@ export default function RestockNotificationButton({
 
   if (loading) {
     return (
-      <span className="rounded-full border border-[#d6b878]/30 bg-[#211812]/90 px-4 py-2 text-xs text-[#ead4a0]">
+      <span className="rounded-full border border-[#B8955A]/45 bg-[#1F2A3C]/90 px-4 py-2 text-xs text-[#F8F4E7]">
         Učitavanje...
       </span>
     );
@@ -168,12 +168,12 @@ export default function RestockNotificationButton({
   if (subscribed) {
     return (
       <div className="text-center">
-        <span className="inline-block rounded-full border border-[#d6b878]/40 bg-[#d6b878]/15 px-4 py-2 text-xs font-semibold text-[#ead4a0]">
+        <span className="inline-block rounded-full border border-[#B8955A]/60 bg-[#B8955A]/15 px-4 py-2 text-xs font-semibold text-[#8A6A33]">
           ✓ Prijavili ste se za obaveštenje
         </span>
 
         {message && (
-          <p className="mt-2 text-xs text-[#d6b878]">{message}</p>
+          <p className="mt-2 text-xs text-[#8A6A33]">{message}</p>
         )}
       </div>
     );
@@ -185,13 +185,13 @@ export default function RestockNotificationButton({
         type="button"
         onClick={subscribe}
         disabled={loading}
-        className="rounded-full border border-[#d6b878]/50 bg-[#211812]/95 px-5 py-3 text-xs font-semibold text-[#ead4a0] shadow-lg transition hover:border-[#ead4a0] hover:bg-[#4b3621] disabled:opacity-50"
+        className="rounded-full border border-[#B8955A]/75 bg-[#1F2A3C]/95 px-5 py-3 text-xs font-semibold text-[#F8F4E7] shadow-lg transition hover:border-[#B8955A]/100 hover:bg-[#1F2A3C]/85 disabled:opacity-50"
       >
         Obavesti me kada bude dostupno
       </button>
 
       {message && (
-        <p role="alert" className="mt-2 text-xs text-[#FFD0A3]">
+        <p role="alert" className="mt-2 text-xs text-[#B4501F]">
           {message}
         </p>
       )}

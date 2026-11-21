@@ -52,8 +52,8 @@ export default function ProductGallery({
 
   if (images.length === 0) {
     return (
-      <div className="overflow-hidden rounded-[2rem] border border-[#d6b878]/20 bg-[#30231b] shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]">
-        <div className="flex min-h-[420px] items-center justify-center bg-gradient-to-br from-[#4b3621]/50 to-[#211812] text-[#b8a99a] sm:min-h-[620px]">
+      <div className="overflow-hidden rounded-[2rem] border border-[#B8955A]/30 bg-[#FFFFFF] shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]">
+        <div className="flex min-h-[420px] items-center justify-center bg-gradient-to-br from-[#B8955A]/15 to-[#F8F4E7] text-[#1F2A3C]/72 sm:min-h-[620px]">
           Slika sata
         </div>
       </div>
@@ -62,9 +62,9 @@ export default function ProductGallery({
 
   return (
     <div>
-      <div className="group relative overflow-hidden rounded-[2rem] border border-[#d6b878]/25 bg-[#30231b] shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]">
+      <div className="group relative overflow-hidden rounded-[2rem] border border-[#B8955A]/40 bg-[#FFFFFF] shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]">
         <div
-          className="flex min-h-[420px] cursor-crosshair items-center justify-center overflow-hidden bg-gradient-to-br from-[#4b3621]/40 via-[#30231b] to-[#211812] sm:min-h-[620px]"
+          className="flex min-h-[420px] cursor-crosshair items-center justify-center overflow-hidden bg-gradient-to-br from-[#B8955A]/10 via-[#FFFFFF] to-[#F8F4E7] sm:min-h-[620px]"
           onMouseMove={handleMouseMove}
           onMouseLeave={resetZoom}
         >
@@ -86,7 +86,7 @@ export default function ProductGallery({
               type="button"
               onClick={goToPrevious}
               aria-label="Prethodna slika"
-              className="absolute left-3 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-[#d6b878]/30 bg-gradient-to-b from-[#d6b878]/25 to-[#211812]/75 text-lg text-[#f4ebdd]/90 shadow-[inset_0_1px_0_rgba(255,255,255,0.2)] backdrop-blur-sm transition hover:border-[#ead4a0]/70 hover:from-[#d6b878]/40 hover:text-white active:scale-95"
+              className="absolute left-3 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-[#B8955A]/45 bg-gradient-to-b from-[#B8955A]/25 to-[#F8F4E7]/75 text-lg text-[#1F2A3C]/90 shadow-[inset_0_1px_0_rgba(255,255,255,0.2)] backdrop-blur-sm transition hover:border-[#B8955A]/100 hover:from-[#B8955A]/40 hover:text-white active:scale-95"
             >
               ←
             </button>
@@ -95,12 +95,12 @@ export default function ProductGallery({
               type="button"
               onClick={goToNext}
               aria-label="Sledeća slika"
-              className="absolute right-3 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-[#d6b878]/30 bg-gradient-to-b from-[#d6b878]/25 to-[#211812]/75 text-lg text-[#f4ebdd]/90 shadow-[inset_0_1px_0_rgba(255,255,255,0.2)] backdrop-blur-sm transition hover:border-[#ead4a0]/70 hover:from-[#d6b878]/40 hover:text-white active:scale-95"
+              className="absolute right-3 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-[#B8955A]/45 bg-gradient-to-b from-[#B8955A]/25 to-[#F8F4E7]/75 text-lg text-[#1F2A3C]/90 shadow-[inset_0_1px_0_rgba(255,255,255,0.2)] backdrop-blur-sm transition hover:border-[#B8955A]/100 hover:from-[#B8955A]/40 hover:text-white active:scale-95"
             >
               →
             </button>
 
-            <div className="pointer-events-none absolute bottom-4 left-1/2 -translate-x-1/2 rounded-full border border-[#d6b878]/30 bg-[#211812]/75 px-3 py-1.5 text-xs text-[#f4ebdd]/90 shadow-[inset_0_1px_0_rgba(255,255,255,0.12)] backdrop-blur">
+            <div className="pointer-events-none absolute bottom-4 left-1/2 -translate-x-1/2 rounded-full border border-[#B8955A]/45 bg-[#F8F4E7]/75 px-3 py-1.5 text-xs text-[#1F2A3C]/90 shadow-[inset_0_1px_0_rgba(255,255,255,0.12)] backdrop-blur">
               {selectedImage + 1} / {imageCount}
             </div>
           </>
@@ -122,13 +122,13 @@ export default function ProductGallery({
                 }}
                 aria-label={`Prikaži sliku ${index + 1}`}
                 aria-pressed={isSelected}
-                className={`group overflow-hidden rounded-2xl border bg-[#30231b] shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] transition-all duration-200 active:scale-95 ${
+                className={`group overflow-hidden rounded-2xl border bg-[#FFFFFF] shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] transition-all duration-200 active:scale-95 ${
                   isSelected
-                    ? "border-[#d6b878] shadow-[0_0_0_1px_rgba(214,184,120,0.15)]"
-                    : "border-[#d6b878]/15 hover:border-[#d6b878]/50"
+                    ? "border-[#B8955A]/100 shadow-[0_0_0_1px_rgba(184,149,90,0.15)]"
+                    : "border-[#B8955A]/20 hover:border-[#B8955A]/75"
                 }`}
               >
-                <div className="aspect-square overflow-hidden bg-gradient-to-br from-[#4b3621]/35 to-[#211812]">
+                <div className="aspect-square overflow-hidden bg-gradient-to-br from-[#B8955A]/10 to-[#F8F4E7]">
                   <img
                     src={image}
                     alt={`${productName} ${index + 1}`}
@@ -142,7 +142,7 @@ export default function ProductGallery({
       )}
 
       {imageCount > 1 && (
-        <p className="mt-3 text-center text-xs text-[#8f8071]">
+        <p className="mt-3 text-center text-xs text-[#1F2A3C]/60">
           Izaberi sliku ili koristi strelice
         </p>
       )}

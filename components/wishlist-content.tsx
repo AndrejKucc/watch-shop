@@ -77,7 +77,7 @@ export default function WishlistContent() {
   if (loading || fetching) {
     return (
       <div className="flex min-h-[40vh] items-center justify-center">
-        <p className="text-sm tracking-widest text-[#d6b878]">
+        <p className="text-sm tracking-widest text-[#8A6A33]">
           UČITAVANJE LISTE ŽELJA...
         </p>
       </div>
@@ -87,20 +87,20 @@ export default function WishlistContent() {
   if (products.length === 0) {
     return (
       <div className="flex min-h-[45vh] flex-col items-center justify-center text-center">
-        <span className="text-6xl text-[#d6b878]">♡</span>
+        <span className="text-6xl text-[#8A6A33]">♡</span>
 
         <h2 className="mt-6 text-2xl font-semibold">
           Tvoja lista želja je prazna
         </h2>
 
-        <p className="mt-3 max-w-md text-sm leading-7 text-[#b8a99a]">
+        <p className="mt-3 max-w-md text-sm leading-7 text-[#1F2A3C]/72">
           Sačuvaj proizvode koji ti se dopadaju klikom na srce
           i pronađi ih ovde kada god poželiš.
         </p>
 
         <Link
           href="/satovi"
-          className="mt-8 rounded-full border border-[#d6b878]/50 bg-[#d6b878] px-7 py-3 text-sm font-semibold text-[#211812] transition hover:bg-[#e6ca91]"
+          className="mt-8 rounded-full border border-[#B8955A]/75 bg-[#1F2A3C] px-7 py-3 text-sm font-semibold text-[#F8F4E7] transition hover:bg-[#1F2A3C]/90"
         >
           Pogledaj proizvode
         </Link>
@@ -116,11 +116,11 @@ export default function WishlistContent() {
         return (
           <article
             key={product.id}
-            className="overflow-hidden rounded-2xl border border-[#d6b878]/20 bg-[#2b2018]"
+            className="overflow-hidden rounded-2xl border border-[#B8955A]/30 bg-[#FFFFFF]"
           >
             <Link
               href={`/product/${product.id}`}
-              className="relative block aspect-square overflow-hidden bg-[#211812]"
+              className="relative block aspect-square overflow-hidden bg-[#F8F4E7]"
             >
               {image ? (
                 <Image
@@ -131,7 +131,7 @@ export default function WishlistContent() {
                   className="object-cover transition duration-500 hover:scale-105"
                 />
               ) : (
-                <div className="flex h-full items-center justify-center text-sm text-[#b8a99a]">
+                <div className="flex h-full items-center justify-center text-sm text-[#1F2A3C]/72">
                   Nema slike
                 </div>
               )}
@@ -139,25 +139,25 @@ export default function WishlistContent() {
 
             <div className="p-5">
               {product.brand && (
-                <p className="text-xs uppercase tracking-widest text-[#d6b878]">
+                <p className="text-xs uppercase tracking-widest text-[#8A6A33]">
                   {product.brand}
                 </p>
               )}
 
               <Link href={`/product/${product.id}`}>
-                <h2 className="mt-2 text-lg font-semibold text-[#f4ebdd] hover:text-[#d6b878]">
+                <h2 className="mt-2 text-lg font-semibold text-[#1F2A3C] hover:text-[#8A6A33]">
                   {product.name}
                 </h2>
               </Link>
 
-              <p className="mt-3 text-xl font-semibold text-[#f4ebdd]">
+              <p className="mt-3 text-xl font-semibold text-[#1F2A3C]">
                 {Number(product.price).toLocaleString("sr-RS")} RSD
               </p>
 
               <p
                 className={`mt-2 text-xs ${
                   product.stock > 0
-                    ? "text-[#d6b878]"
+                    ? "text-[#8A6A33]"
                     : "text-[#c46a2d]"
                 }`}
               >
@@ -179,7 +179,7 @@ export default function WishlistContent() {
               <button
                 type="button"
                 onClick={() => handleRemove(product.id)}
-                className="mt-4 w-full rounded-xl border border-[#d6b878]/20 px-4 py-3 text-sm text-[#c2b5a8] transition hover:border-red-400/40 hover:text-red-300"
+                className="mt-4 w-full rounded-xl border border-[#B8955A]/30 px-4 py-3 text-sm text-[#1F2A3C]/72 transition hover:border-red-400/40 hover:text-red-300"
               >
                 ♡ Ukloni sa liste želja
               </button>

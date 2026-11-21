@@ -107,7 +107,7 @@ function FilterSelect({
     <div className="min-w-0">
       <label
         htmlFor={id}
-        className="mb-2 block text-xs font-medium uppercase tracking-[0.13em] text-[#a9b5c8]"
+        className="mb-2 block text-xs font-medium uppercase tracking-[0.13em] text-[#F8F4E7]/70"
       >
         {label}
       </label>
@@ -116,14 +116,14 @@ function FilterSelect({
         id={id}
         value={value}
         onChange={(event) => onChange(event.target.value)}
-        className="h-12 w-full rounded-xl border border-[#aebbd0]/15 bg-[#1f2a3c]/80 px-3 text-sm text-[#f3f6fb] outline-none backdrop-blur-xl transition duration-200 hover:border-[#aebbd0]/30 focus:border-[#aebbd0] focus:ring-2 focus:ring-[#aebbd0]/30"
+        className="h-12 w-full rounded-xl border border-[#B8955A]/15 bg-[#1F2A3C]/80 px-3 text-sm text-[#F8F4E7] outline-none backdrop-blur-xl transition duration-200 hover:border-[#B8955A]/30 focus:border-[#B8955A]/100 focus:ring-2 focus:ring-[#B8955A]/30"
       >
-        <option value="" className="bg-[#1f2a3c]">
+        <option value="" className="bg-[#1F2A3C]">
           Sve vrednosti
         </option>
 
         {options.map((option) => (
-          <option key={option} value={option} className="bg-[#1f2a3c]">
+          <option key={option} value={option} className="bg-[#1F2A3C]">
             {option}
           </option>
         ))}
@@ -501,27 +501,27 @@ const showAccessoryFilters = isAccessoryMode || isWalletMode;
     setGiftFor("");
   };
     const labelClass =
-    "mb-2 block text-xs font-medium uppercase tracking-[0.13em] text-[#a9b5c8]";
+    "mb-2 block text-xs font-medium uppercase tracking-[0.13em] text-[#F8F4E7]/70";
 
   const inputClass =
-    "h-12 w-full rounded-xl border border-[#aebbd0]/15 bg-[#1f2a3c]/80 px-4 text-base text-[#f3f6fb] outline-none backdrop-blur-xl transition duration-200 placeholder:text-[#8d9ab0] hover:border-[#aebbd0]/30 focus:border-[#aebbd0] focus:ring-2 focus:ring-[#aebbd0]/30";
+    "h-12 w-full rounded-xl border border-[#B8955A]/15 bg-[#1F2A3C]/80 px-4 text-base text-[#F8F4E7] outline-none backdrop-blur-xl transition duration-200 placeholder:text-[#F8F4E7]/50 hover:border-[#B8955A]/30 focus:border-[#B8955A]/100 focus:ring-2 focus:ring-[#B8955A]/30";
 
   return (
     <>
       <style jsx>{`
         .ws-glass-panel {
-          background: rgba(31, 42, 60, 0.78);
-          border: 1px solid rgba(174, 187, 208, 0.15);
+          background: rgba(31,42,60,0.78);
+          border: 1px solid rgba(184,149,90,0.15);
           box-shadow:
-            0 24px 70px rgba(0, 0, 0, 0.18),
+            0 24px 70px rgba(0, 0, 0, 0.22),
             inset 0 1px 0 rgba(255, 255, 255, 0.045);
           backdrop-filter: blur(24px) saturate(145%);
           -webkit-backdrop-filter: blur(24px) saturate(145%);
         }
 
         .ws-glass-control {
-          background: rgba(174, 187, 208, 0.045);
-          border: 1px solid rgba(174, 187, 208, 0.15);
+          background: rgba(184,149,90,0.045);
+          border: 1px solid rgba(184,149,90,0.15);
           backdrop-filter: blur(18px);
           -webkit-backdrop-filter: blur(18px);
           transition:
@@ -531,16 +531,16 @@ const showAccessoryFilters = isAccessoryMode || isWalletMode;
         }
 
         .ws-glass-control:hover {
-          background: rgba(174, 187, 208, 0.09);
-          border-color: rgba(174, 187, 208, 0.28);
+          background: rgba(184,149,90,0.09);
+          border-color: rgba(184,149,90,0.28);
         }
 
         .ws-category-active {
-          background: linear-gradient(135deg, #aebbd0, #7f8fa9);
-          border: 1px solid rgba(220, 228, 239, 0.48);
-          color: #1f2a3c;
+          background: linear-gradient(135deg, #B8955A, #B8955A);
+          border: 1px solid rgba(184,149,90,0.48);
+          color: #1F2A3C;
           box-shadow:
-            0 8px 24px rgba(62, 76, 102, 0.24),
+            0 8px 24px rgba(0, 0, 0, 0.28),
             inset 0 1px 0 rgba(255, 255, 255, 0.18);
         }
 
@@ -556,10 +556,10 @@ const showAccessoryFilters = isAccessoryMode || isWalletMode;
         .ws-product-card {
           background: linear-gradient(
             145deg,
-            rgba(44, 58, 82, 0.96),
-            rgba(31, 42, 60, 0.98) 65%
+            rgba(248, 244, 231, 0.09),
+            rgba(31,42,60,0.98) 65%
           );
-          border: 1px solid rgba(174, 187, 208, 0.14);
+          border: 1px solid rgba(184,149,90,0.14);
           box-shadow: 0 12px 35px rgba(0, 0, 0, 0.12);
           transition:
             transform 260ms ease,
@@ -569,7 +569,7 @@ const showAccessoryFilters = isAccessoryMode || isWalletMode;
 
         .ws-product-card:hover {
           transform: translateY(-5px);
-          border-color: rgba(174, 187, 208, 0.48);
+          border-color: rgba(184,149,90,0.48);
           box-shadow: 0 24px 55px rgba(0, 0, 0, 0.26);
         }
 
@@ -584,19 +584,19 @@ const showAccessoryFilters = isAccessoryMode || isWalletMode;
         .ws-accent-line {
           background: linear-gradient(
             90deg,
-            #aebbd0,
-            rgba(174, 187, 208, 0.12)
+            #B8955A,
+            rgba(184,149,90,0.12)
           );
         }
 
         .ws-price {
-          color: #dce4ef;
+          color: #B8955A;
           font-variant-numeric: tabular-nums;
         }
 
         .ws-stock-dot {
-          background: #aebbd0;
-          box-shadow: 0 0 0 4px rgba(174, 187, 208, 0.12);
+          background: #B8955A;
+          box-shadow: 0 0 0 4px rgba(184,149,90,0.12);
         }
 
         .ws-out-of-stock {
@@ -625,9 +625,9 @@ const showAccessoryFilters = isAccessoryMode || isWalletMode;
         }
 
         .ws-primary-button {
-          background: linear-gradient(135deg, #aebbd0, #7f8fa9);
-          border: 1px solid rgba(220, 228, 239, 0.42);
-          color: #1f2a3c;
+          background: linear-gradient(135deg, #B8955A, #B8955A);
+          border: 1px solid rgba(184,149,90,0.42);
+          color: #1F2A3C;
           transition:
             transform 180ms ease,
             background 180ms ease,
@@ -635,8 +635,9 @@ const showAccessoryFilters = isAccessoryMode || isWalletMode;
         }
 
         .ws-primary-button:hover {
-          background: linear-gradient(135deg, #dce4ef, #7f8fa9);
-          box-shadow: 0 10px 26px rgba(62, 76, 102, 0.24);
+          background: linear-gradient(135deg, #B8955A, #B8955A);
+          filter: brightness(1.12);
+          box-shadow: 0 10px 26px rgba(0, 0, 0, 0.28);
         }
 
         .ws-primary-button:active {
@@ -664,11 +665,11 @@ const showAccessoryFilters = isAccessoryMode || isWalletMode;
         className="ws-glass-panel mt-10 overflow-hidden rounded-[28px] p-4 sm:mt-12 sm:rounded-[32px] sm:p-6 lg:p-7"
       >
         <div className="mb-6 flex items-center gap-3">
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl border border-[#aebbd0]/15 bg-[#aebbd0]/[0.045]">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl border border-[#B8955A]/15 bg-[#B8955A]/4">
             <svg
               aria-hidden="true"
               viewBox="0 0 24 24"
-              className="h-5 w-5 text-[#aebbd0]"
+              className="h-5 w-5 text-[#B8955A]"
               fill="none"
               stroke="currentColor"
               strokeWidth="1.6"
@@ -683,10 +684,10 @@ const showAccessoryFilters = isAccessoryMode || isWalletMode;
           </div>
 
           <div>
-            <h2 className="text-base font-semibold tracking-tight text-[#f3f6fb] sm:text-lg">
+            <h2 className="text-base font-semibold tracking-tight text-[#F8F4E7] sm:text-lg">
               Pronađi svoj stil
             </h2>
-            <p className="mt-0.5 text-xs text-[#a9b5c8] sm:text-sm">
+            <p className="mt-0.5 text-xs text-[#F8F4E7]/70 sm:text-sm">
               Izdvoj detalje i pronađi pravi komad.
             </p>
           </div>
@@ -697,7 +698,7 @@ const showAccessoryFilters = isAccessoryMode || isWalletMode;
             <svg
               aria-hidden="true"
               viewBox="0 0 24 24"
-              className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-[#aebbd0]"
+              className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-[#B8955A]"
               fill="none"
               stroke="currentColor"
               strokeWidth="1.7"
@@ -720,7 +721,7 @@ const showAccessoryFilters = isAccessoryMode || isWalletMode;
                 type="button"
                 onClick={() => setSearch("")}
                 aria-label="Obriši pretragu"
-                className="ws-search-clear absolute right-2 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-xl text-[#a9b5c8] transition"
+                className="ws-search-clear absolute right-2 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-xl text-[#F8F4E7]/70 transition"
               >
                 <span className="text-2xl leading-none">×</span>
               </button>
@@ -747,7 +748,7 @@ const showAccessoryFilters = isAccessoryMode || isWalletMode;
                       className={`ws-filter-button ${
                         active
                           ? "ws-category-active"
-                          : "ws-glass-control text-[#dce4ef]"
+                          : "ws-glass-control text-[#F8F4E7]"
                       }`}
                     >
                       {item.label}
@@ -773,8 +774,8 @@ const showAccessoryFilters = isAccessoryMode || isWalletMode;
           {isWatchMode && (
             <div>
               <div className="mb-4 flex items-center gap-3">
-                <span className="h-5 w-1 rounded-full bg-[#aebbd0]" />
-                <h3 className="text-sm font-semibold tracking-wide text-[#f3f6fb]">
+                <span className="h-5 w-1 rounded-full bg-[#B8955A]" />
+                <h3 className="text-sm font-semibold tracking-wide text-[#F8F4E7]">
                   Detalji satova
                 </h3>
               </div>
@@ -795,8 +796,8 @@ const showAccessoryFilters = isAccessoryMode || isWalletMode;
           {showAccessoryFilters && (
             <div>
               <div className="mb-4 flex items-center gap-3">
-                <span className="h-5 w-1 rounded-full bg-[#aebbd0]" />
-                <h3 className="text-sm font-semibold tracking-wide text-[#f3f6fb]">
+                <span className="h-5 w-1 rounded-full bg-[#B8955A]" />
+                <h3 className="text-sm font-semibold tracking-wide text-[#F8F4E7]">
                   Detalji dodataka
                 </h3>
               </div>
@@ -822,7 +823,7 @@ const showAccessoryFilters = isAccessoryMode || isWalletMode;
             <div>
               <div className="mb-4 flex items-center gap-3">
                 <span className="h-5 w-1 rounded-full bg-[#CC5500]" />
-                <h3 className="text-sm font-semibold tracking-wide text-[#f3f6fb]">
+                <h3 className="text-sm font-semibold tracking-wide text-[#F8F4E7]">
                   Detalji poklona
                 </h3>
               </div>
@@ -836,7 +837,7 @@ const showAccessoryFilters = isAccessoryMode || isWalletMode;
           <div>
             <div className="mb-4 flex items-center gap-3">
               <span className="h-5 w-1 rounded-full bg-[#CC5500]" />
-              <h3 className="text-sm font-semibold tracking-wide text-[#f3f6fb]">
+              <h3 className="text-sm font-semibold tracking-wide text-[#F8F4E7]">
                 Cena i dostupnost
               </h3>
             </div>
@@ -855,7 +856,7 @@ const showAccessoryFilters = isAccessoryMode || isWalletMode;
                     placeholder="0"
                     className={`${inputClass} pr-16`}
                   />
-                  <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-xs font-medium text-[#8d9ab0]">
+                  <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-xs font-medium text-[#F8F4E7]/50">
                     RSD
                   </span>
                 </div>
@@ -874,7 +875,7 @@ const showAccessoryFilters = isAccessoryMode || isWalletMode;
                     placeholder="Bez limita"
                     className={`${inputClass} pr-16`}
                   />
-                  <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-xs font-medium text-[#8d9ab0]">
+                  <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-xs font-medium text-[#F8F4E7]/50">
                     RSD
                   </span>
                 </div>
@@ -888,19 +889,19 @@ const showAccessoryFilters = isAccessoryMode || isWalletMode;
             </p>
           )}
 
-          <div className="flex flex-col gap-4 border-t border-[#aebbd0]/15 pt-5 sm:flex-row sm:items-center sm:justify-between">
-            <label className="flex min-h-11 cursor-pointer items-center gap-3 text-sm text-[#dce4ef]">
+          <div className="flex flex-col gap-4 border-t border-[#B8955A]/15 pt-5 sm:flex-row sm:items-center sm:justify-between">
+            <label className="flex min-h-11 cursor-pointer items-center gap-3 text-sm text-[#F8F4E7]">
               <input
                 type="checkbox"
                 checked={onlyInStock}
                 onChange={(event) => setOnlyInStock(event.target.checked)}
-                className="h-4 w-4 rounded border-[#aebbd0]/30 bg-[#1f2a3c] accent-[#aebbd0]"
+                className="h-4 w-4 rounded border-[#B8955A]/30 bg-[#1F2A3C] accent-[#B8955A]"
               />
               <span>Samo proizvodi na stanju</span>
             </label>
 
             <div className="flex min-w-0 items-center gap-3">
-              <label htmlFor="sort-products" className="shrink-0 text-xs font-medium uppercase tracking-[0.1em] text-[#a9b5c8]">
+              <label htmlFor="sort-products" className="shrink-0 text-xs font-medium uppercase tracking-[0.1em] text-[#F8F4E7]/70">
                 Sortiraj
               </label>
 
@@ -908,10 +909,10 @@ const showAccessoryFilters = isAccessoryMode || isWalletMode;
                 id="sort-products"
                 value={sort}
                 onChange={(event) => setSort(event.target.value)}
-                className="ws-glass-control min-h-11 min-w-0 flex-1 rounded-xl bg-[#1f2a3c]/80 px-3 text-sm text-[#f3f6fb] outline-none focus:border-[#aebbd0] sm:flex-none"
+                className="ws-glass-control min-h-11 min-w-0 flex-1 rounded-xl bg-[#1F2A3C]/80 px-3 text-sm text-[#F8F4E7] outline-none focus:border-[#B8955A]/100 sm:flex-none"
               >
                 {sortOptions.map((option) => (
-                  <option key={option.value} value={option.value} className="bg-[#1f2a3c]">
+                  <option key={option.value} value={option.value} className="bg-[#1F2A3C]">
                     {option.label}
                   </option>
                 ))}
@@ -923,15 +924,15 @@ const showAccessoryFilters = isAccessoryMode || isWalletMode;
 
       <div className="mt-8 flex flex-col gap-4 sm:mt-10 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="text-xs font-medium uppercase tracking-[0.16em] text-[#a9b5c8]">
+          <p className="text-xs font-medium uppercase tracking-[0.16em] text-[#F8F4E7]/70">
             {hasActiveFilters ? "Rezultati pretrage" : `Kolekcija · ${productLabel}`}
           </p>
 
           <div className="mt-2 flex items-baseline gap-2">
-            <p className="text-3xl font-semibold tracking-tight text-[#f3f6fb]">
+            <p className="text-3xl font-semibold tracking-tight text-[#F8F4E7]">
               {invalidPriceRange ? 0 : filteredProducts.length}
             </p>
-            <span className="text-sm text-[#a9b5c8]">
+            <span className="text-sm text-[#F8F4E7]/70">
               {filteredProducts.length === 1 ? "proizvod" : "proizvoda"}
             </span>
           </div>
@@ -970,7 +971,7 @@ const showAccessoryFilters = isAccessoryMode || isWalletMode;
               >
                 <div className="relative">
                   <Link href={`/product/${product.id}`} className="block">
-                    <div className="relative overflow-hidden bg-[#2c3a52]">
+                    <div className="relative overflow-hidden bg-[#F8F4E7]/5">
                       <div className="aspect-[4/3]">
                         {product.images && product.images[0] ? (
                           <img
@@ -980,7 +981,7 @@ const showAccessoryFilters = isAccessoryMode || isWalletMode;
                             className="ws-product-image h-full w-full object-cover"
                           />
                         ) : (
-                          <div className="flex h-full flex-col items-center justify-center gap-3 text-[#8d9ab0]">
+                          <div className="flex h-full flex-col items-center justify-center gap-3 text-[#F8F4E7]/50">
                             <svg
                               aria-hidden="true"
                               viewBox="0 0 24 24"
@@ -999,11 +1000,11 @@ const showAccessoryFilters = isAccessoryMode || isWalletMode;
                         )}
                       </div>
 
-                      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#1f2a3c]/60 via-transparent to-transparent" />
+                      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#1F2A3C]/60 via-transparent to-transparent" />
 
                       {isWatchMode && showGenderFilter && (
                         <div className="absolute left-4 top-4">
-                          <span className="rounded-full border border-[#aebbd0]/20 bg-[#1f2a3c]/80 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-[#f3f6fb] backdrop-blur-xl">
+                          <span className="rounded-full border border-[#B8955A]/20 bg-[#1F2A3C]/80 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-[#F8F4E7] backdrop-blur-xl">
                             {normalize(product.category) === "muski"
                               ? "Muški"
                               : normalize(product.category) === "zenski"
@@ -1014,9 +1015,9 @@ const showAccessoryFilters = isAccessoryMode || isWalletMode;
                       )}
 
                       {product.stock > 0 && (
-                        <div className="absolute bottom-4 left-4 flex items-center gap-2 rounded-full border border-[#aebbd0]/20 bg-[#1f2a3c]/80 px-3 py-2 backdrop-blur-xl">
+                        <div className="absolute bottom-4 left-4 flex items-center gap-2 rounded-full border border-[#B8955A]/20 bg-[#1F2A3C]/80 px-3 py-2 backdrop-blur-xl">
                           <span className="ws-stock-dot h-1.5 w-1.5 rounded-full" />
-                          <span className="text-[10px] font-medium uppercase tracking-[0.12em] text-[#dce4ef]">
+                          <span className="text-[10px] font-medium uppercase tracking-[0.12em] text-[#B8955A]">
                             Dostupno
                           </span>
                         </div>
@@ -1024,16 +1025,16 @@ const showAccessoryFilters = isAccessoryMode || isWalletMode;
                     </div>
 
                     <div className="p-5 pb-3 sm:p-6 sm:pb-3">
-                      <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#aebbd0]">
+                      <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#B8955A]">
                         {product.brand || "WATCH STORE"}
                       </p>
 
-                      <h3 className="mt-3 text-xl font-semibold leading-snug tracking-tight text-[#f3f6fb] transition-colors duration-200 group-hover:text-white sm:text-2xl">
+                      <h3 className="mt-3 text-xl font-semibold leading-snug tracking-tight text-[#F8F4E7] transition-colors duration-200 group-hover:text-white sm:text-2xl">
                         {product.name}
                       </h3>
 
                       {product.model && (
-                        <p className="mt-1.5 text-sm text-[#a9b5c8]">
+                        <p className="mt-1.5 text-sm text-[#F8F4E7]/70">
                           {product.model}
                         </p>
                       )}
@@ -1047,14 +1048,14 @@ const showAccessoryFilters = isAccessoryMode || isWalletMode;
                 </div>
 
                 <div className="p-5 pt-3 sm:p-6 sm:pt-3">
-                  <div className="mb-5 flex items-end justify-between gap-3 border-t border-[#aebbd0]/15 pt-4">
+                  <div className="mb-5 flex items-end justify-between gap-3 border-t border-[#B8955A]/15 pt-4">
                     <div className="min-w-0">
-                      <p className="text-[10px] font-medium uppercase tracking-[0.16em] text-[#8d9ab0]">
+                      <p className="text-[10px] font-medium uppercase tracking-[0.16em] text-[#F8F4E7]/50">
                         Cena
                       </p>
 
                       {hasDiscount && (
-                        <p className="mb-1 mt-1.5 text-sm font-medium text-[#a9b5c8] line-through decoration-[#aebbd0]/60">
+                        <p className="mb-1 mt-1.5 text-sm font-medium text-[#F8F4E7]/70 line-through decoration-[#B8955A]/60">
                           {oldPrice.toLocaleString("sr-RS", {
                             minimumFractionDigits: 2,
                             maximumFractionDigits: 2,
@@ -1068,14 +1069,14 @@ const showAccessoryFilters = isAccessoryMode || isWalletMode;
                           minimumFractionDigits: 2,
                           maximumFractionDigits: 2,
                         })}{" "}
-                        <span className="text-xs font-medium text-[#a9b5c8]">
+                        <span className="text-xs font-medium text-[#F8F4E7]/70">
                           RSD
                         </span>
                       </p>
                     </div>
 
                     {product.stock > 0 ? (
-                      <span className="shrink-0 text-right text-xs text-[#aebbd0]">
+                      <span className="shrink-0 text-right text-xs text-[#B8955A]">
                         Dostupno
                       </span>
                     ) : isWatchMode ? (
@@ -1107,11 +1108,11 @@ const showAccessoryFilters = isAccessoryMode || isWalletMode;
 
         {(invalidPriceRange || filteredProducts.length === 0) && (
           <div className="ws-glass-panel col-span-full rounded-[28px] p-8 text-center sm:p-12">
-            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl border border-[#aebbd0]/15 bg-[#aebbd0]/[0.045]">
+            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl border border-[#B8955A]/15 bg-[#B8955A]/4">
               <svg
                 aria-hidden="true"
                 viewBox="0 0 24 24"
-                className="h-7 w-7 text-[#aebbd0]"
+                className="h-7 w-7 text-[#B8955A]"
                 fill="none"
                 stroke="currentColor"
                 strokeWidth="1.4"
@@ -1121,11 +1122,11 @@ const showAccessoryFilters = isAccessoryMode || isWalletMode;
               </svg>
             </div>
 
-            <h3 className="mt-6 text-xl font-semibold tracking-tight text-[#f3f6fb] sm:text-2xl">
+            <h3 className="mt-6 text-xl font-semibold tracking-tight text-[#F8F4E7] sm:text-2xl">
               {invalidPriceRange ? "Proveri unete cene" : "Nema rezultata"}
             </h3>
 
-            <p className="mx-auto mt-3 max-w-md text-sm leading-6 text-[#a9b5c8]">
+            <p className="mx-auto mt-3 max-w-md text-sm leading-6 text-[#F8F4E7]/70">
               {invalidPriceRange
                 ? "Unete cene nisu ispravne. Proveri početnu i maksimalnu cenu."
                 : "Nismo pronašli proizvod koji odgovara izabranim filterima. Promeni kriterijume ili prikaži celu kolekciju."}

@@ -24,8 +24,8 @@ export function CompareButton({
       aria-pressed={selected}
       className={`mt-3 flex min-h-11 w-full items-center justify-center gap-2 rounded-xl border px-4 py-3 text-sm font-semibold transition duration-200 active:scale-[0.98] ${
         selected
-          ? "border-[#ead4a0] bg-gradient-to-b from-[#ead4a0] via-[#d6b878] to-[#bd9650] text-[#211812] shadow-[inset_0_1px_0_rgba(255,255,255,0.45),0_4px_14px_rgba(214,184,120,0.15)]"
-          : "border-[#d6b878]/25 bg-gradient-to-b from-[#30231b] to-[#211812] text-[#c2b5a8] shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] hover:border-[#d6b878]/60 hover:text-[#ead4a0] hover:shadow-[0_0_14px_rgba(214,184,120,0.08)]"
+          ? "border-[#B8955A]/100 bg-gradient-to-b from-[#1F2A3C] via-[#1F2A3C] to-[#1F2A3C] text-[#F8F4E7] shadow-[inset_0_1px_0_rgba(255,255,255,0.45),0_4px_14px_rgba(184,149,90,0.15)]"
+          : "border-[#B8955A]/40 bg-gradient-to-b from-[#FFFFFF] to-[#F8F4E7] text-[#1F2A3C]/72 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] hover:border-[#B8955A]/90 hover:text-[#8A6A33] hover:shadow-[0_0_14px_rgba(184,149,90,0.08)]"
       }`}
     >
       <span aria-hidden="true">

@@ -69,7 +69,7 @@ function formatRsd(value: number) {
 function OrderStatus({ status }: { status: string }) {
   if (status === "cancelled") {
     return (
-      <span className="rounded-full border border-[#c46a2d]/40 bg-[#c46a2d]/10 px-3 py-1.5 text-xs font-semibold text-[#e8a078]">
+      <span className="rounded-full border border-[#c46a2d]/40 bg-[#c46a2d]/10 px-3 py-1.5 text-xs font-semibold text-[#B4501F]">
         Otkazana
       </span>
     );
@@ -90,8 +90,8 @@ function OrderStatus({ status }: { status: string }) {
               <div
                 className={`flex h-7 w-7 items-center justify-center rounded-full border text-xs font-bold ${
                   completed
-                    ? "border-[#d6b878] bg-[#d6b878] text-[#211812]"
-                    : "border-[#d6b878]/25 bg-[#17110d] text-[#8f8071]"
+                    ? "border-[#B8955A]/100 bg-[#1F2A3C] text-[#F8F4E7]"
+                    : "border-[#B8955A]/40 bg-[#FFFFFF]/100 text-[#1F2A3C]/60"
                 }`}
               >
                 {completed ? "✓" : index + 1}
@@ -99,7 +99,7 @@ function OrderStatus({ status }: { status: string }) {
 
               <span
                 className={`mt-2 text-center text-[11px] sm:text-xs ${
-                  completed ? "text-[#ead4a0]" : "text-[#8f8071]"
+                  completed ? "text-[#8A6A33]" : "text-[#1F2A3C]/60"
                 }`}
               >
                 {step.label}
@@ -109,9 +109,9 @@ function OrderStatus({ status }: { status: string }) {
         })}
       </div>
 
-      <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-[#17110d]">
+      <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-[#FFFFFF]/100">
         <div
-          className="h-full rounded-full bg-gradient-to-r from-[#bd9650] to-[#ead4a0] transition-all duration-500"
+          className="h-full rounded-full bg-gradient-to-r from-[#B8955A] to-[#B8955A] transition-all duration-500"
           style={{
             width:
               currentIndex < 0
@@ -376,7 +376,7 @@ export default function AccountPage() {
 
   if (loading) {
     return (
-      <main className="flex min-h-screen items-center justify-center bg-gradient-to-br from-[#211812] via-[#2b2018] to-[#17110d] text-[#d6b878]">
+      <main className="flex min-h-screen items-center justify-center bg-gradient-to-br from-[#F8F4E7] via-[#FFFFFF] to-[#FFFFFF]/100 text-[#8A6A33]">
         Učitavanje naloga...
       </main>
     );
@@ -388,45 +388,45 @@ export default function AccountPage() {
 
   const tierColor =
     normalizedTier === "gold"
-      ? "border-[#ead4a0]/50 bg-[#d6b878]/15 text-[#ead4a0]"
+      ? "border-[#B8955A]/75 bg-[#B8955A]/15 text-[#8A6A33]"
       : normalizedTier === "silver"
-        ? "border-[#c8c8c8]/40 bg-[#c8c8c8]/10 text-[#dedede]"
-        : "border-[#bd9650]/40 bg-[#bd9650]/10 text-[#d6b878]";
+        ? "border-[#1F2A3C]/25 bg-[#1F2A3C]/5 text-[#1F2A3C]/70"
+        : "border-[#B8955A]/60 bg-[#B8955A]/10 text-[#8A6A33]";
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-[#211812] via-[#2b2018] to-[#17110d] px-5 py-16 text-[#f4ebdd]">
+    <main className="min-h-screen bg-gradient-to-br from-[#F8F4E7] via-[#FFFFFF] to-[#FFFFFF]/100 px-5 py-16 text-[#1F2A3C]">
       <div className="mx-auto max-w-2xl">
         <Link
           href="/"
-          className="text-sm text-[#b8a99a] transition hover:text-[#ead4a0]"
+          className="text-sm text-[#1F2A3C]/72 transition hover:text-[#8A6A33]"
         >
           ← Nazad u prodavnicu
         </Link>
 
-        <section className="mt-8 rounded-3xl border border-[#d6b878]/25 bg-gradient-to-br from-[#30231b] via-[#2b2018] to-[#211812] p-6 shadow-[inset_0_1px_0_rgba(234,212,160,0.08),0_12px_40px_rgba(0,0,0,0.2)] sm:p-10">
-          <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#d6b878]">
+        <section className="mt-8 rounded-3xl border border-[#B8955A]/40 bg-gradient-to-br from-[#FFFFFF] via-[#FFFFFF] to-[#F8F4E7] p-6 shadow-[inset_0_1px_0_rgba(184,149,90,0.08),0_12px_40px_rgba(31,42,60,0.12)] sm:p-10">
+          <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#8A6A33]">
             WATCH STORE
           </p>
 
-          <h1 className="mt-4 text-3xl font-bold text-[#f4ebdd] sm:text-4xl">
+          <h1 className="mt-4 text-3xl font-bold text-[#1F2A3C] sm:text-4xl">
             Moj nalog
           </h1>
 
-          <p className="mt-3 text-[#c2b5a8]">
+          <p className="mt-3 text-[#1F2A3C]/72">
             Dobro došao u svoj korisnički nalog.
           </p>
 
-          <div className="mt-8 space-y-5 border-t border-[#d6b878]/20 pt-6">
+          <div className="mt-8 space-y-5 border-t border-[#B8955A]/30 pt-6">
             <div>
-              <p className="text-sm text-[#b8a99a]">Ime i prezime</p>
-              <p className="mt-1 text-lg text-[#f4ebdd]">
+              <p className="text-sm text-[#1F2A3C]/72">Ime i prezime</p>
+              <p className="mt-1 text-lg text-[#1F2A3C]">
                 {user.user_metadata?.full_name || "Nije uneto"}
               </p>
             </div>
 
             <div>
-              <p className="text-sm text-[#b8a99a]">Email adresa</p>
-              <p className="mt-1 break-all text-lg text-[#f4ebdd]">
+              <p className="text-sm text-[#1F2A3C]/72">Email adresa</p>
+              <p className="mt-1 break-all text-lg text-[#1F2A3C]">
                 {user.email || "Nije dostupna"}
               </p>
             </div>
@@ -435,7 +435,7 @@ export default function AccountPage() {
           <div className="mt-8 flex flex-wrap gap-3">
             <Link
               href="/"
-              className="rounded-xl border border-[#ead4a0]/50 bg-gradient-to-b from-[#ead4a0] via-[#d6b878] to-[#bd9650] px-5 py-3 text-sm font-semibold text-[#211812] shadow-[inset_0_1px_0_rgba(255,255,255,0.45)] transition hover:brightness-110 active:scale-95"
+              className="rounded-xl border border-[#B8955A]/75 bg-gradient-to-b from-[#1F2A3C] via-[#1F2A3C] to-[#1F2A3C] px-5 py-3 text-sm font-semibold text-[#F8F4E7] shadow-[inset_0_1px_0_rgba(255,255,255,0.45)] transition hover:brightness-110 active:scale-95"
             >
               Nastavi kupovinu
             </Link>
@@ -443,7 +443,7 @@ export default function AccountPage() {
             <button
               type="button"
               onClick={logout}
-              className="rounded-xl border border-[#d6b878]/30 bg-[#211812]/60 px-5 py-3 text-sm font-semibold text-[#ead4a0] transition hover:border-[#d6b878]/60 hover:bg-[#4b3621]/50 active:scale-95"
+              className="rounded-xl border border-[#B8955A]/45 bg-[#F8F4E7]/60 px-5 py-3 text-sm font-semibold text-[#8A6A33] transition hover:border-[#B8955A]/90 hover:bg-[#B8955A]/15 active:scale-95"
             >
               Odjavi se
             </button>
@@ -452,7 +452,7 @@ export default function AccountPage() {
           {error && (
             <p
               role="alert"
-              className="mt-4 rounded-xl border border-[#c46a2d]/40 bg-[#c46a2d]/10 px-4 py-3 text-sm text-[#f0a477]"
+              className="mt-4 rounded-xl border border-[#c46a2d]/40 bg-[#c46a2d]/10 px-4 py-3 text-sm text-[#B4501F]"
             >
               {error}
             </p>
@@ -460,14 +460,14 @@ export default function AccountPage() {
         </section>
 
         {/* VIP PROGRAM */}
-        <section className="mt-8 overflow-hidden rounded-3xl border border-[#d6b878]/30 bg-gradient-to-br from-[#30231b] via-[#2b2018] to-[#211812] shadow-[inset_0_1px_0_rgba(234,212,160,0.08),0_12px_40px_rgba(0,0,0,0.2)]">
-          <div className="border-b border-[#d6b878]/20 bg-gradient-to-r from-[#4b3621]/40 to-transparent p-6 sm:p-8">
-            <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#d6b878]">
+        <section className="mt-8 overflow-hidden rounded-3xl border border-[#B8955A]/45 bg-gradient-to-br from-[#FFFFFF] via-[#FFFFFF] to-[#F8F4E7] shadow-[inset_0_1px_0_rgba(184,149,90,0.08),0_12px_40px_rgba(31,42,60,0.12)]">
+          <div className="border-b border-[#B8955A]/30 bg-gradient-to-r from-[#B8955A]/10 to-transparent p-6 sm:p-8">
+            <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#8A6A33]">
               WATCH STORE REWARDS
             </p>
 
             <div className="mt-3 flex flex-wrap items-center justify-between gap-4">
-              <h2 className="text-2xl font-bold text-[#f4ebdd]">
+              <h2 className="text-2xl font-bold text-[#1F2A3C]">
                 Moj VIP status
               </h2>
 
@@ -480,77 +480,77 @@ export default function AccountPage() {
               )}
             </div>
 
-            <p className="mt-2 text-sm leading-6 text-[#b8a99a]">
+            <p className="mt-2 text-sm leading-6 text-[#1F2A3C]/72">
               Sakupljaj poene kupovinom i napreduj kroz VIP nivoe.
             </p>
           </div>
 
           {vipLoading ? (
             <div className="p-6 sm:p-8">
-              <p className="text-sm text-[#b8a99a]">
+              <p className="text-sm text-[#1F2A3C]/72">
                 Učitavanje VIP statusa...
               </p>
             </div>
           ) : vipError ? (
             <div className="p-6 sm:p-8">
-              <p className="rounded-xl border border-[#c46a2d]/30 bg-[#c46a2d]/10 p-4 text-sm text-[#e8a078]">
+              <p className="rounded-xl border border-[#c46a2d]/30 bg-[#c46a2d]/10 p-4 text-sm text-[#B4501F]">
                 {vipError}
               </p>
             </div>
           ) : vipStatus ? (
             <div className="p-6 sm:p-8">
-              <p className="text-sm leading-6 text-[#c2b5a8]">
+              <p className="text-sm leading-6 text-[#1F2A3C]/72">
                 {VipTierDescription({ tier: vipStatus.vip_tier })}
               </p>
 
               <div className="mt-6 grid gap-4 sm:grid-cols-2">
-                <div className="rounded-2xl border border-[#d6b878]/20 bg-[#17110d]/60 p-5">
-                  <p className="text-xs uppercase tracking-wider text-[#8f8071]">
+                <div className="rounded-2xl border border-[#B8955A]/30 bg-[#FFFFFF]/60 p-5">
+                  <p className="text-xs uppercase tracking-wider text-[#1F2A3C]/60">
                     Dostupni VIP poeni
                   </p>
 
-                  <p className="mt-3 text-3xl font-bold text-[#ead4a0]">
+                  <p className="mt-3 text-3xl font-bold text-[#8A6A33]">
                     {vipStatus.points_balance.toLocaleString("sr-RS")}
                   </p>
 
-                  <p className="mt-2 text-xs text-[#b8a99a]">
+                  <p className="mt-2 text-xs text-[#1F2A3C]/72">
                     50 poena = 100 RSD popusta
                   </p>
                 </div>
 
-                <div className="rounded-2xl border border-[#d6b878]/20 bg-[#17110d]/60 p-5">
-                  <p className="text-xs uppercase tracking-wider text-[#8f8071]">
+                <div className="rounded-2xl border border-[#B8955A]/30 bg-[#FFFFFF]/60 p-5">
+                  <p className="text-xs uppercase tracking-wider text-[#1F2A3C]/60">
                     Vrednost tvojih poena
                   </p>
 
-                  <p className="mt-3 text-3xl font-bold text-[#ead4a0]">
+                  <p className="mt-3 text-3xl font-bold text-[#8A6A33]">
                     {formatRsd(vipStatus.points_value)}
                   </p>
 
-                  <p className="mt-2 text-xs text-[#b8a99a]">
+                  <p className="mt-2 text-xs text-[#1F2A3C]/72">
                     RSD popusta za narednu kupovinu
                   </p>
                 </div>
 
-                <div className="rounded-2xl border border-[#d6b878]/20 bg-[#17110d]/60 p-5 sm:col-span-2">
-                  <p className="text-xs uppercase tracking-wider text-[#8f8071]">
+                <div className="rounded-2xl border border-[#B8955A]/30 bg-[#FFFFFF]/60 p-5 sm:col-span-2">
+                  <p className="text-xs uppercase tracking-wider text-[#1F2A3C]/60">
                     Ukupna vrednost završenih kupovina
                   </p>
 
-                  <p className="mt-3 text-3xl font-bold text-[#ead4a0]">
+                  <p className="mt-3 text-3xl font-bold text-[#8A6A33]">
                     {formatRsd(vipStatus.lifetime_spend)} RSD
                   </p>
                 </div>
               </div>
 
-              <div className="mt-7 rounded-2xl border border-[#d6b878]/20 bg-[#17110d]/60 p-5">
+              <div className="mt-7 rounded-2xl border border-[#B8955A]/30 bg-[#FFFFFF]/60 p-5">
                 <div className="flex items-center justify-between gap-3">
                   <div>
-                    <p className="text-xs uppercase tracking-wider text-[#8f8071]">
+                    <p className="text-xs uppercase tracking-wider text-[#1F2A3C]/60">
                       Tvoj VIP napredak
                     </p>
 
-                    <p className="mt-2 font-semibold text-[#ead4a0]">
+                    <p className="mt-2 font-semibold text-[#8A6A33]">
                       {normalizedTier === "gold"
                         ? "Gold nivo dostignut!"
                         : normalizedTier === "silver"
@@ -559,14 +559,14 @@ export default function AccountPage() {
                     </p>
                   </div>
 
-                  <span className="text-lg font-bold text-[#ead4a0]">
+                  <span className="text-lg font-bold text-[#8A6A33]">
                     {Math.round(vipStatus.progress_percent)}%
                   </span>
                 </div>
 
-                <div className="mt-4 h-3 overflow-hidden rounded-full bg-[#30231b]">
+                <div className="mt-4 h-3 overflow-hidden rounded-full bg-[#FFFFFF]">
                   <div
-                    className="h-full rounded-full bg-gradient-to-r from-[#bd9650] via-[#d6b878] to-[#ead4a0] transition-all duration-700"
+                    className="h-full rounded-full bg-gradient-to-r from-[#B8955A] via-[#B8955A] to-[#B8955A] transition-all duration-700"
                     style={{
                       width: `${vipStatus.progress_percent}%`,
                     }}
@@ -574,9 +574,9 @@ export default function AccountPage() {
                 </div>
 
                 {vipStatus.next_tier_spend !== null ? (
-                  <p className="mt-3 text-xs leading-5 text-[#b8a99a]">
+                  <p className="mt-3 text-xs leading-5 text-[#1F2A3C]/72">
                     Do sledećeg nivoa potrebno je još{" "}
-                    <span className="font-semibold text-[#ead4a0]">
+                    <span className="font-semibold text-[#8A6A33]">
                       {formatRsd(
                         Math.max(
                           0,
@@ -589,7 +589,7 @@ export default function AccountPage() {
                     potrošnje na završenim porudžbinama.
                   </p>
                 ) : (
-                  <p className="mt-3 text-xs leading-5 text-[#b8a99a]">
+                  <p className="mt-3 text-xs leading-5 text-[#1F2A3C]/72">
                     Čestitamo! Dostigao si najviši VIP nivo.
                   </p>
                 )}
@@ -599,14 +599,14 @@ export default function AccountPage() {
                 <div
                   className={`rounded-xl border p-3 text-center ${
                     normalizedTier === "bronze"
-                      ? "border-[#bd9650]/60 bg-[#bd9650]/10"
-                      : "border-[#d6b878]/10 bg-[#17110d]/40"
+                      ? "border-[#B8955A]/90 bg-[#B8955A]/10"
+                      : "border-[#B8955A]/15 bg-[#FFFFFF]/60"
                   }`}
                 >
-                  <p className="text-xs font-bold text-[#bd9650]">
+                  <p className="text-xs font-bold text-[#8A6A33]">
                     BRONZE
                   </p>
-                  <p className="mt-1 text-[10px] text-[#8f8071]">
+                  <p className="mt-1 text-[10px] text-[#1F2A3C]/60">
                     0–14.999 RSD
                   </p>
                 </div>
@@ -614,14 +614,14 @@ export default function AccountPage() {
                 <div
                   className={`rounded-xl border p-3 text-center ${
                     normalizedTier === "silver"
-                      ? "border-[#c8c8c8]/60 bg-[#c8c8c8]/10"
-                      : "border-[#d6b878]/10 bg-[#17110d]/40"
+                      ? "border-[#1F2A3C]/30 bg-[#1F2A3C]/5"
+                      : "border-[#B8955A]/15 bg-[#FFFFFF]/60"
                   }`}
                 >
-                  <p className="text-xs font-bold text-[#dedede]">
+                  <p className="text-xs font-bold text-[#1F2A3C]/70">
                     SILVER
                   </p>
-                  <p className="mt-1 text-[10px] text-[#8f8071]">
+                  <p className="mt-1 text-[10px] text-[#1F2A3C]/60">
                     15.000–39.999 RSD
                   </p>
                 </div>
@@ -629,27 +629,27 @@ export default function AccountPage() {
                 <div
                   className={`rounded-xl border p-3 text-center ${
                     normalizedTier === "gold"
-                      ? "border-[#ead4a0]/60 bg-[#d6b878]/10"
-                      : "border-[#d6b878]/10 bg-[#17110d]/40"
+                      ? "border-[#B8955A]/90 bg-[#B8955A]/10"
+                      : "border-[#B8955A]/15 bg-[#FFFFFF]/60"
                   }`}
                 >
-                  <p className="text-xs font-bold text-[#ead4a0]">
+                  <p className="text-xs font-bold text-[#8A6A33]">
                     GOLD
                   </p>
-                  <p className="mt-1 text-[10px] text-[#8f8071]">
+                  <p className="mt-1 text-[10px] text-[#1F2A3C]/60">
                     40.000+ RSD
                   </p>
                 </div>
               </div>
 
-              <p className="mt-5 text-xs leading-5 text-[#8f8071]">
+              <p className="mt-5 text-xs leading-5 text-[#1F2A3C]/60">
                 VIP poeni se dodaju nakon što porudžbina bude označena kao
                 završena. Za svakih potrošenih 100 RSD dobijaš 1 poen.
               </p>
             </div>
           ) : (
             <div className="p-6 sm:p-8">
-              <p className="text-sm text-[#b8a99a]">
+              <p className="text-sm text-[#1F2A3C]/72">
                 VIP status trenutno nije dostupan.
               </p>
             </div>
@@ -657,27 +657,27 @@ export default function AccountPage() {
         </section>
 
         {/* VIP HISTORY */}
-        <section className="mt-8 rounded-3xl border border-[#d6b878]/25 bg-gradient-to-br from-[#30231b] via-[#2b2018] to-[#211812] p-6 shadow-[inset_0_1px_0_rgba(234,212,160,0.08),0_12px_40px_rgba(0,0,0,0.2)] sm:p-8">
-          <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#d6b878]">
+        <section className="mt-8 rounded-3xl border border-[#B8955A]/40 bg-gradient-to-br from-[#FFFFFF] via-[#FFFFFF] to-[#F8F4E7] p-6 shadow-[inset_0_1px_0_rgba(184,149,90,0.08),0_12px_40px_rgba(31,42,60,0.12)] sm:p-8">
+          <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#8A6A33]">
             WATCH STORE REWARDS
           </p>
 
-          <h2 className="mt-3 text-2xl font-bold text-[#f4ebdd]">
+          <h2 className="mt-3 text-2xl font-bold text-[#1F2A3C]">
             Istorija VIP poena
           </h2>
 
-          <p className="mt-2 text-sm leading-6 text-[#b8a99a]">
+          <p className="mt-2 text-sm leading-6 text-[#1F2A3C]/72">
             Pregled svih osvojenih i iskorišćenih VIP poena.
           </p>
 
           {vipLedgerLoading && (
-            <p className="mt-6 text-sm text-[#b8a99a]">
+            <p className="mt-6 text-sm text-[#1F2A3C]/72">
               Učitavanje istorije...
             </p>
           )}
 
           {vipLedgerError && (
-            <p className="mt-6 rounded-xl border border-[#c46a2d]/30 bg-[#c46a2d]/10 p-4 text-sm text-[#e8a078]">
+            <p className="mt-6 rounded-xl border border-[#c46a2d]/30 bg-[#c46a2d]/10 p-4 text-sm text-[#B4501F]">
               {vipLedgerError}
             </p>
           )}
@@ -685,12 +685,12 @@ export default function AccountPage() {
           {!vipLedgerLoading &&
             !vipLedgerError &&
             vipLedger.length === 0 && (
-              <div className="mt-6 rounded-2xl border border-[#d6b878]/15 bg-[#17110d]/50 p-6 text-center">
+              <div className="mt-6 rounded-2xl border border-[#B8955A]/20 bg-[#FFFFFF]/60 p-6 text-center">
                 <p className="text-2xl">⭐</p>
-                <p className="mt-3 font-semibold text-[#ead4a0]">
+                <p className="mt-3 font-semibold text-[#8A6A33]">
                   Još nema VIP transakcija
                 </p>
-                <p className="mt-2 text-sm text-[#b8a99a]">
+                <p className="mt-2 text-sm text-[#1F2A3C]/72">
                   Kada završiš prvu kupovinu, ovde će se pojaviti tvoji
                   osvojeni poeni.
                 </p>
@@ -707,25 +707,25 @@ export default function AccountPage() {
                   return (
                     <article
                       key={entry.id}
-                      className="flex flex-col gap-3 rounded-2xl border border-[#d6b878]/15 bg-[#17110d]/50 p-4 sm:flex-row sm:items-center sm:justify-between"
+                      className="flex flex-col gap-3 rounded-2xl border border-[#B8955A]/20 bg-[#FFFFFF]/60 p-4 sm:flex-row sm:items-center sm:justify-between"
                     >
                       <div className="min-w-0">
-                        <p className="font-semibold text-[#ead4a0]">
+                        <p className="font-semibold text-[#8A6A33]">
                           <VipHistoryLabel entry={entry} />
                         </p>
 
                         {entry.order_number && (
-                          <p className="mt-1 text-xs text-[#8f8071]">
+                          <p className="mt-1 text-xs text-[#1F2A3C]/60">
                             Porudžbina: {entry.order_number}
                           </p>
                         )}
 
-                        <p className="mt-1 text-xs text-[#8f8071]">
+                        <p className="mt-1 text-xs text-[#1F2A3C]/60">
                           {formatDate(entry.created_at)}
                         </p>
 
                         {Number(entry.amount_rsd) > 0 && (
-                          <p className="mt-1 text-xs text-[#b8a99a]">
+                          <p className="mt-1 text-xs text-[#1F2A3C]/72">
                             Iznos: {formatRsd(entry.amount_rsd)} RSD
                           </p>
                         )}
@@ -734,7 +734,7 @@ export default function AccountPage() {
                       <div className="flex-shrink-0">
                         <span
                           className={`text-lg font-bold ${
-                            earned ? "text-green-400" : "text-[#e8a078]"
+                            earned ? "text-green-400" : "text-[#B4501F]"
                           }`}
                         >
                           {earned ? "+" : ""}
@@ -751,40 +751,40 @@ export default function AccountPage() {
             )}
         </section>
 
-        <section className="mt-8 rounded-3xl border border-[#d6b878]/25 bg-gradient-to-br from-[#30231b] via-[#2b2018] to-[#211812] p-6 shadow-[inset_0_1px_0_rgba(234,212,160,0.08),0_12px_40px_rgba(0,0,0,0.2)] sm:p-8">
-          <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#d6b878]">
+        <section className="mt-8 rounded-3xl border border-[#B8955A]/40 bg-gradient-to-br from-[#FFFFFF] via-[#FFFFFF] to-[#F8F4E7] p-6 shadow-[inset_0_1px_0_rgba(184,149,90,0.08),0_12px_40px_rgba(31,42,60,0.12)] sm:p-8">
+          <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#8A6A33]">
             WATCH STORE
           </p>
 
-          <h2 className="mt-3 text-2xl font-bold text-[#f4ebdd]">
+          <h2 className="mt-3 text-2xl font-bold text-[#1F2A3C]">
             Moje porudžbine
           </h2>
 
-          <p className="mt-2 text-sm leading-6 text-[#b8a99a]">
+          <p className="mt-2 text-sm leading-6 text-[#1F2A3C]/72">
             Ovde možeš da pratiš status svojih porudžbina.
           </p>
 
           {ordersLoading && (
-            <p className="mt-7 text-sm text-[#b8a99a]">
+            <p className="mt-7 text-sm text-[#1F2A3C]/72">
               Učitavanje porudžbina...
             </p>
           )}
 
           {ordersError && (
-            <p className="mt-7 rounded-xl border border-[#c46a2d]/30 bg-[#c46a2d]/10 p-4 text-sm text-[#e8a078]">
+            <p className="mt-7 rounded-xl border border-[#c46a2d]/30 bg-[#c46a2d]/10 p-4 text-sm text-[#B4501F]">
               {ordersError}
             </p>
           )}
 
           {!ordersLoading && !ordersError && orders.length === 0 && (
-            <div className="mt-7 rounded-2xl border border-[#d6b878]/15 bg-[#17110d]/50 p-6 text-center">
-              <p className="text-[#c2b5a8]">
+            <div className="mt-7 rounded-2xl border border-[#B8955A]/20 bg-[#FFFFFF]/60 p-6 text-center">
+              <p className="text-[#1F2A3C]/72">
                 Još uvek nemaš nijednu aktivnu porudžbinu.
               </p>
 
               <Link
                 href="/"
-                className="mt-4 inline-flex rounded-xl border border-[#ead4a0]/40 bg-[#d6b878]/10 px-5 py-2.5 text-sm font-semibold text-[#ead4a0] transition hover:bg-[#d6b878]/20"
+                className="mt-4 inline-flex rounded-xl border border-[#B8955A]/60 bg-[#B8955A]/10 px-5 py-2.5 text-sm font-semibold text-[#8A6A33] transition hover:bg-[#B8955A]/20"
               >
                 Pogledaj proizvode
               </Link>
@@ -795,24 +795,24 @@ export default function AccountPage() {
             {orders.map((order) => (
               <article
                 key={order.id}
-                className="rounded-2xl border border-[#d6b878]/20 bg-[#17110d]/50 p-5"
+                className="rounded-2xl border border-[#B8955A]/30 bg-[#FFFFFF]/60 p-5"
               >
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                   <div>
-                    <p className="text-xs uppercase tracking-wider text-[#8f8071]">
+                    <p className="text-xs uppercase tracking-wider text-[#1F2A3C]/60">
                       Broj porudžbine
                     </p>
 
-                    <p className="mt-1 font-mono text-lg font-semibold text-[#ead4a0]">
+                    <p className="mt-1 font-mono text-lg font-semibold text-[#8A6A33]">
                       {order.order_number || order.id}
                     </p>
 
-                    <p className="mt-2 text-xs text-[#8f8071]">
+                    <p className="mt-2 text-xs text-[#1F2A3C]/60">
                       {formatDate(order.created_at)}
                     </p>
                   </div>
 
-                  <p className="text-xl font-bold text-[#ead4a0]">
+                  <p className="text-xl font-bold text-[#8A6A33]">
                     {Number(order.total).toFixed(2)} RSD
                   </p>
                 </div>
@@ -823,29 +823,29 @@ export default function AccountPage() {
           </div>
         </section>
 
-        <section className="mt-8 rounded-3xl border border-[#d6b878]/30 bg-gradient-to-br from-[#30231b] via-[#2b2018] to-[#211812] p-6 shadow-[inset_0_1px_0_rgba(234,212,160,0.08),0_12px_40px_rgba(0,0,0,0.2)] sm:p-8">
-          <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#d6b878]">
+        <section className="mt-8 rounded-3xl border border-[#B8955A]/45 bg-gradient-to-br from-[#FFFFFF] via-[#FFFFFF] to-[#F8F4E7] p-6 shadow-[inset_0_1px_0_rgba(184,149,90,0.08),0_12px_40px_rgba(31,42,60,0.12)] sm:p-8">
+          <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#8A6A33]">
             WATCH STORE REWARDS
           </p>
 
-          <h2 className="mt-3 text-2xl font-bold text-[#f4ebdd]">
+          <h2 className="mt-3 text-2xl font-bold text-[#1F2A3C]">
             Moji kuponi
           </h2>
 
-          <p className="mt-2 text-sm leading-6 text-[#b8a99a]">
+          <p className="mt-2 text-sm leading-6 text-[#1F2A3C]/72">
             Kao znak zahvalnosti za kupovinu, dobijaš popust za svoju
             narednu porudžbinu. Sačuvaj kod i iskoristi ga kada ponovo
             kupuješ.
           </p>
 
           {couponsLoading && (
-            <p className="mt-6 text-sm text-[#b8a99a]">
+            <p className="mt-6 text-sm text-[#1F2A3C]/72">
               Učitavanje kupona...
             </p>
           )}
 
           {couponsError && (
-            <p className="mt-6 rounded-xl border border-[#c46a2d]/30 bg-[#c46a2d]/10 p-4 text-sm text-[#e8a078]">
+            <p className="mt-6 rounded-xl border border-[#c46a2d]/30 bg-[#c46a2d]/10 p-4 text-sm text-[#B4501F]">
               {couponsError}
             </p>
           )}
@@ -853,12 +853,12 @@ export default function AccountPage() {
           {!couponsLoading &&
             !couponsError &&
             coupons.length === 0 && (
-              <div className="mt-6 rounded-2xl border border-[#d6b878]/15 bg-[#17110d]/50 p-6 text-center">
+              <div className="mt-6 rounded-2xl border border-[#B8955A]/20 bg-[#FFFFFF]/60 p-6 text-center">
                 <div className="text-3xl">🎁</div>
-                <p className="mt-3 font-semibold text-[#ead4a0]">
+                <p className="mt-3 font-semibold text-[#8A6A33]">
                   Još nemaš osvojenih kupona
                 </p>
-                <p className="mt-2 text-sm text-[#b8a99a]">
+                <p className="mt-2 text-sm text-[#1F2A3C]/72">
                   Nakon prve kupovine dobićeš kupon za sledeću porudžbinu.
                 </p>
               </div>
@@ -873,36 +873,36 @@ export default function AccountPage() {
                   key={coupon.code}
                   className={`relative overflow-hidden rounded-2xl border p-5 ${
                     isUsed
-                      ? "border-[#8f8071]/20 bg-[#17110d]/40"
-                      : "border-[#d6b878]/45 bg-gradient-to-br from-[#4b3621]/70 via-[#30231b] to-[#211812]"
+                      ? "border-[#1F2A3C]/15 bg-[#FFFFFF]/60"
+                      : "border-[#B8955A]/70 bg-gradient-to-br from-[#B8955A]/20 via-[#FFFFFF] to-[#F8F4E7]"
                   }`}
                 >
                   <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                     <div>
                       <div className="flex flex-wrap items-center gap-2">
-                        <span className="text-3xl font-bold text-[#ead4a0]">
+                        <span className="text-3xl font-bold text-[#8A6A33]">
                           {coupon.discount_percent}%
                         </span>
 
-                        <span className="text-sm text-[#c2b5a8]">
+                        <span className="text-sm text-[#1F2A3C]/72">
                           popusta na sledeću kupovinu
                         </span>
                       </div>
 
-                      <p className="mt-3 text-xs uppercase tracking-wider text-[#8f8071]">
+                      <p className="mt-3 text-xs uppercase tracking-wider text-[#1F2A3C]/60">
                         Tvoj kupon kod
                       </p>
 
-                      <p className="mt-1 break-all font-mono text-lg font-bold tracking-wider text-[#f4ebdd]">
+                      <p className="mt-1 break-all font-mono text-lg font-bold tracking-wider text-[#1F2A3C]">
                         {coupon.code}
                       </p>
 
-                      <p className="mt-2 text-xs text-[#8f8071]">
+                      <p className="mt-2 text-xs text-[#1F2A3C]/60">
                         Osvojen: {formatDate(coupon.created_at)}
                       </p>
 
                       {coupon.source_order_number && (
-                        <p className="mt-1 text-xs text-[#8f8071]">
+                        <p className="mt-1 text-xs text-[#1F2A3C]/60">
                           Porudžbina: {coupon.source_order_number}
                         </p>
                       )}
@@ -912,8 +912,8 @@ export default function AccountPage() {
                       <span
                         className={`rounded-full border px-3 py-1.5 text-xs font-semibold ${
                           isUsed
-                            ? "border-[#8f8071]/30 bg-[#8f8071]/10 text-[#b8a99a]"
-                            : "border-[#d6b878]/40 bg-[#d6b878]/10 text-[#ead4a0]"
+                            ? "border-[#1F2A3C]/15 bg-[#1F2A3C]/5 text-[#1F2A3C]/72"
+                            : "border-[#B8955A]/60 bg-[#B8955A]/10 text-[#8A6A33]"
                         }`}
                       >
                         {isUsed ? "Iskorišćen" : "Dostupan"}
@@ -923,7 +923,7 @@ export default function AccountPage() {
                         <button
                           type="button"
                           onClick={() => copyCoupon(coupon.code)}
-                          className="rounded-xl border border-[#ead4a0]/50 bg-gradient-to-b from-[#ead4a0] via-[#d6b878] to-[#bd9650] px-4 py-2.5 text-sm font-semibold text-[#211812] transition hover:brightness-110 active:scale-95"
+                          className="rounded-xl border border-[#B8955A]/75 bg-gradient-to-b from-[#1F2A3C] via-[#1F2A3C] to-[#1F2A3C] px-4 py-2.5 text-sm font-semibold text-[#F8F4E7] transition hover:brightness-110 active:scale-95"
                         >
                           {copiedCode === coupon.code
                             ? "✓ Kopirano"
@@ -934,8 +934,8 @@ export default function AccountPage() {
                   </div>
 
                   {!isUsed && (
-                    <div className="mt-5 border-t border-[#d6b878]/15 pt-4">
-                      <p className="text-xs leading-5 text-[#b8a99a]">
+                    <div className="mt-5 border-t border-[#B8955A]/20 pt-4">
+                      <p className="text-xs leading-5 text-[#1F2A3C]/72">
                         Unesi ovaj kod u korpi prilikom sledeće kupovine.
                         Kupon može da se iskoristi samo jednom.
                       </p>

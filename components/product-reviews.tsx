@@ -243,45 +243,45 @@ export default function ProductReviews({
   return (
     <section
       id="recenzije"
-      className="mt-16 border-t border-[#d6b878]/20 pt-12 sm:mt-24 sm:pt-16"
+      className="mt-16 border-t border-[#B8955A]/30 pt-12 sm:mt-24 sm:pt-16"
     >
       <div className="grid gap-10 lg:grid-cols-[0.35fr_0.65fr] lg:gap-16">
         <div>
-          <p className="text-[11px] font-medium uppercase tracking-[0.25em] text-[#b8a99a]">
+          <p className="text-[11px] font-medium uppercase tracking-[0.25em] text-[#1F2A3C]/72">
             Iskustva kupaca
           </p>
 
-          <h2 className="mt-3 text-3xl font-semibold tracking-tight text-[#f4ebdd] sm:text-4xl">
+          <h2 className="mt-3 text-3xl font-semibold tracking-tight text-[#1F2A3C] sm:text-4xl">
             Ocene i recenzije
           </h2>
 
           <div className="mt-6">
             {reviews.length > 0 ? (
               <>
-                <p className="text-4xl font-semibold text-[#f4ebdd]">
+                <p className="text-4xl font-semibold text-[#1F2A3C]">
                   {averageRating.toLocaleString("sr-RS", {
                     minimumFractionDigits: 1,
                     maximumFractionDigits: 1,
                   })}
-                  <span className="ml-2 text-lg text-[#b8a99a]">
+                  <span className="ml-2 text-lg text-[#1F2A3C]/72">
                     / 5
                   </span>
                 </p>
 
                 <div
-                  className="mt-2 text-xl tracking-[0.15em] text-[#d6b878]"
+                  className="mt-2 text-xl tracking-[0.15em] text-[#8A6A33]"
                   aria-label={`Prosečna ocena: ${averageRating.toFixed(1)} od 5`}
                 >
                   {"★".repeat(Math.round(averageRating))}
                   {"☆".repeat(5 - Math.round(averageRating))}
                 </div>
 
-                <p className="mt-2 text-sm text-[#b8a99a]">
+                <p className="mt-2 text-sm text-[#1F2A3C]/72">
                   Ukupno recenzija: {reviews.length}
                 </p>
               </>
             ) : (
-              <p className="mt-4 text-sm leading-7 text-[#b8a99a]">
+              <p className="mt-4 text-sm leading-7 text-[#1F2A3C]/72">
                 Ovaj proizvod još nema recenzija. Budi prvi koji će podeliti svoje mišljenje!
               </p>
             )}
@@ -291,21 +291,21 @@ export default function ProductReviews({
         <div>
           <form
             onSubmit={handleSubmit}
-            className="rounded-[2rem] border border-[#d6b878]/25 bg-gradient-to-br from-[#30231b]/95 via-[#211812]/95 to-[#17110d]/95 p-6 shadow-[inset_0_1px_0_rgba(234,212,160,0.05)] sm:p-8"
+            className="rounded-[2rem] border border-[#B8955A]/40 bg-gradient-to-br from-[#FFFFFF]/95 via-[#F8F4E7]/95 to-[#FFFFFF]/95 p-6 shadow-[inset_0_1px_0_rgba(184,149,90,0.05)] sm:p-8"
           >
-            <h3 className="text-xl font-semibold text-[#f4ebdd]">
+            <h3 className="text-xl font-semibold text-[#1F2A3C]">
               {editingId ? "Izmeni svoju recenziju" : "Ostavi svoju recenziju"}
             </h3>
 
             {!user ? (
-              <div className="mt-6 rounded-2xl border border-[#d6b878]/20 bg-[#17110d] p-5">
-                <p className="text-sm leading-6 text-[#c2b5a8]">
+              <div className="mt-6 rounded-2xl border border-[#B8955A]/30 bg-[#FFFFFF]/100 p-5">
+                <p className="text-sm leading-6 text-[#1F2A3C]/72">
                   Da bi ostavio recenziju, prvo se prijavi na svoj nalog.
                 </p>
 
                 <Link
                   href="/nalog/prijava"
-                  className="mt-4 inline-flex min-h-11 items-center rounded-xl border border-[#ead4a0]/60 bg-gradient-to-b from-[#ead4a0] via-[#d6b878] to-[#bd9650] px-5 py-3 text-sm font-semibold text-[#211812] shadow-[inset_0_1px_0_rgba(255,255,255,0.4)] transition hover:brightness-110 active:scale-[0.98]"
+                  className="mt-4 inline-flex min-h-11 items-center rounded-xl border border-[#B8955A]/90 bg-gradient-to-b from-[#1F2A3C] via-[#1F2A3C] to-[#1F2A3C] px-5 py-3 text-sm font-semibold text-[#F8F4E7] shadow-[inset_0_1px_0_rgba(255,255,255,0.4)] transition hover:brightness-110 active:scale-[0.98]"
                 >
                   Prijavi se
                 </Link>
@@ -314,7 +314,7 @@ export default function ProductReviews({
               <>
                 <label
                   htmlFor="reviewer-name"
-                  className="mt-6 block text-sm text-[#c2b5a8]"
+                  className="mt-6 block text-sm text-[#1F2A3C]/72"
                 >
                   Ime
                 </label>
@@ -328,12 +328,12 @@ export default function ProductReviews({
                   maxLength={60}
                   required
                   autoComplete="name"
-                  className="mt-2 min-h-12 w-full rounded-xl border border-[#d6b878]/25 bg-[#17110d] px-4 py-3 text-base text-[#f4ebdd] outline-none transition placeholder:text-[#8f8071] focus:border-[#d6b878]/70 focus:ring-2 focus:ring-[#d6b878]/10"
+                  className="mt-2 min-h-12 w-full rounded-xl border border-[#B8955A]/40 bg-[#FFFFFF]/100 px-4 py-3 text-base text-[#1F2A3C] outline-none transition placeholder:text-[#1F2A3C]/50 focus:border-[#B8955A]/100 focus:ring-2 focus:ring-[#B8955A]/15"
                   placeholder="Unesi svoje ime"
                 />
 
                 <fieldset className="mt-6">
-                  <legend className="text-sm text-[#c2b5a8]">
+                  <legend className="text-sm text-[#1F2A3C]/72">
                     Tvoja ocena
                   </legend>
 
@@ -347,8 +347,8 @@ export default function ProductReviews({
                         aria-pressed={rating === value}
                         className={`min-h-11 min-w-11 rounded-lg text-3xl transition ${
                           value <= rating
-                            ? "text-[#d6b878]"
-                            : "text-[#6f5c49] hover:text-[#ead4a0]"
+                            ? "text-[#8A6A33]"
+                            : "text-[#1F2A3C]/60 hover:text-[#8A6A33]"
                         }`}
                       >
                         ★
@@ -359,7 +359,7 @@ export default function ProductReviews({
 
                 <label
                   htmlFor="review-comment"
-                  className="mt-6 block text-sm text-[#c2b5a8]"
+                  className="mt-6 block text-sm text-[#1F2A3C]/72"
                 >
                   Komentar
                 </label>
@@ -372,14 +372,14 @@ export default function ProductReviews({
                   maxLength={2000}
                   required
                   rows={5}
-                  className="mt-2 w-full resize-y rounded-xl border border-[#d6b878]/25 bg-[#17110d] px-4 py-3 text-base leading-7 text-[#f4ebdd] outline-none transition placeholder:text-[#8f8071] focus:border-[#d6b878]/70 focus:ring-2 focus:ring-[#d6b878]/10"
+                  className="mt-2 w-full resize-y rounded-xl border border-[#B8955A]/40 bg-[#FFFFFF]/100 px-4 py-3 text-base leading-7 text-[#1F2A3C] outline-none transition placeholder:text-[#1F2A3C]/50 focus:border-[#B8955A]/100 focus:ring-2 focus:ring-[#B8955A]/15"
                   placeholder="Podeli svoje iskustvo sa ovim proizvodom..."
                 />
 
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="mt-6 min-h-12 w-full rounded-xl border border-[#ead4a0]/60 bg-gradient-to-b from-[#ead4a0] via-[#d6b878] to-[#bd9650] px-5 py-3 text-sm font-semibold text-[#211812] shadow-[inset_0_1px_0_rgba(255,255,255,0.4)] transition hover:brightness-110 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-50"
+                  className="mt-6 min-h-12 w-full rounded-xl border border-[#B8955A]/90 bg-gradient-to-b from-[#1F2A3C] via-[#1F2A3C] to-[#1F2A3C] px-5 py-3 text-sm font-semibold text-[#F8F4E7] shadow-[inset_0_1px_0_rgba(255,255,255,0.4)] transition hover:brightness-110 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   {submitting
                     ? "Čuvanje..."
@@ -392,7 +392,7 @@ export default function ProductReviews({
                   <button
                     type="button"
                     onClick={cancelEditing}
-                    className="mt-3 min-h-11 w-full rounded-xl border border-[#d6b878]/25 px-5 py-3 text-sm text-[#c2b5a8] transition hover:border-[#d6b878]/50 hover:bg-[#4b3621]/40 hover:text-[#f4ebdd]"
+                    className="mt-3 min-h-11 w-full rounded-xl border border-[#B8955A]/40 px-5 py-3 text-sm text-[#1F2A3C]/72 transition hover:border-[#B8955A]/75 hover:bg-[#B8955A]/10 hover:text-[#1F2A3C]"
                   >
                     Otkaži izmenu
                   </button>
@@ -401,33 +401,33 @@ export default function ProductReviews({
             )}
 
             {errorMessage && (
-              <p role="alert" className="mt-4 text-sm text-[#f0a08a]">
+              <p role="alert" className="mt-4 text-sm text-[#B4501F]">
                 {errorMessage}
               </p>
             )}
 
             {message && (
-              <p role="status" className="mt-4 text-sm text-[#d6b878]">
+              <p role="status" className="mt-4 text-sm text-[#8A6A33]">
                 {message}
               </p>
             )}
 
-            <p className="mt-4 text-xs leading-5 text-[#8f8071]">
+            <p className="mt-4 text-xs leading-5 text-[#1F2A3C]/60">
               Recenzije su javne. Ne unosi lične ili poverljive podatke.
             </p>
           </form>
 
           <div className="mt-8">
-            <h3 className="text-xl font-semibold text-[#f4ebdd]">
+            <h3 className="text-xl font-semibold text-[#1F2A3C]">
               Mišljenja kupaca
             </h3>
 
             {loading ? (
-              <p className="mt-5 text-sm text-[#b8a99a]">
+              <p className="mt-5 text-sm text-[#1F2A3C]/72">
                 Učitavanje recenzija...
               </p>
             ) : reviews.length === 0 ? (
-              <p className="mt-5 text-sm text-[#b8a99a]">
+              <p className="mt-5 text-sm text-[#1F2A3C]/72">
                 Još nema objavljenih recenzija.
               </p>
             ) : (
@@ -439,28 +439,28 @@ export default function ProductReviews({
                   return (
                     <article
                       key={review.id}
-                      className={`rounded-2xl border bg-gradient-to-br from-[#30231b]/90 to-[#211812]/90 p-5 shadow-[inset_0_1px_0_rgba(234,212,160,0.03)] sm:p-6 ${
+                      className={`rounded-2xl border bg-gradient-to-br from-[#FFFFFF]/90 to-[#F8F4E7]/90 p-5 shadow-[inset_0_1px_0_rgba(184,149,90,0.03)] sm:p-6 ${
                         review.is_featured
-                          ? "border-[#d6b878]/55"
-                          : "border-[#d6b878]/15"
+                          ? "border-[#B8955A]/80"
+                          : "border-[#B8955A]/20"
                       }`}
                     >
                       <div className="flex flex-wrap items-start justify-between gap-3">
                         <div>
                           <div className="flex flex-wrap items-center gap-2">
-                            <h4 className="font-semibold text-[#f4ebdd]">
+                            <h4 className="font-semibold text-[#1F2A3C]">
                               {review.reviewer_name}
                             </h4>
 
                             {review.is_featured && (
-                              <span className="rounded-full border border-[#d6b878]/40 bg-[#d6b878]/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-[#ead4a0]">
+                              <span className="rounded-full border border-[#B8955A]/60 bg-[#B8955A]/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-[#8A6A33]">
                                 ⭐ Istaknuta recenzija
                               </span>
                             )}
                           </div>
 
                           <div
-                            className="mt-1 tracking-widest text-[#d6b878]"
+                            className="mt-1 tracking-widest text-[#8A6A33]"
                             aria-label={`Ocena: ${review.rating} od 5`}
                           >
                             {"★".repeat(review.rating)}
@@ -470,7 +470,7 @@ export default function ProductReviews({
 
                         <time
                           dateTime={review.created_at}
-                          className="text-xs text-[#a99988]"
+                          className="text-xs text-[#1F2A3C]/60"
                         >
                           {new Date(review.created_at).toLocaleDateString(
                             "sr-RS",
@@ -483,16 +483,16 @@ export default function ProductReviews({
                         </time>
                       </div>
 
-                      <p className="mt-4 whitespace-pre-line break-words text-sm leading-7 text-[#d8cbbd]">
+                      <p className="mt-4 whitespace-pre-line break-words text-sm leading-7 text-[#1F2A3C]">
                         {review.comment}
                       </p>
 
                       {isOwner && (
-                        <div className="mt-5 flex flex-wrap gap-3 border-t border-[#d6b878]/15 pt-4">
+                        <div className="mt-5 flex flex-wrap gap-3 border-t border-[#B8955A]/20 pt-4">
                           <button
                             type="button"
                             onClick={() => startEditing(review)}
-                            className="min-h-10 rounded-xl border border-[#d6b878]/30 px-4 py-2 text-sm text-[#ead4a0] transition hover:border-[#d6b878]/60 hover:bg-[#4b3621]/50"
+                            className="min-h-10 rounded-xl border border-[#B8955A]/45 px-4 py-2 text-sm text-[#8A6A33] transition hover:border-[#B8955A]/90 hover:bg-[#B8955A]/15"
                           >
                             Izmeni
                           </button>
@@ -501,7 +501,7 @@ export default function ProductReviews({
                             type="button"
                             disabled={busyId === review.id}
                             onClick={() => void deleteReview(review)}
-                            className="min-h-10 rounded-xl border border-[#c46a2d]/45 px-4 py-2 text-sm text-[#e7a17b] transition hover:border-[#c46a2d]/70 hover:bg-[#c46a2d]/10 disabled:opacity-50"
+                            className="min-h-10 rounded-xl border border-[#c46a2d]/45 px-4 py-2 text-sm text-[#B4501F] transition hover:border-[#c46a2d]/70 hover:bg-[#c46a2d]/10 disabled:opacity-50"
                           >
                             {busyId === review.id ? "Brisanje..." : "Obriši"}
                           </button>

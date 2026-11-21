@@ -280,10 +280,10 @@ export default function CheckoutPage() {
 
   if (placedOrder) {
     return (
-      <main className="min-h-screen bg-[#211812] px-5 py-10 text-[#f4ebdd] sm:px-6 sm:py-14">
+      <main className="min-h-screen bg-[#F8F4E7] px-5 py-10 text-[#1F2A3C] sm:px-6 sm:py-14">
         <div className="mx-auto max-w-2xl">
-          <div className="rounded-[2rem] border border-[#d6b878]/25 bg-gradient-to-br from-[#30231b] to-[#211812] p-7 text-center shadow-[inset_0_1px_0_rgba(255,255,255,0.07)] sm:p-12">
-            <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full border border-[#d6b878]/35 bg-gradient-to-br from-[#d6b878]/20 to-[#4b3621]/20 text-[#ead4a0] shadow-[inset_0_1px_0_rgba(255,255,255,0.15)]">
+          <div className="rounded-[2rem] border border-[#B8955A]/40 bg-gradient-to-br from-[#FFFFFF] to-[#F8F4E7] p-7 text-center shadow-[inset_0_1px_0_rgba(255,255,255,0.07)] sm:p-12">
+            <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full border border-[#B8955A]/50 bg-gradient-to-br from-[#B8955A]/20 to-[#B8955A]/5 text-[#8A6A33] shadow-[inset_0_1px_0_rgba(255,255,255,0.15)]">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
@@ -298,7 +298,7 @@ export default function CheckoutPage() {
               </svg>
             </div>
 
-            <p className="mt-7 text-xs font-medium uppercase tracking-[0.3em] text-[#d6b878]">
+            <p className="mt-7 text-xs font-medium uppercase tracking-[0.3em] text-[#8A6A33]">
               WATCH STORE
             </p>
 
@@ -306,34 +306,34 @@ export default function CheckoutPage() {
               Porudžbina je uspešno poslata
             </h1>
 
-            <p className="mx-auto mt-4 max-w-lg leading-7 text-[#c2b5a8]">
+            <p className="mx-auto mt-4 max-w-lg leading-7 text-[#1F2A3C]/72">
               Hvala na kupovini. Kontaktiraćemo te uskoro radi potvrde
               porudžbine i dogovora oko dostave.
             </p>
 
-            <div className="mt-9 overflow-hidden rounded-2xl border border-[#d6b878]/20 bg-[#17110d]/70 text-left">
-              <div className="flex flex-col gap-2 border-b border-[#d6b878]/15 p-5 sm:flex-row sm:items-center sm:justify-between">
-                <span className="text-sm text-[#b8a99a]">
+            <div className="mt-9 overflow-hidden rounded-2xl border border-[#B8955A]/30 bg-[#FFFFFF]/70 text-left">
+              <div className="flex flex-col gap-2 border-b border-[#B8955A]/20 p-5 sm:flex-row sm:items-center sm:justify-between">
+                <span className="text-sm text-[#1F2A3C]/72">
                   Broj porudžbine
                 </span>
 
-                <span className="font-mono text-sm font-semibold text-[#ead4a0] sm:text-right">
+                <span className="font-mono text-sm font-semibold text-[#8A6A33] sm:text-right">
                   {placedOrder.order_number}
                 </span>
               </div>
 
-              <div className="flex items-center justify-between gap-4 border-b border-[#d6b878]/15 p-5">
-                <span className="text-sm text-[#b8a99a]">
+              <div className="flex items-center justify-between gap-4 border-b border-[#B8955A]/20 p-5">
+                <span className="text-sm text-[#1F2A3C]/72">
                   Ukupan iznos
                 </span>
 
-                <span className="text-xl font-bold text-[#ead4a0]">
+                <span className="text-xl font-bold text-[#8A6A33]">
                   {placedOrder.total.toFixed(2)} RSD
                 </span>
               </div>
 
               <div className="flex items-center justify-between gap-4 p-5">
-                <span className="text-sm text-[#b8a99a]">
+                <span className="text-sm text-[#1F2A3C]/72">
                   Način plaćanja
                 </span>
 
@@ -349,12 +349,12 @@ export default function CheckoutPage() {
             )}
 
             {!earnedCoupon && (
-              <div className="mt-8 rounded-2xl border border-[#d6b878]/20 bg-[#17110d]/60 p-5">
-                <p className="font-semibold text-[#ead4a0]">
+              <div className="mt-8 rounded-2xl border border-[#B8955A]/30 bg-[#FFFFFF]/60 p-5">
+                <p className="font-semibold text-[#8A6A33]">
                   Hvala ti na kupovini!
                 </p>
 
-                <p className="mt-2 text-sm leading-6 text-[#b8a99a]">
+                <p className="mt-2 text-sm leading-6 text-[#1F2A3C]/72">
                   Tvoja porudžbina je zabeležena. Kupon će biti dostupan u
                   tvom nalogu ako si prijavljen.
                 </p>
@@ -363,7 +363,7 @@ export default function CheckoutPage() {
 
             <Link
               href="/"
-              className="mt-8 inline-flex w-full items-center justify-center rounded-2xl border border-[#ead4a0]/50 bg-gradient-to-b from-[#ead4a0] via-[#d6b878] to-[#bd9650] px-6 py-4 font-semibold text-[#211812] shadow-[inset_0_1px_0_rgba(255,255,255,0.45),0_5px_16px_rgba(0,0,0,0.25)] transition hover:brightness-110 active:scale-[0.98] sm:w-auto"
+              className="mt-8 inline-flex w-full items-center justify-center rounded-2xl border border-[#B8955A]/75 bg-gradient-to-b from-[#1F2A3C] via-[#1F2A3C] to-[#1F2A3C] px-6 py-4 font-semibold text-[#F8F4E7] shadow-[inset_0_1px_0_rgba(255,255,255,0.45),0_5px_16px_rgba(31,42,60,0.15)] transition hover:brightness-110 active:scale-[0.98] sm:w-auto"
             >
               Nazad na početnu
             </Link>
@@ -375,10 +375,10 @@ export default function CheckoutPage() {
 
   if (items.length === 0) {
     return (
-      <main className="min-h-screen bg-[#211812] px-5 py-10 text-[#f4ebdd] sm:px-6 sm:py-14">
+      <main className="min-h-screen bg-[#F8F4E7] px-5 py-10 text-[#1F2A3C] sm:px-6 sm:py-14">
         <div className="mx-auto max-w-2xl">
-          <div className="rounded-[2rem] border border-[#d6b878]/20 bg-gradient-to-br from-[#30231b] to-[#211812] p-8 text-center shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]">
-            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full border border-[#d6b878]/25 bg-[#4b3621]/40 text-2xl shadow-[inset_0_1px_0_rgba(255,255,255,0.1)]">
+          <div className="rounded-[2rem] border border-[#B8955A]/30 bg-gradient-to-br from-[#FFFFFF] to-[#F8F4E7] p-8 text-center shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]">
+            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full border border-[#B8955A]/40 bg-[#B8955A]/10 text-2xl shadow-[inset_0_1px_0_rgba(255,255,255,0.1)]">
               🛒
             </div>
 
@@ -386,13 +386,13 @@ export default function CheckoutPage() {
               Korpa je prazna
             </h1>
 
-            <p className="mt-2 text-[#b8a99a]">
+            <p className="mt-2 text-[#1F2A3C]/72">
               Dodaj neki sat pre nego što nastaviš na porudžbinu.
             </p>
 
             <Link
               href="/"
-              className="mt-7 inline-flex rounded-2xl border border-[#ead4a0]/50 bg-gradient-to-b from-[#ead4a0] to-[#d6b878] px-6 py-3.5 font-semibold text-[#211812] shadow-[inset_0_1px_0_rgba(255,255,255,0.4)] transition hover:brightness-110 active:scale-95"
+              className="mt-7 inline-flex rounded-2xl border border-[#B8955A]/75 bg-gradient-to-b from-[#1F2A3C] to-[#1F2A3C] px-6 py-3.5 font-semibold text-[#F8F4E7] shadow-[inset_0_1px_0_rgba(255,255,255,0.4)] transition hover:brightness-110 active:scale-95"
             >
               Nazad u prodavnicu
             </Link>
@@ -408,18 +408,18 @@ export default function CheckoutPage() {
   );
 
   return (
-    <main className="min-h-screen bg-[#211812] px-5 py-10 text-[#f4ebdd] sm:px-6 sm:py-14">
+    <main className="min-h-screen bg-[#F8F4E7] px-5 py-10 text-[#1F2A3C] sm:px-6 sm:py-14">
       <div className="mx-auto max-w-5xl">
-        <div className="border-b border-[#d6b878]/20 pb-8">
+        <div className="border-b border-[#B8955A]/30 pb-8">
           <Link
             href="/cart"
-            className="inline-flex rounded-xl border border-[#d6b878]/25 bg-gradient-to-b from-[#d6b878]/10 to-[#4b3621]/20 px-4 py-2.5 text-sm text-[#b8a99a] shadow-[inset_0_1px_0_rgba(255,255,255,0.1)] transition hover:border-[#d6b878]/50 hover:bg-[#4b3621]/40 hover:text-[#ead4a0] active:scale-95"
+            className="inline-flex rounded-xl border border-[#B8955A]/40 bg-gradient-to-b from-[#B8955A]/10 to-[#B8955A]/5 px-4 py-2.5 text-sm text-[#1F2A3C]/72 shadow-[inset_0_1px_0_rgba(255,255,255,0.1)] transition hover:border-[#B8955A]/75 hover:bg-[#B8955A]/10 hover:text-[#8A6A33] active:scale-95"
           >
             ← Nazad na korpu
           </Link>
 
           <div className="mt-8">
-            <p className="text-xs font-medium uppercase tracking-[0.3em] text-[#d6b878]">
+            <p className="text-xs font-medium uppercase tracking-[0.3em] text-[#8A6A33]">
               WATCH STORE
             </p>
 
@@ -427,7 +427,7 @@ export default function CheckoutPage() {
               Potvrda porudžbine
             </h1>
 
-            <p className="mt-3 max-w-2xl text-base leading-7 text-[#b8a99a]">
+            <p className="mt-3 max-w-2xl text-base leading-7 text-[#1F2A3C]/72">
               Unesi podatke za dostavu. Plaćanje se vrši pouzećem prilikom
               preuzimanja.
             </p>
@@ -437,10 +437,10 @@ export default function CheckoutPage() {
         <div className="mt-10 grid gap-8 lg:grid-cols-[1fr_360px] lg:items-start">
           <form
             onSubmit={handleSubmit}
-            className="rounded-[2rem] border border-[#d6b878]/20 bg-gradient-to-br from-[#30231b] to-[#241a14] p-6 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] sm:p-8"
+            className="rounded-[2rem] border border-[#B8955A]/30 bg-gradient-to-br from-[#FFFFFF] to-[#F8F4E7] p-6 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] sm:p-8"
           >
             <div>
-              <p className="text-xs font-medium uppercase tracking-[0.22em] text-[#d6b878]">
+              <p className="text-xs font-medium uppercase tracking-[0.22em] text-[#8A6A33]">
                 01
               </p>
 
@@ -448,7 +448,7 @@ export default function CheckoutPage() {
                 Podaci za dostavu
               </h2>
 
-              <p className="mt-2 text-sm leading-6 text-[#b8a99a]">
+              <p className="mt-2 text-sm leading-6 text-[#1F2A3C]/72">
                 Unesi tačne podatke kako bismo mogli da te kontaktiramo.
               </p>
             </div>
@@ -457,7 +457,7 @@ export default function CheckoutPage() {
               <div>
                 <label
                   htmlFor="fullName"
-                  className="mb-2 block text-sm font-medium text-[#e2d4c2]"
+                  className="mb-2 block text-sm font-medium text-[#1F2A3C]"
                 >
                   Ime i prezime
                 </label>
@@ -468,7 +468,7 @@ export default function CheckoutPage() {
                   onChange={(event) => setFullName(event.target.value)}
                   required
                   autoComplete="name"
-                  className="w-full rounded-2xl border border-[#d6b878]/20 bg-[#17110d]/80 px-4 py-3.5 text-[#f4ebdd] outline-none transition placeholder:text-[#766658] focus:border-[#d6b878]/65 focus:ring-1 focus:ring-[#d6b878]/20"
+                  className="w-full rounded-2xl border border-[#B8955A]/30 bg-[#FFFFFF]/80 px-4 py-3.5 text-[#1F2A3C] outline-none transition placeholder:text-[#1F2A3C]/50 focus:border-[#B8955A]/100 focus:ring-1 focus:ring-[#B8955A]/30"
                   placeholder="Petar Petrović"
                 />
               </div>
@@ -476,7 +476,7 @@ export default function CheckoutPage() {
               <div>
                 <label
                   htmlFor="phone"
-                  className="mb-2 block text-sm font-medium text-[#e2d4c2]"
+                  className="mb-2 block text-sm font-medium text-[#1F2A3C]"
                 >
                   Telefon
                 </label>
@@ -488,7 +488,7 @@ export default function CheckoutPage() {
                   onChange={(event) => setPhone(event.target.value)}
                   required
                   autoComplete="tel"
-                  className="w-full rounded-2xl border border-[#d6b878]/20 bg-[#17110d]/80 px-4 py-3.5 text-[#f4ebdd] outline-none transition placeholder:text-[#766658] focus:border-[#d6b878]/65 focus:ring-1 focus:ring-[#d6b878]/20"
+                  className="w-full rounded-2xl border border-[#B8955A]/30 bg-[#FFFFFF]/80 px-4 py-3.5 text-[#1F2A3C] outline-none transition placeholder:text-[#1F2A3C]/50 focus:border-[#B8955A]/100 focus:ring-1 focus:ring-[#B8955A]/30"
                   placeholder="+381 6X XXX XXXX"
                 />
               </div>
@@ -496,7 +496,7 @@ export default function CheckoutPage() {
               <div>
                 <label
                   htmlFor="email"
-                  className="mb-2 block text-sm font-medium text-[#e2d4c2]"
+                  className="mb-2 block text-sm font-medium text-[#1F2A3C]"
                 >
                   Email
                 </label>
@@ -508,7 +508,7 @@ export default function CheckoutPage() {
                   onChange={(event) => setEmail(event.target.value)}
                   required
                   autoComplete="email"
-                  className="w-full rounded-2xl border border-[#d6b878]/20 bg-[#17110d]/80 px-4 py-3.5 text-[#f4ebdd] outline-none transition placeholder:text-[#766658] focus:border-[#d6b878]/65 focus:ring-1 focus:ring-[#d6b878]/20"
+                  className="w-full rounded-2xl border border-[#B8955A]/30 bg-[#FFFFFF]/80 px-4 py-3.5 text-[#1F2A3C] outline-none transition placeholder:text-[#1F2A3C]/50 focus:border-[#B8955A]/100 focus:ring-1 focus:ring-[#B8955A]/30"
                   placeholder="petar@email.com"
                 />
               </div>
@@ -516,7 +516,7 @@ export default function CheckoutPage() {
               <div>
                 <label
                   htmlFor="address"
-                  className="mb-2 block text-sm font-medium text-[#e2d4c2]"
+                  className="mb-2 block text-sm font-medium text-[#1F2A3C]"
                 >
                   Adresa
                 </label>
@@ -527,7 +527,7 @@ export default function CheckoutPage() {
                   onChange={(event) => setAddress(event.target.value)}
                   required
                   autoComplete="street-address"
-                  className="w-full rounded-2xl border border-[#d6b878]/20 bg-[#17110d]/80 px-4 py-3.5 text-[#f4ebdd] outline-none transition placeholder:text-[#766658] focus:border-[#d6b878]/65 focus:ring-1 focus:ring-[#d6b878]/20"
+                  className="w-full rounded-2xl border border-[#B8955A]/30 bg-[#FFFFFF]/80 px-4 py-3.5 text-[#1F2A3C] outline-none transition placeholder:text-[#1F2A3C]/50 focus:border-[#B8955A]/100 focus:ring-1 focus:ring-[#B8955A]/30"
                   placeholder="Ulica i broj"
                 />
               </div>
@@ -535,7 +535,7 @@ export default function CheckoutPage() {
               <div>
                 <label
                   htmlFor="settlement"
-                  className="mb-2 block text-sm font-medium text-[#e2d4c2]"
+                  className="mb-2 block text-sm font-medium text-[#1F2A3C]"
                 >
                   Mesto / naselje
                 </label>
@@ -546,7 +546,7 @@ export default function CheckoutPage() {
                   onChange={(event) => setSettlement(event.target.value)}
                   required
                   autoComplete="address-line2"
-                  className="w-full rounded-2xl border border-[#d6b878]/20 bg-[#17110d]/80 px-4 py-3.5 text-[#f4ebdd] outline-none transition placeholder:text-[#766658] focus:border-[#d6b878]/65 focus:ring-1 focus:ring-[#d6b878]/20"
+                  className="w-full rounded-2xl border border-[#B8955A]/30 bg-[#FFFFFF]/80 px-4 py-3.5 text-[#1F2A3C] outline-none transition placeholder:text-[#1F2A3C]/50 focus:border-[#B8955A]/100 focus:ring-1 focus:ring-[#B8955A]/30"
                   placeholder="npr. Mladenovac"
                 />
               </div>
@@ -555,7 +555,7 @@ export default function CheckoutPage() {
                 <div className="relative">
                   <label
                     htmlFor="city"
-                    className="mb-2 block text-sm font-medium text-[#e2d4c2]"
+                    className="mb-2 block text-sm font-medium text-[#1F2A3C]"
                   >
                     Grad
                   </label>
@@ -576,12 +576,12 @@ export default function CheckoutPage() {
                     }}
                     required
                     autoComplete="address-level2"
-                    className="w-full rounded-2xl border border-[#d6b878]/20 bg-[#17110d]/80 px-4 py-3.5 text-[#f4ebdd] outline-none transition placeholder:text-[#766658] focus:border-[#d6b878]/65 focus:ring-1 focus:ring-[#d6b878]/20"
+                    className="w-full rounded-2xl border border-[#B8955A]/30 bg-[#FFFFFF]/80 px-4 py-3.5 text-[#1F2A3C] outline-none transition placeholder:text-[#1F2A3C]/50 focus:border-[#B8955A]/100 focus:ring-1 focus:ring-[#B8955A]/30"
                     placeholder="npr. Beograd"
                   />
 
                   {showCitySuggestions && citySuggestions.length > 0 && (
-                    <ul className="absolute z-20 mt-2 max-h-56 w-full overflow-y-auto rounded-2xl border border-[#d6b878]/25 bg-[#30231b] shadow-xl">
+                    <ul className="absolute z-20 mt-2 max-h-56 w-full overflow-y-auto rounded-2xl border border-[#B8955A]/40 bg-[#FFFFFF] shadow-xl">
                       {citySuggestions.map((entry) => (
                         <li key={entry.name}>
                           <button
@@ -589,11 +589,11 @@ export default function CheckoutPage() {
                             onMouseDown={() =>
                               selectCitySuggestion(entry)
                             }
-                            className="flex min-h-12 w-full items-center justify-between gap-4 px-4 py-3 text-left text-sm transition hover:bg-[#4b3621] hover:text-[#ead4a0]"
+                            className="flex min-h-12 w-full items-center justify-between gap-4 px-4 py-3 text-left text-sm transition hover:bg-[#B8955A]/15 hover:text-[#8A6A33]"
                           >
                             <span>{entry.name}</span>
 
-                            <span className="text-[#b8a99a]">
+                            <span className="text-[#1F2A3C]/72">
                               {entry.postalCode}
                             </span>
                           </button>
@@ -606,7 +606,7 @@ export default function CheckoutPage() {
                 <div>
                   <label
                     htmlFor="postalCode"
-                    className="mb-2 block text-sm font-medium text-[#e2d4c2]"
+                    className="mb-2 block text-sm font-medium text-[#1F2A3C]"
                   >
                     Poštanski broj
                   </label>
@@ -618,15 +618,15 @@ export default function CheckoutPage() {
                     required
                     inputMode="numeric"
                     autoComplete="postal-code"
-                    className="w-full rounded-2xl border border-[#d6b878]/20 bg-[#17110d]/80 px-4 py-3.5 text-[#f4ebdd] outline-none transition placeholder:text-[#766658] focus:border-[#d6b878]/65 focus:ring-1 focus:ring-[#d6b878]/20"
+                    className="w-full rounded-2xl border border-[#B8955A]/30 bg-[#FFFFFF]/80 px-4 py-3.5 text-[#1F2A3C] outline-none transition placeholder:text-[#1F2A3C]/50 focus:border-[#B8955A]/100 focus:ring-1 focus:ring-[#B8955A]/30"
                     placeholder="37000"
                   />
                 </div>
               </div>
             </div>
 
-            <div className="mt-8 border-t border-[#d6b878]/20 pt-7">
-              <p className="text-xs font-medium uppercase tracking-[0.22em] text-[#d6b878]">
+            <div className="mt-8 border-t border-[#B8955A]/30 pt-7">
+              <p className="text-xs font-medium uppercase tracking-[0.22em] text-[#8A6A33]">
                 02
               </p>
 
@@ -634,15 +634,15 @@ export default function CheckoutPage() {
                 Način plaćanja
               </h2>
 
-              <div className="mt-5 flex items-start gap-4 rounded-2xl border border-[#d6b878]/25 bg-[#17110d]/60 p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
-                <div className="mt-0.5 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full border border-[#ead4a0] bg-[#ead4a0]">
-                  <div className="h-2 w-2 rounded-full bg-[#211812]" />
+              <div className="mt-5 flex items-start gap-4 rounded-2xl border border-[#B8955A]/40 bg-[#FFFFFF]/60 p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
+                <div className="mt-0.5 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full border border-[#B8955A]/100 bg-[#B8955A]">
+                  <div className="h-2 w-2 rounded-full bg-[#F8F4E7]" />
                 </div>
 
                 <div>
                   <p className="font-semibold">Plaćanje pouzećem</p>
 
-                  <p className="mt-1 text-sm leading-6 text-[#b8a99a]">
+                  <p className="mt-1 text-sm leading-6 text-[#1F2A3C]/72">
                     Plaćaš prilikom preuzimanja pošiljke.
                   </p>
                 </div>
@@ -650,7 +650,7 @@ export default function CheckoutPage() {
             </div>
 
             {message && (
-              <div className="mt-6 rounded-2xl border border-[#c46a2d]/40 bg-[#c46a2d]/10 px-4 py-3 text-sm leading-6 text-[#e5a06d]">
+              <div className="mt-6 rounded-2xl border border-[#c46a2d]/40 bg-[#c46a2d]/10 px-4 py-3 text-sm leading-6 text-[#B4501F]">
                 {message}
               </div>
             )}
@@ -658,18 +658,18 @@ export default function CheckoutPage() {
             <button
               type="submit"
               disabled={loading}
-              className="mt-8 flex w-full items-center justify-center rounded-2xl border border-[#ead4a0]/50 bg-gradient-to-b from-[#ead4a0] via-[#d6b878] to-[#bd9650] px-6 py-4 font-semibold text-[#211812] shadow-[inset_0_1px_0_rgba(255,255,255,0.45),0_5px_16px_rgba(0,0,0,0.22)] transition hover:brightness-110 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
+              className="mt-8 flex w-full items-center justify-center rounded-2xl border border-[#B8955A]/75 bg-gradient-to-b from-[#1F2A3C] via-[#1F2A3C] to-[#1F2A3C] px-6 py-4 font-semibold text-[#F8F4E7] shadow-[inset_0_1px_0_rgba(255,255,255,0.45),0_5px_16px_rgba(31,42,60,0.132)] transition hover:brightness-110 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
             >
               {loading ? "Šaljem porudžbinu..." : "Potvrdi porudžbinu"}
             </button>
 
-            <p className="mt-4 text-center text-xs leading-5 text-[#8f8071]">
+            <p className="mt-4 text-center text-xs leading-5 text-[#1F2A3C]/60">
               Klikom na dugme potvrđuješ da su uneseni podaci tačni.
             </p>
           </form>
 
-          <aside className="rounded-[2rem] border border-[#d6b878]/25 bg-gradient-to-br from-[#30231b] to-[#211812] p-6 shadow-[inset_0_1px_0_rgba(255,255,255,0.07)] lg:sticky lg:top-24">
-            <p className="text-xs font-medium uppercase tracking-[0.22em] text-[#d6b878]">
+          <aside className="rounded-[2rem] border border-[#B8955A]/40 bg-gradient-to-br from-[#FFFFFF] to-[#F8F4E7] p-6 shadow-[inset_0_1px_0_rgba(255,255,255,0.07)] lg:sticky lg:top-24">
+            <p className="text-xs font-medium uppercase tracking-[0.22em] text-[#8A6A33]">
               Pregled
             </p>
 
@@ -680,7 +680,7 @@ export default function CheckoutPage() {
             <div className="mt-6 space-y-4">
               {items.map((item) => (
                 <div key={item.id} className="flex gap-4">
-                  <div className="h-16 w-16 flex-shrink-0 overflow-hidden rounded-xl border border-[#d6b878]/15 bg-[#4b3621]/40">
+                  <div className="h-16 w-16 flex-shrink-0 overflow-hidden rounded-xl border border-[#B8955A]/20 bg-[#B8955A]/10">
                     {item.image ? (
                       <img
                         src={item.image}
@@ -688,7 +688,7 @@ export default function CheckoutPage() {
                         className="h-full w-full object-cover"
                       />
                     ) : (
-                      <div className="flex h-full items-center justify-center text-[10px] text-[#b8a99a]">
+                      <div className="flex h-full items-center justify-center text-[10px] text-[#1F2A3C]/72">
                         Slika sata
                       </div>
                     )}
@@ -699,12 +699,12 @@ export default function CheckoutPage() {
                       {item.name}
                     </p>
 
-                    <p className="mt-1 text-xs text-[#b8a99a]">
+                    <p className="mt-1 text-xs text-[#1F2A3C]/72">
                       {item.quantity} × {item.price.toFixed(2)} RSD
                     </p>
                   </div>
 
-                  <p className="flex-shrink-0 text-sm font-semibold text-[#ead4a0]">
+                  <p className="flex-shrink-0 text-sm font-semibold text-[#8A6A33]">
                     {(item.price * item.quantity).toFixed(2)} RSD
                   </p>
                 </div>
@@ -712,55 +712,55 @@ export default function CheckoutPage() {
             </div>
 
             {/* VIP PROGRAM */}
-            <div className="mt-6 rounded-2xl border border-[#d6b878]/30 bg-[#17110d]/65 p-5">
+            <div className="mt-6 rounded-2xl border border-[#B8955A]/45 bg-[#FFFFFF]/65 p-5">
               <div className="flex items-center justify-between gap-3">
                 <div>
-                  <p className="text-xs font-medium uppercase tracking-[0.2em] text-[#d6b878]">
+                  <p className="text-xs font-medium uppercase tracking-[0.2em] text-[#8A6A33]">
                     WATCH STORE
                   </p>
 
-                  <h3 className="mt-1 text-lg font-semibold text-[#ead4a0]">
+                  <h3 className="mt-1 text-lg font-semibold text-[#8A6A33]">
                     VIP program
                   </h3>
                 </div>
 
-                <span className="rounded-full border border-[#d6b878]/35 bg-[#d6b878]/10 px-3 py-1 text-xs font-semibold text-[#ead4a0]">
+                <span className="rounded-full border border-[#B8955A]/50 bg-[#B8955A]/10 px-3 py-1 text-xs font-semibold text-[#8A6A33]">
                   {vipLoading ? "..." : vipStatus?.vip_tier || "VIP"}
                 </span>
               </div>
 
               {vipLoading ? (
-                <p className="mt-4 text-sm text-[#b8a99a]">
+                <p className="mt-4 text-sm text-[#1F2A3C]/72">
                   Učitavanje VIP statusa...
                 </p>
               ) : vipStatus ? (
                 <>
                   <div className="mt-4 flex items-center justify-between gap-3">
-                    <span className="text-sm text-[#b8a99a]">
+                    <span className="text-sm text-[#1F2A3C]/72">
                       Raspoloživi poeni
                     </span>
 
-                    <span className="text-xl font-bold text-[#ead4a0]">
+                    <span className="text-xl font-bold text-[#8A6A33]">
                       {vipStatus.points_balance.toLocaleString("sr-RS")}
                     </span>
                   </div>
 
-                  <p className="mt-1 text-xs text-[#8f8071]">
+                  <p className="mt-1 text-xs text-[#1F2A3C]/60">
                     Vrednost poena:{" "}
                     {vipStatus.points_value.toLocaleString("sr-RS")} RSD
                   </p>
 
                   {appliedCoupon && (
-                    <div className="mt-5 rounded-xl border border-[#d6b878]/20 bg-[#211812]/70 p-4">
-                      <p className="text-sm text-[#b8a99a]">
+                    <div className="mt-5 rounded-xl border border-[#B8955A]/30 bg-[#F8F4E7]/70 p-4">
+                      <p className="text-sm text-[#1F2A3C]/72">
                         Već koristiš kupon{" "}
-                        <span className="font-mono font-semibold text-[#ead4a0]">
+                        <span className="font-mono font-semibold text-[#8A6A33]">
                           {appliedCoupon.code}
                         </span>
                         .
                       </p>
 
-                      <p className="mt-2 text-xs leading-5 text-[#8f8071]">
+                      <p className="mt-2 text-xs leading-5 text-[#1F2A3C]/60">
                         Možeš koristiti kupon ili VIP poene, ali ne oba
                         istovremeno.
                       </p>
@@ -768,22 +768,22 @@ export default function CheckoutPage() {
                       <button
                         type="button"
                         onClick={handleRemoveCouponForVip}
-                        className="mt-3 w-full rounded-xl border border-[#d6b878]/40 bg-[#d6b878]/10 px-4 py-2.5 text-xs font-semibold text-[#ead4a0] transition hover:bg-[#d6b878]/20"
+                        className="mt-3 w-full rounded-xl border border-[#B8955A]/60 bg-[#B8955A]/10 px-4 py-2.5 text-xs font-semibold text-[#8A6A33] transition hover:bg-[#B8955A]/20"
                       >
                         Ukloni kupon i koristi VIP poene
                       </button>
                     </div>
                   )}
 
-                  <div className="mt-5 border-t border-[#d6b878]/15 pt-4">
+                  <div className="mt-5 border-t border-[#B8955A]/20 pt-4">
                     <label
                       htmlFor="vipPoints"
-                      className="block text-sm font-medium text-[#e2d4c2]"
+                      className="block text-sm font-medium text-[#1F2A3C]"
                     >
                       Koliko poena želiš da iskoristiš?
                     </label>
 
-                    <p className="mt-1 text-xs leading-5 text-[#8f8071]">
+                    <p className="mt-1 text-xs leading-5 text-[#1F2A3C]/60">
                       50 poena = 100 RSD popusta.
                     </p>
 
@@ -802,7 +802,7 @@ export default function CheckoutPage() {
                         onChange={(event) =>
                           setVipPointsToRedeem(Number(event.target.value))
                         }
-                        className="min-w-0 flex-1 rounded-xl border border-[#d6b878]/25 bg-[#211812] px-4 py-3 text-[#f4ebdd] outline-none focus:border-[#d6b878]/60 disabled:cursor-not-allowed disabled:opacity-50"
+                        className="min-w-0 flex-1 rounded-xl border border-[#B8955A]/40 bg-[#1F2A3C] px-4 py-3 text-[#F8F4E7] outline-none focus:border-[#B8955A]/90 disabled:cursor-not-allowed disabled:opacity-50"
                       />
 
                       <button
@@ -814,7 +814,7 @@ export default function CheckoutPage() {
                         onClick={() =>
                           setVipPointsToRedeem(maximumRedeemablePoints)
                         }
-                        className="rounded-xl border border-[#d6b878]/35 px-3 py-3 text-xs font-semibold text-[#ead4a0] transition hover:bg-[#d6b878]/10 disabled:cursor-not-allowed disabled:opacity-40"
+                        className="rounded-xl border border-[#B8955A]/50 px-3 py-3 text-xs font-semibold text-[#8A6A33] transition hover:bg-[#B8955A]/10 disabled:cursor-not-allowed disabled:opacity-40"
                       >
                         Maksimum
                       </button>
@@ -822,7 +822,7 @@ export default function CheckoutPage() {
 
                     {vipPointsToRedeem > 0 && (
                       <div className="mt-3 flex items-center justify-between gap-3 text-sm">
-                        <span className="text-[#b8a99a]">
+                        <span className="text-[#1F2A3C]/72">
                           VIP popust
                         </span>
 
@@ -834,13 +834,13 @@ export default function CheckoutPage() {
 
                     {maximumRedeemablePoints < 50 &&
                       vipPointsToRedeem === 0 && (
-                        <p className="mt-3 text-xs leading-5 text-[#8f8071]">
+                        <p className="mt-3 text-xs leading-5 text-[#1F2A3C]/60">
                           Trenutno nemaš dovoljno poena za ovu porudžbinu.
                         </p>
                       )}
 
                     {vipMessage && (
-                      <p className="mt-3 text-xs leading-5 text-[#d6b878]">
+                      <p className="mt-3 text-xs leading-5 text-[#8A6A33]">
                         {vipMessage}
                       </p>
                     )}
@@ -849,7 +849,7 @@ export default function CheckoutPage() {
                       <button
                         type="button"
                         onClick={() => setVipPointsToRedeem(0)}
-                        className="mt-3 text-xs text-[#b8a99a] underline underline-offset-4 transition hover:text-[#ead4a0]"
+                        className="mt-3 text-xs text-[#1F2A3C]/72 underline underline-offset-4 transition hover:text-[#8A6A33]"
                       >
                         Ukloni VIP poene
                       </button>
@@ -858,14 +858,14 @@ export default function CheckoutPage() {
                 </>
               ) : (
                 <div className="mt-4">
-                  <p className="text-sm leading-6 text-[#b8a99a]">
+                  <p className="text-sm leading-6 text-[#1F2A3C]/72">
                     Prijavi se na svoj nalog da bi sakupljao i koristio VIP
                     poene.
                   </p>
 
                   <Link
                     href="/nalog/prijava"
-                    className="mt-3 inline-flex text-sm font-semibold text-[#ead4a0] underline underline-offset-4"
+                    className="mt-3 inline-flex text-sm font-semibold text-[#8A6A33] underline underline-offset-4"
                   >
                     Prijavi se
                   </Link>
@@ -873,9 +873,9 @@ export default function CheckoutPage() {
               )}
             </div>
 
-            <div className="mt-6 space-y-3 border-t border-[#d6b878]/20 pt-6">
+            <div className="mt-6 space-y-3 border-t border-[#B8955A]/30 pt-6">
               <div className="flex items-center justify-between text-sm">
-                <span className="text-[#b8a99a]">Proizvodi</span>
+                <span className="text-[#1F2A3C]/72">Proizvodi</span>
 
                 <span>
                   {totalQuantity}{" "}
@@ -884,7 +884,7 @@ export default function CheckoutPage() {
               </div>
 
               <div className="flex items-center justify-between text-sm">
-                <span className="text-[#b8a99a]">Plaćanje</span>
+                <span className="text-[#1F2A3C]/72">Plaćanje</span>
 
                 <span>Pouzećem</span>
               </div>
@@ -892,15 +892,15 @@ export default function CheckoutPage() {
               {appliedCoupon && (
                 <>
                   <div className="flex items-center justify-between gap-3 text-sm">
-                    <span className="text-[#b8a99a]">Kupon</span>
+                    <span className="text-[#1F2A3C]/72">Kupon</span>
 
-                    <span className="font-mono text-[#ead4a0]">
+                    <span className="font-mono text-[#8A6A33]">
                       {appliedCoupon.code}
                     </span>
                   </div>
 
                   <div className="flex items-center justify-between text-sm">
-                    <span className="text-[#b8a99a]">Popust</span>
+                    <span className="text-[#1F2A3C]/72">Popust</span>
 
                     <span className="font-semibold text-green-400">
                       -{couponDiscount.toFixed(2)} RSD
@@ -911,7 +911,7 @@ export default function CheckoutPage() {
 
               {vipPointsToRedeem > 0 && (
                 <div className="flex items-center justify-between text-sm">
-                  <span className="text-[#b8a99a]">
+                  <span className="text-[#1F2A3C]/72">
                     Iskorišćeni VIP poeni
                   </span>
 
@@ -922,21 +922,21 @@ export default function CheckoutPage() {
               )}
             </div>
 
-            <div className="mt-6 border-t border-[#d6b878]/20 pt-6">
+            <div className="mt-6 border-t border-[#B8955A]/30 pt-6">
               {(appliedCoupon || vipPointsToRedeem > 0) && (
                 <div className="mb-3 flex items-center justify-between text-sm">
-                  <span className="text-[#b8a99a]">
+                  <span className="text-[#1F2A3C]/72">
                     Iznos pre popusta
                   </span>
 
-                  <span className="text-[#b8a99a] line-through">
+                  <span className="text-[#1F2A3C]/72 line-through">
                     {totalPrice.toFixed(2)} RSD
                   </span>
                 </div>
               )}
 
               <div className="flex items-center justify-between text-sm">
-                <span className="text-[#b8a99a]">
+                <span className="text-[#1F2A3C]/72">
                   Iznos proizvoda
                 </span>
 
@@ -944,17 +944,17 @@ export default function CheckoutPage() {
               </div>
 
               <div className="mt-3 flex items-center justify-between text-sm">
-                <span className="text-[#b8a99a]">Dostava</span>
+                <span className="text-[#1F2A3C]/72">Dostava</span>
 
                 <span>{SHIPPING_COST.toFixed(2)} RSD</span>
               </div>
 
-              <div className="mt-5 border-t border-[#d6b878]/15 pt-5">
-                <p className="text-xs uppercase tracking-[0.18em] text-[#b8a99a]">
+              <div className="mt-5 border-t border-[#B8955A]/20 pt-5">
+                <p className="text-xs uppercase tracking-[0.18em] text-[#1F2A3C]/72">
                   Ukupno za plaćanje
                 </p>
 
-                <p className="mt-2 text-4xl font-bold tracking-tight text-[#ead4a0]">
+                <p className="mt-2 text-4xl font-bold tracking-tight text-[#8A6A33]">
                   {totalWithShipping.toFixed(2)} RSD
                 </p>
               </div>

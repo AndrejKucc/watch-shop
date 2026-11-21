@@ -12,12 +12,12 @@ export default async function NovcaniciPage() {
   );
 
   return (
-    <main className="min-h-screen bg-[#211812] text-[#f4ebdd]">
-      <header className="border-b border-[#d6b878]/20 bg-gradient-to-b from-[#30231b] to-[#211812]">
+    <main className="min-h-screen bg-[#F8F4E7] text-[#1F2A3C]">
+      <header className="border-b border-[#B8955A]/30 bg-gradient-to-b from-[#FFFFFF] to-[#F8F4E7]">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5 lg:px-8">
           <Link
             href="/"
-            className="text-xl font-bold tracking-[0.2em] text-[#ead4a0] transition-colors hover:text-[#d6b878]"
+            className="text-xl font-bold tracking-[0.2em] text-[#8A6A33] transition-colors hover:text-[#8A6A33]"
           >
             WATCH STORE
           </Link>
@@ -28,15 +28,15 @@ export default async function NovcaniciPage() {
 
       <section className="mx-auto max-w-7xl px-6 pb-20 pt-16 lg:px-8">
         <div className="max-w-3xl">
-          <p className="text-sm font-medium uppercase tracking-[0.25em] text-[#c49a55]">
+          <p className="text-sm font-medium uppercase tracking-[0.25em] text-[#8A6A33]">
             Dodaci
           </p>
 
-          <h1 className="mt-4 text-5xl font-semibold tracking-tight text-[#f4ebdd] sm:text-6xl">
+          <h1 className="mt-4 text-5xl font-semibold tracking-tight text-[#1F2A3C] sm:text-6xl">
             Novčanici
           </h1>
 
-          <p className="mt-6 max-w-2xl text-base leading-7 text-[#b8a99a]">
+          <p className="mt-6 max-w-2xl text-base leading-7 text-[#1F2A3C]/72">
             Pogledaj naš izbor novčanika i pronađi praktičan i
             elegantan dodatak za svaki dan.
           </p>

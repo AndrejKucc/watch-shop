@@ -67,16 +67,16 @@ const categories = [
 
 export default function SiteFooter() {
   return (
-    <footer className="border-t border-[#d6b878]/20 bg-[#17110d]/60">
+    <footer className="border-t border-[#B8955A]/20 bg-[#1F2A3C]">
       <div className="mx-auto max-w-7xl px-6 py-10 lg:px-8">
         <div className="grid grid-cols-3 gap-y-8 sm:grid-cols-6">
           {categories.map((category) => (
             <Link
               key={category.href}
               href={category.href}
-              className="group flex flex-col items-center gap-3 text-[#a99987] transition-colors duration-300 hover:text-[#d6b878]"
+              className="group flex flex-col items-center gap-3 text-[#F8F4E7]/65 transition-colors duration-300 hover:text-[#B8955A]"
             >
-              <div className="flex h-12 w-12 items-center justify-center rounded-full border border-[#d6b878]/20 bg-[#d6b878]/[0.04] transition-all duration-300 group-hover:border-[#d6b878]/60 group-hover:bg-[#d6b878]/10 group-hover:scale-110">
+              <div className="flex h-12 w-12 items-center justify-center rounded-full border border-[#B8955A]/20 bg-[#B8955A]/4 transition-all duration-300 group-hover:border-[#B8955A]/60 group-hover:bg-[#B8955A]/10 group-hover:scale-110">
                 {category.icon}
               </div>
 
@@ -87,7 +87,7 @@ export default function SiteFooter() {
           ))}
         </div>
 
-        <div className="mt-10 border-t border-[#d6b878]/15 pt-6 text-center text-xs text-[#8f8071]">
+        <div className="mt-10 border-t border-[#B8955A]/15 pt-6 text-center text-xs text-[#F8F4E7]/50">
           © {new Date().getFullYear()} WATCH STORE. Sva prava zadržana.
         </div>
       </div>

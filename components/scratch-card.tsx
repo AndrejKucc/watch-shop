@@ -27,9 +27,9 @@ export default function ScratchCard({
     canvas.height = 250;
 
     const gradient = ctx.createLinearGradient(0, 0, 700, 250);
-    gradient.addColorStop(0, "#ead4a0");
-    gradient.addColorStop(0.5, "#b99a60");
-    gradient.addColorStop(1, "#d6b878");
+    gradient.addColorStop(0, "#B8955A");
+    gradient.addColorStop(0.5, "#F8F4E7");
+    gradient.addColorStop(1, "#B8955A");
 
     ctx.fillStyle = gradient;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -38,7 +38,7 @@ export default function ScratchCard({
       ctx.fillStyle =
         Math.random() > 0.5
           ? "rgba(255,255,255,0.12)"
-          : "rgba(70,45,20,0.08)";
+          : "rgba(31,42,60,0.08)";
 
       ctx.fillRect(
         Math.random() * canvas.width,
@@ -48,7 +48,7 @@ export default function ScratchCard({
       );
     }
 
-    ctx.fillStyle = "#30231b";
+    ctx.fillStyle = "#1F2A3C";
     ctx.textAlign = "center";
     ctx.font = "bold 32px Arial";
     ctx.fillText("WATCH STORE", 350, 100);
@@ -117,25 +117,25 @@ export default function ScratchCard({
   }
 
   return (
-    <div className="mt-8 rounded-3xl border border-[#d6b878]/30 bg-[#17110d]/70 p-5 text-center sm:p-7">
-      <p className="text-xs font-medium uppercase tracking-[0.25em] text-[#d6b878]">
+    <div className="mt-8 rounded-3xl border border-[#B8955A]/45 bg-[#FFFFFF]/70 p-5 text-center sm:p-7">
+      <p className="text-xs font-medium uppercase tracking-[0.25em] text-[#8A6A33]">
         Tvoj poklon za sledeću kupovinu
       </p>
 
-      <h2 className="mt-3 text-2xl font-semibold text-[#f4ebdd]">
+      <h2 className="mt-3 text-2xl font-semibold text-[#1F2A3C]">
         Osvojio si {discountPercent}% popusta!
       </h2>
 
-      <div className="relative mx-auto mt-6 max-w-xl overflow-hidden rounded-2xl border border-[#d6b878]/30 bg-gradient-to-br from-[#30231b] to-[#211812] p-6">
-        <p className="text-xs uppercase tracking-[0.2em] text-[#b8a99a]">
+      <div className="relative mx-auto mt-6 max-w-xl overflow-hidden rounded-2xl border border-[#B8955A]/45 bg-gradient-to-br from-[#FFFFFF] to-[#F8F4E7] p-6">
+        <p className="text-xs uppercase tracking-[0.2em] text-[#1F2A3C]/72">
           Tvoj kupon
         </p>
 
-        <p className="mt-3 font-mono text-3xl font-bold tracking-widest text-[#ead4a0]">
+        <p className="mt-3 font-mono text-3xl font-bold tracking-widest text-[#8A6A33]">
           {code}
         </p>
 
-        <p className="mt-3 text-sm text-[#b8a99a]">
+        <p className="mt-3 text-sm text-[#1F2A3C]/72">
           Sačuvaj ovaj kod i iskoristi ga pri sledećoj kupovini.
         </p>
 
@@ -164,8 +164,8 @@ export default function ScratchCard({
         />
 
         {revealed && (
-          <div className="absolute inset-0 flex items-center justify-center bg-[#d6b878]/10">
-            <span className="rounded-full border border-[#d6b878]/40 bg-[#211812]/90 px-5 py-2 text-sm font-semibold text-[#ead4a0]">
+          <div className="absolute inset-0 flex items-center justify-center bg-[#B8955A]/10">
+            <span className="rounded-full border border-[#B8955A]/60 bg-[#1F2A3C]/90 px-5 py-2 text-sm font-semibold text-[#F8F4E7]">
               Kupon je otkriven!
             </span>
           </div>
@@ -173,14 +173,14 @@ export default function ScratchCard({
       </div>
 
       {!revealed ? (
-        <p className="mt-4 text-xs text-[#b8a99a]">
+        <p className="mt-4 text-xs text-[#1F2A3C]/72">
           Grebi površinu iznad koda da otkriješ svoj kupon.
         </p>
       ) : (
         <button
           type="button"
           onClick={copyCode}
-          className="mt-5 rounded-xl border border-[#ead4a0]/50 bg-gradient-to-b from-[#ead4a0] to-[#d6b878] px-6 py-3 font-semibold text-[#211812] transition hover:brightness-110 active:scale-95"
+          className="mt-5 rounded-xl border border-[#B8955A]/75 bg-gradient-to-b from-[#1F2A3C] to-[#1F2A3C] px-6 py-3 font-semibold text-[#F8F4E7] transition hover:brightness-110 active:scale-95"
         >
           {copied ? "Kod je kopiran!" : "Kopiraj kupon"}
         </button>

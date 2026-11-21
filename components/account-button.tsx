@@ -41,7 +41,7 @@ export function AccountButton() {
       href={loggedIn ? "/nalog" : "/nalog/prijava"}
       aria-label={loggedIn ? "Moj nalog" : "Prijava"}
       title={loggedIn ? "Moj nalog" : "Prijava"}
-     className={`inline-flex items-center justify-center rounded-xl border border-[#aebbd0]/35 bg-gradient-to-b from-[#2c3a52] to-[#1b2535] text-[#dce4ef] shadow-[inset_0_1px_0_rgba(220,228,239,0.06)] transition hover:border-[#aebbd0]/70 hover:bg-[#3e4c66] hover:text-white active:scale-95 ${
+     className={`inline-flex items-center justify-center rounded-xl border border-[#B8955A]/50 bg-gradient-to-b from-[#1F2A3C] to-[#1F2A3C] text-[#F8F4E7] shadow-[inset_0_1px_0_rgba(184,149,90,0.06)] transition hover:border-[#B8955A]/100 hover:bg-[#1F2A3C]/85 hover:text-white active:scale-95 ${
   loggedIn ? "h-11 w-11" : "min-w-[90px] px-4 py-2.5"
 }`}
     >
