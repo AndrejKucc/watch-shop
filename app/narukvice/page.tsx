@@ -47,7 +47,7 @@ export default async function NarukvicePage() {
           filterMode="accessories"
           productLabel="narukvice"
           searchPlaceholder="Pretraži narukvicu, brend ili model..."
-          showGenderFilter={false}
+          showGenderFilter={true}
         />
       </section>
 

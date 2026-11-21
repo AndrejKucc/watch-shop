@@ -47,7 +47,7 @@ export default async function OgrlicePage() {
           filterMode="accessories"
           productLabel="ogrlice"
           searchPlaceholder="Pretraži ogrlicu, brend ili model..."
-          showGenderFilter={false}
+         showGenderFilter={true}
         />
       </section>
 
