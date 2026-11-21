@@ -40,7 +40,7 @@ export default function ContactPage() {
             <div className="mt-6 rounded-2xl border border-[#d6b878]/15 bg-[#17110d]/60 px-5 py-4">
               <p className="text-sm text-[#a99987]">Email adresa</p>
               <p className="mt-1 text-base text-[#f4ebdd]">
-                Uskoro dostupno
+                info@watchstore.rs
               </p>
             </div>
           </section>
@@ -58,7 +58,7 @@ export default function ContactPage() {
             <div className="mt-6 rounded-2xl border border-[#d6b878]/15 bg-[#17110d]/60 px-5 py-4">
               <p className="text-sm text-[#a99987]">Broj telefona</p>
               <p className="mt-1 text-base text-[#f4ebdd]">
-                Uskoro dostupno
+                +381 63 707 3074
               </p>
             </div>
           </section>
