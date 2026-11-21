@@ -737,7 +737,7 @@ export default function CategoryFilter({
             </div>
           )}
 
-          {shouldShowGenderFilter && isWatchMode && (
+          {shouldShowGenderFilter && (
             <div>
               <p className={labelClass}>Kategorija</p>
 
@@ -765,6 +765,18 @@ export default function CategoryFilter({
             </div>
           )}
 
+          {isBasicMode && (
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              <FilterSelect
+                id="filter-brand-basic"
+                label="Brend"
+                value={brand}
+                onChange={setBrand}
+                options={brands}
+              />
+            </div>
+          )}
+
           {isWatchMode && (
             <div>
               <div className="mb-4 flex items-center gap-3">
@@ -772,7 +784,7 @@ export default function CategoryFilter({
                 <h3 className="text-sm font-semibold tracking-wide text-[#F5EEE3]">
                   Detalji satova
                 </h3>
-              </div>
+              </div> 
 
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 <FilterSelect id="filter-brand" label="Brend" value={brand} onChange={setBrand} options={brands} />
