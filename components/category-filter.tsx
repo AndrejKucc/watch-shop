@@ -762,7 +762,7 @@ export default function CategoryFilter({
                 <FilterSelect id="filter-bracelet-material" label="Materijal narukvice" value={braceletMaterial} onChange={setBraceletMaterial} options={braceletMaterials} />
                 <FilterSelect id="filter-water-resistance" label="Vodootpornost" value={waterResistance} onChange={setWaterResistance} options={waterResistances} />
                 <FilterSelect id="filter-chronograph" label="Hronograf" value={chronograph} onChange={setChronograph} options={chronographOptions} />
-                <FilterSelect id="filter-gmt" label="GMT" value={gmt} onChange={setGmt} options={gmtOptions} />
+                
               </div>
             </div>
           )}
