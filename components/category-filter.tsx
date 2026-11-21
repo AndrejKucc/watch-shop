@@ -67,6 +67,15 @@ const sortOptions = [
 function normalize(value: unknown) {
   return String(value ?? "").trim().toLocaleLowerCase("sr-RS");
 }
+function stableMixScore(id: string) {
+  let hash = 0;
+
+  for (let i = 0; i < id.length; i++) {
+    hash = (hash * 31 + id.charCodeAt(i)) | 0;
+  }
+
+  return hash;
+}
 
 function distinctValues(
   products: Product[],
@@ -392,23 +401,34 @@ export default function CategoryFilter({
         );
       })
       .sort((a, b) => {
-        if (sort === "price_asc") {
-          return Number(a.price) - Number(b.price);
-        }
+  if (sort === "price_asc") {
+    return Number(a.price) - Number(b.price);
+  }
 
-        if (sort === "price_desc") {
-          return Number(b.price) - Number(a.price);
-        }
+  if (sort === "price_desc") {
+    return Number(b.price) - Number(a.price);
+  }
 
-        if (sort === "name_asc") {
-          return a.name.localeCompare(b.name, "sr");
-        }
+  if (sort === "name_asc") {
+    return a.name.localeCompare(b.name, "sr");
+  }
 
-        const dateA = a.created_at ? new Date(a.created_at).getTime() : 0;
-        const dateB = b.created_at ? new Date(b.created_at).getTime() : 0;
+  // Početna stranica: stabilno izmešani proizvodi
+  if (isBasicMode) {
+    return stableMixScore(a.id) - stableMixScore(b.id);
+  }
 
-        return dateB - dateA;
-      });
+  // Ostale stranice: najnoviji proizvodi
+  const dateA = a.created_at
+    ? new Date(a.created_at).getTime()
+    : 0;
+
+  const dateB = b.created_at
+    ? new Date(b.created_at).getTime()
+    : 0;
+
+  return dateB - dateA;
+});
   }, [
     products,
     category,
