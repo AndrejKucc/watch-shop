@@ -398,7 +398,6 @@ export default function CategoryFilter({
         if (sort === "name_asc") {
           return a.name.localeCompare(b.name, "sr");
         }
-
         const dateA = a.created_at ? new Date(a.created_at).getTime() : 0;
         const dateB = b.created_at ? new Date(b.created_at).getTime() : 0;
 
@@ -862,7 +861,7 @@ export default function CategoryFilter({
                 className="ws-glass-control min-h-11 min-w-0 flex-1 rounded-xl bg-[#241A13]/80 px-3 text-sm text-[#F5EEE3] outline-none focus:border-[#D4AF7A] sm:flex-none"
               >
                 {sortOptions.map((option) => (
-                  <option key={option.value} value={option.value} className="bg-[#241A13]">
+                  <option key={option.value} value={option.value} className="bg-[#241A13}">
                     {option.label}
                   </option>
                 ))}
@@ -871,8 +870,7 @@ export default function CategoryFilter({
           </div>
         </div>
       </section>
-
-      <div className="mt-8 flex flex-col gap-4 sm:mt-10 sm:flex-row sm:items-end sm:justify-between">
+            <div className="mt-8 flex flex-col gap-4 sm:mt-10 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="text-xs font-medium uppercase tracking-[0.16em] text-[#B9A58C]">
             {hasActiveFilters ? "Rezultati pretrage" : `Kolekcija · ${productLabel}`}
@@ -1026,9 +1024,8 @@ export default function CategoryFilter({
                     </div>
 
                     {product.stock > 0 ? (
-                      <span className="shrink-0 text-right text-xs text-[#B9A58C]">
-                        {product.stock}{" "}
-                        {product.stock === 1 ? "komad" : "komada"}
+                      <span className="shrink-0 text-right text-xs text-[#D4AF7A]">
+                        Dostupno
                       </span>
                     ) : isWatchMode ? (
                       <RestockNotificationButton productId={product.id} />
