@@ -654,21 +654,21 @@ export default async function ProductPage({
                         {group.specifications.map(
                           (specification, specificationIndex) => (
                             <div
-                              key={specification.label}
-                              className={`grid grid-cols-[1fr_auto] items-start gap-6 py-4 ${
-                                specificationIndex > 0
-                                  ? "border-t border-[#d6b878]/10"
-                                  : ""
-                              }`}
-                            >
-                              <span className="text-sm text-[#b8a99a]">
-                                {specification.label}
-                              </span>
+  key={specification.label}
+  className={`grid grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)] items-start gap-4 py-4 ${
+    specificationIndex > 0
+      ? "border-t border-[#d6b878]/10"
+      : ""
+  }`}
+>
+  <span className="text-sm text-[#b8a99a]">
+    {specification.label}
+  </span>
 
-                              <span className="max-w-[55%] text-right text-sm font-medium text-[#f4ebdd]">
-                                {specification.value}
-                              </span>
-                            </div>
+  <span className="text-right text-sm font-medium text-[#f4ebdd] whitespace-normal break-normal">
+    {specification.value}
+  </span>
+</div>
                           )
                         )}
                       </div>
