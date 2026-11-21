@@ -286,8 +286,8 @@ export function WishlistButton({
         saved ? "Ukloni iz liste želja" : "Dodaj u listu želja"
       }
       title={saved ? "Ukloni iz liste želja" : "Dodaj u listu želja"}
-      className={`flex h-10 w-10 items-center justify-center rounded-full border border-[#c9a46a]/40 bg-[#211811]/90 text-xl transition hover:scale-110 hover:border-[#c9a46a] ${
-        saved ? "text-red-500" : "text-[#d8c5a5]"
+      className={`flex h-10 w-10 items-center justify-center rounded-full border border-[#aebbd0]/40 bg-[#1b2535]/90 text-xl transition hover:scale-110 hover:border-[#aebbd0] ${
+        saved ? "text-red-500" : "text-[#c9d3e3]"
       } ${className}`}
     >
       {saved ? "♥" : "♡"}
@@ -303,11 +303,11 @@ export function WishlistCountButton() {
       href="/wishlist"
       aria-label="Moja lista želja"
       title="Moja lista želja"
-      className="relative flex h-10 w-10 items-center justify-center rounded-full border border-[#c9a46a]/40 text-xl text-[#d8c5a5] transition hover:border-[#c9a46a]"
+      className="relative flex h-10 w-10 items-center justify-center rounded-full border border-[#aebbd0]/40 text-xl text-[#c9d3e3] transition hover:border-[#aebbd0]"
     >
       ♥
       {!loading && productIds.length > 0 && (
-        <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-[#c9a46a] px-1 text-[10px] font-bold text-[#211811]">
+        <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-[#aebbd0] px-1 text-[10px] font-bold text-[#1b2535]">
           {productIds.length}
         </span>
       )}
