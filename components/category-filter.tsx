@@ -705,7 +705,39 @@ export default function CategoryFilter({
             )}
           </div>
 
-          {shouldShowGenderFilter && (
+                    {isBasicMode && shouldShowGenderFilter && (
+            <div className="flex flex-wrap items-center gap-2">
+              {categories.map((item) => {
+                const active = category === item.value;
+
+                return (
+                  <button
+                    key={item.value}
+                    type="button"
+                    onClick={() => setCategory(item.value)}
+                    aria-pressed={active}
+                    className={`ws-filter-button ${
+                      active
+                        ? "ws-category-active"
+                        : "ws-glass-control text-[#E2D4C1]"
+                    }`}
+                  >
+                    {item.label}
+                  </button>
+                );
+              })}
+
+              <FilterSelect
+                id="filter-brand-basic"
+                label=""
+                value={brand}
+                onChange={setBrand}
+                options={brands}
+              />
+            </div>
+          )}
+
+          {shouldShowGenderFilter && isWatchMode && (
             <div>
               <p className={labelClass}>Kategorija</p>
 
@@ -730,18 +762,6 @@ export default function CategoryFilter({
                   );
                 })}
               </div>
-            </div>
-          )}
-
-          {isBasicMode && (
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              <FilterSelect
-                id="filter-brand-basic"
-                label="Brend"
-                value={brand}
-                onChange={setBrand}
-                options={brands}
-              />
             </div>
           )}
 
