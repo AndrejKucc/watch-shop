@@ -146,18 +146,20 @@ export default function CategoryFilter({
   filterMode?: FilterMode;
 }) {
   const isWatchMode = filterMode === "watches";
-  const isBasicMode = filterMode === "basic";
+const isBasicMode = filterMode === "basic";
 
-  const shouldShowGenderFilter =
-    showGenderFilter && (isWatchMode || isBasicMode);
+const isAccessoryMode = filterMode === "accessories";
+const isWalletMode = filterMode === "wallets";
+const isGiftMode = filterMode === "gifts";
 
-  const shouldShowBrandFilter = isWatchMode || isBasicMode;
+const shouldShowGenderFilter =
+  showGenderFilter && (isWatchMode || isBasicMode || isAccessoryMode);
 
-  const isAccessoryMode = filterMode === "accessories";
-  const isWalletMode = filterMode === "wallets";
-  const isGiftMode = filterMode === "gifts";
+const shouldShowBrandFilter = isWatchMode || isBasicMode;
 
-  const showAccessoryFilters = isAccessoryMode || isWalletMode;
+const showAccessoryFilters = isAccessoryMode || isWalletMode;
+
+ 
 
   const [category, setCategory] = useState("sve");
   const [search, setSearch] = useState("");
@@ -730,7 +732,10 @@ export default function CategoryFilter({
               <p className={labelClass}>Kategorija</p>
 
               <div className="flex flex-wrap gap-2">
-                {categories.map((item) => {
+                {(isAccessoryMode
+  ? categories.filter((item) => item.value !== "unisex")
+  : categories
+).map((item) => {
                   const active = category === item.value;
 
                   return (
