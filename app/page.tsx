@@ -517,32 +517,26 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* SVI PROIZVODI — tamna espreso sekcija (filter ostaje u svom originalnom izgledu) */}
-      <section className="relative bg-[#1F2A3C] text-[#F8F4E7]">
-        {/* mekani prelaz iz svetle u tamnu sekciju */}
-        <div
-          aria-hidden="true"
-          className="pointer-events-none h-32 bg-gradient-to-b from-[#F8F4E7] via-[#F8F4E7]/40 to-[#1F2A3C] sm:h-48"
-        />
-
+      {/* SVI PROIZVODI — svetla sekcija; samo filter i kartice proizvoda su plavi */}
+      <section className="relative text-[#1F2A3C]">
         <div className="mx-auto max-w-7xl px-6 pb-16 sm:pb-20">
           <div id="kolekcija" className="relative scroll-mt-36">
-            <div className="mb-8 flex flex-col justify-between gap-4 border-b border-white/[0.09] pb-6 sm:flex-row sm:items-end">
+            <div className="mb-8 flex flex-col justify-between gap-4 border-b border-[#1F2A3C]/10 pb-6 sm:flex-row sm:items-end">
               <div>
-                <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-[#B8955A] sm:text-xs">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-[#8A6A33] sm:text-xs">
                   Istraži naš izbor
                 </p>
 
-                <h2 className="mt-3 text-2xl font-semibold tracking-tight text-[#F8F4E7] sm:text-3xl">
+                <h2 className="mt-3 text-2xl font-semibold tracking-tight text-[#1F2A3C] sm:text-3xl">
                   Svi proizvodi
                 </h2>
 
-                <p className="mt-2 max-w-2xl text-sm leading-6 text-[#F8F4E7]/70">
+                <p className="mt-2 max-w-2xl text-sm leading-6 text-[#1F2A3C]/70">
                   Pronađi pravi proizvod i prilagodi prikaz svojim željama.
                 </p>
               </div>
 
-              <div className="ws-glass-card-dark flex w-fit items-center gap-2 rounded-xl px-3 py-2 text-xs text-[#F8F4E7]/85">
+              <div className="ws-glass-card flex w-fit items-center gap-2 rounded-xl px-3 py-2 text-xs text-[#1F2A3C]/85">
                 <span className="h-2 w-2 rounded-full bg-[#B8955A]" />
                 Pronađi svoj stil
               </div>
