@@ -137,6 +137,13 @@ export default function CategoryFilter({
   filterMode?: FilterMode;
 }) {
   const isWatchMode = filterMode === "watches";
+  const isBasicMode = filterMode === "basic";
+
+  const shouldShowGenderFilter =
+    showGenderFilter && (isWatchMode || isBasicMode);
+
+  const shouldShowBrandFilter = isWatchMode || isBasicMode;
+
   const isAccessoryMode = filterMode === "accessories";
   const isWalletMode = filterMode === "wallets";
   const isGiftMode = filterMode === "gifts";
@@ -224,8 +231,7 @@ export default function CategoryFilter({
       ),
     [products],
   );
-
-  const accessoryColors = useMemo(
+    const accessoryColors = useMemo(
     () =>
       distinctValues(
         products,
@@ -261,8 +267,7 @@ export default function CategoryFilter({
     return products
       .filter((product) => {
         const matchesCategory =
-          !isWatchMode ||
-          !showGenderFilter ||
+          !shouldShowGenderFilter ||
           category === "sve" ||
           normalize(product.category) === normalize(category);
 
@@ -300,45 +305,45 @@ export default function CategoryFilter({
           max === null || !Number.isFinite(max) || productPrice <= max;
 
         const matchesBrand =
-          !isWatchMode ||
+          !shouldShowBrandFilter ||
           !brand ||
           normalize(product.brand) === normalize(brand);
 
         const matchesMovement =
           !isWatchMode ||
           !movement ||
-          normalize(product.movement_type) === normalize(movement);
+            normalize(product.movement_type) === normalize(movement);
 
         const matchesDiameter =
           !isWatchMode ||
           !diameter ||
-          normalize(product.case_diameter) === normalize(diameter);
+            normalize(product.case_diameter) === normalize(diameter);
 
         const matchesCaseMaterial =
           !isWatchMode ||
           !caseMaterial ||
-          normalize(product.case_material) === normalize(caseMaterial);
+            normalize(product.case_material) === normalize(caseMaterial);
 
         const matchesBraceletMaterial =
           !isWatchMode ||
           !braceletMaterial ||
-          normalize(product.bracelet_material) ===
-            normalize(braceletMaterial);
+            normalize(product.bracelet_material) ===
+              normalize(braceletMaterial);
 
         const matchesWaterResistance =
           !isWatchMode ||
           !waterResistance ||
-          normalize(product.water_resistance) === normalize(waterResistance);
+            normalize(product.water_resistance) === normalize(waterResistance);
 
         const matchesChronograph =
           !isWatchMode ||
           !chronograph ||
-          normalize(product.chronograph) === normalize(chronograph);
+            normalize(product.chronograph) === normalize(chronograph);
 
         const matchesGmt =
           !isWatchMode ||
           !gmt ||
-          normalize(product.gmt) === normalize(gmt);
+            normalize(product.gmt) === normalize(gmt);
 
         const productMaterial =
           product.accessory_material || product.bracelet_material;
@@ -364,7 +369,7 @@ export default function CategoryFilter({
         const matchesGiftFor =
           !isGiftMode ||
           !giftFor ||
-          normalize(product.gift_for) === normalize(giftFor);
+            normalize(product.gift_for) === normalize(giftFor);
 
         return (
           matchesCategory &&
@@ -398,6 +403,7 @@ export default function CategoryFilter({
         if (sort === "name_asc") {
           return a.name.localeCompare(b.name, "sr");
         }
+
         const dateA = a.created_at ? new Date(a.created_at).getTime() : 0;
         const dateB = b.created_at ? new Date(b.created_at).getTime() : 0;
 
@@ -424,6 +430,8 @@ export default function CategoryFilter({
     accessorySize,
     giftFor,
     showGenderFilter,
+    shouldShowGenderFilter,
+    shouldShowBrandFilter,
     isWatchMode,
     showAccessoryFilters,
     isWalletMode,
@@ -432,12 +440,12 @@ export default function CategoryFilter({
 
   const hasActiveFilters =
     search.trim() !== "" ||
-    (isWatchMode && category !== "sve") ||
+    (shouldShowGenderFilter && category !== "sve") ||
     onlyInStock ||
     sort !== "newest" ||
     minPrice !== "" ||
     maxPrice !== "" ||
-    (isWatchMode && brand !== "") ||
+    (shouldShowBrandFilter && brand !== "") ||
     (isWatchMode && movement !== "") ||
     (isWatchMode && diameter !== "") ||
     (isWatchMode && caseMaterial !== "") ||
@@ -470,8 +478,7 @@ export default function CategoryFilter({
     setAccessorySize("");
     setGiftFor("");
   };
-
-  const labelClass =
+    const labelClass =
     "mb-2 block text-xs font-medium uppercase tracking-[0.13em] text-[#B9A58C]";
 
   const inputClass =
@@ -698,7 +705,7 @@ export default function CategoryFilter({
             )}
           </div>
 
-          {isWatchMode && showGenderFilter && (
+          {shouldShowGenderFilter && (
             <div>
               <p className={labelClass}>Kategorija</p>
 
@@ -723,6 +730,18 @@ export default function CategoryFilter({
                   );
                 })}
               </div>
+            </div>
+          )}
+
+          {isBasicMode && (
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              <FilterSelect
+                id="filter-brand-basic"
+                label="Brend"
+                value={brand}
+                onChange={setBrand}
+                options={brands}
+              />
             </div>
           )}
 
@@ -861,7 +880,7 @@ export default function CategoryFilter({
                 className="ws-glass-control min-h-11 min-w-0 flex-1 rounded-xl bg-[#241A13]/80 px-3 text-sm text-[#F5EEE3] outline-none focus:border-[#D4AF7A] sm:flex-none"
               >
                 {sortOptions.map((option) => (
-                  <option key={option.value} value={option.value} className="bg-[#241A13}">
+                  <option key={option.value} value={option.value} className="bg-[#241A13]">
                     {option.label}
                   </option>
                 ))}
@@ -870,7 +889,8 @@ export default function CategoryFilter({
           </div>
         </div>
       </section>
-            <div className="mt-8 flex flex-col gap-4 sm:mt-10 sm:flex-row sm:items-end sm:justify-between">
+
+      <div className="mt-8 flex flex-col gap-4 sm:mt-10 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="text-xs font-medium uppercase tracking-[0.16em] text-[#B9A58C]">
             {hasActiveFilters ? "Rezultati pretrage" : `Kolekcija · ${productLabel}`}

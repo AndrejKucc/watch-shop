@@ -553,12 +553,12 @@ export default async function Home() {
           </div>
 
           <CategoryFilter
-            products={products}
-            filterMode="basic"
-            productLabel="proizvodi"
-            searchPlaceholder="Pretraži sat, narukvicu, ogrlicu, novčanik ili poklon..."
-            showGenderFilter={false}
-          />
+  products={products}
+  filterMode="basic"
+  productLabel="proizvodi"
+  searchPlaceholder="Pretraži sat, narukvicu, ogrlicu, novčanik ili poklon..."
+  showGenderFilter={true}
+/>
         </div>
       </section>
 
