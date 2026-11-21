@@ -105,7 +105,7 @@ export default async function Home() {
   ).slice(0, 6);
 
   return (
-    <main className="relative min-h-screen overflow-x-clip bg-[#E8DCC6] text-[#241A13] selection:bg-[#B38B4D] selection:text-white">
+    <main className="relative min-h-screen overflow-x-clip bg-[#F8F4E7] text-[#241A13] selection:bg-[#B38B4D] selection:text-white">
       <style>{`
         :root {
           color-scheme: light;
@@ -113,14 +113,14 @@ export default async function Home() {
 
         html {
           scroll-behavior: smooth;
-          background: #E8DCC6;
+          background: #F8F4E7;
         }
 
-        /* Paleta: pesak #E8DCC6 · espreso #241A13 · zlato #B38B4D (tamnije #7A5A26 za tekst) */
+        /* Paleta: osnova #F8F4E7 · dugmići #4E3423 · ivice #CC5500 · tamna sekcija #241A13 */
 
         .ws-glass {
-          background: rgba(232, 220, 198, 0.74);
-          border: 1px solid rgba(179, 139, 77, 0.22);
+          background: rgba(248, 244, 231, 0.74);
+          border: 1px solid rgba(204, 85, 0, 0.22);
           -webkit-backdrop-filter: blur(22px) saturate(145%);
           backdrop-filter: blur(22px) saturate(145%);
         }
@@ -131,7 +131,7 @@ export default async function Home() {
             rgba(255, 255, 255, 0.62),
             rgba(179, 139, 77, 0.10)
           );
-          border: 1px solid rgba(179, 139, 77, 0.28);
+          border: 1px solid rgba(204, 85, 0, 0.32);
           -webkit-backdrop-filter: blur(18px);
           backdrop-filter: blur(18px);
         }
@@ -152,7 +152,7 @@ export default async function Home() {
           background:
             radial-gradient(ellipse at 78% 30%, rgba(179, 139, 77, 0.22), transparent 50%),
             radial-gradient(ellipse at 8% 90%, rgba(255, 255, 255, 0.75), transparent 45%),
-            linear-gradient(115deg, #F1E8D6 0%, #E6D9C0 55%, #DACBAE 100%);
+            linear-gradient(115deg, #FDFBF3 0%, #F3EDD9 55%, #E9E0C8 100%);
         }
 
         .ws-title-gradient {
@@ -168,36 +168,36 @@ export default async function Home() {
         }
 
         .ws-primary-button {
-          background: linear-gradient(135deg, #33261C, #241A13);
-          border: 1px solid rgba(179, 139, 77, 0.55);
-          box-shadow: 0 10px 28px rgba(36, 26, 19, 0.22);
-          color: #F7F1E7;
+          background: linear-gradient(135deg, #5A3D29, #4E3423);
+          border: 1px solid #CC5500;
+          box-shadow: 0 10px 28px rgba(78, 52, 35, 0.28);
+          color: #F8F4E7;
           transition: transform 200ms ease, border-color 200ms ease, filter 200ms ease;
         }
 
         .ws-primary-button:hover {
-          border-color: rgba(179, 139, 77, 1);
-          filter: brightness(1.15);
+          border-color: #E8691A;
+          filter: brightness(1.12);
           transform: translateY(-2px);
         }
 
         .ws-product-card {
-          background: linear-gradient(160deg, #FFFFFF 0%, #FAF4E8 100%);
-          border: 1px solid rgba(179, 139, 77, 0.22);
+          background: linear-gradient(160deg, #FFFFFF 0%, #FBF8EE 100%);
+          border: 1px solid rgba(204, 85, 0, 0.30);
           box-shadow: 0 10px 30px rgba(60, 40, 20, 0.07);
           transition: transform 300ms ease, border-color 300ms ease, box-shadow 300ms ease;
         }
 
         .ws-product-card:hover {
           transform: translateY(-5px);
-          border-color: rgba(179, 139, 77, 0.65);
+          border-color: #CC5500;
           box-shadow: 0 24px 55px rgba(60, 40, 20, 0.16);
         }
 
         .ws-watch-image {
           background:
             radial-gradient(ellipse at 50% 45%, rgba(179, 139, 77, 0.18), transparent 62%),
-            linear-gradient(145deg, #E3D5BA, #D4C3A2);
+            linear-gradient(145deg, #EEE6D0, #E0D5B8);
         }
 
         @media (prefers-reduced-motion: reduce) {
@@ -213,7 +213,7 @@ export default async function Home() {
       `}</style>
 
       {/* GORNJA NAVIGACIJA */}
-      <header className="ws-glass sticky top-0 z-50 border-b border-[#B38B4D]/20">
+      <header className="ws-glass sticky top-0 z-50 border-b border-[#CC5500]/25">
         <div className="mx-auto max-w-7xl px-4 sm:px-6">
           <div className="flex items-center justify-between gap-3 py-4 sm:py-5">
             <Link href="/" className="group min-w-0">
@@ -251,15 +251,15 @@ export default async function Home() {
           {/* KATEGORIJE SA IKONICAMA */}
           <nav
             aria-label="Glavna navigacija"
-            className="grid grid-cols-5 gap-2 border-t border-[#B38B4D]/20 py-3 sm:gap-4"
+            className="grid grid-cols-5 gap-2 border-t border-[#CC5500]/20 py-3 sm:gap-4"
           >
             {mainNavigation.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
-                className="group flex min-w-0 flex-col items-center justify-center gap-2 rounded-xl border border-transparent px-1 py-2 text-[#52422F] transition-all duration-300 hover:border-[#B38B4D]/35 hover:bg-[#B38B4D]/10 hover:text-[#241A13]"
+                className="group flex min-w-0 flex-col items-center justify-center gap-2 rounded-xl border border-transparent px-1 py-2 text-[#52422F] transition-all duration-300 hover:border-[#CC5500]/45 hover:bg-[#CC5500]/10 hover:text-[#241A13]"
               >
-                <span className="flex h-10 w-10 items-center justify-center rounded-full border border-[#B38B4D]/35 bg-white/50 text-[#7A5A26] transition-all duration-300 group-hover:scale-110 group-hover:border-[#B38B4D] group-hover:bg-[#B38B4D]/15">
+                <span className="flex h-10 w-10 items-center justify-center rounded-full border border-[#CC5500]/40 bg-white/60 text-[#CC5500] transition-all duration-300 group-hover:scale-110 group-hover:border-[#CC5500] group-hover:bg-[#CC5500]/10">
                   {item.icon}
                 </span>
 
@@ -273,7 +273,7 @@ export default async function Home() {
       </header>
 
       {/* LUKSUZNI HERO DEO */}
-      <section className="ws-hero relative isolate overflow-hidden border-b border-[#B38B4D]/20">
+      <section className="ws-hero relative isolate overflow-hidden border-b border-[#CC5500]/25">
         <div
           aria-hidden="true"
           className="pointer-events-none absolute -right-24 top-0 -z-10 h-[420px] w-[420px] rounded-full bg-[#B38B4D]/20 blur-[100px]"
@@ -286,8 +286,8 @@ export default async function Home() {
 
         <div className="mx-auto grid max-w-7xl items-center gap-10 px-6 py-16 sm:py-20 lg:grid-cols-[1.05fr_0.95fr] lg:gap-8 lg:py-24">
           <div className="relative z-10 max-w-2xl">
-            <div className="inline-flex items-center gap-2 rounded-full border border-[#B38B4D]/35 bg-white/55 px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.23em] text-[#7A5A26] sm:text-xs">
-              <span className="h-1.5 w-1.5 rounded-full bg-[#B38B4D]" />
+            <div className="inline-flex items-center gap-2 rounded-full border border-[#CC5500]/40 bg-white/60 px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.23em] text-[#7A5A26] sm:text-xs">
+              <span className="h-1.5 w-1.5 rounded-full bg-[#CC5500]" />
               Vreme je za nešto posebno
             </div>
 
@@ -405,7 +405,7 @@ export default async function Home() {
 
           <Link
             href="/satovi"
-            className="inline-flex w-fit items-center gap-2 rounded-xl border border-[#241A13]/15 bg-white/60 px-4 py-2.5 text-sm font-medium text-[#241A13] transition hover:border-[#B38B4D] hover:bg-white hover:text-[#7A5A26]"
+            className="inline-flex w-fit items-center gap-2 rounded-xl border border-[#CC5500] bg-[#4E3423] px-4 py-2.5 text-sm font-medium text-[#F8F4E7] transition hover:bg-[#5F4130] hover:text-white"
           >
             Svi satovi <span aria-hidden="true">→</span>
           </Link>
@@ -501,7 +501,7 @@ export default async function Home() {
                       </p>
                     </div>
 
-                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-[#B38B4D]/30 bg-[#B38B4D]/10 text-[#7A5A26] transition group-hover:border-[#B38B4D] group-hover:bg-[#241A13] group-hover:text-[#F7F1E7]">
+                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-[#CC5500]/50 bg-[#CC5500]/10 text-[#CC5500] transition group-hover:border-[#CC5500] group-hover:bg-[#4E3423] group-hover:text-[#F8F4E7]">
                       →
                     </span>
                   </div>
