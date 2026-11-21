@@ -805,9 +805,15 @@ const showAccessoryFilters = isAccessoryMode || isWalletMode;
                 <FilterSelect id="filter-accessory-material" label="Materijal" value={accessoryMaterial} onChange={setAccessoryMaterial} options={accessoryMaterials} />
                 <FilterSelect id="filter-accessory-color" label="Boja" value={accessoryColor} onChange={setAccessoryColor} options={accessoryColors} />
 
-                {isWalletMode && (
-                  <FilterSelect id="filter-accessory-size" label="Veličina" value={accessorySize} onChange={setAccessorySize} options={accessorySizes} />
-                )}
+                {(isWalletMode || isAccessoryMode) && (
+  <FilterSelect
+    id="filter-accessory-size"
+    label="Veličina"
+    value={accessorySize}
+    onChange={setAccessorySize}
+    options={accessorySizes}
+  />
+)}
               </div>
             </div>
           )}
