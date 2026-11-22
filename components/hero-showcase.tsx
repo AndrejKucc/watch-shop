@@ -483,7 +483,7 @@ export default function HeroShowcase({
                         alt={`${slide.name} – ručni sat`}
                         decoding="async"
                         fetchPriority={i === 0 ? "high" : undefined}
-                        className="h-full w-full object-contain p-4"
+                        className="h-full w-full object-contain"
                       />
                     ) : (
                       <ProductImage
@@ -491,7 +491,7 @@ export default function HeroShowcase({
                         alt={`${slide.name} – ručni sat`}
                         priority={i === 0}
                         sizes="(min-width: 1024px) 560px, 92vw"
-                        className="h-full w-full object-contain p-1"
+                        className="h-full w-full object-contain"
                       />
                     )}
 
@@ -634,7 +634,7 @@ export default function HeroShowcase({
                       alt=""
                       widths={[96, 128, 192]}
                       sizes="64px"
-                      className="h-full w-full object-cover"
+                      className="h-full w-full object-contain p-1"
                     />
                   </button>
                 ))}
