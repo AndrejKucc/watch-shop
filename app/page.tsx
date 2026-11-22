@@ -543,7 +543,7 @@ export default async function Home() {
                           src={product.images[0]}
                           alt={`${product.name} – ručni sat`}
                           sizes="(min-width: 1024px) 420px, (min-width: 640px) 45vw, 92vw"
-                          className="h-full w-full object-contain p-2 transition-transform duration-500 group-hover:scale-[1.02]"
+                          className="h-full w-full object-contain p-1 transition-transform duration-500 group-hover:scale-[1.02]"
                         />
                       ) : (
                         <div className="flex h-full items-center justify-center">
