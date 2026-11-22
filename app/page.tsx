@@ -537,13 +537,13 @@ export default async function Home() {
                     href={`/product/${product.id}`}
                     className="ws-card-dark group overflow-hidden rounded-[1.75rem] p-3"
                   >
-                    <div className="relative aspect-[4/5] overflow-hidden rounded-[1.25rem] bg-[#F8F4E7]/5">
+                    <div className="relative aspect-[4/5] overflow-hidden rounded-[1.25rem] bg-[#F8F4E7]">
                       {product.images && product.images[0] ? (
                         <ProductImage
                           src={product.images[0]}
                           alt={`${product.name} – ručni sat`}
                           sizes="(min-width: 1024px) 420px, (min-width: 640px) 45vw, 92vw"
-                          className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.05]"
+                          className="h-full w-full object-contain p-3 transition-transform duration-500 group-hover:scale-[1.03]"
                         />
                       ) : (
                         <div className="flex h-full items-center justify-center">
