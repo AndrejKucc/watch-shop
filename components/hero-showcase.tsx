@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { ProductImage } from "@/components/product-image";
-import { resizedUrl } from "@/lib/image";
+import { canResize, resizedUrl } from "@/lib/image";
 
 export type HeroSlide = {
   id: string;
@@ -196,34 +196,38 @@ export default function HeroShowcase({
     return () => clearTimeout(timer);
   }, [index, paused, count, goTo]);
 
-  // boja pozadine za sat koji je na redu (i za sledeći)
+  // boje svih satova se računaju odmah pri učitavanju, pa nema čekanja kad se sat promeni
   useEffect(() => {
     let cancelled = false;
 
-    seen.forEach((i) => {
-      const slide = slides[i];
+    slides.forEach((slide, i) => {
+      if (slide.image.startsWith("/")) return;
 
-      if (!slide || slide.image.startsWith("/") || colors[i]) return;
+      // za slike koje se ne mogu smanjiti računamo samo prva dva sata
+      if (!canResize(slide.image) && i > 1) return;
 
-      loadColor(resizedUrl(slide.image, 64, 50)).then((small) => {
-        if (small || cancelled) return small;
-        return loadColor(slide.image);
-      }).then((rgb) => {
-        if (rgb && !cancelled) {
-          setColors((existing) => ({ ...existing, [i]: rgb }));
-        }
-      });
+      loadColor(resizedUrl(slide.image, 64, 50))
+        .then((small) => {
+          if (small || cancelled) return small;
+          return i < 2 ? loadColor(slide.image) : null;
+        })
+        .then((rgb) => {
+          if (rgb && !cancelled) {
+            setColors((existing) =>
+              existing[i] ? existing : { ...existing, [i]: rgb },
+            );
+          }
+        });
     });
 
     return () => {
       cancelled = true;
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [seen, slides]);
+  }, [slides]);
 
   // stara pozadina nestaje tek pošto se nova potpuno pojavi
   useEffect(() => {
-    const timer = setTimeout(() => setPrev(index), 1200);
+    const timer = setTimeout(() => setPrev(index), 800);
 
     return () => clearTimeout(timer);
   }, [index]);
@@ -252,7 +256,11 @@ export default function HeroShowcase({
         <div
           key={`current-${index}`}
           className="ws-fade-in absolute inset-0"
-          style={{ background: glowBackground(colors[index] ?? DEFAULT_RGB) }}
+          style={{
+            background: glowBackground(
+              colors[index] ?? colors[prev] ?? DEFAULT_RGB,
+            ),
+          }}
         />
       </div>
 
@@ -422,7 +430,7 @@ export default function HeroShowcase({
 
           <div className="relative rounded-[2rem] border border-[#B8955A]/35 p-2 shadow-[0_30px_80px_rgba(0,0,0,0.45)] sm:rounded-[2.5rem] sm:p-3">
             <div
-              className="relative isolate aspect-[4/4.7] overflow-hidden rounded-[1.5rem] bg-[#1F2A3C] sm:rounded-[2rem]"
+              className="relative isolate aspect-[4/5] overflow-hidden rounded-[1.5rem] bg-[#1F2A3C] sm:rounded-[2rem]"
               style={{ touchAction: "pan-y" }}
               onPointerDown={(event) => {
                 touchStart.current = { x: event.clientX, y: event.clientY };
@@ -463,7 +471,7 @@ export default function HeroShowcase({
                   <div
                     key={slide.id || `slide-${i}`}
                     aria-hidden={i !== index}
-                    className={`absolute inset-0 transition-all duration-[900ms] ease-out ${
+                    className={`absolute inset-0 transition-all duration-700 ease-out ${
                       i === index
                         ? "scale-100 opacity-100"
                         : "pointer-events-none scale-[1.04] opacity-0"
@@ -478,26 +486,13 @@ export default function HeroShowcase({
                         className="h-full w-full object-cover"
                       />
                     ) : (
-                      <>
-                        <div
-                          aria-hidden="true"
-                          className="absolute inset-0"
-                          style={{
-                            background: `radial-gradient(circle at 50% 38%, rgba(${
-                              colors[i] ?? DEFAULT_RGB
-                            },0.55), transparent 68%)`,
-                          }}
-                        />
-                        <div className="absolute inset-x-3 top-3 bottom-[10.5rem] sm:inset-x-4 sm:top-4 sm:bottom-[11.5rem]">
-                          <ProductImage
-                            src={slide.image}
-                            alt={`${slide.name} – ručni sat`}
-                            priority={i === 0}
-                            sizes="(min-width: 1024px) 560px, 92vw"
-                            className="h-full w-full object-contain drop-shadow-[0_24px_40px_rgba(0,0,0,0.45)]"
-                          />
-                        </div>
-                      </>
+                      <ProductImage
+                        src={slide.image}
+                        alt={`${slide.name} – ručni sat`}
+                        priority={i === 0}
+                        sizes="(min-width: 1024px) 560px, 92vw"
+                        className="h-full w-full object-cover"
+                      />
                     )}
 
                     <Link
@@ -512,7 +507,7 @@ export default function HeroShowcase({
 
               <div
                 aria-hidden="true"
-                className="pointer-events-none absolute inset-x-0 bottom-0 z-[3] h-[55%] bg-gradient-to-t from-[#1F2A3C] via-[#1F2A3C]/85 to-transparent"
+                className="pointer-events-none absolute inset-x-0 bottom-0 z-[3] h-[52%] bg-gradient-to-t from-[#1F2A3C]/95 via-[#1F2A3C]/60 to-transparent"
               />
 
               {current.badge && (

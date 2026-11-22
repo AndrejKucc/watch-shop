@@ -1041,13 +1041,13 @@ const showAccessoryFilters = isAccessoryMode || isWalletMode;
                 <div className="relative">
                   <Link href={`/product/${product.id}`} className="block">
                     <div className="relative overflow-hidden bg-[#F8F4E7]/5">
-                      <div className="aspect-[4/3]">
+                      <div className="aspect-[4/5]">
                         {product.images && product.images[0] ? (
                           <ProductImage
                             src={product.images[0]}
                             alt={product.name}
                             sizes="(min-width: 1024px) 380px, (min-width: 640px) 45vw, 92vw"
-                            className="ws-product-image h-full w-full object-contain"
+                            className="ws-product-image h-full w-full object-cover"
                           />
                         ) : (
                           <div className="flex h-full flex-col items-center justify-center gap-3 text-[#F8F4E7]/50">

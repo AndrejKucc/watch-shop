@@ -317,7 +317,7 @@ export default async function Home() {
         }
 
         .ws-fade-in {
-          animation: ws-fade-in 1100ms ease both;
+          animation: ws-fade-in 600ms ease both;
         }
 
         .ws-progress {
@@ -537,13 +537,13 @@ export default async function Home() {
                     href={`/product/${product.id}`}
                     className="ws-card-dark group overflow-hidden rounded-[1.75rem] p-3"
                   >
-                    <div className="relative aspect-[4/4.2] overflow-hidden rounded-[1.25rem] bg-[#F8F4E7]/5">
+                    <div className="relative aspect-[4/5] overflow-hidden rounded-[1.25rem] bg-[#F8F4E7]/5">
                       {product.images && product.images[0] ? (
                         <ProductImage
                           src={product.images[0]}
                           alt={`${product.name} – ručni sat`}
                           sizes="(min-width: 1024px) 420px, (min-width: 640px) 45vw, 92vw"
-                          className="h-full w-full object-contain transition-transform duration-700 group-hover:scale-[1.05]"
+                          className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.05]"
                         />
                       ) : (
                         <div className="flex h-full items-center justify-center">
