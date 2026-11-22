@@ -3,7 +3,8 @@
 import { CompareButton } from "@/components/compare-button";
 import ComparePanel from "@/components/compare-panel";
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { ProductImage } from "@/components/product-image";
 import { AddToCartButton } from "@/components/cart";
 import { WishlistButton } from "@/components/wishlist";
 import RestockNotificationButton from "@/components/restock-notification-button";
@@ -49,6 +50,9 @@ type Product = {
 };
 
 type FilterMode = "basic" | "watches" | "accessories" | "wallets" | "gifts";
+
+// Koliko proizvoda se prikazuje odjednom (ostali se učitavaju dok korisnik skroluje)
+const PAGE_SIZE = 9;
 
 const categories = [
   { value: "sve", label: "Svi" },
@@ -116,7 +120,7 @@ function FilterSelect({
         id={id}
         value={value}
         onChange={(event) => onChange(event.target.value)}
-        className="h-12 w-full rounded-xl border border-[#B8955A]/15 bg-[#1F2A3C]/80 px-3 text-sm text-[#F8F4E7] outline-none backdrop-blur-xl transition duration-200 hover:border-[#B8955A]/30 focus:border-[#B8955A]/100 focus:ring-2 focus:ring-[#B8955A]/30"
+        className="h-12 w-full rounded-xl border border-[#B8955A]/15 bg-[#1F2A3C]/80 px-3 text-sm text-[#F8F4E7] outline-none md:backdrop-blur-xl transition duration-200 hover:border-[#B8955A]/30 focus:border-[#B8955A]/100 focus:ring-2 focus:ring-[#B8955A]/30"
       >
         <option value="" className="bg-[#1F2A3C]">
           Sve vrednosti
@@ -460,6 +464,56 @@ const showAccessoryFilters = isAccessoryMode || isWalletMode;
     isGiftMode,
   ]);
 
+  // Postepeno prikazivanje: telefon ne mora odjednom da iscrtava sve proizvode
+  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
+  const loadMoreRef = useRef<HTMLDivElement | null>(null);
+
+  const filterKey = [
+    category,
+    debouncedSearch,
+    onlyInStock,
+    sort,
+    min,
+    max,
+    brand,
+    movement,
+    diameter,
+    caseMaterial,
+    braceletMaterial,
+    waterResistance,
+    chronograph,
+    gmt,
+    accessoryMaterial,
+    accessoryColor,
+    accessorySize,
+    giftFor,
+  ].join("|");
+
+  // kad se promeni filter ili pretraga, vrati se na prvu stranu
+  useEffect(() => {
+    setVisibleCount(PAGE_SIZE);
+  }, [filterKey]);
+
+  // kad korisnik dođe blizu kraja liste, učitaj sledeće proizvode
+  useEffect(() => {
+    const element = loadMoreRef.current;
+
+    if (!element || typeof IntersectionObserver === "undefined") return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0]?.isIntersecting) {
+          setVisibleCount((count) => count + PAGE_SIZE);
+        }
+      },
+      { rootMargin: "500px 0px" },
+    );
+
+    observer.observe(element);
+
+    return () => observer.disconnect();
+  }, [visibleCount, filteredProducts.length]);
+
   const hasActiveFilters =
     search.trim() !== "" ||
     (shouldShowGenderFilter && category !== "sve") ||
@@ -504,7 +558,7 @@ const showAccessoryFilters = isAccessoryMode || isWalletMode;
     "mb-2 block text-xs font-medium uppercase tracking-[0.13em] text-[#F8F4E7]/70";
 
   const inputClass =
-    "h-12 w-full rounded-xl border border-[#B8955A]/15 bg-[#1F2A3C]/80 px-4 text-base text-[#F8F4E7] outline-none backdrop-blur-xl transition duration-200 placeholder:text-[#F8F4E7]/50 hover:border-[#B8955A]/30 focus:border-[#B8955A]/100 focus:ring-2 focus:ring-[#B8955A]/30";
+    "h-12 w-full rounded-xl border border-[#B8955A]/15 bg-[#1F2A3C]/80 px-4 text-base text-[#F8F4E7] outline-none md:backdrop-blur-xl transition duration-200 placeholder:text-[#F8F4E7]/50 hover:border-[#B8955A]/30 focus:border-[#B8955A]/100 focus:ring-2 focus:ring-[#B8955A]/30";
 
   return (
     <>
@@ -553,7 +607,22 @@ const showAccessoryFilters = isAccessoryMode || isWalletMode;
           letter-spacing: 0.01em;
         }
 
+        /* Telefon: bez teškog zamućenja i bez iscrtavanja kartica koje nisu na ekranu */
+        @media (max-width: 767px) {
+          .ws-glass-panel,
+          .ws-glass-control {
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+          }
+
+          .ws-glass-panel {
+            background: rgba(31, 42, 60, 0.96);
+          }
+        }
+
         .ws-product-card {
+          content-visibility: auto;
+          contain-intrinsic-size: auto 600px;
           background: linear-gradient(
             145deg,
             rgba(248, 244, 231, 0.09),
@@ -954,7 +1023,7 @@ const showAccessoryFilters = isAccessoryMode || isWalletMode;
 
       <div className="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
         {!invalidPriceRange &&
-          filteredProducts.map((product) => {
+          filteredProducts.slice(0, visibleCount).map((product) => {
             const oldPrice = Number(product.old_price);
             const currentPrice = Number(product.price);
 
@@ -974,10 +1043,10 @@ const showAccessoryFilters = isAccessoryMode || isWalletMode;
                     <div className="relative overflow-hidden bg-[#F8F4E7]/5">
                       <div className="aspect-[4/3]">
                         {product.images && product.images[0] ? (
-                          <img
+                          <ProductImage
                             src={product.images[0]}
                             alt={product.name}
-                            loading="lazy"
+                            sizes="(min-width: 1024px) 380px, (min-width: 640px) 45vw, 92vw"
                             className="ws-product-image h-full w-full object-cover"
                           />
                         ) : (
@@ -1004,7 +1073,7 @@ const showAccessoryFilters = isAccessoryMode || isWalletMode;
 
                       {isWatchMode && showGenderFilter && (
                         <div className="absolute left-4 top-4">
-                          <span className="rounded-full border border-[#B8955A]/20 bg-[#1F2A3C]/80 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-[#F8F4E7] backdrop-blur-xl">
+                          <span className="rounded-full border border-[#B8955A]/20 bg-[#1F2A3C]/80 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-[#F8F4E7] md:backdrop-blur-xl">
                             {normalize(product.category) === "muski"
                               ? "Muški"
                               : normalize(product.category) === "zenski"
@@ -1015,7 +1084,7 @@ const showAccessoryFilters = isAccessoryMode || isWalletMode;
                       )}
 
                       {product.stock > 0 && (
-                        <div className="absolute bottom-4 left-4 flex items-center gap-2 rounded-full border border-[#B8955A]/20 bg-[#1F2A3C]/80 px-3 py-2 backdrop-blur-xl">
+                        <div className="absolute bottom-4 left-4 flex items-center gap-2 rounded-full border border-[#B8955A]/20 bg-[#1F2A3C]/80 px-3 py-2 md:backdrop-blur-xl">
                           <span className="ws-stock-dot h-1.5 w-1.5 rounded-full" />
                           <span className="text-[10px] font-medium uppercase tracking-[0.12em] text-[#B8955A]">
                             Dostupno
@@ -1105,6 +1174,22 @@ const showAccessoryFilters = isAccessoryMode || isWalletMode;
               </article>
             );
           })}
+
+        {!invalidPriceRange && filteredProducts.length > visibleCount && (
+          <div
+            ref={loadMoreRef}
+            className="col-span-full flex flex-col items-center gap-3 pt-2"
+          >
+            <button
+              type="button"
+              onClick={() => setVisibleCount((count) => count + PAGE_SIZE)}
+              className="ws-primary-button rounded-xl px-6 py-3 text-sm font-semibold"
+            >
+              Prikaži još proizvoda (
+              {filteredProducts.length - visibleCount})
+            </button>
+          </div>
+        )}
 
         {(invalidPriceRange || filteredProducts.length === 0) && (
           <div className="ws-glass-panel col-span-full rounded-[28px] p-8 text-center sm:p-12">
