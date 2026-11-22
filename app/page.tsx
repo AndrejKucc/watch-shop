@@ -5,6 +5,8 @@ import { CartButton } from "@/components/cart";
 import { AccountButton } from "@/components/account-button";
 import { WishlistCountButton } from "@/components/wishlist";
 import CategoryFilter from "@/components/category-filter";
+import HeroShowcase, { type HeroSlide } from "@/components/hero-showcase";
+import { ProductImage } from "@/components/product-image";
 
 const mainNavigation = [
   {
@@ -105,6 +107,60 @@ export default async function Home() {
   ).slice(0, 6);
 
   const currentYear = new Date().getFullYear();
+
+  // Sati koji se listaju u heroju (samo oni koji imaju sliku)
+  const heroSlides: HeroSlide[] = displayedWatches
+    .filter(
+      (product) =>
+        Array.isArray(product.images) &&
+        typeof product.images[0] === "string" &&
+        product.images[0] !== "",
+    )
+    .map((product) => {
+      const badgeKey =
+        typeof product.featured_badge === "string"
+          ? product.featured_badge
+          : "";
+
+      const oldPrice = Number(product.old_price);
+
+      return {
+        id: String(product.id),
+        name: String(product.name),
+        brand: product.brand || "WATCH STORE",
+        href: `/product/${product.id}`,
+        cta: "Pogledaj sat",
+        image: product.images[0] as string,
+        price: Number.isFinite(Number(product.price))
+          ? Number(product.price)
+          : null,
+        oldPrice:
+          product.old_price !== null &&
+          product.old_price !== undefined &&
+          Number.isFinite(oldPrice)
+            ? oldPrice
+            : null,
+        badge: featuredBadges[badgeKey] ?? null,
+      };
+    });
+
+  const slides: HeroSlide[] =
+    heroSlides.length > 0
+      ? heroSlides
+      : [
+          {
+            id: "hero-fallback",
+            name: "Vreme je za pravi izbor.",
+            brand: "WATCH STORE · PREMIUM SELECTION",
+            href: "/satovi",
+            cta: "Pogledaj satove",
+            image: "/images/hero-watch.png",
+            price: null,
+            oldPrice: null,
+            subtitle: "Pronađi detalj koji upotpunjuje tvoj stil.",
+            badge: null,
+          },
+        ];
 
   return (
     <main className="relative min-h-screen overflow-x-clip bg-[#F8F4E7] text-[#1F2A3C] selection:bg-[#B8955A] selection:text-white">
@@ -255,6 +311,61 @@ export default async function Home() {
           animation: ws-rise 900ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
         }
 
+        .ws-ambient-mask {
+          -webkit-mask-image: linear-gradient(to bottom, #000 55%, transparent 100%);
+          mask-image: linear-gradient(to bottom, #000 55%, transparent 100%);
+        }
+
+        .ws-fade-in {
+          animation: ws-fade-in 1100ms ease both;
+        }
+
+        .ws-progress {
+          transform-origin: left;
+          animation: ws-progress 6500ms linear forwards;
+        }
+
+        @keyframes ws-fade-in {
+          from {
+            opacity: 0;
+          }
+          to {
+            opacity: 1;
+          }
+        }
+
+        @keyframes ws-progress {
+          from {
+            transform: scaleX(0);
+          }
+          to {
+            transform: scaleX(1);
+          }
+        }
+
+        /* Telefon: bez teških efekata zamućenja (brže listanje) */
+        @media (max-width: 767px) {
+          .ws-glass {
+            background: rgba(248, 244, 231, 0.97);
+            -webkit-backdrop-filter: none;
+            backdrop-filter: none;
+          }
+
+          .ws-glass-card,
+          .ws-dark-glass {
+            -webkit-backdrop-filter: none;
+            backdrop-filter: none;
+          }
+
+          .ws-dark-glass {
+            background: rgba(248, 244, 231, 0.09);
+          }
+
+          .ws-card-dark {
+            box-shadow: 0 8px 22px rgba(0, 0, 0, 0.22);
+          }
+        }
+
         @keyframes ws-rise {
           from {
             opacity: 0;
@@ -278,8 +389,14 @@ export default async function Home() {
           }
 
           .ws-ring,
-          .ws-rise {
+          .ws-rise,
+          .ws-fade-in {
             animation: none;
+          }
+
+          .ws-progress {
+            animation: none;
+            transform: none;
           }
 
           .ws-card-dark,
@@ -353,234 +470,17 @@ export default async function Home() {
       {/* TAMNI FILMSKI OKVIR: hero + izdvojeni satovi */}
       <div className="px-3 pt-4 sm:px-6 sm:pt-6">
         <div className="ws-stage mx-auto max-w-[1400px] overflow-hidden rounded-[1.75rem] sm:rounded-[2.5rem]">
-          <div aria-hidden="true" className="ws-grain" />
+          <div aria-hidden="true" className="ws-grain hidden md:block" />
 
-          {/* HERO */}
-          <section className="relative z-10">
-            <div className="flex items-center justify-between px-6 pt-6 text-[10px] font-medium uppercase tracking-[0.3em] text-[#F8F4E7]/60 sm:px-10 sm:pt-8">
-              <span className="flex items-center gap-3">
-                <span className="h-px w-8 bg-[#B8955A]" />
-                Kolekcija {currentYear}
-              </span>
-
-              <span className="hidden items-center gap-3 sm:flex">
-                Muški · Ženski
-                <span className="h-px w-8 bg-[#B8955A]" />
-              </span>
-            </div>
-
-            <div className="grid items-center gap-12 px-6 pb-12 pt-10 sm:px-10 lg:grid-cols-[0.95fr_1.05fr] lg:gap-8 lg:pb-16 lg:pt-8">
-              <div className="relative z-10 max-w-2xl">
-                <div className="ws-rise ws-dark-glass inline-flex items-center gap-2 rounded-full px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.23em] text-[#B8955A] sm:text-xs">
-                  <span className="h-1.5 w-1.5 rounded-full bg-[#B8955A]" />
-                  Vreme je za nešto posebno
-                </div>
-
-                <h1
-                  className="ws-rise ws-serif mt-7 text-5xl font-normal leading-[1.03] tracking-tight text-[#F8F4E7] sm:text-6xl lg:text-7xl xl:text-[5.25rem]"
-                  style={{ animationDelay: "120ms" }}
-                >
-                  Muški i ženski
-                  <span className="ws-title-gradient block italic">
-                    ručni satovi.
-                  </span>
-                </h1>
-
-                <p
-                  className="ws-rise mt-7 max-w-xl text-base leading-7 text-[#F8F4E7]/70 sm:text-lg sm:leading-8"
-                  style={{ animationDelay: "240ms" }}
-                >
-                  Otkrij kolekciju muških i ženskih ručnih satova u WATCH
-                  STORE-u. Pronađi elegantne, moderne i pažljivo odabrane
-                  satove, kao i narukvice, ogrlice, novčanike i poklone za
-                  svaki stil.
-                </p>
-
-                <div
-                  className="ws-rise mt-9 flex flex-wrap gap-3"
-                  style={{ animationDelay: "360ms" }}
-                >
-                  <a
-                    href="#kolekcija"
-                    className="ws-gold-button inline-flex items-center justify-center gap-2 rounded-2xl px-6 py-3.5 text-sm font-semibold"
-                  >
-                    Pogledaj kolekciju
-                    <span aria-hidden="true">↗</span>
-                  </a>
-
-                  <a
-                    href="#satovi"
-                    className="ws-ghost-button inline-flex items-center justify-center gap-2 rounded-2xl px-6 py-3.5 text-sm font-medium"
-                  >
-                    Izdvojeni satovi
-                  </a>
-                </div>
-
-                <div
-                  className="ws-rise mt-12 grid max-w-md grid-cols-2 gap-3"
-                  style={{ animationDelay: "480ms" }}
-                >
-                  <div className="ws-dark-glass flex items-center gap-3 rounded-2xl p-4">
-                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-[#B8955A]/50 text-[#B8955A]">
-                      <svg
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="1.5"
-                        className="h-4 w-4"
-                        aria-hidden="true"
-                      >
-                        <circle cx="12" cy="12" r="9" />
-                        <path d="M12 7v5l3 2" />
-                      </svg>
-                    </span>
-                    <div>
-                      <p className="text-sm font-semibold text-[#F8F4E7]">
-                        Stil
-                      </p>
-                      <p className="mt-0.5 text-[11px] text-[#F8F4E7]/60">
-                        Za svaki trenutak
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="ws-dark-glass flex items-center gap-3 rounded-2xl p-4">
-                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-[#B8955A]/50 text-[#B8955A]">
-                      <svg
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="1.5"
-                        className="h-4 w-4"
-                        aria-hidden="true"
-                      >
-                        <path d="m12 3 2.6 5.4 5.9.9-4.3 4.2 1 5.9L12 16.6 6.8 19.4l1-5.9L3.5 9.3l5.9-.9L12 3Z" />
-                      </svg>
-                    </span>
-                    <div>
-                      <p className="text-sm font-semibold text-[#F8F4E7]">
-                        Pažljivo birano
-                      </p>
-                      <p className="mt-0.5 text-[11px] text-[#F8F4E7]/60">
-                        Detalji koji znače
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* GLAVNA SLIKA SATA */}
-              <div className="relative mx-auto w-full max-w-xl lg:max-w-none">
-                {/* ukrasni brojčanik sa crticama */}
-                <div
-                  aria-hidden="true"
-                  className="pointer-events-none absolute -inset-[7%] flex items-center justify-center"
-                >
-                  <svg
-                    viewBox="0 0 400 400"
-                    className="ws-ring h-full w-full text-[#B8955A]/45"
-                  >
-                    <circle
-                      cx="200"
-                      cy="200"
-                      r="192"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="0.7"
-                    />
-                    <circle
-                      cx="200"
-                      cy="200"
-                      r="168"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="0.5"
-                      strokeDasharray="1 6"
-                    />
-                    {Array.from({ length: 60 }).map((_, i) => (
-                      <line
-                        key={i}
-                        x1="200"
-                        y1="8"
-                        x2="200"
-                        y2={i % 5 === 0 ? 26 : 17}
-                        stroke="currentColor"
-                        strokeWidth={i % 5 === 0 ? 1.4 : 0.6}
-                        transform={`rotate(${i * 6} 200 200)`}
-                      />
-                    ))}
-                  </svg>
-                </div>
-
-                <div
-                  aria-hidden="true"
-                  className="pointer-events-none absolute inset-10 rounded-full bg-[#B8955A]/25 blur-[80px]"
-                />
-
-                <div className="relative rounded-[2rem] border border-[#B8955A]/35 p-2 shadow-[0_30px_80px_rgba(0,0,0,0.45)] sm:rounded-[2.5rem] sm:p-3">
-                  <div className="relative isolate flex aspect-[4/4.5] items-center justify-center overflow-hidden rounded-[1.5rem] bg-[#1F2A3C] sm:rounded-[2rem]">
-                    <img
-                      src="/images/hero-watch.png"
-                      alt="Muški i ženski ručni satovi iz WATCH STORE kolekcije"
-                      fetchPriority="high"
-                      className="absolute inset-0 z-0 h-full w-full rounded-[1.5rem] object-cover sm:rounded-[2rem]"
-                    />
-
-                    <div
-                      aria-hidden="true"
-                      className="pointer-events-none absolute inset-0 z-[1] rounded-[1.5rem] bg-gradient-to-t from-[#1F2A3C]/90 via-[#1F2A3C]/10 to-black/10 sm:rounded-[2rem]"
-                    />
-
-                    <span className="ws-dark-glass absolute left-4 top-4 z-10 rounded-full px-3 py-1.5 text-[9px] font-semibold uppercase tracking-[0.25em] text-[#F8F4E7]/85 sm:left-5 sm:top-5 sm:text-[10px]">
-                      Premium selection
-                    </span>
-
-                    <div className="relative z-10 mt-auto w-full px-4 pb-10 pt-64 text-center sm:px-6 sm:pb-14 sm:pt-72">
-                      <p className="text-[10px] font-medium uppercase tracking-[0.35em] text-[#B8955A] sm:text-xs">
-                        WATCH STORE · PREMIUM SELECTION
-                      </p>
-
-                      <p className="ws-serif mt-3 text-2xl font-normal italic tracking-wide text-[#F8F4E7] sm:text-3xl">
-                        Vreme je za pravi izbor.
-                      </p>
-
-                      <p className="mx-auto mt-3 max-w-xs text-sm leading-6 text-[#F8F4E7]/80">
-                        Pronađi detalj koji upotpunjuje tvoj stil.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* DONJA TRAKA HERO DELA */}
-            <div className="flex items-center justify-between gap-4 border-t border-[#F8F4E7]/10 px-6 py-4 text-[10px] font-medium uppercase tracking-[0.25em] text-[#F8F4E7]/55 sm:px-10">
-              <a
-                href="#satovi"
-                className="flex shrink-0 items-center gap-2 transition hover:text-[#B8955A]"
-              >
-                <span aria-hidden="true">↓</span>
-                Skroluj
-              </a>
-
-              <div aria-hidden="true" className="ws-ticks mx-2 hidden flex-1 md:block" />
-
-              <nav
-                aria-label="Brze kategorije"
-                className="hidden shrink-0 items-center gap-6 sm:flex"
-              >
-                {mainNavigation.map((item) => (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    className="transition hover:text-[#B8955A]"
-                  >
-                    {item.label}
-                  </Link>
-                ))}
-              </nav>
-            </div>
-          </section>
+          {/* HERO: karusel satova sa pozadinom koja prati sat */}
+          <HeroShowcase
+            slides={slides}
+            quickLinks={mainNavigation.map((item) => ({
+              href: item.href,
+              label: item.label,
+            }))}
+            year={currentYear}
+          />
 
           {/* IZDVOJENI SATOVI */}
           <section
@@ -639,10 +539,10 @@ export default async function Home() {
                   >
                     <div className="relative aspect-[4/4.2] overflow-hidden rounded-[1.25rem] bg-[#F8F4E7]/5">
                       {product.images && product.images[0] ? (
-                        <img
+                        <ProductImage
                           src={product.images[0]}
                           alt={`${product.name} – ručni sat`}
-                          loading="lazy"
+                          sizes="(min-width: 1024px) 420px, (min-width: 640px) 45vw, 92vw"
                           className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.05]"
                         />
                       ) : (
@@ -660,7 +560,7 @@ export default async function Home() {
 
                       {badge && (
                         <span
-                          className={`absolute left-4 top-4 z-10 inline-flex max-w-[calc(100%-4.5rem)] items-center rounded-xl border px-3 py-2 text-[9px] font-bold tracking-[0.1em] shadow-lg backdrop-blur-xl sm:text-[10px] ${badge.className}`}
+                          className={`absolute left-4 top-4 z-10 inline-flex max-w-[calc(100%-4.5rem)] items-center rounded-xl border px-3 py-2 text-[9px] font-bold tracking-[0.1em] shadow-lg md:backdrop-blur-xl sm:text-[10px] ${badge.className}`}
                         >
                           {badge.text}
                         </span>
@@ -670,7 +570,7 @@ export default async function Home() {
                         {String(index + 1).padStart(2, "0")}
                       </span>
 
-                      <span className="absolute bottom-4 right-4 flex h-10 w-10 items-center justify-center rounded-xl border border-[#B8955A] bg-[#1F2A3C]/70 text-lg text-[#F8F4E7] opacity-0 backdrop-blur-xl transition-all duration-300 group-hover:opacity-100">
+                      <span className="absolute bottom-4 right-4 flex h-10 w-10 items-center justify-center rounded-xl border border-[#B8955A] bg-[#1F2A3C]/70 text-lg text-[#F8F4E7] opacity-0 md:backdrop-blur-xl transition-all duration-300 group-hover:opacity-100">
                         ↗
                       </span>
                     </div>
