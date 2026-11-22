@@ -1047,7 +1047,7 @@ const showAccessoryFilters = isAccessoryMode || isWalletMode;
                             src={product.images[0]}
                             alt={product.name}
                             sizes="(min-width: 1024px) 380px, (min-width: 640px) 45vw, 92vw"
-                            className="ws-product-image h-full w-full object-cover"
+                            className="ws-product-image h-full w-full object-contain"
                           />
                         ) : (
                           <div className="flex h-full flex-col items-center justify-center gap-3 text-[#F8F4E7]/50">

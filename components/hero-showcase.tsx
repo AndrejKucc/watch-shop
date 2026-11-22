@@ -27,6 +27,121 @@ type HeroShowcaseProps = {
 };
 
 const INTERVAL = 6500;
+const DEFAULT_RGB = "184,149,90";
+
+function rgbToHsl(r: number, g: number, b: number): [number, number, number] {
+  r /= 255;
+  g /= 255;
+  b /= 255;
+  const max = Math.max(r, g, b);
+  const min = Math.min(r, g, b);
+  const l = (max + min) / 2;
+  if (max === min) return [0, 0, l];
+  const d = max - min;
+  const s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+  let h = 0;
+  if (max === r) h = (g - b) / d + (g < b ? 6 : 0);
+  else if (max === g) h = (b - r) / d + 2;
+  else h = (r - g) / d + 4;
+  return [h / 6, s, l];
+}
+
+function hslToRgb(h: number, s: number, l: number): [number, number, number] {
+  if (s === 0) {
+    const v = Math.round(l * 255);
+    return [v, v, v];
+  }
+  const hue = (p: number, q: number, t: number) => {
+    if (t < 0) t += 1;
+    if (t > 1) t -= 1;
+    if (t < 1 / 6) return p + (q - p) * 6 * t;
+    if (t < 1 / 2) return q;
+    if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
+    return p;
+  };
+  const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+  const p = 2 * l - q;
+  return [
+    Math.round(hue(p, q, h + 1 / 3) * 255),
+    Math.round(hue(p, q, h) * 255),
+    Math.round(hue(p, q, h - 1 / 3) * 255),
+  ];
+}
+
+// Izvlači glavnu boju sata sa slike (mala slika, 24x24 piksela)
+function loadColor(src: string): Promise<string | null> {
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.crossOrigin = "anonymous";
+    img.decoding = "async";
+
+    img.onload = () => {
+      try {
+        const size = 24;
+        const canvas = document.createElement("canvas");
+        canvas.width = size;
+        canvas.height = size;
+        const ctx = canvas.getContext("2d", { willReadFrequently: true });
+
+        if (!ctx) return resolve(null);
+
+        ctx.drawImage(img, 0, 0, size, size);
+        const data = ctx.getImageData(0, 0, size, size).data;
+
+        let rs = 0;
+        let gs = 0;
+        let bs = 0;
+        let ws = 0;
+
+        for (let i = 0; i < data.length; i += 4) {
+          const r = data[i];
+          const g = data[i + 1];
+          const b = data[i + 2];
+          if (data[i + 3] < 128) continue;
+
+          const max = Math.max(r, g, b);
+          const min = Math.min(r, g, b);
+          const l = (max + min) / 510;
+          const sat = max === min ? 0 : (max - min) / (255 - Math.abs(max + min - 255) || 1);
+          const weight = Math.max(0.02, (0.15 + sat) * (1 - Math.abs(l - 0.5) * 1.4));
+
+          rs += r * weight;
+          gs += g * weight;
+          bs += b * weight;
+          ws += weight;
+        }
+
+        if (ws === 0) return resolve(null);
+
+        const [h0, s0, l0] = rgbToHsl(rs / ws, gs / ws, bs / ws);
+
+        // srebrni i crni satovi (skoro bez boje) dobijaju hladnu plavo-sivu nijansu
+        const neutral = s0 < 0.1;
+        const [r, g, b] = hslToRgb(
+          neutral ? 0.6 : h0,
+          neutral ? 0.16 : Math.min(1, Math.max(0.2, s0 * 1.15)),
+          Math.min(0.46, Math.max(0.3, l0)),
+        );
+
+        resolve(`${r},${g},${b}`);
+      } catch {
+        // slika sa tuđe adrese bez dozvole: ostaje podrazumevana zlatna
+        resolve(null);
+      }
+    };
+
+    img.onerror = () => resolve(null);
+    img.src = src;
+  });
+}
+
+function glowBackground(rgb: string) {
+  return [
+    `radial-gradient(ellipse 75% 65% at 72% 28%, rgba(${rgb},0.85), transparent 72%)`,
+    `radial-gradient(ellipse 60% 50% at 8% 95%, rgba(${rgb},0.50), transparent 70%)`,
+    `linear-gradient(180deg, rgba(${rgb},0.35), rgba(31,42,60,0) 75%)`,
+  ].join(", ");
+}
 
 function formatPrice(value: number) {
   return value.toLocaleString("sr-RS", {
@@ -46,7 +161,7 @@ export default function HeroShowcase({
   const [prev, setPrev] = useState(0);
   const [paused, setPaused] = useState(false);
   const [seen, setSeen] = useState<number[]>(count > 1 ? [0, 1] : [0]);
-  const [ambientFailed, setAmbientFailed] = useState(false);
+  const [colors, setColors] = useState<Record<number, string>>({});
 
   const touchStart = useRef<{ x: number; y: number } | null>(null);
   const swiped = useRef(false);
@@ -81,6 +196,31 @@ export default function HeroShowcase({
     return () => clearTimeout(timer);
   }, [index, paused, count, goTo]);
 
+  // boja pozadine za sat koji je na redu (i za sledeći)
+  useEffect(() => {
+    let cancelled = false;
+
+    seen.forEach((i) => {
+      const slide = slides[i];
+
+      if (!slide || slide.image.startsWith("/") || colors[i]) return;
+
+      loadColor(resizedUrl(slide.image, 64, 50)).then((small) => {
+        if (small || cancelled) return small;
+        return loadColor(slide.image);
+      }).then((rgb) => {
+        if (rgb && !cancelled) {
+          setColors((existing) => ({ ...existing, [i]: rgb }));
+        }
+      });
+    });
+
+    return () => {
+      cancelled = true;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [seen, slides]);
+
   // stara pozadina nestaje tek pošto se nova potpuno pojavi
   useEffect(() => {
     const timer = setTimeout(() => setPrev(index), 1200);
@@ -102,29 +242,18 @@ export default function HeroShowcase({
         className="ws-ambient-mask pointer-events-none absolute inset-0 -z-10 overflow-hidden"
       >
         {prev !== index && slides[prev] && (
-          <img
+          <div
             key={`prev-${prev}`}
-            src={resizedUrl(slides[prev].image, 32, 40)}
-            alt=""
-            decoding="async"
-            className={`absolute inset-0 h-full w-full object-cover saturate-150 ${
-              ambientFailed ? "scale-125 blur-3xl" : ""
-            }`}
+            className="absolute inset-0"
+            style={{ background: glowBackground(colors[prev] ?? DEFAULT_RGB) }}
           />
         )}
 
-        <img
+        <div
           key={`current-${index}`}
-          src={resizedUrl(current.image, 32, 40)}
-          alt=""
-          decoding="async"
-          onError={() => setAmbientFailed(true)}
-          className={`ws-fade-in absolute inset-0 h-full w-full object-cover saturate-150 ${
-            ambientFailed ? "scale-125 blur-3xl" : ""
-          }`}
+          className="ws-fade-in absolute inset-0"
+          style={{ background: glowBackground(colors[index] ?? DEFAULT_RGB) }}
         />
-
-        <div className="absolute inset-0 bg-[#1F2A3C]/75" />
       </div>
 
       <div className="flex items-center justify-between px-6 pt-6 text-[10px] font-medium uppercase tracking-[0.3em] text-[#F8F4E7]/60 sm:px-10 sm:pt-8">
@@ -293,7 +422,7 @@ export default function HeroShowcase({
 
           <div className="relative rounded-[2rem] border border-[#B8955A]/35 p-2 shadow-[0_30px_80px_rgba(0,0,0,0.45)] sm:rounded-[2.5rem] sm:p-3">
             <div
-              className="relative isolate aspect-[4/4.5] overflow-hidden rounded-[1.5rem] bg-[#1F2A3C] sm:rounded-[2rem]"
+              className="relative isolate aspect-[4/4.7] overflow-hidden rounded-[1.5rem] bg-[#1F2A3C] sm:rounded-[2rem]"
               style={{ touchAction: "pan-y" }}
               onPointerDown={(event) => {
                 touchStart.current = { x: event.clientX, y: event.clientY };
@@ -349,13 +478,26 @@ export default function HeroShowcase({
                         className="h-full w-full object-cover"
                       />
                     ) : (
-                      <ProductImage
-                        src={slide.image}
-                        alt={`${slide.name} – ručni sat`}
-                        priority={i === 0}
-                        sizes="(min-width: 1024px) 560px, 92vw"
-                        className="h-full w-full object-cover"
-                      />
+                      <>
+                        <div
+                          aria-hidden="true"
+                          className="absolute inset-0"
+                          style={{
+                            background: `radial-gradient(circle at 50% 38%, rgba(${
+                              colors[i] ?? DEFAULT_RGB
+                            },0.55), transparent 68%)`,
+                          }}
+                        />
+                        <div className="absolute inset-x-3 top-3 bottom-[10.5rem] sm:inset-x-4 sm:top-4 sm:bottom-[11.5rem]">
+                          <ProductImage
+                            src={slide.image}
+                            alt={`${slide.name} – ručni sat`}
+                            priority={i === 0}
+                            sizes="(min-width: 1024px) 560px, 92vw"
+                            className="h-full w-full object-contain drop-shadow-[0_24px_40px_rgba(0,0,0,0.45)]"
+                          />
+                        </div>
+                      </>
                     )}
 
                     <Link
@@ -370,7 +512,7 @@ export default function HeroShowcase({
 
               <div
                 aria-hidden="true"
-                className="pointer-events-none absolute inset-0 z-[3] bg-gradient-to-t from-[#1F2A3C]/95 via-[#1F2A3C]/15 to-black/10"
+                className="pointer-events-none absolute inset-x-0 bottom-0 z-[3] h-[55%] bg-gradient-to-t from-[#1F2A3C] via-[#1F2A3C]/85 to-transparent"
               />
 
               {current.badge && (
