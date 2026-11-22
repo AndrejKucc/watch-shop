@@ -104,6 +104,8 @@ export default async function Home() {
     featuredWatches.length > 0 ? featuredWatches : watches
   ).slice(0, 6);
 
+  const currentYear = new Date().getFullYear();
+
   return (
     <main className="relative min-h-screen overflow-x-clip bg-[#F8F4E7] text-[#1F2A3C] selection:bg-[#B8955A] selection:text-white">
       <style>{`
@@ -116,7 +118,7 @@ export default async function Home() {
           background: #F8F4E7;
         }
 
-        /* Paleta: osnova #F8F4E7 · dugmići #1F2A3C · ivice #B8955A · tamna sekcija #1F2A3C */
+        /* Paleta: osnova #F8F4E7 · navy #1F2A3C · zlato #B8955A · tamno zlato #8A6A33 */
 
         .ws-glass {
           background: rgba(248, 244, 231, 0.74);
@@ -136,67 +138,138 @@ export default async function Home() {
           backdrop-filter: blur(18px);
         }
 
-        /* Staklo za tamnu sekciju (originalni izgled) */
-        .ws-glass-card-dark {
-          background: linear-gradient(
-            135deg,
-            rgba(184, 149, 90, 0.10),
-            rgba(255, 255, 255, 0.018)
-          );
-          border: 1px solid rgba(184, 149, 90, 0.15);
-          -webkit-backdrop-filter: blur(18px);
-          backdrop-filter: blur(18px);
+        /* Tamni filmski okvir (hero + izdvojeni satovi) */
+        .ws-stage {
+          position: relative;
+          background:
+            radial-gradient(ellipse 60% 55% at 74% 22%, rgba(184, 149, 90, 0.30), transparent 70%),
+            radial-gradient(ellipse 50% 40% at 6% 96%, rgba(184, 149, 90, 0.14), transparent 70%),
+            linear-gradient(180deg, rgba(0, 0, 0, 0.20), rgba(0, 0, 0, 0) 38%, rgba(0, 0, 0, 0.30)),
+            #1F2A3C;
+          border: 1px solid rgba(184, 149, 90, 0.28);
+          box-shadow:
+            0 40px 100px rgba(31, 42, 60, 0.35),
+            inset 0 1px 0 rgba(248, 244, 231, 0.08);
         }
 
-        .ws-hero {
-          background:
-            radial-gradient(ellipse at 78% 30%, rgba(184, 149, 90, 0.26), transparent 52%),
-            radial-gradient(ellipse at 8% 90%, rgba(255, 255, 255, 0.8), transparent 45%),
-            linear-gradient(115deg, #FFFFFF 0%, #F8F4E7 55%, rgba(184, 149, 90, 0.22) 100%);
+        /* fino zrno preko tamnog okvira */
+        .ws-grain {
+          pointer-events: none;
+          position: absolute;
+          inset: 0;
+          z-index: 1;
+          opacity: 0.07;
+          mix-blend-mode: overlay;
+          background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+        }
+
+        .ws-serif {
+          font-family: Georgia, "Times New Roman", serif;
         }
 
         .ws-title-gradient {
-          background: linear-gradient(
-            105deg,
-            #8A6A33 0%,
-            #B8955A 100%
-          );
+          background: linear-gradient(105deg, #B8955A 0%, #F8F4E7 100%);
           -webkit-background-clip: text;
           background-clip: text;
           color: transparent;
         }
 
-        .ws-primary-button {
-          background: linear-gradient(135deg, #1F2A3C, #1F2A3C);
-          border: 1px solid #B8955A;
-          box-shadow: 0 10px 28px rgba(31, 42, 60, 0.28);
-          color: #F8F4E7;
-          transition: transform 200ms ease, border-color 200ms ease, filter 200ms ease;
+        .ws-dark-glass {
+          background: rgba(248, 244, 231, 0.055);
+          border: 1px solid rgba(248, 244, 231, 0.12);
+          -webkit-backdrop-filter: blur(16px);
+          backdrop-filter: blur(16px);
         }
 
-        .ws-primary-button:hover {
-          border-color: #B8955A;
+        .ws-gold-button {
+          background: #B8955A;
+          color: #1F2A3C;
+          border: 1px solid rgba(248, 244, 231, 0.35);
+          box-shadow: 0 12px 30px rgba(0, 0, 0, 0.30);
+          transition: transform 200ms ease, filter 200ms ease;
+        }
+
+        .ws-gold-button:hover {
           filter: brightness(1.12);
           transform: translateY(-2px);
         }
 
-        .ws-product-card {
-          background: linear-gradient(160deg, #FFFFFF 0%, #F8F4E7 100%);
-          border: 1px solid rgba(184, 149, 90, 0.30);
-          box-shadow: 0 10px 30px rgba(60, 40, 20, 0.07);
-          transition: transform 300ms ease, border-color 300ms ease, box-shadow 300ms ease;
+        .ws-ghost-button {
+          border: 1px solid rgba(248, 244, 231, 0.28);
+          color: #F8F4E7;
+          transition: border-color 200ms ease, background 200ms ease, color 200ms ease;
         }
 
-        .ws-product-card:hover {
-          transform: translateY(-5px);
+        .ws-ghost-button:hover {
           border-color: #B8955A;
-          box-shadow: 0 24px 55px rgba(60, 40, 20, 0.16);
+          background: rgba(184, 149, 90, 0.14);
+          color: #F8F4E7;
         }
 
-        .ws-watch-image {
-          background:
-            radial-gradient(ellipse at 50% 45%, rgba(184, 149, 90, 0.18), transparent 62%),
-            linear-gradient(145deg, #FFFFFF, rgba(184, 149, 90, 0.28));
+        .ws-hairline {
+          height: 1px;
+          background: linear-gradient(
+            90deg,
+            transparent,
+            rgba(184, 149, 90, 0.65),
+            transparent
+          );
+        }
+
+        .ws-ticks {
+          height: 10px;
+          background: repeating-linear-gradient(
+            90deg,
+            rgba(248, 244, 231, 0.35) 0 1px,
+            transparent 1px 8px
+          );
+          -webkit-mask-image: linear-gradient(90deg, transparent, #000 18%, #000 82%, transparent);
+          mask-image: linear-gradient(90deg, transparent, #000 18%, #000 82%, transparent);
+        }
+
+        .ws-ring {
+          animation: ws-spin 90s linear infinite;
+        }
+
+        .ws-card-dark {
+          background: linear-gradient(
+            160deg,
+            rgba(248, 244, 231, 0.10),
+            rgba(248, 244, 231, 0.025) 60%
+          );
+          border: 1px solid rgba(248, 244, 231, 0.10);
+          box-shadow: 0 18px 45px rgba(0, 0, 0, 0.22);
+          transition:
+            transform 320ms ease,
+            border-color 320ms ease,
+            box-shadow 320ms ease;
+        }
+
+        .ws-card-dark:hover {
+          transform: translateY(-6px);
+          border-color: rgba(184, 149, 90, 0.70);
+          box-shadow: 0 30px 70px rgba(0, 0, 0, 0.38);
+        }
+
+        .ws-rise {
+          animation: ws-rise 900ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+        }
+
+        @keyframes ws-rise {
+          from {
+            opacity: 0;
+            transform: translateY(22px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        @keyframes ws-spin {
+          to {
+            transform: rotate(360deg);
+          }
         }
 
         @media (prefers-reduced-motion: reduce) {
@@ -204,8 +277,14 @@ export default async function Home() {
             scroll-behavior: auto;
           }
 
-          .ws-primary-button,
-          .ws-product-card {
+          .ws-ring,
+          .ws-rise {
+            animation: none;
+          }
+
+          .ws-card-dark,
+          .ws-gold-button,
+          .ws-ghost-button {
             transition: none;
           }
         }
@@ -271,255 +350,385 @@ export default async function Home() {
         </div>
       </header>
 
-      {/* LUKSUZNI HERO DEO */}
-      <section className="ws-hero relative isolate overflow-hidden border-b border-[#B8955A]/25">
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute -right-24 top-0 -z-10 h-[420px] w-[420px] rounded-full bg-[#B8955A]/20 blur-[100px]"
-        />
+      {/* TAMNI FILMSKI OKVIR: hero + izdvojeni satovi */}
+      <div className="px-3 pt-4 sm:px-6 sm:pt-6">
+        <div className="ws-stage mx-auto max-w-[1400px] overflow-hidden rounded-[1.75rem] sm:rounded-[2.5rem]">
+          <div aria-hidden="true" className="ws-grain" />
 
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute -bottom-40 left-0 -z-10 h-[360px] w-[360px] rounded-full bg-white/70 blur-[100px]"
-        />
+          {/* HERO */}
+          <section className="relative z-10">
+            <div className="flex items-center justify-between px-6 pt-6 text-[10px] font-medium uppercase tracking-[0.3em] text-[#F8F4E7]/60 sm:px-10 sm:pt-8">
+              <span className="flex items-center gap-3">
+                <span className="h-px w-8 bg-[#B8955A]" />
+                Kolekcija {currentYear}
+              </span>
 
-        <div className="mx-auto grid max-w-7xl items-center gap-10 px-6 py-16 sm:py-20 lg:grid-cols-[1.05fr_0.95fr] lg:gap-8 lg:py-24">
-          <div className="relative z-10 max-w-2xl">
-            <div className="inline-flex items-center gap-2 rounded-full border border-[#B8955A]/40 bg-white/60 px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.23em] text-[#8A6A33] sm:text-xs">
-              <span className="h-1.5 w-1.5 rounded-full bg-[#B8955A]" />
-              Vreme je za nešto posebno
+              <span className="hidden items-center gap-3 sm:flex">
+                Muški · Ženski
+                <span className="h-px w-8 bg-[#B8955A]" />
+              </span>
             </div>
 
-            <h1 className="mt-7 text-5xl font-semibold leading-[1.04] tracking-tight text-[#1F2A3C] sm:text-6xl lg:text-7xl xl:text-[5.5rem]">
-              Muški i ženski
-              <span className="ws-title-gradient block">ručni satovi.</span>
-            </h1>
+            <div className="grid items-center gap-12 px-6 pb-12 pt-10 sm:px-10 lg:grid-cols-[0.95fr_1.05fr] lg:gap-8 lg:pb-16 lg:pt-8">
+              <div className="relative z-10 max-w-2xl">
+                <div className="ws-rise ws-dark-glass inline-flex items-center gap-2 rounded-full px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.23em] text-[#B8955A] sm:text-xs">
+                  <span className="h-1.5 w-1.5 rounded-full bg-[#B8955A]" />
+                  Vreme je za nešto posebno
+                </div>
 
-            <p className="mt-7 max-w-xl text-base leading-7 text-[#1F2A3C]/80 sm:text-lg sm:leading-8">
-              Otkrij kolekciju muških i ženskih ručnih satova u WATCH STORE-u.
-              Pronađi elegantne, moderne i pažljivo odabrane satove, kao i
-              narukvice, ogrlice, novčanike i poklone za svaki stil.
-            </p>
+                <h1
+                  className="ws-rise ws-serif mt-7 text-5xl font-normal leading-[1.03] tracking-tight text-[#F8F4E7] sm:text-6xl lg:text-7xl xl:text-[5.25rem]"
+                  style={{ animationDelay: "120ms" }}
+                >
+                  Muški i ženski
+                  <span className="ws-title-gradient block italic">
+                    ručni satovi.
+                  </span>
+                </h1>
 
-            <div className="mt-9 flex flex-wrap gap-3">
-              <a
-                href="#kolekcija"
-                className="ws-primary-button inline-flex items-center justify-center gap-2 rounded-2xl px-6 py-3.5 text-sm font-semibold"
-              >
-                Pogledaj kolekciju
-                <span aria-hidden="true">↗</span>
-              </a>
-            </div>
-
-            <div className="mt-12 flex flex-wrap gap-x-8 gap-y-4 border-t border-[#1F2A3C]/10 pt-6">
-              <div>
-                <p className="text-lg font-semibold text-[#1F2A3C]">Stil</p>
-                <p className="mt-1 text-xs text-[#1F2A3C]/65">
-                  Za svaki trenutak
+                <p
+                  className="ws-rise mt-7 max-w-xl text-base leading-7 text-[#F8F4E7]/70 sm:text-lg sm:leading-8"
+                  style={{ animationDelay: "240ms" }}
+                >
+                  Otkrij kolekciju muških i ženskih ručnih satova u WATCH
+                  STORE-u. Pronađi elegantne, moderne i pažljivo odabrane
+                  satove, kao i narukvice, ogrlice, novčanike i poklone za
+                  svaki stil.
                 </p>
+
+                <div
+                  className="ws-rise mt-9 flex flex-wrap gap-3"
+                  style={{ animationDelay: "360ms" }}
+                >
+                  <a
+                    href="#kolekcija"
+                    className="ws-gold-button inline-flex items-center justify-center gap-2 rounded-2xl px-6 py-3.5 text-sm font-semibold"
+                  >
+                    Pogledaj kolekciju
+                    <span aria-hidden="true">↗</span>
+                  </a>
+
+                  <a
+                    href="#satovi"
+                    className="ws-ghost-button inline-flex items-center justify-center gap-2 rounded-2xl px-6 py-3.5 text-sm font-medium"
+                  >
+                    Izdvojeni satovi
+                  </a>
+                </div>
+
+                <div
+                  className="ws-rise mt-12 grid max-w-md grid-cols-2 gap-3"
+                  style={{ animationDelay: "480ms" }}
+                >
+                  <div className="ws-dark-glass flex items-center gap-3 rounded-2xl p-4">
+                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-[#B8955A]/50 text-[#B8955A]">
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="1.5"
+                        className="h-4 w-4"
+                        aria-hidden="true"
+                      >
+                        <circle cx="12" cy="12" r="9" />
+                        <path d="M12 7v5l3 2" />
+                      </svg>
+                    </span>
+                    <div>
+                      <p className="text-sm font-semibold text-[#F8F4E7]">
+                        Stil
+                      </p>
+                      <p className="mt-0.5 text-[11px] text-[#F8F4E7]/60">
+                        Za svaki trenutak
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="ws-dark-glass flex items-center gap-3 rounded-2xl p-4">
+                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-[#B8955A]/50 text-[#B8955A]">
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="1.5"
+                        className="h-4 w-4"
+                        aria-hidden="true"
+                      >
+                        <path d="m12 3 2.6 5.4 5.9.9-4.3 4.2 1 5.9L12 16.6 6.8 19.4l1-5.9L3.5 9.3l5.9-.9L12 3Z" />
+                      </svg>
+                    </span>
+                    <div>
+                      <p className="text-sm font-semibold text-[#F8F4E7]">
+                        Pažljivo birano
+                      </p>
+                      <p className="mt-0.5 text-[11px] text-[#F8F4E7]/60">
+                        Detalji koji znače
+                      </p>
+                    </div>
+                  </div>
+                </div>
               </div>
 
-              <div className="h-10 w-px bg-[#1F2A3C]/15" />
-
-              <div>
-                <p className="text-lg font-semibold text-[#1F2A3C]">
-                  Pažljivo birano
-                </p>
-                <p className="mt-1 text-xs text-[#1F2A3C]/65">
-                  Detalji koji znače
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* GLAVNA SLIKA SATA */}
-          <div className="relative mx-auto w-full max-w-xl lg:max-w-none">
-            <div
-              aria-hidden="true"
-              className="pointer-events-none absolute inset-8 rounded-full bg-[#B8955A]/25 blur-[70px]"
-            />
-
-            <div className="ws-glass-card relative overflow-hidden rounded-[2rem] p-2 shadow-[0_25px_70px_rgba(60,40,20,0.20)] sm:rounded-[2.5rem] sm:p-3">
-              <div className="ws-watch-image relative isolate flex aspect-[4/4.5] items-center justify-center overflow-hidden rounded-[1.5rem] sm:rounded-[2rem]">
-                <img
-                  src="/images/hero-watch.png"
-                  alt="Muški i ženski ručni satovi iz WATCH STORE kolekcije"
-                  fetchPriority="high"
-                  className="absolute inset-0 z-0 h-full w-full rounded-[1.5rem] object-cover sm:rounded-[2rem]"
-                />
+              {/* GLAVNA SLIKA SATA */}
+              <div className="relative mx-auto w-full max-w-xl lg:max-w-none">
+                {/* ukrasni brojčanik sa crticama */}
+                <div
+                  aria-hidden="true"
+                  className="pointer-events-none absolute -inset-[7%] flex items-center justify-center"
+                >
+                  <svg
+                    viewBox="0 0 400 400"
+                    className="ws-ring h-full w-full text-[#B8955A]/45"
+                  >
+                    <circle
+                      cx="200"
+                      cy="200"
+                      r="192"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="0.7"
+                    />
+                    <circle
+                      cx="200"
+                      cy="200"
+                      r="168"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="0.5"
+                      strokeDasharray="1 6"
+                    />
+                    {Array.from({ length: 60 }).map((_, i) => (
+                      <line
+                        key={i}
+                        x1="200"
+                        y1="8"
+                        x2="200"
+                        y2={i % 5 === 0 ? 26 : 17}
+                        stroke="currentColor"
+                        strokeWidth={i % 5 === 0 ? 1.4 : 0.6}
+                        transform={`rotate(${i * 6} 200 200)`}
+                      />
+                    ))}
+                  </svg>
+                </div>
 
                 <div
                   aria-hidden="true"
-                  className="pointer-events-none absolute inset-0 z-[1] rounded-[1.5rem] bg-gradient-to-t from-[#1F2A3C]/85 via-[#1F2A3C]/10 to-black/5 sm:rounded-[2rem]"
+                  className="pointer-events-none absolute inset-10 rounded-full bg-[#B8955A]/25 blur-[80px]"
                 />
 
-                <div className="relative z-10 mt-auto w-full px-4 pb-10 pt-64 text-center sm:px-6 sm:pb-14 sm:pt-72">
-                  <p className="text-[10px] font-medium uppercase tracking-[0.35em] text-[#B8955A] sm:text-xs">
-                    WATCH STORE · PREMIUM SELECTION
-                  </p>
+                <div className="relative rounded-[2rem] border border-[#B8955A]/35 p-2 shadow-[0_30px_80px_rgba(0,0,0,0.45)] sm:rounded-[2.5rem] sm:p-3">
+                  <div className="relative isolate flex aspect-[4/4.5] items-center justify-center overflow-hidden rounded-[1.5rem] bg-[#1F2A3C] sm:rounded-[2rem]">
+                    <img
+                      src="/images/hero-watch.png"
+                      alt="Muški i ženski ručni satovi iz WATCH STORE kolekcije"
+                      fetchPriority="high"
+                      className="absolute inset-0 z-0 h-full w-full rounded-[1.5rem] object-cover sm:rounded-[2rem]"
+                    />
 
-                  <p className="mt-3 text-2xl font-medium tracking-wide text-[#F8F4E7] sm:text-3xl">
-                    Vreme je za pravi izbor.
-                  </p>
+                    <div
+                      aria-hidden="true"
+                      className="pointer-events-none absolute inset-0 z-[1] rounded-[1.5rem] bg-gradient-to-t from-[#1F2A3C]/90 via-[#1F2A3C]/10 to-black/10 sm:rounded-[2rem]"
+                    />
 
-                  <p className="mx-auto mt-3 max-w-xs text-sm leading-6 text-[#F8F4E7]/85">
-                    Pronađi detalj koji upotpunjuje tvoj stil.
-                  </p>
+                    <span className="ws-dark-glass absolute left-4 top-4 z-10 rounded-full px-3 py-1.5 text-[9px] font-semibold uppercase tracking-[0.25em] text-[#F8F4E7]/85 sm:left-5 sm:top-5 sm:text-[10px]">
+                      Premium selection
+                    </span>
+
+                    <div className="relative z-10 mt-auto w-full px-4 pb-10 pt-64 text-center sm:px-6 sm:pb-14 sm:pt-72">
+                      <p className="text-[10px] font-medium uppercase tracking-[0.35em] text-[#B8955A] sm:text-xs">
+                        WATCH STORE · PREMIUM SELECTION
+                      </p>
+
+                      <p className="ws-serif mt-3 text-2xl font-normal italic tracking-wide text-[#F8F4E7] sm:text-3xl">
+                        Vreme je za pravi izbor.
+                      </p>
+
+                      <p className="mx-auto mt-3 max-w-xs text-sm leading-6 text-[#F8F4E7]/80">
+                        Pronađi detalj koji upotpunjuje tvoj stil.
+                      </p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
 
-            <div
-              aria-hidden="true"
-              className="pointer-events-none absolute -bottom-5 -right-3 h-24 w-24 rounded-full bg-[#B8955A]/20 blur-3xl"
-            />
-          </div>
-        </div>
-      </section>
-
-      {/* IZDVOJENI SATOVI */}
-      <section className="relative mx-auto max-w-7xl px-6 py-16 sm:py-20">
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute right-0 top-10 h-64 w-64 rounded-full bg-[#B8955A]/10 blur-[90px]"
-        />
-
-        <div
-          id="satovi"
-          className="relative scroll-mt-36 flex flex-col justify-between gap-4 border-b border-[#1F2A3C]/10 pb-6 sm:flex-row sm:items-end"
-        >
-          <div>
-            <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-[#8A6A33] sm:text-xs">
-              Pažljivo odabrana kolekcija
-            </p>
-
-            <h2 className="mt-3 text-2xl font-semibold tracking-tight text-[#1F2A3C] sm:text-3xl">
-              Izdvojeni satovi
-            </h2>
-
-            <p className="mt-2 text-sm text-[#1F2A3C]/80">
-              Naš izbor satova koji privlače pažnju.
-            </p>
-          </div>
-
-          <Link
-            href="/satovi"
-            className="inline-flex w-fit items-center gap-2 rounded-xl border border-[#B8955A] bg-[#1F2A3C] px-4 py-2.5 text-sm font-medium text-[#F8F4E7] transition hover:bg-[#1F2A3C]/90 hover:text-white"
-          >
-            Svi satovi <span aria-hidden="true">→</span>
-          </Link>
-        </div>
-
-        <div className="relative mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {displayedWatches.map((product) => {
-            const badgeKey =
-              typeof product.featured_badge === "string"
-                ? product.featured_badge
-                : "";
-
-            const badge = featuredBadges[badgeKey];
-
-            const oldPrice = Number(product.old_price);
-            const currentPrice = Number(product.price);
-
-            const hasDiscount =
-              product.old_price !== null &&
-              product.old_price !== undefined &&
-              Number.isFinite(oldPrice) &&
-              oldPrice > currentPrice;
-
-            return (
-              <Link
-                key={product.id}
-                href={`/product/${product.id}`}
-                className="ws-product-card group overflow-hidden rounded-[1.75rem]"
+            {/* DONJA TRAKA HERO DELA */}
+            <div className="flex items-center justify-between gap-4 border-t border-[#F8F4E7]/10 px-6 py-4 text-[10px] font-medium uppercase tracking-[0.25em] text-[#F8F4E7]/55 sm:px-10">
+              <a
+                href="#satovi"
+                className="flex shrink-0 items-center gap-2 transition hover:text-[#B8955A]"
               >
-                <div className="ws-watch-image relative aspect-[4/3] overflow-hidden">
-                  {product.images && product.images[0] ? (
-                    <img
-                      src={product.images[0]}
-                      alt={`${product.name} – ručni sat`}
-                      loading="lazy"
-                      className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.045]"
-                    />
-                  ) : (
-                    <div className="flex h-full items-center justify-center">
-                      <span className="text-sm text-[#1F2A3C]/65">
-                        Slika sata
-                      </span>
-                    </div>
-                  )}
+                <span aria-hidden="true">↓</span>
+                Skroluj
+              </a>
 
-                  <div
-                    aria-hidden="true"
-                    className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#1F2A3C]/35 via-transparent to-black/0"
-                  />
+              <div aria-hidden="true" className="ws-ticks mx-2 hidden flex-1 md:block" />
 
-                  {badge && (
-                    <span
-                      className={`absolute left-4 top-4 z-10 inline-flex max-w-[calc(100%-2rem)] items-center rounded-xl border px-3 py-2 text-[9px] font-bold tracking-[0.1em] shadow-lg backdrop-blur-xl sm:text-[10px] ${badge.className}`}
-                    >
-                      {badge.text}
-                    </span>
-                  )}
+              <nav
+                aria-label="Brze kategorije"
+                className="hidden shrink-0 items-center gap-6 sm:flex"
+              >
+                {mainNavigation.map((item) => (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className="transition hover:text-[#B8955A]"
+                  >
+                    {item.label}
+                  </Link>
+                ))}
+              </nav>
+            </div>
+          </section>
 
-                  <span className="absolute bottom-4 right-4 flex h-10 w-10 items-center justify-center rounded-xl border border-white/15 bg-[#1F2A3C]/70 text-lg text-white opacity-0 backdrop-blur-xl transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100">
-                    ↗
-                  </span>
-                </div>
+          {/* IZDVOJENI SATOVI */}
+          <section
+            id="satovi"
+            className="relative z-10 scroll-mt-36 px-6 pb-12 pt-4 sm:px-10 sm:pb-16"
+          >
+            <div aria-hidden="true" className="ws-hairline mb-12 sm:mb-14" />
 
-                <div className="p-5 sm:p-6">
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.23em] text-[#8A6A33]">
-                    {product.brand || "WATCH STORE"}
-                  </p>
+            <div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
+              <div>
+                <p className="flex items-center gap-3 text-[10px] font-semibold uppercase tracking-[0.3em] text-[#B8955A] sm:text-xs">
+                  <span className="h-px w-8 bg-[#B8955A]" />
+                  Pažljivo odabrana kolekcija
+                </p>
 
-                  <h3 className="mt-3 text-xl font-semibold tracking-tight text-[#1F2A3C] sm:text-2xl">
-                    {product.name}
-                  </h3>
+                <h2 className="ws-serif mt-4 text-3xl font-normal tracking-tight text-[#F8F4E7] sm:text-5xl">
+                  Izdvojeni satovi
+                </h2>
 
-                  <div className="mt-5 flex items-center justify-between gap-3 border-t border-[#1F2A3C]/10 pt-4">
-                    <div className="min-w-0">
-                      {hasDiscount && (
-                        <p className="mb-1 text-sm font-medium text-[#1F2A3C]/65 line-through decoration-[#B8955A]/70">
-                          {oldPrice.toLocaleString("sr-RS", {
-                            minimumFractionDigits: 2,
-                            maximumFractionDigits: 2,
-                          })}{" "}
-                          RSD
-                        </p>
+                <p className="mt-3 text-sm text-[#F8F4E7]/65">
+                  Naš izbor satova koji privlače pažnju.
+                </p>
+              </div>
+
+              <Link
+                href="/satovi"
+                className="ws-ghost-button inline-flex w-fit items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-medium"
+              >
+                Svi satovi <span aria-hidden="true">→</span>
+              </Link>
+            </div>
+
+            <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+              {displayedWatches.map((product, index) => {
+                const badgeKey =
+                  typeof product.featured_badge === "string"
+                    ? product.featured_badge
+                    : "";
+
+                const badge = featuredBadges[badgeKey];
+
+                const oldPrice = Number(product.old_price);
+                const currentPrice = Number(product.price);
+
+                const hasDiscount =
+                  product.old_price !== null &&
+                  product.old_price !== undefined &&
+                  Number.isFinite(oldPrice) &&
+                  oldPrice > currentPrice;
+
+                return (
+                  <Link
+                    key={product.id}
+                    href={`/product/${product.id}`}
+                    className="ws-card-dark group overflow-hidden rounded-[1.75rem] p-3"
+                  >
+                    <div className="relative aspect-[4/4.2] overflow-hidden rounded-[1.25rem] bg-[#F8F4E7]/5">
+                      {product.images && product.images[0] ? (
+                        <img
+                          src={product.images[0]}
+                          alt={`${product.name} – ručni sat`}
+                          loading="lazy"
+                          className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.05]"
+                        />
+                      ) : (
+                        <div className="flex h-full items-center justify-center">
+                          <span className="text-sm text-[#F8F4E7]/50">
+                            Slika sata
+                          </span>
+                        </div>
                       )}
 
-                      <p className="text-xl font-bold tracking-tight text-[#8A6A33]">
-                        {currentPrice.toLocaleString("sr-RS", {
-                          minimumFractionDigits: 2,
-                          maximumFractionDigits: 2,
-                        })}{" "}
-                        <span className="text-sm font-medium text-[#1F2A3C]/65">
-                          RSD
+                      <div
+                        aria-hidden="true"
+                        className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#1F2A3C]/60 via-transparent to-black/0"
+                      />
+
+                      {badge && (
+                        <span
+                          className={`absolute left-4 top-4 z-10 inline-flex max-w-[calc(100%-4.5rem)] items-center rounded-xl border px-3 py-2 text-[9px] font-bold tracking-[0.1em] shadow-lg backdrop-blur-xl sm:text-[10px] ${badge.className}`}
+                        >
+                          {badge.text}
                         </span>
-                      </p>
+                      )}
+
+                      <span className="absolute right-4 top-4 z-10 text-[10px] font-medium tracking-[0.25em] text-[#F8F4E7]/80">
+                        {String(index + 1).padStart(2, "0")}
+                      </span>
+
+                      <span className="absolute bottom-4 right-4 flex h-10 w-10 items-center justify-center rounded-xl border border-[#B8955A] bg-[#1F2A3C]/70 text-lg text-[#F8F4E7] opacity-0 backdrop-blur-xl transition-all duration-300 group-hover:opacity-100">
+                        ↗
+                      </span>
                     </div>
 
-                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-[#B8955A]/50 bg-[#B8955A]/10 text-[#8A6A33] transition group-hover:border-[#B8955A] group-hover:bg-[#1F2A3C] group-hover:text-[#F8F4E7]">
-                      →
-                    </span>
-                  </div>
-                </div>
-              </Link>
-            );
-          })}
+                    <div className="px-3 pb-3 pt-5">
+                      <p className="text-[10px] font-semibold uppercase tracking-[0.25em] text-[#B8955A]">
+                        {product.brand || "WATCH STORE"}
+                      </p>
 
-          {displayedWatches.length === 0 && (
-            <p className="text-[#1F2A3C]/65">
-              Trenutno nema satova za prikaz.
-            </p>
-          )}
+                      <h3 className="ws-serif mt-3 text-xl font-normal tracking-tight text-[#F8F4E7] sm:text-2xl">
+                        {product.name}
+                      </h3>
+
+                      <div className="mt-5 flex items-center justify-between gap-3 border-t border-[#F8F4E7]/10 pt-4">
+                        <div className="min-w-0">
+                          {hasDiscount && (
+                            <p className="mb-1 text-sm font-medium text-[#F8F4E7]/45 line-through decoration-[#B8955A]/70">
+                              {oldPrice.toLocaleString("sr-RS", {
+                                minimumFractionDigits: 2,
+                                maximumFractionDigits: 2,
+                              })}{" "}
+                              RSD
+                            </p>
+                          )}
+
+                          <p className="text-xl font-bold tracking-tight text-[#F8F4E7]">
+                            {currentPrice.toLocaleString("sr-RS", {
+                              minimumFractionDigits: 2,
+                              maximumFractionDigits: 2,
+                            })}{" "}
+                            <span className="text-sm font-medium text-[#B8955A]">
+                              RSD
+                            </span>
+                          </p>
+                        </div>
+
+                        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-[#B8955A]/50 text-[#B8955A] transition group-hover:border-[#B8955A] group-hover:bg-[#B8955A] group-hover:text-[#1F2A3C]">
+                          →
+                        </span>
+                      </div>
+                    </div>
+                  </Link>
+                );
+              })}
+
+              {displayedWatches.length === 0 && (
+                <p className="text-[#F8F4E7]/60">
+                  Trenutno nema satova za prikaz.
+                </p>
+              )}
+            </div>
+          </section>
         </div>
-      </section>
+      </div>
 
       {/* SVI PROIZVODI — svetla sekcija; samo filter i kartice proizvoda su plavi */}
       <section className="relative text-[#1F2A3C]">
-        <div className="mx-auto max-w-7xl px-6 pb-16 sm:pb-20">
+        <div className="mx-auto max-w-7xl px-6 pb-16 pt-16 sm:pb-20 sm:pt-20">
           <div id="kolekcija" className="relative scroll-mt-36">
             <div className="mb-8 flex flex-col justify-between gap-4 border-b border-[#1F2A3C]/10 pb-6 sm:flex-row sm:items-end">
               <div>
