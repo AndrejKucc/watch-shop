@@ -10,6 +10,7 @@ type ProductImageProps = {
   sizes?: string;
   widths?: number[];
   priority?: boolean;
+  style?: React.CSSProperties;
 };
 
 /**
@@ -23,6 +24,7 @@ export function ProductImage({
   sizes,
   widths = [480, 800, 1200],
   priority = false,
+  style,
 }: ProductImageProps) {
   const [failed, setFailed] = useState(false);
   const ref = useRef<HTMLImageElement | null>(null);
@@ -50,6 +52,7 @@ export function ProductImage({
       fetchPriority={priority ? "high" : undefined}
       onError={() => setFailed(true)}
       className={className}
+      style={style}
     />
   );
 }

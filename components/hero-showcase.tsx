@@ -623,18 +623,25 @@ export default function HeroShowcase({
                     type="button"
                     onClick={() => goTo(i)}
                     aria-label={slide.name}
-                    className={`relative h-14 w-14 shrink-0 overflow-hidden rounded-xl border transition sm:h-16 sm:w-16 ${
+                    className={`relative block shrink-0 overflow-hidden rounded-xl border-2 transition ${
                       i === index
                         ? "border-[#B8955A] opacity-100"
                         : "border-[#F8F4E7]/15 opacity-60 hover:opacity-100"
                     }`}
+                    style={{ width: 72, height: 90 }}
                   >
                     <ProductImage
                       src={slide.image}
                       alt=""
-                      widths={[96, 128, 192]}
-                      sizes="64px"
-                      className="h-full w-full object-contain p-1"
+                      widths={[144, 216, 288]}
+                      sizes="72px"
+                      style={{
+                        position: "absolute",
+                        inset: 0,
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "cover",
+                      }}
                     />
                   </button>
                 ))}
