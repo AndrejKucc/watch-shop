@@ -432,6 +432,26 @@ export default async function ProductPage({
 
   return (
     <main className="min-h-screen bg-[#F8F4E7] text-[#1F2A3C]">
+      <style>{`
+        .ws-stage {
+          position: relative;
+          background:
+            radial-gradient(ellipse 60% 55% at 74% 18%, rgba(184, 149, 90, 0.30), transparent 70%),
+            radial-gradient(ellipse 50% 40% at 6% 96%, rgba(184, 149, 90, 0.14), transparent 70%),
+            linear-gradient(180deg, rgba(0, 0, 0, 0.20), rgba(0, 0, 0, 0) 38%, rgba(0, 0, 0, 0.30)),
+            #1F2A3C;
+          border: 1px solid rgba(184, 149, 90, 0.28);
+          box-shadow:
+            0 40px 100px rgba(31, 42, 60, 0.30),
+            inset 0 1px 0 rgba(248, 244, 231, 0.08);
+        }
+
+        .ws-hairline {
+          height: 1px;
+          background: linear-gradient(90deg, transparent, rgba(184, 149, 90, 0.65), transparent);
+        }
+      `}</style>
+
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -462,14 +482,14 @@ export default async function ProductPage({
         </Link>
 
         <div className="mt-8 grid gap-10 lg:grid-cols-[minmax(0,1.15fr)_minmax(380px,0.85fr)] lg:items-start lg:gap-16">
-          <div className="min-w-0">
+          <div className="ws-stage min-w-0 overflow-hidden rounded-[2rem] p-3 sm:p-5">
             <ProductGallery
               images={imageList}
               productName={product.name}
             />
           </div>
 
-          <div className="lg:sticky lg:top-28">
+          <div className="rounded-[2rem] border border-[#B8955A]/30 bg-white p-6 shadow-[0_30px_80px_rgba(31,42,60,0.10)] sm:p-8 lg:sticky lg:top-28">
             <div className="flex flex-wrap gap-2">
               <span className="rounded-full border border-[#B8955A]/40 bg-[#B8955A]/6 px-3 py-1.5 text-[11px] font-medium uppercase tracking-[0.2em] text-[#1F2A3C]/72">
                 {productTypeLabel}
@@ -482,7 +502,8 @@ export default async function ProductPage({
               )}
             </div>
 
-            <p className="mt-7 text-xs font-medium uppercase tracking-[0.35em] text-[#8A6A33]">
+            <p className="mt-7 flex items-center gap-3 text-xs font-medium uppercase tracking-[0.35em] text-[#8A6A33]">
+              <span aria-hidden="true" className="h-px w-8 bg-[#B8955A]" />
               {product.brand || "WATCH STORE"}
             </p>
 

@@ -142,7 +142,7 @@ export default function ProductGallery({
       )}
 
       {imageCount > 1 && (
-        <p className="mt-3 text-center text-xs text-[#1F2A3C]/60">
+        <p className="mt-3 text-center text-xs text-[#F8F4E7]/60">
           Izaberi sliku ili koristi strelice
         </p>
       )}
