@@ -1041,13 +1041,13 @@ const showAccessoryFilters = isAccessoryMode || isWalletMode;
                 <div className="relative">
                   <Link href={`/product/${product.id}`} className="block">
                     <div className="relative overflow-hidden bg-[#F8F4E7]/5">
-                      <div className="aspect-[4/5]">
+                      <div className="relative aspect-[4/5]">
                         {product.images && product.images[0] ? (
                           <ProductImage
                             src={product.images[0]}
                             alt={product.name}
                             sizes="(min-width: 1024px) 380px, (min-width: 640px) 45vw, 92vw"
-                            className="ws-product-image h-full w-full object-cover"
+                            className="ws-product-image absolute inset-0 h-full w-full object-cover"
                           />
                         ) : (
                           <div className="flex h-full flex-col items-center justify-center gap-3 text-[#F8F4E7]/50">
@@ -1098,7 +1098,7 @@ const showAccessoryFilters = isAccessoryMode || isWalletMode;
                         {product.brand || "WATCH STORE"}
                       </p>
 
-                      <h3 className="mt-3 text-xl font-semibold leading-snug tracking-tight text-[#F8F4E7] transition-colors duration-200 group-hover:text-white sm:text-2xl">
+                      <h3 className="ws-serif mt-3 text-xl font-normal leading-snug tracking-tight text-[#F8F4E7] transition-colors duration-200 group-hover:text-white sm:text-2xl">
                         {product.name}
                       </h3>
 
