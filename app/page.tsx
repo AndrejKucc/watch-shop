@@ -537,26 +537,21 @@ export default async function Home() {
                     href={`/product/${product.id}`}
                     className="ws-card-dark group overflow-hidden rounded-[1.75rem] p-3"
                   >
-                    <div className="relative aspect-[4/5] overflow-hidden rounded-[1.25rem] bg-[#F8F4E7]">
+                    <div className="relative aspect-[4/5] overflow-hidden rounded-[1.25rem] bg-white">
                       {product.images && product.images[0] ? (
                         <ProductImage
                           src={product.images[0]}
                           alt={`${product.name} – ručni sat`}
                           sizes="(min-width: 1024px) 420px, (min-width: 640px) 45vw, 92vw"
-                          className="h-full w-full object-contain p-1 transition-transform duration-500 group-hover:scale-[1.02]"
+                          className="absolute inset-0 h-full w-full object-contain transition-transform duration-700 group-hover:scale-[1.04]"
                         />
                       ) : (
                         <div className="flex h-full items-center justify-center">
-                          <span className="text-sm text-[#F8F4E7]/50">
+                          <span className="text-sm text-[#1F2A3C]/50">
                             Slika sata
                           </span>
                         </div>
                       )}
-
-                      <div
-                        aria-hidden="true"
-                        className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#1F2A3C]/60 via-transparent to-black/0"
-                      />
 
                       {badge && (
                         <span
@@ -566,7 +561,7 @@ export default async function Home() {
                         </span>
                       )}
 
-                      <span className="absolute right-4 top-4 z-10 text-[10px] font-medium tracking-[0.25em] text-[#F8F4E7]/80">
+                      <span className="absolute right-4 top-4 z-10 text-[10px] font-medium tracking-[0.25em] text-[#1F2A3C]/60">
                         {String(index + 1).padStart(2, "0")}
                       </span>
 
