@@ -22,7 +22,8 @@ export function resizedUrl(
   const base = url.replace(STORAGE_MARKER, RENDER_MARKER);
   const separator = base.includes("?") ? "&" : "?";
 
-  return `${base}${separator}width=${width}&quality=${quality}`;
+  // resize=contain: slika se samo smanji, bez ikakvog sečenja
+  return `${base}${separator}width=${width}&resize=contain&quality=${quality}`;
 }
 
 export function resizedSrcSet(
