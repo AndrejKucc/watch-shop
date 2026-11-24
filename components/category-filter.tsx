@@ -1098,7 +1098,7 @@ const showAccessoryFilters = isAccessoryMode || isWalletMode;
                         {product.brand || "WATCH STORE"}
                       </p>
 
-                      <h3 className="ws-serif mt-3 text-xl font-normal leading-snug tracking-tight text-[#F8F4E7] transition-colors duration-200 group-hover:text-white sm:text-2xl">
+                      <h3 className="mt-3 text-xl font-semibold leading-snug tracking-tight text-[#F8F4E7] transition-colors duration-200 group-hover:text-white sm:text-2xl">
                         {product.name}
                       </h3>
 

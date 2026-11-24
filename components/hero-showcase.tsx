@@ -288,11 +288,11 @@ export default function HeroShowcase({
           </div>
 
           <h1
-            className="ws-rise ws-serif mt-7 text-4xl font-normal leading-[1.05] tracking-tight text-[#F8F4E7] sm:text-5xl lg:text-6xl xl:text-7xl"
+            className="ws-rise mt-7 text-4xl font-semibold leading-[1.05] tracking-tight text-[#F8F4E7] sm:text-5xl lg:text-6xl xl:text-7xl"
             style={{ animationDelay: "120ms" }}
           >
             Muški i ženski
-            <span className="ws-title-gradient block italic">
+            <span className="ws-title-gradient block">
               ručni satovi.
             </span>
           </h1>
@@ -526,7 +526,7 @@ export default function HeroShowcase({
                   {current.brand}
                 </p>
 
-                <p className="ws-serif mt-2 line-clamp-2 text-2xl font-normal leading-tight tracking-tight text-[#F8F4E7] sm:text-3xl">
+                <p className="mt-2 line-clamp-2 text-2xl font-semibold leading-tight tracking-tight text-[#F8F4E7] sm:text-3xl">
                   {current.name}
                 </p>
 
