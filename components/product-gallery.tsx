@@ -64,7 +64,7 @@ export default function ProductGallery({
     <div>
       <div className="group relative overflow-hidden rounded-[2rem] border border-[#B8955A]/40 bg-[#FFFFFF] shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]">
         <div
-          className="flex min-h-[420px] cursor-crosshair items-center justify-center overflow-hidden bg-gradient-to-br from-[#B8955A]/10 via-[#FFFFFF] to-[#F8F4E7] sm:min-h-[620px]"
+          className="flex aspect-square cursor-crosshair items-center justify-center overflow-hidden bg-gradient-to-br from-[#B8955A]/10 via-[#FFFFFF] to-[#F8F4E7] sm:aspect-auto sm:min-h-[620px]"
           onMouseMove={handleMouseMove}
           onMouseLeave={resetZoom}
         >

@@ -1,1 +1,1 @@
-Restyle product page: dark gallery frame, white buy card
+Fix mobile gallery: remove white bands above and below image
