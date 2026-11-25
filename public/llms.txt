@@ -1,22 +1,48 @@
 # WATCH STORE
 
-> WATCH STORE je online prodavnica muskih i zenskih rucnih satova, narukvica, ogrlica, novcanika i poklona. Porucivanje je online, placanje je pouzecem, a porudzbina se salje na adresu koju kupac unese.
+> WATCH STORE je online prodavnica rucnih satova, narukvica, ogrlica, novcanika i poklona
+> za muskarce i zene u Srbiji. Porucivanje je online, placanje je pouzecem, a porudzbina
+> se salje na adresu koju kupac unese.
 
 ## Kolekcije
 
-- [Satovi](https://watchstore.rs/satovi): muski i zenski rucni satovi
-- [Narukvice](https://watchstore.rs/narukvice): narukvice
-- [Ogrlice](https://watchstore.rs/ogrlice): ogrlice
-- [Novcanici](https://watchstore.rs/novcanici): novcanici
+- [Satovi](https://watchstore.rs/satovi): muski, zenski i unisex rucni satovi
+- [Narukvice](https://watchstore.rs/narukvice)
+- [Ogrlice](https://watchstore.rs/ogrlice)
+- [Novcanici](https://watchstore.rs/novcanici)
 - [Pokloni](https://watchstore.rs/pokloni): poklon kutije i poklon setovi
+
+## Sta se moze naci na stranici proizvoda
+
+- Satovi: kuciste (precnik, debljina, materijal, oblik, boja, vodootpornost), mehanizam (tip,
+  proizvodjac, kalibar), cifer (boja, indeksi, luminacija, datum, hronograf, GMT), staklo,
+  narukvica ili kais (materijal, boja, sirina).
+- Narukvice, ogrlice, novcanici: materijal, boja, velicina ili duzina, dimenzije.
+- Pokloni: za koga je poklon, velicina, boja, sadrzaj seta.
+- Slike proizvoda, cena (sa precrtanom starom cenom kad postoji popust), dostupnost, ocene kupaca.
+
+## Pretraga i filteri
+
+Po brendu, polu (muski, zenski, unisex), mehanizmu, precniku kucista, materijalu kucista i
+narukvice, vodootpornosti, hronografu, ceni i dostupnosti, uz sortiranje po ceni.
+
+## Kupovina
+
+- Placanje: samo pouzecem, kupac placa pri preuzimanju posiljke.
+- Nakon porudzbine stize potvrda na email, a kasnije i obavestenje da je porudzbina poslata.
+- Kupci mogu da skupljaju bodove i da ih koriste za popust, a postoje i kuponi za popust.
+- Dostupno: lista zelja, poredjenje proizvoda, obavestenje kad proizvod ponovo bude dostupan,
+  korisnicki nalog.
 
 ## Informacije
 
 - [O nama](https://watchstore.rs/about)
-- [Uslovi kupovine](https://watchstore.rs/terms): porucivanje, placanje pouzecem, dostava, dostupnost
+- [Uslovi kupovine](https://watchstore.rs/terms)
 - [Politika privatnosti](https://watchstore.rs/privacy)
 - [Kontakt](https://watchstore.rs/contact): info@watchstore.rs, +381 63 707 3074
 
 ## Napomena
 
-Svaki proizvod ima svoju stranicu na adresi https://watchstore.rs/product/{id}; sve adrese proizvoda su navedene u https://watchstore.rs/sitemap.xml.
+Svaki proizvod ima svoju stranicu na https://watchstore.rs/product/{id}; sve adrese proizvoda
+su u https://watchstore.rs/sitemap.xml. Ponuda i cene se menjaju, pa su stranice sajta
+merodavne.

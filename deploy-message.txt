@@ -1,1 +1,1 @@
-Fix llms.txt: plain ASCII text
+Expand llms.txt with product, filter and shopping details
