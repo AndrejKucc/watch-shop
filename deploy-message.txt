@@ -1,1 +1,1 @@
-SEO: per-page metadata and canonical, schema, sitemap, robots, llms.txt
+Fix llms.txt: plain ASCII text

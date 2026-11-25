@@ -1,19 +1,19 @@
 # WATCH STORE
 
-> WATCH STORE je online prodavnica muških i ženskih ručnih satova, narukvica, ogrlica, novčanika i poklona. Poručivanje je online, plaćanje je pouzećem, a porudžbina se šalje na adresu koju kupac unese.
+> WATCH STORE je online prodavnica muskih i zenskih rucnih satova, narukvica, ogrlica, novcanika i poklona. Porucivanje je online, placanje je pouzecem, a porudzbina se salje na adresu koju kupac unese.
 
 ## Kolekcije
 
-- [Satovi](https://watchstore.rs/satovi): muški i ženski ručni satovi
+- [Satovi](https://watchstore.rs/satovi): muski i zenski rucni satovi
 - [Narukvice](https://watchstore.rs/narukvice): narukvice
 - [Ogrlice](https://watchstore.rs/ogrlice): ogrlice
-- [Novčanici](https://watchstore.rs/novcanici): novčanici
+- [Novcanici](https://watchstore.rs/novcanici): novcanici
 - [Pokloni](https://watchstore.rs/pokloni): poklon kutije i poklon setovi
 
 ## Informacije
 
 - [O nama](https://watchstore.rs/about)
-- [Uslovi kupovine](https://watchstore.rs/terms): poručivanje, plaćanje pouzećem, dostava, dostupnost
+- [Uslovi kupovine](https://watchstore.rs/terms): porucivanje, placanje pouzecem, dostava, dostupnost
 - [Politika privatnosti](https://watchstore.rs/privacy)
 - [Kontakt](https://watchstore.rs/contact): info@watchstore.rs, +381 63 707 3074
 
