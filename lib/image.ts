@@ -79,3 +79,13 @@ export function heroUrl(url: string): string {
 
   return `${base}${separator}width=900&quality=70`;
 }
+
+// Slika za kartice proizvoda: širina 640 px, bez zadate visine (razmera ostaje ista kao original).
+export function cardUrl(url: string): string {
+  if (!canResize(url)) return url;
+
+  const base = url.replace(STORAGE_MARKER, RENDER_MARKER);
+  const separator = base.includes("?") ? "&" : "?";
+
+  return `${base}${separator}width=640&quality=70`;
+}

@@ -8,6 +8,7 @@ import { WishlistCountButton } from "@/components/wishlist";
 import CategoryFilter from "@/components/category-filter";
 import HeroShowcase, { type HeroSlide } from "@/components/hero-showcase";
 import { ProductImage } from "@/components/product-image";
+import { cardUrl } from "@/lib/image";
 
 const mainNavigation = [
   {
@@ -575,7 +576,8 @@ export default async function Home() {
                     <div className="relative aspect-[4/5] overflow-hidden rounded-[1.25rem] bg-white">
                       {product.images && product.images[0] ? (
                         <ProductImage
-                          src={product.images[0]}
+                          src={cardUrl(product.images[0])}
+                          fallbackSrc={product.images[0]}
                           alt={`${product.name} – ručni sat`}
                           sizes="(min-width: 1024px) 420px, (min-width: 640px) 45vw, 92vw"
                           className="absolute inset-0 h-full w-full object-contain transition-transform duration-700 group-hover:scale-[1.04]"

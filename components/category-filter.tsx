@@ -5,6 +5,7 @@ import ComparePanel from "@/components/compare-panel";
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { ProductImage } from "@/components/product-image";
+import { cardUrl } from "@/lib/image";
 import { AddToCartButton } from "@/components/cart";
 import { WishlistButton } from "@/components/wishlist";
 import RestockNotificationButton from "@/components/restock-notification-button";
@@ -1044,7 +1045,8 @@ const showAccessoryFilters = isAccessoryMode || isWalletMode;
                       <div className="relative aspect-[4/5]">
                         {product.images && product.images[0] ? (
                           <ProductImage
-                            src={product.images[0]}
+                            src={cardUrl(product.images[0])}
+                            fallbackSrc={product.images[0]}
                             alt={product.name}
                             sizes="(min-width: 1024px) 380px, (min-width: 640px) 45vw, 92vw"
                             className="ws-product-image absolute inset-0 h-full w-full object-cover"

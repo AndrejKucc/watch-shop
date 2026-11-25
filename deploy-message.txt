@@ -1,1 +1,1 @@
-Expand llms.txt with product, filter and shopping details
+Serve smaller product card images for faster loading
