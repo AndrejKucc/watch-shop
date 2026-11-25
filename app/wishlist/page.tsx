@@ -1,5 +1,6 @@
 import Link from "next/link";
 import WishlistContent from "@/components/wishlist-content";
+import SiteFooter from "@/components/site-footer";
 
 export const metadata = {
   title: "Moja lista želja",
@@ -42,11 +43,7 @@ export default function WishlistPage() {
         <WishlistContent />
       </section>
 
-      <footer className="border-t border-[#B8955A]/30 bg-[#1F2A3C]">
-        <div className="mx-auto max-w-7xl px-5 py-8 text-center text-sm text-[#F8F4E7]/70 sm:px-6">
-          WATCH STORE — Premium satovi i modni dodaci
-        </div>
-      </footer>
+      <SiteFooter />
     </main>
   );
 }

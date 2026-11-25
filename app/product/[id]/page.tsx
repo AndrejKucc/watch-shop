@@ -7,6 +7,7 @@ import { WishlistButton } from "@/components/wishlist";
 import ProductReviews from "@/components/product-reviews";
 import ProductGallery from "@/components/product-gallery";
 import RestockNotificationButton from "@/components/restock-notification-button";
+import SiteFooter from "@/components/site-footer";
 
 const BASE_URL = "https://watchstore.rs";
 
@@ -704,11 +705,9 @@ export default async function ProductPage({
         <ProductReviews productId={product.id} />
       </section>
 
-      <footer className="mt-20 border-t border-[#B8955A]/20 bg-[#1F2A3C]">
-        <div className="mx-auto max-w-7xl px-5 py-10 text-center text-sm text-[#F8F4E7]/70 sm:px-6">
-          WATCH STORE — Premium satovi i modni dodaci
-        </div>
-      </footer>
+      <div className="mt-20">
+        <SiteFooter />
+      </div>
     </main>
   );
 }

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase";
 import { useCart } from "@/components/cart";
 import ScratchCard from "@/components/scratch-card";
+import { galleryThumbUrl } from "@/lib/image";
 
 const SHIPPING_COST = 480;
 
@@ -683,8 +684,17 @@ export default function CheckoutPage() {
                   <div className="h-16 w-16 flex-shrink-0 overflow-hidden rounded-xl border border-[#B8955A]/20 bg-[#B8955A]/10">
                     {item.image ? (
                       <img
-                        src={item.image}
+                        src={galleryThumbUrl(item.image)}
                         alt={item.name}
+                        loading="lazy"
+                        decoding="async"
+                        onError={(event) => {
+                          const original = item.image as string;
+
+                          if (event.currentTarget.src !== original) {
+                            event.currentTarget.src = original;
+                          }
+                        }}
                         className="h-full w-full object-cover"
                       />
                     ) : (

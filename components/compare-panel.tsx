@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useCompare } from "@/lib/use-compare";
+import { galleryThumbUrl } from "@/lib/image";
 
 type Product = {
   id: string;
@@ -131,9 +132,17 @@ export default function ComparePanel({
                   <div className="relative">
                     {product.images?.[0] ? (
                       <img
-                        src={product.images[0]}
+                        src={galleryThumbUrl(product.images[0])}
                         alt={product.name}
                         loading="lazy"
+                        decoding="async"
+                        onError={(event) => {
+                          const original = product.images?.[0] as string;
+
+                          if (event.currentTarget.src !== original) {
+                            event.currentTarget.src = original;
+                          }
+                        }}
                         className="mb-4 aspect-square w-full max-w-40 rounded-2xl border border-[#B8955A]/20 bg-[#F8F4E7] object-cover shadow-[0_6px_20px_rgba(31,42,60,0.12)]"
                       />
                     ) : (

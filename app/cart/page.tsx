@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { useCart } from "@/components/cart";
+import { galleryThumbUrl } from "@/lib/image";
 
 export default function CartPage() {
   const {
@@ -89,8 +90,17 @@ export default function CartPage() {
                     <div className="h-28 w-28 flex-shrink-0 overflow-hidden rounded-2xl border border-[#B8955A]/15 bg-gradient-to-br from-[#B8955A]/15 to-[#F8F4E7] sm:h-32 sm:w-32">
                       {item.image ? (
                         <img
-                          src={item.image}
+                          src={galleryThumbUrl(item.image)}
                           alt={item.name}
+                          loading="lazy"
+                          decoding="async"
+                          onError={(event) => {
+                            const original = item.image as string;
+
+                            if (event.currentTarget.src !== original) {
+                              event.currentTarget.src = original;
+                            }
+                          }}
                           className="h-full w-full object-cover"
                         />
                       ) : (

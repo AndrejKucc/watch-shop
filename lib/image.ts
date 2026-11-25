@@ -53,14 +53,14 @@ export function galleryUrl(url: string): string {
   return `${base}${separator}width=1000&height=1000&resize=contain&quality=75`;
 }
 
-// Kvadratna sličica (200x200) za sličice ispod velike slike u galeriji.
+// Kvadratna sličica (300x300) za sličice ispod velike slike u galeriji.
 export function galleryThumbUrl(url: string): string {
   if (!canResize(url)) return url;
 
   const base = url.replace(STORAGE_MARKER, RENDER_MARKER);
   const separator = base.includes("?") ? "&" : "?";
 
-  return `${base}${separator}width=200&height=200&resize=cover&quality=60`;
+  return `${base}${separator}width=300&height=300&resize=cover&quality=60`;
 }
 
 // Mala sličica (144x180, odnos 4:5) za male kartice u heroju.

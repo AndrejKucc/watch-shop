@@ -1,1 +1,1 @@
-Speed up product gallery and hero: use small images with fallback
+Restyle collection pages with dark header, small images in cart and checkout, shared footer
