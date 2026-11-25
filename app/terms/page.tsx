@@ -1,4 +1,12 @@
 import Link from "next/link";
+import { pageMetadata } from "@/lib/seo";
+
+export const metadata = pageMetadata({
+  title: "Uslovi kupovine",
+  description:
+    "Uslovi kupovine u WATCH STORE prodavnici: poručivanje, plaćanje pouzećem, dostava i dostupnost proizvoda.",
+  path: "/terms",
+});
 
 export default function TermsPage() {
   return (

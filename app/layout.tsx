@@ -45,10 +45,6 @@ export const metadata: Metadata = {
     "WATCH STORE",
   ],
 
-  alternates: {
-    canonical: "/",
-  },
-
   openGraph: {
     type: "website",
     locale: "sr_RS",

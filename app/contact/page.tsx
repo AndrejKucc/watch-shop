@@ -1,4 +1,12 @@
 import Link from "next/link";
+import { pageMetadata } from "@/lib/seo";
+
+export const metadata = pageMetadata({
+  title: "Kontakt",
+  description:
+    "Kontaktirajte WATCH STORE: email info@watchstore.rs ili telefon +381 63 707 3074.",
+  path: "/contact",
+});
 
 export default function ContactPage() {
   return (

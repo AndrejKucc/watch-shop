@@ -4,6 +4,14 @@ import { CartButton } from "@/components/cart";
 import CategoryFilter from "@/components/category-filter";
 import CollectionHeader from "@/components/collection-header";
 import SiteFooter from "@/components/site-footer";
+import { pageMetadata } from "@/lib/seo";
+
+export const metadata = pageMetadata({
+  title: "Poklon kutije i poklon setovi",
+  description:
+    "Izaberite poklon kutiju ili kompletan poklon set u WATCH STORE online prodavnici. Poručite online, plaćanje pouzećem.",
+  path: "/pokloni",
+});
 
 export default async function PokloniPage() {
   const allProducts = await getProducts();

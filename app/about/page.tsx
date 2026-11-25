@@ -1,4 +1,12 @@
 import Link from "next/link";
+import { pageMetadata } from "@/lib/seo";
+
+export const metadata = pageMetadata({
+  title: "O nama",
+  description:
+    "Saznajte više o WATCH STORE prodavnici ručnih satova i modnih dodataka.",
+  path: "/about",
+});
 
 export default function AboutPage() {
   return (

@@ -4,6 +4,14 @@ import { CartButton } from "@/components/cart";
 import CategoryFilter from "@/components/category-filter";
 import CollectionHeader from "@/components/collection-header";
 import SiteFooter from "@/components/site-footer";
+import { pageMetadata } from "@/lib/seo";
+
+export const metadata = pageMetadata({
+  title: "Muški i ženski ručni satovi",
+  description:
+    "Pogledajte kolekciju muških i ženskih ručnih satova u WATCH STORE online prodavnici. Poručite online, plaćanje pouzećem.",
+  path: "/satovi",
+});
 
 export default async function WatchesPage() {
   const allProducts = await getProducts();

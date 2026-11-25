@@ -1,4 +1,12 @@
 import Link from "next/link";
+import { pageMetadata } from "@/lib/seo";
+
+export const metadata = pageMetadata({
+  title: "Politika privatnosti",
+  description:
+    "Politika privatnosti WATCH STORE prodavnice.",
+  path: "/privacy",
+});
 
 export default function PrivacyPage() {
   return (

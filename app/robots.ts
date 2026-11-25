@@ -5,6 +5,14 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: "*",
       allow: "/",
+      disallow: [
+        "/admin",
+        "/api/",
+        "/cart",
+        "/checkout",
+        "/nalog",
+        "/wishlist",
+      ],
     },
     sitemap: "https://watchstore.rs/sitemap.xml",
     host: "https://watchstore.rs",

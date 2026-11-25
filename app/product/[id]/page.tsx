@@ -333,6 +333,40 @@ export default async function ProductPage({
     },
   };
 
+  const breadcrumbLabels: Record<string, string> = {
+    watch: "Satovi",
+    bracelet: "Narukvice",
+    necklace: "Ogrlice",
+    wallet: "Novčanici",
+    gift_box: "Pokloni",
+    gift_set: "Pokloni",
+  };
+
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Početna",
+        item: BASE_URL,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: breadcrumbLabels[product.product_type] || "Proizvodi",
+        item: `${BASE_URL}${returnPath}`,
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: product.name,
+        item: canonicalUrl,
+      },
+    ],
+  };
+
   const watchSpecificationGroups: SpecificationGroup[] = [
     {
       title: "Kućište",
@@ -433,6 +467,13 @@ export default async function ProductPage({
 
   return (
     <main className="min-h-screen bg-[#F8F4E7] text-[#1F2A3C]">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(breadcrumbJsonLd).replace(/</g, "\\u003c"),
+        }}
+      />
+
       <style>{`
         .ws-stage {
           position: relative;

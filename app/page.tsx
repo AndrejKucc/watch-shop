@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { getProducts } from "@/lib/products";
@@ -91,6 +92,37 @@ const featuredBadges: Record<string, { text: string; className: string }> = {
   },
 };
 
+export const metadata: Metadata = {
+  alternates: { canonical: "https://watchstore.rs" },
+};
+
+const siteJsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "WATCH STORE",
+    url: "https://watchstore.rs",
+    email: "info@watchstore.rs",
+    telephone: "+381637073074",
+    areaServed: "RS",
+    contactPoint: {
+      "@type": "ContactPoint",
+      contactType: "customer service",
+      email: "info@watchstore.rs",
+      telephone: "+381637073074",
+      areaServed: "RS",
+      availableLanguage: "sr",
+    },
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "WATCH STORE",
+    url: "https://watchstore.rs",
+    inLanguage: "sr",
+  },
+];
+
 export default async function Home() {
   const products = await getProducts();
 
@@ -164,6 +196,13 @@ export default async function Home() {
 
   return (
     <main className="relative min-h-screen overflow-x-clip bg-[#F8F4E7] text-[#1F2A3C] selection:bg-[#B8955A] selection:text-white">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(siteJsonLd).replace(/</g, "\\u003c"),
+        }}
+      />
+
       <style>{`
         :root {
           color-scheme: light;

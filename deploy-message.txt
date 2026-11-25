@@ -1,1 +1,1 @@
-Restyle collection pages with dark header, small images in cart and checkout, shared footer
+SEO: per-page metadata and canonical, schema, sitemap, robots, llms.txt

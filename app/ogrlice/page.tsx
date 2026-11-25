@@ -4,6 +4,14 @@ import { CartButton } from "@/components/cart";
 import CategoryFilter from "@/components/category-filter";
 import CollectionHeader from "@/components/collection-header";
 import SiteFooter from "@/components/site-footer";
+import { pageMetadata } from "@/lib/seo";
+
+export const metadata = pageMetadata({
+  title: "Ogrlice",
+  description:
+    "Pogledajte izbor ogrlica u WATCH STORE online prodavnici. Poručite online, plaćanje pouzećem.",
+  path: "/ogrlice",
+});
 
 export default async function OgrlicePage() {
   const allProducts = await getProducts();
