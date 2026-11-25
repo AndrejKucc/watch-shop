@@ -69,3 +69,13 @@ export function thumbUrl(url: string): string {
 
   return renderUrl(url, 144, 180, 60);
 }
+
+// Velika slika u heroju: širina 900 px, bez zadate visine (razmera ostaje ista kao original).
+export function heroUrl(url: string): string {
+  if (!canResize(url)) return url;
+
+  const base = url.replace(STORAGE_MARKER, RENDER_MARKER);
+  const separator = base.includes("?") ? "&" : "?";
+
+  return `${base}${separator}width=900&quality=70`;
+}

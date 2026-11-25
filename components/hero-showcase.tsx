@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { ProductImage } from "@/components/product-image";
-import { canResize, thumbUrl, tinyUrl } from "@/lib/image";
+import { canResize, heroUrl, thumbUrl, tinyUrl } from "@/lib/image";
 
 export type HeroSlide = {
   id: string;
@@ -487,7 +487,8 @@ export default function HeroShowcase({
                       />
                     ) : (
                       <ProductImage
-                        src={slide.image}
+                        src={heroUrl(slide.image)}
+                        fallbackSrc={slide.image}
                         alt={`${slide.name} – ručni sat`}
                         priority={i === 0}
                         sizes="(min-width: 1024px) 560px, 92vw"
