@@ -33,7 +33,8 @@ export function AccountButton() {
   }, []);
 
   if (loading) {
-    return null;
+    // rezerviše mesto dugmeta da se zaglavlje ne pomera kad provera završi
+    return <span aria-hidden="true" className="inline-block h-11 min-w-[90px]" />;
   }
 
   return (

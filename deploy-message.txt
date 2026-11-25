@@ -1,1 +1,1 @@
-Serve smaller product card images for faster loading
+Reserve space for account button to prevent layout shift
