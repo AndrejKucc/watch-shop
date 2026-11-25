@@ -1,1 +1,1 @@
-Reserve space for account button to prevent layout shift
+Revert product card images to originals
