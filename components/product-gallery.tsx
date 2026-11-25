@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, type MouseEvent } from "react";
+import { galleryThumbUrl, galleryUrl } from "@/lib/image";
 
 type ProductGalleryProps = {
   images: string[];
@@ -69,8 +70,17 @@ export default function ProductGallery({
           onMouseLeave={resetZoom}
         >
           <img
-            src={images[selectedImage]}
+            src={galleryUrl(images[selectedImage])}
             alt={`${productName} - slika ${selectedImage + 1}`}
+            decoding="async"
+            fetchPriority="high"
+            onError={(event) => {
+              const original = images[selectedImage];
+
+              if (event.currentTarget.src !== original) {
+                event.currentTarget.src = original;
+              }
+            }}
             className="h-full max-h-[620px] w-full object-contain transition-transform duration-100 ease-out"
             style={{
               transform: isZoomed ? "scale(2.2)" : "scale(1)",
@@ -130,8 +140,15 @@ export default function ProductGallery({
               >
                 <div className="aspect-square overflow-hidden bg-gradient-to-br from-[#B8955A]/10 to-[#F8F4E7]">
                   <img
-                    src={image}
+                    src={galleryThumbUrl(image)}
                     alt={`${productName} ${index + 1}`}
+                    loading="lazy"
+                    decoding="async"
+                    onError={(event) => {
+                      if (event.currentTarget.src !== image) {
+                        event.currentTarget.src = image;
+                      }
+                    }}
                     className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                   />
                 </div>

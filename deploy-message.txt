@@ -1,1 +1,1 @@
-Fix mobile gallery: remove white bands above and below image
+Speed up product gallery and hero: use small images with fallback

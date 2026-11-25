@@ -42,3 +42,30 @@ export function tinyUrl(url: string): string {
 
   return renderUrl(url, 64, 80, 50);
 }
+
+// Slika za veliki prikaz u galeriji proizvoda: staje u 1000x1000, bez sečenja.
+export function galleryUrl(url: string): string {
+  if (!canResize(url)) return url;
+
+  const base = url.replace(STORAGE_MARKER, RENDER_MARKER);
+  const separator = base.includes("?") ? "&" : "?";
+
+  return `${base}${separator}width=1000&height=1000&resize=contain&quality=75`;
+}
+
+// Kvadratna sličica (200x200) za sličice ispod velike slike u galeriji.
+export function galleryThumbUrl(url: string): string {
+  if (!canResize(url)) return url;
+
+  const base = url.replace(STORAGE_MARKER, RENDER_MARKER);
+  const separator = base.includes("?") ? "&" : "?";
+
+  return `${base}${separator}width=200&height=200&resize=cover&quality=60`;
+}
+
+// Mala sličica (144x180, odnos 4:5) za male kartice u heroju.
+export function thumbUrl(url: string): string {
+  if (!canResize(url)) return url;
+
+  return renderUrl(url, 144, 180, 60);
+}

@@ -11,6 +11,8 @@ type ProductImageProps = {
   widths?: number[];
   priority?: boolean;
   style?: React.CSSProperties;
+  // slika koja se učitava ako `src` ne uspe (npr. original umesto sličice)
+  fallbackSrc?: string;
 };
 
 /**
@@ -25,6 +27,7 @@ export function ProductImage({
   widths = [480, 800, 1200],
   priority = false,
   style,
+  fallbackSrc,
 }: ProductImageProps) {
   const [failed, setFailed] = useState(false);
   const ref = useRef<HTMLImageElement | null>(null);
@@ -43,7 +46,7 @@ export function ProductImage({
   return (
     <img
       ref={ref}
-      src={failed ? src : resizedUrl(src, mainWidth)}
+      src={failed ? (fallbackSrc ?? src) : resizedUrl(src, mainWidth)}
       srcSet={failed ? undefined : resizedSrcSet(src, widths)}
       sizes={failed ? undefined : sizes}
       alt={alt}

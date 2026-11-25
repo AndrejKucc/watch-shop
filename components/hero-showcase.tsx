@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { ProductImage } from "@/components/product-image";
-import { canResize, resizedUrl } from "@/lib/image";
+import { canResize, thumbUrl, tinyUrl } from "@/lib/image";
 
 export type HeroSlide = {
   id: string;
@@ -206,7 +206,7 @@ export default function HeroShowcase({
       // za slike koje se ne mogu smanjiti računamo samo prva dva sata
       if (!canResize(slide.image) && i > 1) return;
 
-      loadColor(resizedUrl(slide.image, 64, 50))
+      loadColor(tinyUrl(slide.image))
         .then((small) => {
           if (small || cancelled) return small;
           return i < 2 ? loadColor(slide.image) : null;
@@ -631,9 +631,9 @@ export default function HeroShowcase({
                     style={{ width: 72, height: 90 }}
                   >
                     <ProductImage
-                      src={slide.image}
+                      src={thumbUrl(slide.image)}
+                      fallbackSrc={slide.image}
                       alt=""
-                      widths={[144, 216, 288]}
                       sizes="72px"
                       style={{
                         position: "absolute",
